@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.os.Build;
+//No say the cat is in the sac if the cat is not in the sac
 
 public class MainActivity extends ActionBarActivity {
 
