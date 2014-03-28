@@ -1,21 +1,17 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
       xmlns:yourapp="http://schemas.android.com/apk/res-auto" >
     <!-- Search, should appear as action button -->
-    <item android:id="@+id/action_settings"
-          android:title="@string/hello_world"
-          yourapp:showAsAction="ifRoom"  />
     
-    <item android:id="@+id/action_search"
-          android:title="@string/action_settings"
-          android:showAsAction="never">
-          <item android:id="@+id/pippo1"
-          		android:title="@string/action_settings"
-          		yourapp:showAsAction="never"/>
-          <item android:id="@+id/pippo"
-          		android:title="@string/hello_world"
-          		yourapp:showAsAction="never"/>
-    </item>
               
-          
+    <item android:id="@+id/pippo3"
+          android:title="4"
+          yourapp:showAsAction="always">
+          <item android:id="@+id/pippo12"
+          		android:title="4.1"
+          		yourapp:showAsAction="never"/>
+          <item android:id="@+id/pippo8"
+          		android:title="4.2"
+          		yourapp:showAsAction="never"/>
+          </item>    
     
 </menu>
