@@ -3,6 +3,7 @@
 
     <string-array name="gen_features_array">
         <item>Prova</item>
+        <item>dummy</item>
     </string-array>
 
     <string name="app_name">WatchDog</string>
