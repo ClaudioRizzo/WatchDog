@@ -1,5 +1,8 @@
 package it.polimi.dima.watchdog;
 
+import it.polimi.dima.watchdog.crypto.ECDSA_Signature;
+import it.polimi.dima.watchdog.exceptions.NoECDSAKeyPairGeneratedException;
+import it.polimi.dima.watchdog.exceptions.NoSignatureDoneException;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -19,6 +22,8 @@ import android.widget.ListView;
 public class MainActivity extends ActionBarActivity {
 
 	private String[] mGeneralFeaturesTitles;
+	private String[] PROVA;
+	private ECDSA_Signature PROVA2;
 	private DrawerLayout mDrawerLayout;
 	private ListView mDrawerList;
 	
@@ -33,14 +38,27 @@ public class MainActivity extends ActionBarActivity {
 		setContentView(R.layout.activity_main);
 
 		mTitle = mDrawerTitle = getTitle();
-		mGeneralFeaturesTitles = getResources().getStringArray(
-				R.array.gen_features_array);
+		try {
+			PROVA2 = new ECDSA_Signature("Prova");
+			try {
+				PROVA2.sign();
+				PROVA = getResources().getStringArray(R.array.gen_features_array);
+				PROVA[1] = PROVA2.getStringSignature();
+				System.out.println("DEBUG");
+			} catch (NoSignatureDoneException e) {System.out.println("e1");}
+		} catch (NoECDSAKeyPairGeneratedException e) {System.out.println("e2");}
+		
+		/*mGeneralFeaturesTitles = getResources().getStringArray(
+				R.array.gen_features_array);*/
+		mGeneralFeaturesTitles = PROVA;
+		
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 		mDrawerList = (ListView) findViewById(R.id.left_drawer);
 
 		// Set the adapter for the list view
 		mDrawerList.setAdapter(new ArrayAdapter<String>(this,
 				R.layout.drawer_list_item, mGeneralFeaturesTitles));
+		
 
 		mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 		
