@@ -14,6 +14,15 @@ import java.security.SignatureException;
 
 import it.polimi.dima.watchdog.exceptions.*;
 
+/**
+ * Classe che serve per generare la firma digitale "signature" (e la sua verione in stringa "string_signature")
+ * di un messaggio "ptx" a sua volta stringa. La coppia di chiavi viene autogenerata se non è passata dall'utente,
+ * e vengono lanciate eccezioni nei seguenti casi: le chiavi non sono valide, almeno una chiave è nulla, la firma
+ * non è andata a buon fine.
+ * 
+ * @author emanuele
+ *
+ */
 public class ECDSA_Signature {
 	
 	private String ptx;
@@ -64,6 +73,9 @@ public class ECDSA_Signature {
 		}
 	}
 	
+	/**
+	 * Genera una coppia di chiavi nel caso questa non sia stata passata dall'utente
+	 */
 	//TODO leggere il warning per android <= 4.3 e agire di conseguenza
 	private void generateKeyPair() {
 		try{
