@@ -62,7 +62,6 @@ public class MainActivity extends ActionBarActivity {
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
                 getSupportActionBar().setTitle(mDrawerTitle);
-                System.out.println("[DEBUG] BELLAZ");
                 supportInvalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
             }
         };
@@ -156,6 +155,8 @@ public class MainActivity extends ActionBarActivity {
 		public void onItemClick(AdapterView<?> parent, View view, int position,
 				long id) {
 			System.out.println("[DEBUG] ho cliccato");
+			//qua gestiamo i click sugli elementi del menu' che appare a sinistra NB a seconda di avere un drawer in ogni attività 
+			//possiamo pensare di avere una classe che gestisce il drawer
 
 		}
 
