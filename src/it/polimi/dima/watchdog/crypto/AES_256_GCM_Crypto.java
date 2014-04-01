@@ -142,7 +142,9 @@ public class AES_256_GCM_Crypto implements Crypto{
 		this.ctx = DatatypeConverter.parseBase64Binary(this.base64_ctx);
 	}
 	
-	
+	/**
+	 * Esegue l'encrypt di this.ptx con this.key; mette tutto in this.ctx, lo converte in base64 e lo ritorna.
+	 */
 	@SuppressLint("NewApi")
 	public String encrypt() throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, InvalidAlgorithmParameterException, NoSuchProviderException, IllegalBlockSizeException, BadPaddingException{
 		
@@ -152,8 +154,8 @@ public class AES_256_GCM_Crypto implements Crypto{
 		//setta i parametri per il modo GCM a partire dall'iv e dalla tag length
 		GCMParameterSpec gmcps = new GCMParameterSpec(this.tagLength, this.iv);
 		
-		//crea una nuova istanza di uno stato dell'aes con GCM come modo e PKCS5 come algoritmo di padding
-		Cipher ctx = Cipher.getInstance("AES/GCM/NoPadding");
+		//crea una nuova istanza di uno stato dell'aes con GCM come modo e nessun padding (con GCM non serve)
+		Cipher ctx = Cipher.getInstance("AES/GCM/NoPadding", "BC");
 		
 		//inizializza lo stato
 		ctx.init(Cipher.ENCRYPT_MODE, this.key, gmcps);
@@ -168,9 +170,32 @@ public class AES_256_GCM_Crypto implements Crypto{
 		return this.base64_ctx;
 	}
 	
-	public String decrypt(){
-		//TODO
-		return null;
+	/**
+	 * Esegue il decrypt di this.ctx con this.key; mette tutto in ptx, lo converte in stringa e lo ritorna.
+	 */
+	@SuppressLint("NewApi")
+	public String decrypt() throws NoSuchAlgorithmException, NoSuchProviderException, NoSuchPaddingException, InvalidKeyException, InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException{
+		
+		//aggiunge il provider che supporta GCM
+		Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
+		
+		//setta i parametri per il modo GCM a partire dall'iv e dalla tag length
+		GCMParameterSpec gmcps = new GCMParameterSpec(this.tagLength, this.iv);
+		
+		//crea una nuova istanza di uno stato dell'aes con GCM come modo e nessun padding (con GCM non serve)
+		Cipher ctx = Cipher.getInstance("AES/GCM/NoPadding", "BC");
+		
+		//inizializza lo stato
+		ctx.init(Cipher.DECRYPT_MODE, this.key, gmcps);
+		
+		//esegue tutti i round dell'aes al contrario
+		byte[] ptx = ctx.doFinal(this.ctx);
+		
+		//converte lo stato finale in una stringa
+		this.ptx = new String(ptx);
+		
+		//ritorna il messaggio decriptato
+		return this.ptx;
 	}
 	
 
