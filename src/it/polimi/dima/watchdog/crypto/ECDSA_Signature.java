@@ -20,6 +20,10 @@ import it.polimi.dima.watchdog.exceptions.*;
  * e vengono lanciate eccezioni nei seguenti casi: le chiavi non sono valide, almeno una chiave è nulla, la firma
  * non è andata a buon fine.
  * 
+ * Un altro uso è quello esclusivo di creazione di una coppia di chiavi pubblica e privata da utilizzare
+ * esclusivamente per firme digitali. Questo avviene mediante l'istanziazione di un oggetto della classe
+ * tramite costruttore vuoto.
+ * 
  * @author emanuele
  *
  */
@@ -37,6 +41,22 @@ public class ECDSA_Signature {
 	
 	public Signature getSignature(){
 		return this.signature;
+	}
+	
+	public PrivateKey getPrivateKey(){
+		return this.priv;
+	}
+	
+	public PublicKey getPublicKey(){
+		return this.pub;
+	}
+	
+	
+	/**
+	 * Costruttore che serve esclusivamente a generare una coppia di chiavi.
+	 */
+	public ECDSA_Signature(){
+		generateKeyPair();		
 	}
 	
 	
