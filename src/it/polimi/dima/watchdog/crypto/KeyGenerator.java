@@ -75,22 +75,21 @@ public class KeyGenerator {
 
 	private void pseudoRandomFunction(byte[] result, int ti_offset, Mac prf, byte[] salt, int counter, int blockIndex) {
 		final int hLen = prf.getMacLength();
-        byte U_r[] = new byte[ hLen ];
-        // U0 = S || INT (i);
+        byte U_r[] = new byte[hLen];
         byte U_i[] = new byte[salt.length + 4];
-        System.arraycopy( salt, 0, U_i, 0, salt.length );
-        INT( U_i, salt.length, blockIndex );
-        for( int i = 0; i < counter; i++ ) {
-            U_i = prf.doFinal( U_i );
-            xor( U_r, U_i );
+        System.arraycopy(salt, 0, U_i, 0, salt.length);
+        INT(U_i, salt.length, blockIndex);
+        for(int i = 0; i < counter; i++) {
+            U_i = prf.doFinal(U_i);
+            xor(U_r, U_i);
         }
 
         System.arraycopy(U_r, 0, result, ti_offset, hLen);
 		
 	}
 	
-	private void xor( byte[] dest, byte[] src ) {
-        for( int i = 0; i < dest.length; i++ ) {
+	private void xor(byte[] dest, byte[] src) {
+        for(int i = 0; i < dest.length; i++) {
             dest[i] ^= src[i];
         }
     }
