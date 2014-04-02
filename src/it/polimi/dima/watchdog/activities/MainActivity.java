@@ -1,5 +1,12 @@
-package it.polimi.dima.watchdog;
+package it.polimi.dima.watchdog.activities;
 
+import it.polimi.dima.watchdog.R;
+import it.polimi.dima.watchdog.R.array;
+import it.polimi.dima.watchdog.R.drawable;
+import it.polimi.dima.watchdog.R.id;
+import it.polimi.dima.watchdog.R.layout;
+import it.polimi.dima.watchdog.R.menu;
+import it.polimi.dima.watchdog.R.string;
 import it.polimi.dima.watchdog.crypto.ECDSA_Signature;
 import it.polimi.dima.watchdog.exceptions.NoECDSAKeyPairGeneratedException;
 import it.polimi.dima.watchdog.exceptions.NoSignatureDoneException;

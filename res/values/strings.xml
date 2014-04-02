@@ -13,5 +13,8 @@
     <string name="action_share">Shate Application</string>
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
+    <string name="title_activity_gps">GpsActivity</string>
+    <string name="title_activity_phone_status">PhoneStatusActivity</string>
+    <string name="title_activity_sms_remote">SmsRemoteActivity</string>
 
 </resources>
