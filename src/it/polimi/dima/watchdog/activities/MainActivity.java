@@ -1,15 +1,6 @@
 package it.polimi.dima.watchdog.activities;
 
 import it.polimi.dima.watchdog.R;
-import it.polimi.dima.watchdog.R.array;
-import it.polimi.dima.watchdog.R.drawable;
-import it.polimi.dima.watchdog.R.id;
-import it.polimi.dima.watchdog.R.layout;
-import it.polimi.dima.watchdog.R.menu;
-import it.polimi.dima.watchdog.R.string;
-import it.polimi.dima.watchdog.crypto.ECDSA_Signature;
-import it.polimi.dima.watchdog.exceptions.NoECDSAKeyPairGeneratedException;
-import it.polimi.dima.watchdog.exceptions.NoSignatureDoneException;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -29,8 +20,6 @@ import android.widget.ListView;
 public class MainActivity extends ActionBarActivity {
 
 	private String[] mGeneralFeaturesTitles;
-	private String[] PROVA;
-	private ECDSA_Signature PROVA2;
 	private DrawerLayout mDrawerLayout;
 	private ListView mDrawerList;
 	
@@ -45,19 +34,9 @@ public class MainActivity extends ActionBarActivity {
 		setContentView(R.layout.activity_main);
 
 		mTitle = mDrawerTitle = getTitle();
-		try {
-			PROVA2 = new ECDSA_Signature("Prova");
-			try {
-				PROVA2.sign();
-				PROVA = getResources().getStringArray(R.array.gen_features_array);
-				PROVA[1] = PROVA2.getStringSignature();
-				System.out.println("DEBUG");
-			} catch (NoSignatureDoneException e) {System.out.println("e1");}
-		} catch (NoECDSAKeyPairGeneratedException e) {System.out.println("e2");}
+		mGeneralFeaturesTitles = getResources().getStringArray(
+				R.array.gen_features_array);
 		
-		/*mGeneralFeaturesTitles = getResources().getStringArray(
-				R.array.gen_features_array);*/
-		mGeneralFeaturesTitles = PROVA;
 		
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 		mDrawerList = (ListView) findViewById(R.id.left_drawer);
@@ -97,7 +76,7 @@ public class MainActivity extends ActionBarActivity {
         if (savedInstanceState == null) {
 
 			getSupportFragmentManager().beginTransaction()
-					.add(R.id.container, new PlaceholderFragment()).commit();
+					.add(R.id.main_features_container, new PlaceholderFragment()).commit();
 		}
 	}
 
@@ -166,7 +145,7 @@ public class MainActivity extends ActionBarActivity {
 		@Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container,
 				Bundle savedInstanceState) {
-			View rootView = inflater.inflate(R.layout.fragment_main, container,
+			View rootView = inflater.inflate(R.layout.fragment_main_features, container,
 					false);
 			return rootView;
 		}
