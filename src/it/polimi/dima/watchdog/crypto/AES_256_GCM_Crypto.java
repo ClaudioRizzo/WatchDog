@@ -10,12 +10,8 @@ import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.Security;
 
-<<<<<<< HEAD
-//import javax.xml.bind.DatatypeConverter;
-=======
 //import org.apache.commons.codec.binary.Base64.*;
 
->>>>>>> 53e967cf52cddf6982798ca26a301fa69d84972f
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 //import javax.crypto.KeyGenerator;
@@ -35,24 +31,6 @@ import javax.crypto.Cipher;
  */
 public class AES_256_GCM_Crypto implements Crypto {
 
-	@Override
-	public String encrypt() throws NoSuchAlgorithmException,
-			NoSuchPaddingException, InvalidKeyException,
-			InvalidAlgorithmParameterException, NoSuchProviderException,
-			IllegalBlockSizeException, BadPaddingException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String decrypt() throws NoSuchAlgorithmException,
-			NoSuchProviderException, NoSuchPaddingException,
-			InvalidKeyException, InvalidAlgorithmParameterException,
-			IllegalBlockSizeException, BadPaddingException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-/*
 	private String ptx;
 	private String keyString;
 	private byte[] keyValue;
@@ -94,7 +72,7 @@ public class AES_256_GCM_Crypto implements Crypto {
 	 * @param keyString
 	 *            : la chiave sotto forma di stringa di caratteri esadecimali
 	 *            (0-F)
-	 
+	 */
 	public AES_256_GCM_Crypto(String ptx, String keyString) {
 
 		if (keyString.length() != 64) {
@@ -115,7 +93,7 @@ public class AES_256_GCM_Crypto implements Crypto {
 	 *            : il plaintext da cifrare
 	 * @param keyValue
 	 *            : la chiave sotto forma di array di byte
-	 
+	 */
 	public AES_256_GCM_Crypto(String ptx, byte[] keyValue) {
 
 		if (keyValue.length != 32) {
@@ -135,7 +113,7 @@ public class AES_256_GCM_Crypto implements Crypto {
 	 *            : il plaintext da cifrare
 	 * @param key
 	 *            : la chiave già generata
-	 
+	 */
 	public AES_256_GCM_Crypto(String ptx, Key key) {
 		String dummy = "0000000000000000000000000000000000000000000000000000000000000000";
 		byte[] dummyArray = dummy.getBytes();//DatatypeConverter.parseHexBinary(dummy);
@@ -157,7 +135,7 @@ public class AES_256_GCM_Crypto implements Crypto {
 	 *            : la chiave
 	 * @param ctx
 	 *            : il ciphertext passato come array di byte
-	 
+	 */
 	public AES_256_GCM_Crypto(Key key, byte[] ctx) {
 		this.key = key;
 		this.ctx = ctx;
@@ -175,7 +153,7 @@ public class AES_256_GCM_Crypto implements Crypto {
 	 *            : la chiave
 	 * @param ctx
 	 *            : il ciphertext passato come stringa in base64
-	 
+	 */
 	public AES_256_GCM_Crypto(Key key, String ctx) {
 		// nulla di esoterico: solo l'espressione regolare che matcha una
 		// stringa in base64: una serie opzionale
@@ -195,7 +173,7 @@ public class AES_256_GCM_Crypto implements Crypto {
 	/**
 	 * Esegue l'encrypt di this.ptx con this.key; mette tutto in this.ctx, lo
 	 * converte in base64 e lo ritorna.
-	 
+	 */
 	@SuppressLint("NewApi")
 	public String encrypt() throws NoSuchAlgorithmException,
 			NoSuchPaddingException, InvalidKeyException,
@@ -230,7 +208,7 @@ public class AES_256_GCM_Crypto implements Crypto {
 	/**
 	 * Esegue il decrypt di this.ctx con this.key; mette tutto in ptx, lo
 	 * converte in stringa e lo ritorna.
-	 
+	 */
 	@SuppressLint("NewApi")
 	public String decrypt() throws NoSuchAlgorithmException,
 			NoSuchProviderException, NoSuchPaddingException,
@@ -259,6 +237,6 @@ public class AES_256_GCM_Crypto implements Crypto {
 
 		// ritorna il messaggio decriptato
 		return this.ptx;
-	}*/
+	}
 
 }
