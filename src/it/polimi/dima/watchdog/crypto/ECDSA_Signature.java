@@ -34,6 +34,7 @@ public class ECDSA_Signature {
 	private String string_signature;
 	private PublicKey pub;
 	private PrivateKey priv;
+	private byte[] signatureToVerify;
 	
 	public String getStringSignature(){
 		return this.string_signature;
@@ -61,8 +62,8 @@ public class ECDSA_Signature {
 	
 	
 	/**
-	 * Costruttore che prevede il passaggio anche di una coppia di chiavi; lancia un'eccezione se almeno una
-	 * delle due chiavi non è una chiave ECDSA.
+	 * Costruttore in sign-mode che prevede il passaggio anche di una coppia di chiavi; lancia un'eccezione se
+	 * almeno una delle due chiavi non è una chiave ECDSA.
 	 * @param ptx : il messaggio da firmare
 	 * @param pub : la chiave pubblica
 	 * @param priv : la chiave privata
@@ -79,8 +80,8 @@ public class ECDSA_Signature {
 	}
 	
 	/**
-	 * Costruttore che genera le chiavi sul momento. Lancia un'eccezione se almeno una delle chiavi non viene
-	 * generata.
+	 * Costruttore in sign-mode che genera le chiavi sul momento. Lancia un'eccezione se almeno una delle chiavi
+	 * non viene generata.
 	 * @param ptx : il messaggio da firmare
 	 * @throws NoECDSAKeyPairGeneratedException
 	 */
@@ -92,6 +93,35 @@ public class ECDSA_Signature {
 			throw new NoECDSAKeyPairGeneratedException();
 		}
 	}
+	
+	/**
+	 * Costruttore in decrypt-mode che riceve il messaggio, la chiave pubblica con cui verificare la firma
+	 * (quella dell'utente che ha firmato il messaggio) e la firma da verificare sotto forma di array di byte.
+	 * @param ptx : il messaggio
+	 * @param pub : la chiave pubblica del mittente
+	 * @param signature : la firma da verificare
+	 */
+	public ECDSA_Signature(String ptx, PublicKey pub, byte[] signature){
+		this.ptx = ptx;
+		this.pub = pub;
+		this.signatureToVerify = signature;
+	}
+	
+	
+	/**
+	 * Costruttore in decrypt-mode che riceve il messaggio, la chiave pubblica con cui verificare la firma
+	 * (quella dell'utente che ha firmato il messaggio) e la firma da verificare sotto forma di stringa.
+	 * @param ptx : il messaggio
+	 * @param pub : la chiave pubblica del mittente
+	 * @param signature : la firma da verificare
+	 */
+	public ECDSA_Signature(String ptx, PublicKey pub, String signature){
+		this.ptx = ptx;
+		this.pub = pub;
+		this.signatureToVerify = signature.getBytes();
+	}
+	
+	
 	
 	/**
 	 * Genera una coppia di chiavi nel caso questa non sia stata passata dall'utente
@@ -145,6 +175,30 @@ public class ECDSA_Signature {
 		if(this.signature == null){
 			throw new NoSignatureDoneException();
 		}
+	}
+	
+	/**
+	 * Effettua la verifica della firma digitale.
+	 * @return true se la firma è verificata, false in caso contrario
+	 * @throws ErrorInSignatureCheckingException
+	 */
+	public boolean verifySignature() throws ErrorInSignatureCheckingException{
+		try{
+			Signature verify = Signature.getInstance("SHA1withECDSA");
+			verify.initVerify(this.pub);
+			verify.update(this.ptx.getBytes());
+			return verify.verify(this.signatureToVerify);
+		}
+		catch(SignatureException e){
+			throw new ErrorInSignatureCheckingException();
+		}
+		catch(InvalidKeyException e){
+			throw new ErrorInSignatureCheckingException();
+		}
+		catch(NoSuchAlgorithmException e){
+			throw new ErrorInSignatureCheckingException();
+		}
+		
 	}
 
 	

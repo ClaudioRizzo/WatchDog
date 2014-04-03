@@ -1,42 +1,46 @@
 package it.polimi.dima.watchdog.crypto;
 
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
+
+import javax.crypto.KeyAgreement;
+
 
 /**
  * Questa classe creerà un segreto condiviso tra due utenti, a partire dalle chiavi rsa di entrambi, senza
  * che il segreto stesso sia trasmesso su alcun canale. Il segreto potrà poi essere utilizzato dalla classe
- * KeyGenerator per derivare le chiavi dell'AES. Il protocollo utilizzato è il ECMQV (oppure il FHMQV se ne
- * esiste una versione in java). Le chiavi pubbliche si suppongono già autenticate.
+ * KeyGenerator per derivare le chiavi dell'AES. Il protocollo utilizzato è ECDH (in mancanza di implementazioni
+ * in java già pronte di FHMQV e ECMQV). Le chiavi di partenza si suppongono già autenticate.
  * 
  * @author emanuele
  *
  */
 public class SharedSecretAgreement {
-	private PublicKey myPublicKey;
 	private PrivateKey myPrivateKey;
 	private PublicKey otherPublicKey;
-	private byte[] otherS; //detta (X,x) la coppia calcolata dall'altro con x random e X = [x]P su una EC nota e condivisa, e detti Xs i primi L bit
-						   //di X dove L = ceil((floor(log2(n))+1)/2) e n è l'ordine del punto P della EC, e detto innfine oPr la chiave privata
-						   //dell'altro, --> otherS = x + Xs*oPr
-						   //Importante è che io conosca solo otherS e non i valori usati per calcolarlo.
 	private byte[] sharedSecret;
 	 
 	
 	
-	public SharedSecretAgreement(PublicKey mPu, PrivateKey mPr, PublicKey oPu, byte[] oS){
-		this.myPublicKey = mPu;
+	public SharedSecretAgreement(PrivateKey mPr, PublicKey oPu){
 		this.myPrivateKey = mPr;
 		this.otherPublicKey = oPu;
-		this.otherS = oS;
 	}
 	
 	/**
-	 * Metodo che genera lo shared secret con l'algoritmo ECMQV
-	 * @return
+	 * Metodo che genera lo shared secret con l'algoritmo ECDH.
+	 * @return un segreto che sarà lo stesso computato dall'altro utente.
+	 * @throws InvalidKeyException 
+	 * @throws NoSuchAlgorithmException 
 	 */
-	public byte[] generateSharedSecret(){
-		//TODO
+	public byte[] generateSharedSecret() throws InvalidKeyException, NoSuchAlgorithmException{
+		KeyAgreement ka = KeyAgreement.getInstance("ECDH");
+		ka.init(this.myPrivateKey);
+		ka.doPhase(this.otherPublicKey, true);
+		this.sharedSecret = ka.generateSecret();
+		
 		return this.sharedSecret;
 	}
 

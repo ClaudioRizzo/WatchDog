@@ -7,8 +7,9 @@ import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
 /**
- * In questa classe verranno generate le chiavi da dare in pasto agli algoritmi a partire da una "password";
- * l'algoritmo usato è PBKDF2 con HmacSHA256.
+ * In questa classe verrà generata di volta in volta una chiave per l'AES a partire da un "segreto condiviso";
+ * l'algoritmo usato è PBKDF2 con HmacSHA256. Il segreto condiviso si suppone essere stato già concordato con
+ * l'altro utente mediante FHMQV o ECMQV.
  * 
  * JAVADOC WILL COME (TODO)
  *  
@@ -17,8 +18,8 @@ import javax.crypto.spec.SecretKeySpec;
  */
 public class KeyGenerator {
 	
-	private String password;
-	private byte[] pwd;
+	private String secret;
+	private byte[] sec;
 	private String salt;
 	private byte[] slt;
 	private final int dkLen = 32;
@@ -29,17 +30,17 @@ public class KeyGenerator {
 		return this.key;
 	}
 	
-	public KeyGenerator(String password, String salt){
-		this.password = password;
-		this.pwd = this.password.getBytes();
+	public KeyGenerator(String secret, String salt){
+		this.secret = secret;
+		this.sec = this.secret.getBytes();
 		this.salt = salt;
 		this.slt = this.salt.getBytes();
 		this.counter = 0;
 	}
 	
-	public KeyGenerator(byte[] password, byte[] salt){
-		this.pwd = password;
-		this.password = new String(this.pwd);
+	public KeyGenerator(byte[] secret, byte[] salt){
+		this.sec = secret;
+		this.secret = new String(this.sec);
 		this.slt = salt;
 		this.salt = new String(this.slt);
 		this.counter = 0;
@@ -47,7 +48,7 @@ public class KeyGenerator {
 	
 	public byte[] generateKey() throws NoSuchAlgorithmException, InvalidKeyException{
 		
-		SecretKeySpec keyspec = new SecretKeySpec(this.pwd, "HmacSHA256");
+		SecretKeySpec keyspec = new SecretKeySpec(this.sec, "HmacSHA256");
         Mac prf = Mac.getInstance("HmacSHA256");
         prf.init(keyspec);
         
