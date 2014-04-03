@@ -1,6 +1,9 @@
 package it.polimi.dima.watchdog.activities;
 
 import it.polimi.dima.watchdog.R;
+import it.polimi.dima.watchdog.fragments.MainFeaturesFragment;
+import it.polimi.dima.watchdog.fragments.MainFeaturesFragment.OnFeatureSelectedListener;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -17,7 +20,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends ActionBarActivity implements OnFeatureSelectedListener {
 
 	private String[] mGeneralFeaturesTitles;
 	private DrawerLayout mDrawerLayout;
@@ -72,11 +75,13 @@ public class MainActivity extends ActionBarActivity {
 		
 
         mDrawerLayout.setDrawerListener(mDrawerToggle);
-		
+        MainFeaturesFragment fragment = new MainFeaturesFragment();
+        fragment.setArguments(getIntent().getExtras());
+        
         if (savedInstanceState == null) {
-
-			getSupportFragmentManager().beginTransaction()
-					.add(R.id.main_features_container, new PlaceholderFragment()).commit();
+        	
+        	getSupportFragmentManager().beginTransaction()
+            .add(R.id.main_features_container, fragment).commit();
 		}
 	}
 
@@ -164,6 +169,32 @@ public class MainActivity extends ActionBarActivity {
 
 		}
 
+	}
+	
+
+	@Override
+	public void onGpsFeatureSelected() {
+		
+		startFeatureActivity(GpsActivity.class);
+		System.out.println("[DEBUG] ho cliccato sul gps");
+		
+	}
+
+	@Override
+	public void onPhoneStatusFeatureSelected() {
+		startFeatureActivity(PhoneStatusActivity.class);
+		
+	}
+
+	@Override
+	public void onSmsRemoteFeatureSelected() {
+		startFeatureActivity(SmsRemoteActivity.class);
+		
+	}
+	
+	private void startFeatureActivity(Class<?> cls) {
+		Intent intent = new Intent(this, cls);
+		startActivity(intent);
 	}
 
 }

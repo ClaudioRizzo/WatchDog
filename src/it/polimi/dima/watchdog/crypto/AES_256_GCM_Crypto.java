@@ -1,6 +1,7 @@
 package it.polimi.dima.watchdog.crypto;
 
 import android.annotation.SuppressLint;
+import android.util.Base64;
 
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
@@ -9,7 +10,12 @@ import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.Security;
 
+<<<<<<< HEAD
 //import javax.xml.bind.DatatypeConverter;
+=======
+//import org.apache.commons.codec.binary.Base64.*;
+
+>>>>>>> 53e967cf52cddf6982798ca26a301fa69d84972f
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 //import javax.crypto.KeyGenerator;
@@ -96,7 +102,7 @@ public class AES_256_GCM_Crypto implements Crypto {
 		}
 		this.ptx = ptx;
 		this.keyString = keyString;
-		this.keyValue = DatatypeConverter.parseHexBinary(this.keyString);
+		this.keyValue = this.keyString.getBytes();//DatatypeConverter.parseHexBinary(this.keyString);
 		this.key = new SecretKeySpec(this.keyValue, "AES");
 	}
 
@@ -132,7 +138,7 @@ public class AES_256_GCM_Crypto implements Crypto {
 	 
 	public AES_256_GCM_Crypto(String ptx, Key key) {
 		String dummy = "0000000000000000000000000000000000000000000000000000000000000000";
-		byte[] dummyArray = DatatypeConverter.parseHexBinary(dummy);
+		byte[] dummyArray = dummy.getBytes();//DatatypeConverter.parseHexBinary(dummy);
 		Key dummyKey = new SecretKeySpec(dummyArray, "AES");
 
 		if (key.getEncoded().length != dummyKey.getEncoded().length) {
@@ -155,7 +161,7 @@ public class AES_256_GCM_Crypto implements Crypto {
 	public AES_256_GCM_Crypto(Key key, byte[] ctx) {
 		this.key = key;
 		this.ctx = ctx;
-		this.base64_ctx = DatatypeConverter.printBase64Binary(this.ctx); // giusto
+		this.base64_ctx = Base64.encodeToString(this.ctx, Base64.DEFAULT);//DatatypeConverter.printBase64Binary(this.ctx); // giusto
 																			// per
 																			// completezza
 	}
@@ -183,7 +189,7 @@ public class AES_256_GCM_Crypto implements Crypto {
 		}
 		this.key = key;
 		this.base64_ctx = ctx;
-		this.ctx = DatatypeConverter.parseBase64Binary(this.base64_ctx);
+		this.ctx = Base64.decode(this.base64_ctx, Base64.DEFAULT);//DatatypeConverter.parseBase64Binary(this.base64_ctx);
 	}
 
 	/**
@@ -197,7 +203,7 @@ public class AES_256_GCM_Crypto implements Crypto {
 			IllegalBlockSizeException, BadPaddingException {
 
 		// aggiunge il provider che supporta GCM
-		Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
+		Security.insertProviderAt(new org.spongycastle.jce.provider.BouncyCastleProvider(), 1);
 
 		// setta i parametri per il modo GCM a partire dall'iv e dalla tag
 		// length
@@ -205,7 +211,7 @@ public class AES_256_GCM_Crypto implements Crypto {
 
 		// crea una nuova istanza di uno stato dell'aes con GCM come modo e
 		// nessun padding (con GCM non serve)
-		Cipher ctx = Cipher.getInstance("AES/GCM/NoPadding", "BC");
+		Cipher ctx = Cipher.getInstance("AES/GCM/NoPadding");
 
 		// inizializza lo stato
 		ctx.init(Cipher.ENCRYPT_MODE, this.key, gmcps);
@@ -215,7 +221,7 @@ public class AES_256_GCM_Crypto implements Crypto {
 
 		// converte lo stato finale in una stringa base64 e la salva in
 		// base64_ctx
-		this.base64_ctx = DatatypeConverter.printBase64Binary(this.ctx);
+		this.base64_ctx = Base64.encodeToString(this.ctx, Base64.DEFAULT);//DatatypeConverter.printBase64Binary(this.ctx);
 
 		// ritorna una stringa in base64 che rappresenta il ciphertext
 		return this.base64_ctx;
@@ -232,7 +238,7 @@ public class AES_256_GCM_Crypto implements Crypto {
 			IllegalBlockSizeException, BadPaddingException {
 
 		// aggiunge il provider che supporta GCM
-		Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
+		Security.insertProviderAt(new org.spongycastle.jce.provider.BouncyCastleProvider(), 1);
 
 		// setta i parametri per il modo GCM a partire dall'iv e dalla tag
 		// length
@@ -240,7 +246,7 @@ public class AES_256_GCM_Crypto implements Crypto {
 
 		// crea una nuova istanza di uno stato dell'aes con GCM come modo e
 		// nessun padding (con GCM non serve)
-		Cipher ctx = Cipher.getInstance("AES/GCM/NoPadding", "BC");
+		Cipher ctx = Cipher.getInstance("AES/GCM/NoPadding");
 
 		// inizializza lo stato
 		ctx.init(Cipher.DECRYPT_MODE, this.key, gmcps);

@@ -16,5 +16,8 @@
     <string name="title_activity_gps">GpsActivity</string>
     <string name="title_activity_phone_status">PhoneStatusActivity</string>
     <string name="title_activity_sms_remote">SmsRemoteActivity</string>
+    <string name="gps_button">GPS</string>
+    <string name="remote_control">Sms Remote</string>
+    <string name="status">Phone Status</string>
 
 </resources>
