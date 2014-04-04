@@ -10,7 +10,11 @@ import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.Security;
 
+import org.apache.commons.codec.DecoderException;
+import org.apache.commons.codec.binary.Hex;
+
 //import org.apache.commons.codec.binary.Base64.*;
+
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
@@ -72,15 +76,16 @@ public class AES_256_GCM_Crypto implements Crypto {
 	 * @param keyString
 	 *            : la chiave sotto forma di stringa di caratteri esadecimali
 	 *            (0-F)
+	 * @throws DecoderException 
 	 */
-	public AES_256_GCM_Crypto(String ptx, String keyString) {
+	public AES_256_GCM_Crypto(String ptx, String keyString) throws DecoderException {
 
 		if (keyString.length() != 64) {
 			throw new IllegalArgumentException("La chiave non è di 256 bit");
 		}
 		this.ptx = ptx;
 		this.keyString = keyString;
-		this.keyValue = this.keyString.getBytes();//DatatypeConverter.parseHexBinary(this.keyString);
+		this.keyValue = Hex.decodeHex(this.keyString.toCharArray());//DatatypeConverter.parseHexBinary(this.keyString);
 		this.key = new SecretKeySpec(this.keyValue, "AES");
 	}
 
@@ -113,10 +118,11 @@ public class AES_256_GCM_Crypto implements Crypto {
 	 *            : il plaintext da cifrare
 	 * @param key
 	 *            : la chiave già generata
+	 * @throws DecoderException 
 	 */
-	public AES_256_GCM_Crypto(String ptx, Key key) {
+	public AES_256_GCM_Crypto(String ptx, Key key) throws DecoderException {
 		String dummy = "0000000000000000000000000000000000000000000000000000000000000000";
-		byte[] dummyArray = dummy.getBytes();//DatatypeConverter.parseHexBinary(dummy);
+		byte[] dummyArray = Hex.decodeHex(dummy.toCharArray());//DatatypeConverter.parseHexBinary(dummy);
 		Key dummyKey = new SecretKeySpec(dummyArray, "AES");
 
 		if (key.getEncoded().length != dummyKey.getEncoded().length) {
