@@ -2,8 +2,10 @@
 <resources>
 
     <string-array name="gen_features_array">
-        <item>Prova</item>
-        <item>dummy</item>
+        <item>Home</item>
+        <item>Gps</item>
+        <item>Remote</item>
+        <item>Status</item>
     </string-array>
 
     <string name="app_name">WatchDog</string>
@@ -19,5 +21,17 @@
     <string name="gps_button">GPS</string>
     <string name="remote_control">Sms Remote</string>
     <string name="status">Phone Status</string>
+    <string name="title_section1">Section 1</string>
+    <string name="title_section2">Section 2</string>
+    <string name="title_section3">Section 3</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="action_example">Example action</string>
+
+    <!-- Action Bar Titles -->
+    <string name="gps_title">Gps</string>
+    <string name="status_title">Status</string>
+    <string name="remote_title">Remote</string>
+    <!--  -->
 
 </resources>
