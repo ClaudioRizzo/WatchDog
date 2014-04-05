@@ -1,6 +1,7 @@
 package it.polimi.dima.watchdog.crypto;
 
 import java.security.InvalidKeyException;
+import java.security.Key;
 import java.security.NoSuchAlgorithmException;
 
 import javax.crypto.Mac;
@@ -9,28 +10,33 @@ import javax.crypto.spec.SecretKeySpec;
 /**
  * In questa classe verrà generata di volta in volta una chiave per l'AES a partire da un "segreto condiviso";
  * l'algoritmo usato è PBKDF2 con HmacSHA256. Il segreto condiviso si suppone essere stato già concordato con
- * l'altro utente mediante FHMQV o ECMQV.
+ * l'altro utente mediante ECDH.
  * 
  * JAVADOC WILL COME (TODO)
  *  
  * @author emanuele
  *
  */
-public class KeyGenerator {
+public class AESKeyGenerator {
 	
 	private String secret;
 	private byte[] sec;
 	private String salt;
 	private byte[] slt;
-	private final int dkLen = 32;
+	private final int dkLen = 32; //inteso in byte --> 256 bit
 	private int counter = 0x1000;
-	private byte[] key;
+	private byte[] keyValue;
+	private Key key;
 	
-	public byte[] getKey(){
+	public byte[] getKeyValue(){
+		return this.keyValue;
+	}
+	
+	public Key getKey(){
 		return this.key;
 	}
 	
-	public KeyGenerator(String secret, String salt){
+	public AESKeyGenerator(String secret, String salt){
 		this.secret = secret;
 		this.sec = this.secret.getBytes();
 		this.salt = salt;
@@ -38,7 +44,7 @@ public class KeyGenerator {
 		this.counter = 0;
 	}
 	
-	public KeyGenerator(byte[] secret, byte[] salt){
+	public AESKeyGenerator(byte[] secret, byte[] salt){
 		this.sec = secret;
 		this.secret = new String(this.sec);
 		this.slt = salt;
@@ -46,7 +52,7 @@ public class KeyGenerator {
 		this.counter = 0;
 	}
 	
-	public byte[] generateKey() throws NoSuchAlgorithmException, InvalidKeyException{
+	public Key generateKey() throws NoSuchAlgorithmException, InvalidKeyException{
 		
 		SecretKeySpec keyspec = new SecretKeySpec(this.sec, "HmacSHA256");
         Mac prf = Mac.getInstance("HmacSHA256");
@@ -66,11 +72,13 @@ public class KeyGenerator {
             // Incomplete last block
             byte dk[] = new byte[dkLen];
             System.arraycopy(result, 0, dk, 0, dkLen);
-            this.key = dk;
+            this.keyValue = dk;
+            this.key = new SecretKeySpec(this.keyValue, "AES");
             return this.key;
         }
 		
-        this.key = result;
+        this.keyValue = result;
+        this.key = new SecretKeySpec(this.keyValue, "AES");
 		return this.key;
 	}
 

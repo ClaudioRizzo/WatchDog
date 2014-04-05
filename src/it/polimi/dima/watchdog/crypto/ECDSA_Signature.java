@@ -3,12 +3,9 @@ package it.polimi.dima.watchdog.crypto;
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.security.InvalidKeyException;
-import java.security.KeyPair;
-import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
-import java.security.SecureRandom;
 import java.security.Signature;
 import java.security.SignatureException;
 
@@ -53,12 +50,7 @@ public class ECDSA_Signature {
 	}
 	
 	
-	/**
-	 * Costruttore che serve esclusivamente a generare una coppia di chiavi.
-	 */
-	public ECDSA_Signature(){
-		generateKeyPair();		
-	}
+	
 	
 	
 	/**
@@ -79,20 +71,6 @@ public class ECDSA_Signature {
 		}
 	}
 	
-	/**
-	 * Costruttore in sign-mode che genera le chiavi sul momento. Lancia un'eccezione se almeno una delle chiavi
-	 * non viene generata.
-	 * @param ptx : il messaggio da firmare
-	 * @throws NoECDSAKeyPairGeneratedException
-	 */
-	public ECDSA_Signature(String ptx) throws NoECDSAKeyPairGeneratedException{
-		this.ptx = ptx;
-		generateKeyPair();
-		
-		if(this.pub == null || this.priv == null){
-			throw new NoECDSAKeyPairGeneratedException();
-		}
-	}
 	
 	/**
 	 * Costruttore in decrypt-mode che riceve il messaggio, la chiave pubblica con cui verificare la firma
@@ -121,26 +99,6 @@ public class ECDSA_Signature {
 		this.signatureToVerify = signature.getBytes();
 	}
 	
-	
-	
-	/**
-	 * Genera una coppia di chiavi nel caso questa non sia stata passata dall'utente
-	 */
-	//TODO leggere il warning per android <= 4.3 e agire di conseguenza
-	private void generateKeyPair() {
-		try{
-			KeyPairGenerator keyGen = KeyPairGenerator.getInstance("EC");
-	        SecureRandom random = SecureRandom.getInstance("SHA1PRNG");
-
-	        keyGen.initialize(256, random);
-
-	        KeyPair pair = keyGen.generateKeyPair();
-	        this.priv = pair.getPrivate();
-	        this.pub = pair.getPublic();
-		}
-		catch(NoSuchAlgorithmException e){}
-		
-	}
 	
 	/**
 	 * Effettua la firma digitale aggiornando signature e string_signature, oppure, se qualunque cosa

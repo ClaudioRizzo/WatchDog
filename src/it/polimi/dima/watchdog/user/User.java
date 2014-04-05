@@ -12,7 +12,7 @@ import java.security.PublicKey;
 public class User {
 	
 	private Key aesKey;
-	private PublicKey ecdsaPublicKey;
-	private PrivateKey ecdsaPrivateKey;
+	private PublicKey publicKey;
+	private PrivateKey privateKey;
 
 }
