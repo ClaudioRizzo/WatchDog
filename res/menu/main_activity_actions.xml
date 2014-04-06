@@ -1,20 +1,35 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:yourapp="http://schemas.android.com/apk/res-auto" >
-
+	
+    
+    <!-- items shown in the bar -->
+    <item
+        android:id="@+id/gps_icon"
+        android:title="@string/gps_title"
+        android:icon="@drawable/ic_action_map"
+        yourapp:showAsAction="ifRoom" />
+    
+    <!-- items shown in the bar -->
+    <item
+        android:id="@+id/sms_icon"
+        android:title="@string/remote_title"
+        android:icon="@drawable/ic_action_chat"
+        yourapp:showAsAction="ifRoom" />
+    
     <!-- item within the option panel on the right -->
     <item
         android:id="@+id/settings_panel"
         android:title="@string/action_settings"
-        android:showAsAction="always"/>
+        yourapp:showAsAction="never"/>
     
     <item
         android:id="@+id/rate_panel"
         android:title="@string/action_rateus"
-        android:showAsAction="always"/>
+        yourapp:showAsAction="never"/>
     
     <item
         android:id="@+id/share_panel"
         android:title="@string/action_share"
-        android:showAsAction="always"/>
+        yourapp:showAsAction="never"/>
 
 </menu>
