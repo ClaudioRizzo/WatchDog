@@ -4,6 +4,15 @@ import org.apache.commons.codec.binary.Base64;
 
 import it.polimi.dima.watchdog.exceptions.ArbitraryMessageReceivedException;
 
+/**
+ * Classe che si occupa di spacchettare il contenuto di un sms, dividendolo in hash della password e testo.
+ * Esegue anche la comparazione di tale hash con quello salvato (dove? TODO) per verificare che il telefono
+ * del mittente (già autenticato) non sia utilizzato da malintenzionati. TODO: implementare la decodifica e il
+ * controllo della firma digitale (in questa classe).
+ * 
+ * @author emanuele
+ *
+ */
 public class SMSParser {
 	public byte[] sms;
 	public String plaintext;

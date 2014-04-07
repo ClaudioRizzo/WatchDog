@@ -36,6 +36,7 @@ import javax.crypto.Cipher;
 public class AES_256_GCM_Crypto implements Crypto {
 
 	private String ptx;
+	private byte[] plaintext;
 	private String keyString;
 	private byte[] keyValue;
 	private Key key;
@@ -65,6 +66,20 @@ public class AES_256_GCM_Crypto implements Crypto {
 	private final int tagLength = 128; // serve per generare i parametri per il
 										// modo GCM
 
+	
+	public byte[] getCiphertext(){
+		return this.ctx;
+	}
+	
+	public byte[] getPlaintext(){
+		return this.plaintext;
+	}
+	
+	public String getStringPlaintext(){
+		return this.ptx;
+	}
+	
+	
 	/**
 	 * Costruttore in encrypt mode con plaintext e chiave sotto forma di stringa
 	 * di caratteri esadecimali (0-F); se la stringa non è lunga 64 (ogni
@@ -78,12 +93,12 @@ public class AES_256_GCM_Crypto implements Crypto {
 	 *            (0-F)
 	 * @throws DecoderException 
 	 */
-	public AES_256_GCM_Crypto(String ptx, String keyString) throws DecoderException {
+	public AES_256_GCM_Crypto(byte[] ptx, String keyString) throws DecoderException {
 
 		if (keyString.length() != 64) {
 			throw new IllegalArgumentException("La chiave non è di 256 bit");
 		}
-		this.ptx = ptx;
+		this.plaintext = ptx;
 		this.keyString = keyString;
 		this.keyValue = Hex.decodeHex(this.keyString.toCharArray());//DatatypeConverter.parseHexBinary(this.keyString);
 		this.key = new SecretKeySpec(this.keyValue, "AES");
@@ -99,12 +114,12 @@ public class AES_256_GCM_Crypto implements Crypto {
 	 * @param keyValue
 	 *            : la chiave sotto forma di array di byte
 	 */
-	public AES_256_GCM_Crypto(String ptx, byte[] keyValue) {
+	public AES_256_GCM_Crypto(byte[] ptx, byte[] keyValue) {
 
 		if (keyValue.length != 32) {
 			throw new IllegalArgumentException("La chiave non è di 256 bit");
 		}
-		this.ptx = ptx;
+		this.plaintext = ptx;
 		this.keyValue = keyValue;
 		this.key = new SecretKeySpec(this.keyValue, "AES");
 	}
@@ -120,7 +135,7 @@ public class AES_256_GCM_Crypto implements Crypto {
 	 *            : la chiave già generata
 	 * @throws DecoderException 
 	 */
-	public AES_256_GCM_Crypto(String ptx, Key key) throws DecoderException {
+	public AES_256_GCM_Crypto(byte[] ptx, Key key) throws DecoderException {
 		String dummy = "0000000000000000000000000000000000000000000000000000000000000000";
 		byte[] dummyArray = Hex.decodeHex(dummy.toCharArray());//DatatypeConverter.parseHexBinary(dummy);
 		Key dummyKey = new SecretKeySpec(dummyArray, "AES");
@@ -129,7 +144,7 @@ public class AES_256_GCM_Crypto implements Crypto {
 			throw new IllegalArgumentException("La chiave non è di 256 bit");
 		}
 
-		this.ptx = ptx;
+		this.plaintext = ptx;
 		this.key = key;
 	}
 
@@ -201,7 +216,7 @@ public class AES_256_GCM_Crypto implements Crypto {
 		ctx.init(Cipher.ENCRYPT_MODE, this.key, gmcps);
 
 		// esegue tutti i round dell'aes
-		this.ctx = ctx.doFinal(this.ptx.getBytes());
+		this.ctx = ctx.doFinal(this.plaintext);
 
 		// converte lo stato finale in una stringa base64 e la salva in
 		// base64_ctx
@@ -236,10 +251,10 @@ public class AES_256_GCM_Crypto implements Crypto {
 		ctx.init(Cipher.DECRYPT_MODE, this.key, gmcps);
 
 		// esegue tutti i round dell'aes al contrario
-		byte[] ptx = ctx.doFinal(this.ctx);
+		this.plaintext = ctx.doFinal(this.ctx);
 
 		// converte lo stato finale in una stringa
-		this.ptx = new String(ptx);
+		this.ptx = new String(this.plaintext);
 
 		// ritorna il messaggio decriptato
 		return this.ptx;

@@ -27,26 +27,28 @@ import it.polimi.dima.watchdog.exceptions.*;
 public class ECDSA_Signature {
 	
 	private String ptx;
-	private Signature signature;
+	private byte[] plaintext;
+	private Signature sig;
 	private String string_signature;
-	private PublicKey pub;
-	private PrivateKey priv;
+	private byte[] signature;
+	private PublicKey oPub;
+	private PrivateKey mPriv;
 	private byte[] signatureToVerify;
 	
 	public String getStringSignature(){
 		return this.string_signature;
 	}
 	
-	public Signature getSignature(){
+	public byte[] getSignature(){
 		return this.signature;
 	}
 	
 	public PrivateKey getPrivateKey(){
-		return this.priv;
+		return this.mPriv;
 	}
 	
 	public PublicKey getPublicKey(){
-		return this.pub;
+		return this.oPub;
 	}
 	
 	
@@ -54,19 +56,35 @@ public class ECDSA_Signature {
 	
 	
 	/**
-	 * Costruttore in sign-mode che prevede il passaggio anche di una coppia di chiavi; lancia un'eccezione se
-	 * almeno una delle due chiavi non è una chiave ECDSA.
+	 * Costruttore in sign-mode che prevede il passaggio anche di una chiave privata; lancia un'eccezione se
+	 * non è una chiave ECDSA.
+	 * 
 	 * @param ptx : il messaggio da firmare
-	 * @param pub : la chiave pubblica
 	 * @param priv : la chiave privata
 	 * @throws NoECDSAKeyPairGeneratedException
 	 */
-	public ECDSA_Signature(String ptx, PublicKey pub, PrivateKey priv) throws NoECDSAKeyPairGeneratedException{
+	public ECDSA_Signature(String ptx, PrivateKey priv) throws NoECDSAKeyPairGeneratedException{
 		this.ptx = ptx;
-		this.pub = pub;
-		this.priv = priv;
+		this.mPriv = priv;
 		
-		if(!this.pub.getAlgorithm().toString().equals("EC")){
+		if(!this.mPriv.getAlgorithm().toString().equals("EC")){
+			throw new NoECDSAKeyPairGeneratedException();
+		}
+	}
+	
+	/**
+	 * Costruttore in sign-mode che prevede il passaggio anche di una chiave privata; lancia un'eccezione se
+	 * non è una chiave ECDSA.
+	 * 
+	 * @param ptx : il messaggio da firmare
+	 * @param priv : la chiave privata
+	 * @throws NoECDSAKeyPairGeneratedException
+	 */
+	public ECDSA_Signature(byte[] ptx, PrivateKey priv) throws NoECDSAKeyPairGeneratedException{
+		this.plaintext = ptx;
+		this.mPriv = priv;
+		
+		if(!this.mPriv.getAlgorithm().toString().equals("EC")){
 			throw new NoECDSAKeyPairGeneratedException();
 		}
 	}
@@ -81,7 +99,7 @@ public class ECDSA_Signature {
 	 */
 	public ECDSA_Signature(String ptx, PublicKey pub, byte[] signature){
 		this.ptx = ptx;
-		this.pub = pub;
+		this.oPub = pub;
 		this.signatureToVerify = signature;
 	}
 	
@@ -95,7 +113,7 @@ public class ECDSA_Signature {
 	 */
 	public ECDSA_Signature(String ptx, PublicKey pub, String signature){
 		this.ptx = ptx;
-		this.pub = pub;
+		this.oPub = pub;
 		this.signatureToVerify = signature.getBytes();
 	}
 	
@@ -107,30 +125,36 @@ public class ECDSA_Signature {
 	 */
 	public void sign() throws NoSignatureDoneException{
 		try {
-			this.signature = Signature.getInstance("SHA1withECDSA");
-			this.signature.initSign(this.priv);
+			this.sig = Signature.getInstance("SHA1withECDSA");
+			this.sig.initSign(this.mPriv);
+			
+			if(this.plaintext == null && this.ptx != null){
+				byte[] strByte = this.ptx.getBytes("UTF-8");
+		        this.sig.update(strByte);
+			}
+			else{
+				this.sig.update(this.plaintext);
+			}
+	        
 
-	        byte[] strByte = this.ptx.getBytes("UTF-8");
-	        this.signature.update(strByte);
-
-	        byte[] realSig = this.signature.sign();
-	        //this.string_signature = new BigInteger(1, realSig).toString(16);
-	        this.string_signature = new BigInteger(1, realSig).toString(16);
+	        this.signature = this.sig.sign();
+	        
+	        this.string_signature = new BigInteger(1, this.signature).toString(16);
 		}
 		catch (NoSuchAlgorithmException e) {
-			this.signature = null;
+			this.sig = null;
 		} 
 		catch (SignatureException e) {
-			this.signature = null;
+			this.sig = null;
 		}
 		catch (InvalidKeyException e) {
-			this.signature = null;
+			this.sig = null;
 		}
 		catch (UnsupportedEncodingException e) {
-			this.signature = null;
+			this.sig = null;
 		}
 		
-		if(this.signature == null){
+		if(this.sig == null){
 			throw new NoSignatureDoneException();
 		}
 	}
@@ -143,7 +167,7 @@ public class ECDSA_Signature {
 	public boolean verifySignature() throws ErrorInSignatureCheckingException{
 		try{
 			Signature verify = Signature.getInstance("SHA1withECDSA");
-			verify.initVerify(this.pub);
+			verify.initVerify(this.oPub);
 			verify.update(this.ptx.getBytes());
 			return verify.verify(this.signatureToVerify);
 		}
