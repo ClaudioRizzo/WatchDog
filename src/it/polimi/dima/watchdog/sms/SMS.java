@@ -5,23 +5,44 @@ import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+/**
+ * Classe che gestisce la costruzione degli SMS.
+ * @author emanuele
+ *
+ */
 public class SMS {
 	private String text;
 	private String password;
 	private byte[] passwordHash;
 	private byte[] finalMessage;
 	
-	
+	/**
+	 * Costruttore con solo testo.
+	 * @param text : il testo in chiaro del messaggio
+	 */
 	public SMS(String text){
 		this.text = text;
 	}
 	
+	/**
+	 * Costruttore con testo e password che richiama il metodo di incapsulamento di text e password nel messaggio
+	 * finale.
+	 * 
+	 * @param text : il testo in chiaro del messaggio
+	 * @param password : la password che varrà "allegata" al messaggio
+	 * @throws NoSuchAlgorithmException
+	 * @throws IOException
+	 */
 	public SMS(String text, String password) throws NoSuchAlgorithmException, IOException{
 		this.text = text;
 		this.password = password;
 		construct();
 	}
 	
+	/**
+	 * Setta la password utilizzando quella passata.
+	 * @param password : la password che in un secondo momento verrà "allegata" al messaggio
+	 */
 	public void setPassword(String password){
 		if(this.password == null){
 			this.password = password;
@@ -29,7 +50,8 @@ public class SMS {
 	}
 	
 	/**
-	 * Public perchè può essere chiamato dall'esterno nel caso si costruisca esplicitamente passo a passo l'SMS
+	 * Public perchè può essere chiamato dall'esterno nel caso si costruisca esplicitamente passo a passo l'SMS.
+	 * Crea un hash della password con sha-256 e crea la struttura hash(password) || text .
 	 * @throws NoSuchAlgorithmException 
 	 * @throws IOException 
 	 */
