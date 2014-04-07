@@ -97,8 +97,8 @@ public class ECDSA_Signature {
 	 * @param pub : la chiave pubblica del mittente
 	 * @param signature : la firma da verificare
 	 */
-	public ECDSA_Signature(String ptx, PublicKey pub, byte[] signature){
-		this.ptx = ptx;
+	public ECDSA_Signature(byte[] ptx, PublicKey pub, byte[] signature){
+		this.plaintext = ptx;
 		this.oPub = pub;
 		this.signatureToVerify = signature;
 	}
@@ -112,7 +112,7 @@ public class ECDSA_Signature {
 	 * @param signature : la firma da verificare
 	 */
 	public ECDSA_Signature(String ptx, PublicKey pub, String signature){
-		this.ptx = ptx;
+		this.plaintext = ptx.getBytes();
 		this.oPub = pub;
 		this.signatureToVerify = signature.getBytes();
 	}
@@ -168,7 +168,7 @@ public class ECDSA_Signature {
 		try{
 			Signature verify = Signature.getInstance("SHA1withECDSA");
 			verify.initVerify(this.oPub);
-			verify.update(this.ptx.getBytes());
+			verify.update(this.plaintext);
 			return verify.verify(this.signatureToVerify);
 		}
 		catch(SignatureException e){

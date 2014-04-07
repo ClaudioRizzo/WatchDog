@@ -32,7 +32,7 @@ import org.apache.commons.codec.DecoderException;
  */
 public class SMS {
 	private PrivateKey myPrivateKey; //chiave per la firma digitale
-	private Key key; //chiave dell'AES
+	private Key encryptionKey; //chiave dell'AES
 	private String text;
 	private String password;
 	private byte[] passwordHash; //hash(password)
@@ -50,8 +50,7 @@ public class SMS {
 		return this.finalSignedAndEncryptedMessage;
 	}
 	/**
-	 * Costruttore con testo e password che richiama il metodo di incapsulamento di text e password nel messaggio
-	 * finale.
+	 * Costruttore con testo e password alla fine del quale il messaggio sarà pronto per essere spedito.
 	 * 
 	 * @param text : il testo in chiaro del messaggio
 	 * @param password : la password che verrà "allegata" al messaggio
@@ -73,14 +72,14 @@ public class SMS {
 		this.text = text;
 		this.password = password;
 		this.myPrivateKey = mPriv;
-		this.key = key;
+		this.encryptionKey = key;
 		construct();
 	}
 	
 
 	
 	/**
-	 * Crea un hash della password con sha-256 e crea la struttura hash(password) || text . Poi chiama i metodi
+	 * Crea un hash della password con SHA-256 e crea la struttura hash(password) || text . Poi chiama i metodi
 	 * che firmano e crittano il messaggio.
 	 * 
 	 * @throws NoSuchAlgorithmException 
@@ -113,6 +112,11 @@ public class SMS {
 		}
 	}
 
+	/**
+	 * Genera la firma digitale del messaggio con SHA-256 ed ECDSA.
+	 * @throws NoECDSAKeyPairGeneratedException
+	 * @throws NoSignatureDoneException
+	 */
 	private void sign() throws NoECDSAKeyPairGeneratedException, NoSignatureDoneException {
 		ECDSA_Signature sig = new ECDSA_Signature(this.finalMessage, this.myPrivateKey);
 		sig.sign();
@@ -120,12 +124,22 @@ public class SMS {
 	}
 
 
-
+	/**
+	 * Critta la struttura firma || messaggio con l'AES-256-GCM.
+	 * @throws DecoderException
+	 * @throws InvalidKeyException
+	 * @throws NoSuchAlgorithmException
+	 * @throws NoSuchPaddingException
+	 * @throws InvalidAlgorithmParameterException
+	 * @throws NoSuchProviderException
+	 * @throws IllegalBlockSizeException
+	 * @throws BadPaddingException
+	 */
 	private void encrypt() throws DecoderException, InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidAlgorithmParameterException, NoSuchProviderException, IllegalBlockSizeException, BadPaddingException {
 		byte[] signaturePlusMessage = new byte[this.finalMessage.length + this.signature.length];
 		System.arraycopy(this.signature, 0, signaturePlusMessage, 0, this.signature.length);
 		System.arraycopy(this.finalMessage, 0, signaturePlusMessage, this.signature.length, this.finalMessage.length);
-		AES_256_GCM_Crypto enc = new AES_256_GCM_Crypto(signaturePlusMessage, this.key);
+		AES_256_GCM_Crypto enc = new AES_256_GCM_Crypto(signaturePlusMessage, this.encryptionKey);
 		enc.encrypt();
 		this.finalSignedAndEncryptedMessage = enc.getCiphertext();
 	}
