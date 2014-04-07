@@ -1,6 +1,9 @@
 package it.polimi.dima.watchdog.activities;
 
+import it.polimi.dima.watchdog.Consts;
+import it.polimi.dima.watchdog.FeaturesEnum;
 import it.polimi.dima.watchdog.R;
+import it.polimi.dima.watchdog.factory.FeaturesFactory;
 import it.polimi.dima.watchdog.fragments.FirstTabRootFragment;
 import it.polimi.dima.watchdog.fragments.LocalizatoionFragment;
 import it.polimi.dima.watchdog.fragments.PerimeterFragment;
@@ -50,25 +53,13 @@ public class MainActivity extends ActionBarActivity implements TabListener {
 	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-
-		FragmentTransaction trans = getSupportFragmentManager().beginTransaction();	
+	
 		switch (item.getItemId()) {
 		case R.id.gps_icon:
-			trans.replace(R.id.tab1_root_frame, new LocalizatoionFragment());
-			trans.replace(R.id.tab2_root_frame, new PerimeterFragment());
-			trans.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-			trans.addToBackStack(null);
-			
-
-			trans.commit();
+			this.replaceFragment(FeaturesEnum.GPS);
 			return true;
 		case R.id.sms_icon:
-			trans.replace(R.id.tab1_root_frame, new SirenOnFragment());
-			trans.replace(R.id.tab2_root_frame, new SirenOnFragment());
-			trans.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-			trans.addToBackStack(null);
-
-			trans.commit();
+			this.replaceFragment(FeaturesEnum.SMS_REMOTE);
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
@@ -128,11 +119,8 @@ public class MainActivity extends ActionBarActivity implements TabListener {
 
 	private class TabsAdapter extends FragmentPagerAdapter {
 
-		private String context = "GPS";
-
 		public TabsAdapter(String context, FragmentManager mFragmentManager) {
 			super(mFragmentManager);
-			this.setContext(context);
 		}
 
 		public TabsAdapter(FragmentManager fm) {
@@ -158,9 +146,6 @@ public class MainActivity extends ActionBarActivity implements TabListener {
 			return 2;
 		}
 
-		public void setContext(String context) {
-			this.context = context;
-		}
 
 	}
 
@@ -182,6 +167,22 @@ public class MainActivity extends ActionBarActivity implements TabListener {
 		
 	}
 
+	private void replaceFragment(FeaturesEnum fEnum) {
+		Fragment mFragment;
+		FragmentTransaction trans = getSupportFragmentManager().beginTransaction();
+		
+		for(int tab: Consts.tabs_frame_id) {
+			 mFragment = FeaturesFactory.getFeature(fEnum).getFragment(tab);
+			 trans.replace(tab, mFragment);
+		}
+		
+		trans.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+		trans.addToBackStack(null);
 
+		trans.commit();
+		
+		//TODO: Gestire il caso in cui le tabelle non sono di numero omogeneo
+		
+	}
 
 }
