@@ -1,33 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string-array name="gen_features_array">
-        <item>Home</item>
-        <item>Gps</item>
-        <item>Remote</item>
-        <item>Status</item>
-    </string-array>
+    
 
     <string name="app_name">WatchDog</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="action_rateus">Rate Us</string>
-    <string name="action_share">Shate Application</string>
-    <string name="drawer_open">Open navigation drawer</string>
-    <string name="drawer_close">Close navigation drawer</string>
-    <string name="title_activity_gps">GpsActivity</string>
-    <string name="title_activity_phone_status">PhoneStatusActivity</string>
-    <string name="title_activity_sms_remote">SmsRemoteActivity</string>
-    <string name="gps_button">GPS</string>
-    <string name="remote_control">Sms Remote</string>
-    <string name="status">Phone Status</string>
-    <string name="title_section1">Section 1</string>
-    <string name="title_section2">Section 2</string>
-    <string name="title_section3">Section 3</string>
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="action_example">Example action</string>
-    <string name="siren_on">Siren On</string>
+    <string name="action_share">Share Application</string>
+    
 
     <!-- Action Bar Titles -->
     <string name="gps_title">Gps</string>

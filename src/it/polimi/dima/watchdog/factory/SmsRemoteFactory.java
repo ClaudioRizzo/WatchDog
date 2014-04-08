@@ -1,26 +1,22 @@
 package it.polimi.dima.watchdog.factory;
 
-import it.polimi.dima.watchdog.R;
-import it.polimi.dima.watchdog.fragments.SirenOnFragment;
+import it.polimi.dima.watchdog.fragments.smsRemote.SirenOfFragment;
+import it.polimi.dima.watchdog.fragments.smsRemote.SirenOnFragment;
 import android.support.v4.app.Fragment;
 
-/**
- * dispaccia i fragment relativi alla funzionalità del controllo in remoto via sms
- * @author claudio
- *
- */
-public class SmsRemoteFactory extends FeaturesFactory {
+public class SmsRemoteFactory extends FeatureFactory {
 
 	@Override
-	public Fragment getFragment(int id) {
-		switch (id) {
-		case R.id.tab1_root_frame:
+	public Fragment getFragment(int pos) {
+		switch(pos) {
+		case 0:
 			return new SirenOnFragment();
-		case R.id.tab2_root_frame:
-			return new SirenOnFragment();
-		default:
-			return null;
+		case 1: 
+			return new SirenOfFragment();
+		
 		}
+		throw new IllegalStateException("Per il Remote Control questa posizione non esiste!");
 	}
 
+	
 }
