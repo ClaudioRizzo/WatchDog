@@ -5,7 +5,6 @@ import it.polimi.dima.watchdog.crypto.ECDSA_Signature;
 import it.polimi.dima.watchdog.exceptions.NoECDSAKeyPairGeneratedException;
 import it.polimi.dima.watchdog.exceptions.NoSignatureDoneException;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
@@ -69,7 +68,7 @@ public class SMS {
 	 * @throws InvalidKeyException 
 	 */
 	public SMS(String text, String password, PrivateKey mPriv, Key key) throws NoSuchAlgorithmException, IOException, NoECDSAKeyPairGeneratedException, NoSignatureDoneException, DecoderException, InvalidKeyException, NoSuchPaddingException, InvalidAlgorithmParameterException, NoSuchProviderException, IllegalBlockSizeException, BadPaddingException{
-		this.text = text;
+		this.text = sanitize(text);
 		this.password = password;
 		this.myPrivateKey = mPriv;
 		this.encryptionKey = key;
@@ -77,7 +76,26 @@ public class SMS {
 	}
 	
 
-	
+	/**
+	 * Sostituisce tutti gli spazi presenti nel messaggio con dei caratteri underscore. Questo perchè il
+	 * carattere spazio sarà utilizzato come separatore tra messaggio e firma
+	 * 
+	 * @param text : il testo del messaggio
+	 * @return text privato di tutti gli eventuali spazi in coda
+	 */
+	private String sanitize(String text) {
+		if(text == null || text == " "){
+			throw new IllegalArgumentException("Un messaggio nullo o formato solo da uno spazio non è accettabile!!!");
+		}
+		byte[] string = text.getBytes();
+		for(int i=0; i<string.length; i++){
+			if(string[i] == ' '){
+				string[i] = '_';
+			}
+		}
+		return new String(string);
+	}
+
 	/**
 	 * Crea un hash della password con SHA-256 e crea la struttura hash(password) || text . Poi chiama i metodi
 	 * che firmano e crittano il messaggio.
@@ -99,14 +117,15 @@ public class SMS {
 			MessageDigest digest = MessageDigest.getInstance("SHA-256");
 			//l'hash sarà lungo 256 bit
 			this.passwordHash = digest.digest(this.password.getBytes("UTF-8"));
+			byte[] text = this.text.getBytes();
 			
 			//in pratica si crea una struttura hash(password) || text
 			//Sapendo che l'hash è lungo 256 bit, è comodo alla ricezione separare le due parti se l'hash...
 			//...è in testa
-			ByteArrayOutputStream outputStream = new ByteArrayOutputStream( );
-			outputStream.write(this.passwordHash);
-			outputStream.write(this.text.getBytes());
-			this.finalMessage = outputStream.toByteArray();
+			this.finalMessage = new byte[this.passwordHash.length + text.length];
+			System.arraycopy(this.passwordHash, 0, this.finalMessage, 0, this.passwordHash.length);
+			System.arraycopy(text, 0, this.finalMessage, this.passwordHash.length, text.length);
+			
 			sign();
 			encrypt();
 		}
@@ -125,7 +144,9 @@ public class SMS {
 
 
 	/**
-	 * Critta la struttura firma || messaggio con l'AES-256-GCM.
+	 * Critta la struttura  messaggio || ' ' || firma  con l'AES-256-GCM. Il carattere spazio servirà al parser
+	 * per separare firma da messaggio, perchè la lunghezza della firma ECDSA è veriabile.
+	 * 
 	 * @throws DecoderException
 	 * @throws InvalidKeyException
 	 * @throws NoSuchAlgorithmException
@@ -136,9 +157,10 @@ public class SMS {
 	 * @throws BadPaddingException
 	 */
 	private void encrypt() throws DecoderException, InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidAlgorithmParameterException, NoSuchProviderException, IllegalBlockSizeException, BadPaddingException {
-		byte[] signaturePlusMessage = new byte[this.finalMessage.length + this.signature.length];
-		System.arraycopy(this.signature, 0, signaturePlusMessage, 0, this.signature.length);
-		System.arraycopy(this.finalMessage, 0, signaturePlusMessage, this.signature.length, this.finalMessage.length);
+		byte[] signaturePlusMessage = new byte[this.finalMessage.length + this.signature.length + 1];
+		System.arraycopy(this.finalMessage, 0, signaturePlusMessage, 0, this.finalMessage.length);
+		signaturePlusMessage[this.finalMessage.length] = ' ';
+		System.arraycopy(this.signature, 0, signaturePlusMessage, this.finalMessage.length + 1, this.signature.length);
 		AES_256_GCM_Crypto enc = new AES_256_GCM_Crypto(signaturePlusMessage, this.encryptionKey);
 		enc.encrypt();
 		this.finalSignedAndEncryptedMessage = enc.getCiphertext();

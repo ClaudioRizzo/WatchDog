@@ -22,8 +22,7 @@ import it.polimi.dima.watchdog.exceptions.ErrorInSignatureCheckingException;
 /**
  * Classe che si occupa di spacchettare il contenuto di un sms, dividendolo in hash della password e testo.
  * Esegue anche la comparazione di tale hash con quello salvato (dove? TODO) per verificare che il telefono
- * del mittente (già autenticato) non sia utilizzato da malintenzionati. TODO: implementare la decodifica e il
- * controllo della firma digitale (in questa classe).
+ * del mittente (già autenticato) non sia utilizzato da malintenzionati.
  * 
  * @author emanuele
  *
@@ -32,7 +31,7 @@ public class SMSParser {
 	public byte[] smsEncrypted; //sms crittato
 	public Key decryptionKey; //chiave dell'AES
 	public PublicKey oPub; //chiave pubblica del mittente, usata per verificare la firma
-	public byte[] sms; //sms decrittato
+	public byte[] sms; //sms decrittato (hash(password) || text)
 	public byte[] signature; //firma scorporata dal messaggio
 	public String plaintext; //parte testuale del messaggio senza la password
 	public byte[] passwordHash; //l'hash della password proveniente dal messaggio
@@ -68,15 +67,34 @@ public class SMSParser {
 	private void decrypt() throws DecoderException, InvalidKeyException, NoSuchAlgorithmException, NoSuchProviderException, NoSuchPaddingException, InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException, ArbitraryMessageReceivedException, ErrorInSignatureCheckingException {
 		AES_256_GCM_Crypto dec = new AES_256_GCM_Crypto(this.smsEncrypted, this.decryptionKey);
 		dec.decrypt();
-		byte[] decryptedSMS = dec.getPlaintext(); // firma + messaggio
-		//TODO TODO TODO trovare un modo di parsing alternativo
-		/* poi:
-		 * copiare la parte di decryptedSMS che corrisponde alla firma in this.signature
-		 * copiare l'altra parte in this.sms
-		 */
+		byte[] decryptedSMS = dec.getPlaintext(); // messaggio || ' ' || firma
+		int spacePosition = getSpacePosition(decryptedSMS);
+		//copia la firma
+		System.arraycopy(decryptedSMS, spacePosition + 1, this.signature, 0, decryptedSMS.length - spacePosition - 1);
+		//copia il messaggio
+		System.arraycopy(decryptedSMS, 0, this.sms, 0, spacePosition);
 		validateSignature();
 		parse();
-		
+	}
+
+	/**
+	 * Ritorna la posizione dello spazio separatore. La ricerca parte dal 257esimo carattere perchè quelli prima
+	 * fanno parte della password messa come header.
+	 * 
+	 * @param string : la struttura messaggio || ' ' || firma
+	 * @return un intero che indica la posizione del separatore
+	 * @throws ArbitraryMessageReceivedException 
+	 */
+	private int getSpacePosition(byte[] string) throws ArbitraryMessageReceivedException {
+		if(string.length <= 257){
+			throw new ArbitraryMessageReceivedException();
+		}
+		for(int i=256; i < string.length; i++){
+			if(string[i] == ' '){
+				return i;
+			}
+		}
+		throw new ArbitraryMessageReceivedException();
 	}
 
 	private void validateSignature() throws ArbitraryMessageReceivedException, ErrorInSignatureCheckingException{
@@ -94,7 +112,7 @@ public class SMSParser {
 	}
 
 	/**
-	 * Scompone l'sms ricevuto in hash della password e testo in chiaro.
+	 * Scompone l'sms ricevuto (già decrittato e scoprorato dalla firma) in hash della password e testo in chiaro.
 	 */
 	private void decompose() {
 		System.arraycopy(this.sms, 0, this.passwordHash, 0, 32);
