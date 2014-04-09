@@ -20,6 +20,11 @@ import javax.crypto.NoSuchPaddingException;
 
 import org.apache.commons.codec.DecoderException;
 
+import android.app.PendingIntent;
+import android.content.Intent;
+import android.telephony.SmsManager;
+import android.widget.EditText;
+
 /**
  * Classe che gestisce la costruzione degli SMS. IMPORTANTE: per gli sms di configurazione (scambio chiavi, ecc.)
  * NON si usa questa classe: questa classe è pensata solo per costruire i messaggi che costituiscono i comandi,
@@ -38,6 +43,9 @@ public class SMS {
 	private byte[] finalMessage; // hash(password) || text
 	private byte[] signature; //firma digitale
 	private byte[] finalSignedAndEncryptedMessage; //messaggio firmato e crittografato
+	private final int SENT = 1; //serve per il controllo di invio corretto
+	private final short SMS_PORT = 8998; //TODO proprio questa? Porta del destinatario
+	private String dest; //serve per memorizzare il destinatario
 	
 	
 	
@@ -67,11 +75,12 @@ public class SMS {
 	 * @throws NoSuchPaddingException 
 	 * @throws InvalidKeyException 
 	 */
-	public SMS(String text, String password, PrivateKey mPriv, Key key) throws NoSuchAlgorithmException, IOException, NoECDSAKeyPairGeneratedException, NoSignatureDoneException, DecoderException, InvalidKeyException, NoSuchPaddingException, InvalidAlgorithmParameterException, NoSuchProviderException, IllegalBlockSizeException, BadPaddingException{
+	public SMS(String text, String password, PrivateKey mPriv, Key key, String dest) throws NoSuchAlgorithmException, IOException, NoECDSAKeyPairGeneratedException, NoSignatureDoneException, DecoderException, InvalidKeyException, NoSuchPaddingException, InvalidAlgorithmParameterException, NoSuchProviderException, IllegalBlockSizeException, BadPaddingException{
 		this.text = sanitize(text);
 		this.password = password;
 		this.myPrivateKey = mPriv;
 		this.encryptionKey = key;
+		this.dest = dest;
 		construct();
 	}
 	
@@ -164,6 +173,14 @@ public class SMS {
 		AES_256_GCM_Crypto enc = new AES_256_GCM_Crypto(signaturePlusMessage, this.encryptionKey);
 		enc.encrypt();
 		this.finalSignedAndEncryptedMessage = enc.getCiphertext();
+	}
+	
+	/**
+	 * Tutto da testare ancora (per esempio la porta va cambiata) TODO
+	 */
+	public void send(){
+		SmsManager smsManager = SmsManager.getDefault();
+		smsManager.sendDataMessage(this.dest, null, this.SMS_PORT, this.finalSignedAndEncryptedMessage, null, null);
 	}
 	
 	
