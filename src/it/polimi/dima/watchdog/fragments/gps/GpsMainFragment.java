@@ -14,9 +14,11 @@ import android.view.ViewGroup;
 
 public class GpsMainFragment extends Fragment {
 
-	ActionBarActivity myContext;
-	ViewPager mViewPager;
-	TabsAdapter mAdapter;
+	public static final String TAG = "Gps";
+	
+	private ActionBarActivity myContext;
+	private ViewPager mViewPager;
+	private TabsAdapter mAdapter;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -36,7 +38,7 @@ public class GpsMainFragment extends Fragment {
 
 	@Override
 	public void onAttach(Activity activity) {
-		myContext = (ActionBarActivity) activity;
+		this.myContext = (ActionBarActivity) activity;
 		super.onAttach(activity);
 	}
 

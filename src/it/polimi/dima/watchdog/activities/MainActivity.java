@@ -1,8 +1,10 @@
 package it.polimi.dima.watchdog.activities;
 
+import it.polimi.dima.watchdog.MyDrawerUtility;
 import it.polimi.dima.watchdog.R;
 import it.polimi.dima.watchdog.fragments.gps.GpsMainFragment;
 import it.polimi.dima.watchdog.fragments.smsRemote.SmsRemoteMainFragment;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -13,11 +15,17 @@ import android.view.MenuItem;
 
 public class MainActivity extends ActionBarActivity {
 
+	MyDrawerUtility mDrawerUtil;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main_layout);
-
+		mDrawerUtil = new MyDrawerUtility();
+		
+		mDrawerUtil.InitializeDrawerList(this, R.id.drawer_layout, R.id.left_drawer);
+		mDrawerUtil.handleOpenCloseDrawer(this,R.id.drawer_layout);
+		
 		if (findViewById(R.id.main_fragment_container) != null) {
 
 			if (savedInstanceState != null) {
@@ -43,8 +51,10 @@ public class MainActivity extends ActionBarActivity {
 	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-	    // Handle presses on the action bar items
-	    switch (item.getItemId()) {
+	    
+		mDrawerUtil.getOnOptionsItemSelected(item);
+		// Handle presses on the action bar items
+	    /*switch (item.getItemId()) {
 	        case R.id.gps_icon:
 	            replaceFragment(new GpsMainFragment());
 	            return true;
@@ -53,13 +63,28 @@ public class MainActivity extends ActionBarActivity {
 	            return true;
 	        default:
 	            return super.onOptionsItemSelected(item);
-	    }
+	    }*/
+		return super.onOptionsItemSelected(item);
 	}
 	
-	private void replaceFragment(Fragment fragment) {
+	
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        // Sync the toggle state after onRestoreInstanceState has occurred.
+        mDrawerUtil.syncDrawerToggle();
+    }
+    
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        mDrawerUtil.onConfigurationChangedNeeded(newConfig);
+    }
+	
+	public void replaceFragment(Fragment fragment, String tag) {
 		FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-		transaction.replace(R.id.main_fragment_container, fragment);
-		transaction.addToBackStack(null);
+		transaction.replace(R.id.main_fragment_container, fragment, tag);
+		transaction.addToBackStack(tag);
 		transaction.commit();
 	}
 

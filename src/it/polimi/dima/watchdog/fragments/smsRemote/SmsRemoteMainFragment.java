@@ -14,9 +14,11 @@ import android.view.ViewGroup;
 
 public class SmsRemoteMainFragment extends Fragment {
 
-	ActionBarActivity myContext;
-	ViewPager mViewPager;
-	TabsAdapter mAdapter;
+	public static final String TAG = "Sms Remote";
+	
+	private ActionBarActivity myContext;
+	private ViewPager mViewPager;
+	private TabsAdapter mAdapter;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
