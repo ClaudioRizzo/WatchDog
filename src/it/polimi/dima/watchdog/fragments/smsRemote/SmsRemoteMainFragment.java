@@ -3,6 +3,7 @@ package it.polimi.dima.watchdog.fragments.smsRemote;
 import it.polimi.dima.watchdog.R;
 import it.polimi.dima.watchdog.activities.TabsAdapter;
 import it.polimi.dima.watchdog.factory.FeatureEnum;
+import it.polimi.dima.watchdog.fragments.gps.GpsMainFragment;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -40,5 +41,11 @@ public class SmsRemoteMainFragment extends Fragment {
 	public void onAttach(Activity activity) {
 		myContext = (ActionBarActivity) activity;
 		super.onAttach(activity);
+	}
+	
+	@Override
+	public void onResume() {
+		super.onResume();
+		((ActionBarActivity) getActivity()).getSupportActionBar().setTitle(SmsRemoteMainFragment.TAG);
 	}
 }

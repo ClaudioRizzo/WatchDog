@@ -3,6 +3,7 @@ package it.polimi.dima.watchdog.fragments.gps;
 import it.polimi.dima.watchdog.R;
 import it.polimi.dima.watchdog.activities.TabsAdapter;
 import it.polimi.dima.watchdog.factory.FeatureEnum;
+import it.polimi.dima.watchdog.fragments.smsRemote.SmsRemoteMainFragment;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -40,6 +41,13 @@ public class GpsMainFragment extends Fragment {
 	public void onAttach(Activity activity) {
 		this.myContext = (ActionBarActivity) activity;
 		super.onAttach(activity);
+	}
+	
+	@Override
+	public void onResume() {
+		super.onResume();
+		System.out.println("Ho riesumato");
+		((ActionBarActivity) getActivity()).getSupportActionBar().setTitle(GpsMainFragment.TAG);
 	}
 
 }
