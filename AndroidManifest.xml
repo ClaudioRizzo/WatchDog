@@ -9,23 +9,31 @@
         android:targetSdkVersion="19" />
 
     <uses-permission android:name="android.permission.SEND_SMS" />
-    
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/default_tab"
         android:theme="@style/AppTheme" >
+        <receiver android:name=".SMSReceiver" >
+            <intent-filter android:priority="10" >
+                <action android:name="android.intent.action.DATA_SMS_RECEIVED" />
+
+                <data android:scheme="sms" />
+                <data android:port="7777" />
+            </intent-filter>
+        </receiver>
+
         <activity
             android:name="it.polimi.dima.watchdog.activities.MainActivity"
-            android:theme="@style/Theme.AppCompat.Light"
-            android:launchMode="singleTop" >
+            android:launchMode="singleTop"
+            android:theme="@style/Theme.AppCompat.Light" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        
         <activity
             android:name="it.polimi.dima.watchdog.activities.GpsActivity"
             android:theme="@style/Theme.AppCompat.Light" >
