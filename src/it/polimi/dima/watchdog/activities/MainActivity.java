@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
+import android.telephony.SmsManager;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -16,6 +17,7 @@ import android.view.MenuItem;
 public class MainActivity extends ActionBarActivity {
 
 	MyDrawerUtility mDrawerUtil;
+	static final String ACTION = "android.intent.action.DATA_SMS_RECEIVED"; 
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +66,12 @@ public class MainActivity extends ActionBarActivity {
 	        default:
 	            return super.onOptionsItemSelected(item);
 	    }*/
+		
+		if(item.getItemId() == R.id.prova_sms) {
+			SmsManager man = SmsManager.getDefault();
+			man.sendDataMessage("+393466342499", null, (short) 7777, "ciao".getBytes(), null, null);
+			
+		}
 		return super.onOptionsItemSelected(item);
 	}
 	
