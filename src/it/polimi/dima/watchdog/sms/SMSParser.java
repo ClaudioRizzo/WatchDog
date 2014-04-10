@@ -12,17 +12,8 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 
 import org.apache.commons.codec.DecoderException;
-import org.apache.commons.codec.binary.Base64;
 
-import android.content.BroadcastReceiver;
-import android.content.ContentResolver;
-import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
-import android.support.v4.internal.view.SupportSubMenu;
-import android.telephony.SmsManager;
-import android.telephony.SmsMessage;
-import android.util.Log;
+import android.util.Base64;
 import it.polimi.dima.watchdog.crypto.AES_256_GCM_Crypto;
 import it.polimi.dima.watchdog.crypto.ECDSA_Signature;
 import it.polimi.dima.watchdog.exceptions.ArbitraryMessageReceivedException;
@@ -36,7 +27,7 @@ import it.polimi.dima.watchdog.exceptions.ErrorInSignatureCheckingException;
  * @author emanuele
  *
  */
-public class SMSParser extends BroadcastReceiver {
+public class SMSParser {
 	
 	public static final String SMS_EXTRA_NAME ="pdus";
 	
@@ -142,32 +133,11 @@ public class SMSParser extends BroadcastReceiver {
 	 * @return true in caso affermativo, false altrimenti
 	 */
 	private boolean validate() {
-		String received = Base64.encodeBase64String(this.passwordHash);
-		String stored = Base64.encodeBase64String(this.storedPasswordHash);
+		//String received = Base64.encodeBase64String(this.passwordHash);
+		//String stored = Base64.encodeBase64String(this.storedPasswordHash);
+		String received = Base64.encodeToString(this.passwordHash, Base64.DEFAULT);
+		String stored = Base64.encodeToString(this.storedPasswordHash, Base64.DEFAULT);
 		return received.equals(stored);
 	}
-
-	@Override
-	public void onReceive(Context context, Intent intent) {
-		
-		final SmsManager man = SmsManager.getDefault();
-		final Bundle b = intent.getExtras();
-		
-		try {
-			if(b != null) {
-				final Object[] pdusObj = (Object[]) b.get("pdus");
-				for(int i=0; i<pdusObj.length; i++) {
-					SmsMessage current = SmsMessage.createFromPdu((byte[]) pdusObj[i]);
-					String phone = current.getDisplayOriginatingAddress();
-					String sender = phone;
-					String message = new String(current.getUserData());
-					Log.i("[SmsReceiver]", phone +" "+ message);
-					
-					
-				}
-			}
-		}catch(Exception e) {Log.e("SmsReceiver", e.toString());}
-	}
-	
 
 }
