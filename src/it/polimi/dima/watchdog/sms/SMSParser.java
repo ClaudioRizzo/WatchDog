@@ -18,6 +18,7 @@ import it.polimi.dima.watchdog.crypto.AES_256_GCM_Crypto;
 import it.polimi.dima.watchdog.crypto.ECDSA_Signature;
 import it.polimi.dima.watchdog.exceptions.ArbitraryMessageReceivedException;
 import it.polimi.dima.watchdog.exceptions.ErrorInSignatureCheckingException;
+import it.polimi.dima.watchdog.sms.SMSValuesEnum;
 
 /**
  * Classe che si occupa di spacchettare il contenuto di un sms, dividendolo in hash della password e testo.
@@ -71,6 +72,20 @@ public class SMSParser {
 		
 	}
 	
+	/**
+	 * Decritta il messaggio eseguendo tutti i round dell'AES al contrario
+	 * 
+	 * @throws DecoderException
+	 * @throws InvalidKeyException
+	 * @throws NoSuchAlgorithmException
+	 * @throws NoSuchProviderException
+	 * @throws NoSuchPaddingException
+	 * @throws InvalidAlgorithmParameterException
+	 * @throws IllegalBlockSizeException
+	 * @throws BadPaddingException
+	 * @throws ArbitraryMessageReceivedException
+	 * @throws ErrorInSignatureCheckingException
+	 */
 	private void decrypt() throws DecoderException, InvalidKeyException, NoSuchAlgorithmException, NoSuchProviderException, NoSuchPaddingException, InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException, ArbitraryMessageReceivedException, ErrorInSignatureCheckingException {
 		AES_256_GCM_Crypto dec = new AES_256_GCM_Crypto(this.smsEncrypted, this.decryptionKey);
 		dec.decrypt();
@@ -104,6 +119,12 @@ public class SMSParser {
 		throw new ArbitraryMessageReceivedException();
 	}
 
+	/**
+	 * Tenta di validare la firma digitale: se non ci riesce lancia un'eccezione
+	 * 
+	 * @throws ArbitraryMessageReceivedException
+	 * @throws ErrorInSignatureCheckingException
+	 */
 	private void validateSignature() throws ArbitraryMessageReceivedException, ErrorInSignatureCheckingException{
 		ECDSA_Signature ver = new ECDSA_Signature(this.sms, this.oPub, this.signature);
 		if(!ver.verifySignature()){
@@ -111,11 +132,99 @@ public class SMSParser {
 		}
 	}
 	
+	/**
+	 * Scompone il messaggio separando testo e password. Chiama poi in sequenza i metodi per verificare la
+	 * password e reagire al testo.
+	 * 
+	 * @throws ArbitraryMessageReceivedException
+	 */
 	private void parse() throws ArbitraryMessageReceivedException{
 		decompose();
 		if(!validate()){
 			throw new ArbitraryMessageReceivedException("La password non è corretta!!!");
 		}
+		react();
+	}
+
+	/**
+	 * Fa uno switch sul testo del messaggio ricevuto e dà il via alla "reazione" a seconda del match. Lancia
+	 * un'eccezione se il testo del messaggio è qualcosa di non previsto (non matcha nessun valore della enum).
+	 * 
+	 * @throws ArbitraryMessageReceivedException
+	 */
+	private void react() throws ArbitraryMessageReceivedException{
+		
+		SMSValues smsValues = new SMSValues();
+		
+		switch(smsValues.getValues().get(this.plaintext)){
+		case SIREN_ON :
+			turnOnSiren();
+			break;
+		
+		case SIREN_OFF :
+			turnOffSiren();
+			break;
+		
+		case MARK_LOST :
+			markPhoneLost();
+			break;
+			
+		case MARK_STOLEN :
+			markPhoneStolen();
+			break;
+		
+		case MARK_LOST_OR_STOLEN :
+			markPhoneLostOrStolen();
+			break;
+			
+		case MARK_FOUND :
+			markPhoneFound();
+			break;
+		
+		case LOCATE :
+			locatePhone();
+			break;
+			
+		default :
+			throw new ArbitraryMessageReceivedException("Il comando inviato non esiste!!!");
+			
+		}
+		
+	}
+
+	private void locatePhone() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void markPhoneFound() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void markPhoneLostOrStolen() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void markPhoneStolen() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void markPhoneLost() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void turnOffSiren() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void turnOnSiren() {
+		// TODO Auto-generated method stub
+		
 	}
 
 	/**
