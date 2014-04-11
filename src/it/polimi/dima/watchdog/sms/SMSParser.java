@@ -68,9 +68,6 @@ public class SMSParser {
 		decrypt();
 	}
 	
-	public SMSParser() {
-		
-	}
 	
 	/**
 	 * Decritta il messaggio eseguendo tutti i round dell'AES al contrario
