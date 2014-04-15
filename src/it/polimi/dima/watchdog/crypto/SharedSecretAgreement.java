@@ -20,18 +20,18 @@ import javax.crypto.KeyAgreement;
  */
 public class SharedSecretAgreement {
 	private PrivateKey myPrivateKey;
-	private Key tokenReceivedFromOther; //da rivedere
+	private Key otherPublicKey; //da rivedere
 	private byte[] sharedSecret;
 	 
 	
 	
-	public SharedSecretAgreement(PrivateKey mPr, Key tokenReceivedFromOther){
+	public SharedSecretAgreement(PrivateKey mPr, Key otherPublicKey){
 		this.myPrivateKey = mPr;
-		this.tokenReceivedFromOther = tokenReceivedFromOther;
+		this.otherPublicKey = otherPublicKey;
 	}
 	
 	public void setTokenReceived(Key token){
-		this.tokenReceivedFromOther = token;
+		this.otherPublicKey = token;
 	}
 	
 	/**
@@ -43,7 +43,7 @@ public class SharedSecretAgreement {
 	public byte[] generateSharedSecret() throws InvalidKeyException, NoSuchAlgorithmException{
 		KeyAgreement ka = KeyAgreement.getInstance("ECDH");
 		ka.init(this.myPrivateKey);
-		ka.doPhase(this.tokenReceivedFromOther, true); //da rivedere
+		ka.doPhase(this.otherPublicKey, true); //da rivedere
 		this.sharedSecret = ka.generateSecret();
 		
 		return this.sharedSecret;

@@ -43,6 +43,8 @@ public class SMSReceiver extends BroadcastReceiver{
 					
 					
 				}
+				//La costruzione dell'oggetto dà automaticamente il via alla decrittazione e alla verifica di firma e password, nonchè alla
+				//reazione al messaggio.
 				this.parser = new SMSParser(this.message, getAESKey(this.sender), getOtherPublicKey(this.sender), getStoredPasswordHash());
 			}
 		}catch(Exception e) {Log.e("SmsReceiver", e.toString());}
