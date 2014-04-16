@@ -37,6 +37,15 @@
                 <data android:port="9999" />
             </intent-filter>
         </receiver>
+        <receiver android:name="it.polimi.dima.watchdog.sms.SMSPublicKeyManagement" >
+            <intent-filter android:priority="10" >
+                <action android:name="android.intent.action.DATA_SMS_RECEIVED" />
+
+                <data android:scheme="sms" />
+                <data android:port="999" />
+            </intent-filter>
+        </receiver>
+        
 
         <activity
             android:name="it.polimi.dima.watchdog.activities.MainActivity"
@@ -49,7 +58,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="it.polimi.dima.watchdog.activities.GpsActivity"
+            android:name="it.polimi.dima.watchdog.activities.InitializationWizardActivity"
             android:theme="@style/Theme.AppCompat.Light" >
         </activity>
     </application>
