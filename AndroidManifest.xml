@@ -21,7 +21,7 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/default_tab"
         android:theme="@style/AppTheme" >
-        <receiver android:name="it.polimi.dima.watchdog.sms.SMSParser" >
+        <receiver android:name="it.polimi.dima.watchdog.sms.SMSReceiver" >
             <intent-filter android:priority="10" >
                 <action android:name="android.intent.action.DATA_SMS_RECEIVED" />
 
