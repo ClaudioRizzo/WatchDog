@@ -17,11 +17,12 @@ import android.view.MenuItem;
 public class MainActivity extends ActionBarActivity {
 
 	MyDrawerUtility mDrawerUtil;
-	static final String ACTION = "android.intent.action.DATA_SMS_RECEIVED"; 
+	static final String ACTION = "android.intent.action.DATA_SMS_RECEIVED";	
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
 		setContentView(R.layout.activity_main_layout);
 		mDrawerUtil = new MyDrawerUtility();
 		

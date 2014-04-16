@@ -1,8 +1,26 @@
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/localization_text"
-    android:text="Localization"
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
-    android:textSize="24sp"
-    android:padding="32dp" />
+    android:orientation="horizontal">
+    <EditText android:id="@+id/phone_number1"
+        android:layout_weight="1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="@string/edit_text_phone"
+        android:inputType="phone" />
+    <EditText android:id="@+id/password_localize_1"
+        android:layout_weight="1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="@string/edit_text_password"
+        android:inputType="textPassword" />
+    <Button
+        android:id="@+id/button_localization"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/button_localize" />
+</LinearLayout>
+
+
