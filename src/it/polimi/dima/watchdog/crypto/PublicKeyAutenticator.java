@@ -2,7 +2,6 @@ package it.polimi.dima.watchdog.crypto;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.security.PublicKey;
 
 import android.util.Base64;
 

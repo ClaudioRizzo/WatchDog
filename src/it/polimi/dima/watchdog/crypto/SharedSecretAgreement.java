@@ -1,12 +1,13 @@
 package it.polimi.dima.watchdog.crypto;
 
+import android.annotation.SuppressLint;
 import java.security.InvalidKeyException;
 import java.security.Key;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
-import java.security.PublicKey;
-
 import javax.crypto.KeyAgreement;
+
+
 
 
 /**
@@ -40,6 +41,7 @@ public class SharedSecretAgreement {
 	 * @throws InvalidKeyException 
 	 * @throws NoSuchAlgorithmException 
 	 */
+	@SuppressLint("TrulyRandom")
 	public byte[] generateSharedSecret() throws InvalidKeyException, NoSuchAlgorithmException{
 		KeyAgreement ka = KeyAgreement.getInstance("ECDH");
 		ka.init(this.myPrivateKey);

@@ -23,5 +23,17 @@
     <string name="status_title">Status</string>
     <string name="remote_title">Remote</string>
     <!--  -->
+    
+    
+    <!-- Begin Crypto Algorithms -->
+    <string name="AES">AES</string>
+    <string name="AESGCMNoPadding">AES/GCM/NoPadding</string>
+    <string name="HmacSHA256">HmacSHA256</string>
+    <string name="EC">EC</string>
+    <string name="SHA1withECDSA">SHA1withECDSA</string>
+    <string name="SHA1PRNG">SHA1PRNG</string>
+    <string name="SHA256">SHA-256</string>
+    <string name="ECDH">ECDH</string>
+    <!-- End Crypto Algorithms -->
 
 </resources>
