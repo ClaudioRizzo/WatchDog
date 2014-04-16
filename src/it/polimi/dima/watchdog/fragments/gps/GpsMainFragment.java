@@ -46,7 +46,6 @@ public class GpsMainFragment extends Fragment {
 	@Override
 	public void onResume() {
 		super.onResume();
-		System.out.println("Ho riesumato");
 		((ActionBarActivity) getActivity()).getSupportActionBar().setTitle(GpsMainFragment.TAG);
 	}
 
