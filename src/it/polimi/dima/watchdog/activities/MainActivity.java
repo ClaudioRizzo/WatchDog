@@ -4,6 +4,8 @@ import it.polimi.dima.watchdog.MyDrawerUtility;
 import it.polimi.dima.watchdog.R;
 import it.polimi.dima.watchdog.fragments.gps.GpsMainFragment;
 import it.polimi.dima.watchdog.fragments.smsRemote.SmsRemoteMainFragment;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -28,6 +30,19 @@ public class MainActivity extends ActionBarActivity {
 		
 		mDrawerUtil.InitializeDrawerList(this, R.id.drawer_layout, R.id.left_drawer);
 		mDrawerUtil.handleOpenCloseDrawer(this,R.id.drawer_layout);
+		
+		// Restore preferences
+		SharedPreferences settings = getSharedPreferences(InitializationWizardActivity.PREFS_NAME, 0);
+		boolean wizardDone = settings.getBoolean("wizardDone", false);
+		
+		if(wizardDone) {
+			System.out.println("HO FATTO IL WIZARD");
+		}
+		else {
+			System.out.println("WIZARD NON FATTO");
+			
+		}
+		
 		
 		if (findViewById(R.id.main_fragment_container) != null) {
 
