@@ -42,6 +42,7 @@ public class InitializationWizardActivity extends ActionBarActivity implements
 		SharedPreferences settings = getSharedPreferences(MyPrefFiles.PREF_INIT, 0);
 		SharedPreferences.Editor editor = settings.edit();
 		ECKeyPairGenerator mkeyGen = new ECKeyPairGenerator();
+		mkeyGen.generateKeyPair();
 		
 		byte[] pubKeyBytes = mkeyGen.getPublicKey().getEncoded();
 		byte[] privateKeyBytes = mkeyGen.getPrivateKey().getEncoded();

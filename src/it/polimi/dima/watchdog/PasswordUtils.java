@@ -7,7 +7,7 @@ import java.security.SecureRandom;
 
 public class PasswordUtils {
 
-	public static final int SALT_LENGTH = 16;
+	public static final int SALT_LENGTH = 32; //256 bit, come la lunghezza del digest di sha256
 
 	public static byte[] nextSalt() {
 		byte[] salt = new byte[SALT_LENGTH];

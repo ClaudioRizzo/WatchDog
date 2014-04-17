@@ -13,13 +13,17 @@ import android.util.Base64;
  *
  */
 public class PublicKeyAutenticator {
-	public byte[] myPublicKey;
-	public byte[] receivedPublicKey;
-	public String secretQuestion;
-	public String secretAnswer;
-	public String receivedHash; //hash(bPublicKey,secretAnswerGivenByB) --> l'hash che l'altro mi ha inviato
-	public String computedHash; //hash(receivedPublicKey,secretAnswer) --> l'hash che devo calcolare per vedere se l'altro sa la risposta
-	public String hashToSend;   //hash(myPublicKey,secretAnswer) --> l'hash che devo mandare per provare che so la risposta
+	private byte[] myPublicKey;
+	private byte[] receivedPublicKey;
+	private String secretQuestion;
+	private String secretAnswer;
+	private String receivedHash; //hash(bPublicKey,secretAnswerGivenByB) --> l'hash che l'altro mi ha inviato
+	private String computedHash; //hash(receivedPublicKey,secretAnswer) --> l'hash che devo calcolare per vedere se l'altro sa la risposta
+	private String hashToSend;   //hash(myPublicKey,secretAnswer) --> l'hash che devo mandare per provare che so la risposta
+	
+	public byte[] getMyPublicKey(){
+		return this.myPublicKey;
+	}
 	
 	public void setReceivedPublicKey(byte[] receivedPublicKey){
 		this.receivedPublicKey = receivedPublicKey;
