@@ -33,6 +33,8 @@ public class InitializationWizardActivity extends ActionBarActivity implements
 	}
 
 
+	//TODO: pensare a un modo intelligente di gestire le stringhe delle preferences
+	//Evitare di averle scritte sparse nel codice. Aggiungerle a PrefFiles?
 	@Override
 	public void getWizardChanges(boolean wizardDone, String hashToSave, String salt) {
 		SharedPreferences settings = getSharedPreferences(MyPrefFiles.PREF_INIT, 0);
