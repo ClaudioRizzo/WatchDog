@@ -3,8 +3,7 @@ package it.polimi.dima.watchdog.sms;
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.security.NoSuchAlgorithmException;
-import java.security.PublicKey;
-import java.util.regex.Pattern;
+import java.util.Arrays;
 
 import it.polimi.dima.watchdog.crypto.PublicKeyAutenticator;
 import it.polimi.dima.watchdog.exceptions.ArbitraryMessageReceivedException;
@@ -14,9 +13,15 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.telephony.SmsManager;
 import android.telephony.SmsMessage;
-import android.util.Base64;
 import android.util.Log;
 
+/**
+ * Classe in cui il protocollo del socialista milionario è utilizzato tramite invio di SMS per validare la
+ * chiave pubblica di un altro telefono.
+ * 
+ * @author emanuele
+ *
+ */
 public class SMSPublicKeyManagement extends BroadcastReceiver {
 
 	private byte[] PublicKeyRequestCode = new BigInteger("0xC0DE1FFF").toByteArray();
@@ -24,7 +29,6 @@ public class SMSPublicKeyManagement extends BroadcastReceiver {
 	private byte[] SecretQuestionSentCode = new BigInteger("0xC0DE3FFF").toByteArray();
 	private byte[] SecretAnswerAndPublicKeyHashSentCode = new BigInteger("0xC0DE4FFF").toByteArray();
 	
-	//private boolean iAmTheSender;
 	private PublicKeyAutenticator pka;
 	private SmsManager manager;
 	private String other;
@@ -38,8 +42,7 @@ public class SMSPublicKeyManagement extends BroadcastReceiver {
 	 * @param secretAnswer
 	 * @param other
 	 */
-	public SMSPublicKeyManagement(PublicKey mPub, String secretQuestion, String secretAnswer, String other) {
-		this.pka = new PublicKeyAutenticator(mPub.getEncoded(), secretQuestion, secretAnswer);
+	public SMSPublicKeyManagement(String other) {
 		this.other = other;
 		this.manager = SmsManager.getDefault();
 	}
@@ -60,7 +63,10 @@ public class SMSPublicKeyManagement extends BroadcastReceiver {
 		this.manager.sendDataMessage(this.other, null, (short)999, message, null, null);
 	}
 	
-
+	/**
+	 * Metodo che prende il messaggio ricevuto e il mittente e li salva negli attributi della classe; poi chiama
+	 * il metodo che parsa il messaggio e agisce di conseguenza.
+	 */
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		final Bundle bundle = intent.getExtras();
@@ -69,17 +75,12 @@ public class SMSPublicKeyManagement extends BroadcastReceiver {
 			if (bundle != null) {
 				final Object[] pdusObj = (Object[]) bundle.get("pdus");
 				for (int i = 0; i < pdusObj.length; i++) {
-					SmsMessage receivedMessage = SmsMessage
-							.createFromPdu((byte[]) pdusObj[i]);
-					this.other = receivedMessage
-							.getDisplayOriginatingAddress();
-					//String message = new String(receivedMessage.getUserData());
+					SmsMessage receivedMessage = SmsMessage.createFromPdu((byte[]) pdusObj[i]);
+					this.other = receivedMessage.getDisplayOriginatingAddress();
 					this.message = receivedMessage.getUserData();
-					//Log.i("[SmsReceiver]", this.other + " " + message);
 
 				}
 			}
-			//constructClass();
 			manageReceivedMessage();
 			
 		} catch (Exception e) {
@@ -96,26 +97,26 @@ public class SMSPublicKeyManagement extends BroadcastReceiver {
 	 */
 	private void manageReceivedMessage() throws ArbitraryMessageReceivedException, UnsupportedEncodingException, NoSuchAlgorithmException {
 		if(this.message.equals(this.PublicKeyRequestCode)){
-			this.pka = new PublicKeyAutenticator(getPublicKey(), getSecretQuestion(), getSecretAnswer());
-			sendPublicKey();
+			this.pka = new PublicKeyAutenticator(getPublicKey(), null, null);
+			sendMessage("key");
 		}
-		else if(contains(this.PublicKeySentCode)){
+		else if(receivedMessageStartsWith(this.PublicKeySentCode)){
 			this.pka = new PublicKeyAutenticator(null, getSecretQuestion(), null);
 			saveOnFileThePublicKeyObtained();
-			sendSecretQuestion();
+			sendMessage("question");
 		}
-		else if(contains(this.SecretQuestionSentCode)){
+		else if(receivedMessageStartsWith(this.SecretQuestionSentCode)){
 			this.pka = new PublicKeyAutenticator(getPublicKey(), null, null);
-			this.pka.setReceivedQuestion(unwrapReceivedQuestion());
+			this.pka.setReceivedQuestion(unwrapContent(this.SecretQuestionSentCode));
 			this.pka.setSecretAnswer(getSecretAnswerFromUserInput());
-			sendValidationHash();
+			sendMessage("hash");
 		}
-		else if(contains(this.SecretAnswerAndPublicKeyHashSentCode)){
+		else if(receivedMessageStartsWith(this.SecretAnswerAndPublicKeyHashSentCode)){
 			this.pka = new PublicKeyAutenticator(null, null, getSecretAnswer());
 			//recupera da file la chiave pubblica ricevuta precedentemente
 			this.pka.setReceivedPublicKey(getKeyToVerify());
 			this.pka.doHashToCheck();
-			this.pka.setReceivedHash(unwrapReceivedHash());
+			this.pka.setReceivedHash(unwrapContent(this.SecretAnswerAndPublicKeyHashSentCode));
 			if(!this.pka.checkForEquality()){
 				//TODO gestire la mancata validazione della chiave.
 			}
@@ -125,19 +126,19 @@ public class SMSPublicKeyManagement extends BroadcastReceiver {
 	}
 
 	/**
-	 * Metodo che separa header e hash e ritorna quest'ultimo.
+	 * Metodo che separa header da corpo del messaggio e ritorna quest'ultimo.
+	 * @param prefix
 	 * @return
 	 * @throws UnsupportedEncodingException
 	 */
-	private String unwrapReceivedHash() throws UnsupportedEncodingException {
-		int messageLength = this.message.length - this.SecretAnswerAndPublicKeyHashSentCode.length;
+	private String unwrapContent(byte[] prefix) throws UnsupportedEncodingException{
+		int messageLength = this.message.length - prefix.length;
 		byte[] message = new byte[messageLength];
-		System.arraycopy(this.message, this.SecretAnswerAndPublicKeyHashSentCode.length, message, 0, messageLength);
+		System.arraycopy(this.message, prefix.length, message, 0, messageLength);
 		
 		return new String(message, "UTF-8");
 	}
-
-
+	
 	/**
 	 * Prende ciò che l'utente digita come risposta segreta per generare l'hash che servirà a dimostrare di
 	 * essere il vero proprietario della chiave pubblica inviata precedentemente.
@@ -166,54 +167,6 @@ public class SMSPublicKeyManagement extends BroadcastReceiver {
 	}
 
 	/**
-	 * Metodo che separa header e domanda segreta e ritorna quest'ultima.
-	 * @return
-	 * @throws UnsupportedEncodingException
-	 */
-	private String unwrapReceivedQuestion() throws UnsupportedEncodingException {
-		int messageLength = this.message.length - this.SecretQuestionSentCode.length;
-		byte[] message = new byte[messageLength];
-		System.arraycopy(this.message, this.SecretQuestionSentCode.length, message, 0, messageLength);
-		
-		return new String(message, "UTF-8");
-	}
-
-	/**
-	 * Metodo che invia all'altro l'hash che dovrebbe dimostrare che non è un MITM, preceduto da un header
-	 * appropriato.
-	 * 
-	 * @throws NoSuchAlgorithmException
-	 */
-	private void sendValidationHash() throws NoSuchAlgorithmException {
-		this.pka.doHashToSend();
-		String hash = this.pka.getHashToSend();
-		
-		int hashSize = hash.getBytes().length;
-		int headerSize = this.SecretAnswerAndPublicKeyHashSentCode.length;
-		
-		byte[] message = new byte[hashSize + headerSize];
-		System.arraycopy(this.SecretAnswerAndPublicKeyHashSentCode, 0, message, 0, headerSize);
-		System.arraycopy(hash.getBytes(), 0, message, headerSize, hashSize);
-		
-		this.manager.sendDataMessage(this.other, null, (short)999, message, null, null);
-	}
-
-
-	/**
-	 * Metodo che vede se il messaggio è formato da header appropriato + qualcos'altro.
-	 * @return
-	 */
-	private boolean contains(byte[] prefix) {
-		String prefixBase64 = Base64.encodeToString(prefix, Base64.DEFAULT);
-		String messageBase64 = Base64.encodeToString(this.message, Base64.DEFAULT);
-		if(Pattern.matches(prefixBase64 + ".+", messageBase64)){
-			return true;
-		}
-		return false;
-	}
-
-
-	/**
 	 * Da file ritorna la risposta segreta
 	 * @return
 	 */
@@ -239,34 +192,67 @@ public class SMSPublicKeyManagement extends BroadcastReceiver {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
-
+	
 	/**
-	 * Metodo che manda la propria chiave pubblica al destinatario preceduta dall'header giusto.
+	 * Metodo che vede se il messaggio è formato da header appropriato + qualcos'altro.
+	 * @return
+	 * @throws ArbitraryMessageReceivedException 
 	 */
-	private void sendPublicKey() {
-		int publicKeySize = this.pka.getMyPublicKey().length;
-		int headerSize = this.PublicKeySentCode.length;
-		
-		byte[] message = new byte[publicKeySize + headerSize];
-		System.arraycopy(this.PublicKeySentCode, 0, message, 0, headerSize);
-		System.arraycopy(this.pka.getMyPublicKey(), 0, message, headerSize, publicKeySize);
-		
-		this.manager.sendDataMessage(this.other, null, (short)999, message, null, null);
+	private boolean receivedMessageStartsWith(byte[] prefix) throws ArbitraryMessageReceivedException {
+		byte[] temp = new byte[prefix.length];
+		System.arraycopy(this.message, 0, temp, 0, prefix.length);
+		if(Arrays.equals(temp, prefix)){
+			if(this.message.length == prefix.length){
+				throw new ArbitraryMessageReceivedException("C'è solo il prefisso: manca il corpo!!!");
+			}
+		}
+		return false;
 	}
 	
 	/**
-	 * Metodo che manda la domanda segreta al destinatario preceduta dall'header giusto.
+	 * Metodo che a seconda del messaggio che bisogna inviare all'altro decide le lunghezze di header e body e
+	 * poi richiama il metodo che costruisce e spedisce l'sms. Nel caso il messaggio da mandare sia l'hash, lo
+	 * costruisce.
+	 * 
+	 * @param switcher
+	 * @throws NoSuchAlgorithmException
 	 */
-	private void sendSecretQuestion() {
-		int secretQuestionSize = this.pka.getSecretQuestion().getBytes().length;
-		int headerSize = this.SecretQuestionSentCode.length;
+	private void sendMessage(String switcher) throws NoSuchAlgorithmException{
+		int bodySize;
+		int headerSize;
 		
-		byte[] message = new byte[secretQuestionSize + headerSize];
+		if(switcher.equals("key")){
+			bodySize = this.pka.getMyPublicKey().length;
+			headerSize = this.PublicKeySentCode.length;
+		}
+		else if(switcher.equals("question")){
+			bodySize = this.pka.getSecretQuestion().getBytes().length;
+			headerSize = this.SecretQuestionSentCode.length;
+		}
+		else if(switcher.equals("hash")){
+			this.pka.doHashToSend();
+			String hash = this.pka.getHashToSend();
+			
+			bodySize = hash.getBytes().length;
+			headerSize = this.SecretAnswerAndPublicKeyHashSentCode.length;
+		}
+		else{
+			throw new IllegalArgumentException();
+		}
+		send(bodySize, headerSize);
+	}
+	
+	/**
+	 * Costruisce e manda il messaggio.
+	 * @param bodySize : dimensione in byte del corpo del messaggio
+	 * @param headerSize : dimensione in byte dell'header del messaggio
+	 */
+	private void send(int bodySize, int headerSize){
+		byte[] message = new byte[bodySize + headerSize];
 		System.arraycopy(this.SecretQuestionSentCode, 0, message, 0, headerSize);
-		System.arraycopy(this.pka.getSecretQuestion().getBytes(), 0, message, headerSize, secretQuestionSize);
+		System.arraycopy(this.pka.getSecretQuestion().getBytes(), 0, message, headerSize, bodySize);
 		
-		this.manager.sendDataMessage(this.other, null, (short)999, message, null, null);		
+		this.manager.sendDataMessage(this.other, null, (short)999, message, null, null);
 	}
 
 

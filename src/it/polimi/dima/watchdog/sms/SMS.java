@@ -20,10 +20,7 @@ import javax.crypto.NoSuchPaddingException;
 
 import org.apache.commons.codec.DecoderException;
 
-import android.app.PendingIntent;
-import android.content.Intent;
 import android.telephony.SmsManager;
-import android.widget.EditText;
 
 /**
  * Classe che gestisce la costruzione degli SMS. IMPORTANTE: per gli sms di configurazione (scambio chiavi, ecc.)
@@ -43,8 +40,7 @@ public class SMS {
 	private byte[] finalMessage; // hash(password) || text
 	private byte[] signature; //firma digitale
 	private byte[] finalSignedAndEncryptedMessage; //messaggio firmato e crittografato
-	private final int SENT = 1; //serve per il controllo di invio corretto
-	private final short SMS_PORT = 8998; //TODO proprio questa? Porta del destinatario
+	private final short SMS_PORT = 7777;
 	private String dest; //serve per memorizzare il destinatario
 	
 	

@@ -55,6 +55,8 @@ public class PublicKeyAutenticator {
 		this.secretAnswer = secretAnswer;
 	}
 	
+	public PublicKeyAutenticator() {}
+
 	public void doHashToSend() throws NoSuchAlgorithmException{
 		MessageDigest digest = MessageDigest.getInstance("SHA-256");
 		byte[] hash = digest.digest(new String(this.myPublicKey + this.secretAnswer).getBytes());
