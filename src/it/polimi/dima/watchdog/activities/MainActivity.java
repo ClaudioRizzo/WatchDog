@@ -36,6 +36,7 @@ public class MainActivity extends ActionBarActivity {
 		mDrawerUtil.InitializeDrawerList(this, R.id.drawer_layout,
 				R.id.left_drawer);
 		mDrawerUtil.handleOpenCloseDrawer(this, R.id.drawer_layout);
+		getSupportActionBar().setTitle(R.string.default_tab);
 
 		if (wizardDone) {
 			if (findViewById(R.id.main_fragment_container) != null) {
