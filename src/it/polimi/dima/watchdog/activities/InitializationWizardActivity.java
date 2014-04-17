@@ -1,5 +1,6 @@
 package it.polimi.dima.watchdog.activities;
 
+import it.polimi.dima.watchdog.MyPrefFiles;
 import it.polimi.dima.watchdog.R;
 import it.polimi.dima.watchdog.fragments.wizard.InitializeWizardFragment;
 import it.polimi.dima.watchdog.fragments.wizard.InitializeWizardFragment.OnPasswordInizializedListener;
@@ -11,7 +12,6 @@ import android.support.v7.app.ActionBarActivity;
 public class InitializationWizardActivity extends ActionBarActivity implements
 		OnPasswordInizializedListener {
 
-	public final static String PREFS_NAME = "MyPrefFile";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -33,10 +33,12 @@ public class InitializationWizardActivity extends ActionBarActivity implements
 
 
 	@Override
-	public void getWizardChanges(boolean wizardDone) {
-		SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+	public void getWizardChanges(boolean wizardDone, String hashToSave, String salt) {
+		SharedPreferences settings = getSharedPreferences(MyPrefFiles.PREF_INIT, 0);
 		SharedPreferences.Editor editor = settings.edit();
 		editor.putBoolean("wizardDone", wizardDone);
+		editor.putString("psswd_hash_salted", hashToSave);
+		editor.putString("salt", salt);
 		editor.commit();
 		
 		Intent intent = new Intent(this, MainActivity.class);

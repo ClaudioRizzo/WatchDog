@@ -1,6 +1,7 @@
 package it.polimi.dima.watchdog.activities;
 
 import it.polimi.dima.watchdog.MyDrawerUtility;
+import it.polimi.dima.watchdog.MyPrefFiles;
 import it.polimi.dima.watchdog.R;
 import it.polimi.dima.watchdog.fragments.gps.GpsMainFragment;
 import it.polimi.dima.watchdog.fragments.smsRemote.SmsRemoteMainFragment;
@@ -27,7 +28,7 @@ public class MainActivity extends ActionBarActivity {
 
 		// Restore preferences false if doesn't exist
 		SharedPreferences settings = getSharedPreferences(
-				InitializationWizardActivity.PREFS_NAME, 0);
+				MyPrefFiles.PREF_INIT, 0);
 		boolean wizardDone = settings.getBoolean("wizardDone", false);
 		setContentView(R.layout.activity_main_layout);
 
