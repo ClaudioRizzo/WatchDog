@@ -2,6 +2,7 @@ package it.polimi.dima.watchdog.activities;
 
 import it.polimi.dima.watchdog.MyPrefFiles;
 import it.polimi.dima.watchdog.R;
+import it.polimi.dima.watchdog.crypto.ECKeyPairGenerator;
 import it.polimi.dima.watchdog.fragments.wizard.InitializeWizardFragment;
 import it.polimi.dima.watchdog.fragments.wizard.InitializeWizardFragment.OnPasswordInizializedListener;
 import android.content.Intent;
@@ -36,14 +37,22 @@ public class InitializationWizardActivity extends ActionBarActivity implements
 	public void getWizardChanges(boolean wizardDone, String hashToSave, String salt) {
 		SharedPreferences settings = getSharedPreferences(MyPrefFiles.PREF_INIT, 0);
 		SharedPreferences.Editor editor = settings.edit();
+		ECKeyPairGenerator mkeyGen = new ECKeyPairGenerator();
+		
+		//saving preferences
 		editor.putBoolean("wizardDone", wizardDone);
 		editor.putString("psswd_hash_salted", hashToSave);
 		editor.putString("salt", salt);
+		editor.putString("user_pub_key", mkeyGen.getPublicKey().toString());
+		editor.putString("user_private_key", mkeyGen.getPrivateKey().toString());
+		
 		editor.commit();
 		
+		//start MainActivity
 		Intent intent = new Intent(this, MainActivity.class);
 		startActivity(intent);
 		finish();
-		
 	}
+	
+	
 }
