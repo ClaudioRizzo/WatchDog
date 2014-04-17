@@ -25,12 +25,28 @@ public class PublicKeyAutenticator {
 		return this.myPublicKey;
 	}
 	
+	public String getSecretQuestion(){
+		return this.secretQuestion;
+	}
+	
+	public String getHashToSend(){
+		return this.hashToSend;
+	}
+	
+	public void setSecretAnswer(String answer){
+		this.secretAnswer = answer;
+	}
+	
 	public void setReceivedPublicKey(byte[] receivedPublicKey){
 		this.receivedPublicKey = receivedPublicKey;
 	}
 	
 	public void setReceivedHash(String receivedHash){
 		this.receivedHash = receivedHash;
+	}
+	
+	public void setReceivedQuestion(String question){
+		this.secretQuestion = question;
 	}
 	
 	public PublicKeyAutenticator(byte[] myPublicKey, String secretQuestion, String secretAnswer){
