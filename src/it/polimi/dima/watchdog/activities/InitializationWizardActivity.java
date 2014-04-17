@@ -1,6 +1,7 @@
 package it.polimi.dima.watchdog.activities;
 
 import it.polimi.dima.watchdog.MyPrefFiles;
+import it.polimi.dima.watchdog.PasswordUtils;
 import it.polimi.dima.watchdog.R;
 import it.polimi.dima.watchdog.crypto.ECKeyPairGenerator;
 import it.polimi.dima.watchdog.fragments.wizard.InitializeWizardFragment;
@@ -9,6 +10,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Base64;
 
 public class InitializationWizardActivity extends ActionBarActivity implements
 		OnPasswordInizializedListener {
@@ -41,12 +43,19 @@ public class InitializationWizardActivity extends ActionBarActivity implements
 		SharedPreferences.Editor editor = settings.edit();
 		ECKeyPairGenerator mkeyGen = new ECKeyPairGenerator();
 		
+		byte[] pubKeyBytes = mkeyGen.getPublicKey().getEncoded();
+		byte[] privateKeyBytes = mkeyGen.getPrivateKey().getEncoded();
+		String pubKey = Base64.encodeToString(pubKeyBytes, Base64.DEFAULT);
+		String privateKey = Base64.encodeToString(privateKeyBytes, Base64.DEFAULT);
+		
 		//saving preferences
 		editor.putBoolean("wizardDone", wizardDone);
 		editor.putString("psswd_hash_salted", hashToSave);
 		editor.putString("salt", salt);
-		editor.putString("user_pub_key", mkeyGen.getPublicKey().toString());
-		editor.putString("user_private_key", mkeyGen.getPrivateKey().toString());
+		
+		
+		editor.putString("user_pub_key", pubKey);
+		editor.putString("user_private_key", privateKey);
 		
 		editor.commit();
 		
