@@ -18,7 +18,6 @@ import it.polimi.dima.watchdog.crypto.AES_256_GCM_Crypto;
 import it.polimi.dima.watchdog.crypto.ECDSA_Signature;
 import it.polimi.dima.watchdog.exceptions.ArbitraryMessageReceivedException;
 import it.polimi.dima.watchdog.exceptions.ErrorInSignatureCheckingException;
-import it.polimi.dima.watchdog.sms.SMSValuesEnum;
 
 /**
  * Classe che si occupa di spacchettare il contenuto di un sms, dividendolo in hash della password e testo.
@@ -65,7 +64,6 @@ public class SMSParser {
 		this.decryptionKey = decryptionKey;
 		this.oPub = oPub;
 		this.storedPasswordHash = storedPasswordHash;
-		decrypt();
 	}
 	
 	
@@ -83,7 +81,7 @@ public class SMSParser {
 	 * @throws ArbitraryMessageReceivedException
 	 * @throws ErrorInSignatureCheckingException
 	 */
-	private void decrypt() throws DecoderException, InvalidKeyException, NoSuchAlgorithmException, NoSuchProviderException, NoSuchPaddingException, InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException, ArbitraryMessageReceivedException, ErrorInSignatureCheckingException {
+	public void decrypt() throws DecoderException, InvalidKeyException, NoSuchAlgorithmException, NoSuchProviderException, NoSuchPaddingException, InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException, ArbitraryMessageReceivedException, ErrorInSignatureCheckingException {
 		AES_256_GCM_Crypto dec = new AES_256_GCM_Crypto(this.smsEncrypted, this.decryptionKey);
 		dec.decrypt();
 		byte[] decryptedSMS = dec.getPlaintext(); // messaggio || ' ' || firma
