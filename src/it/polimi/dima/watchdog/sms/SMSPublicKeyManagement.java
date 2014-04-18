@@ -28,6 +28,7 @@ public class SMSPublicKeyManagement extends BroadcastReceiver {
 	private byte[] PublicKeySentCode = new BigInteger("0xC0DE2FFF").toByteArray();
 	private byte[] SecretQuestionSentCode = new BigInteger("0xC0DE3FFF").toByteArray();
 	private byte[] SecretAnswerAndPublicKeyHashSentCode = new BigInteger("0xC0DE4FFF").toByteArray();
+	private byte[] KeyValidatedCode = new BigInteger("0xC0DE5FFF").toByteArray();
 	
 	private PublicKeyAutenticator pka;
 	private SmsManager manager;
@@ -120,6 +121,18 @@ public class SMSPublicKeyManagement extends BroadcastReceiver {
 			if(!this.pka.checkForEquality()){
 				//TODO gestire la mancata validazione della chiave.
 			}
+			else{
+				this.pka.setOtherKeyValidated(true);
+				saveOnFileTheCoupleTelephoneAndKey();
+				sendMessage("ack");
+			}
+		}
+		else if(receivedMessageStartsWith(this.KeyValidatedCode)){
+			this.pka = new PublicKeyAutenticator();
+			this.pka.setOtherKeyValidated(isOtherKeyValidatedByMe());
+			if(!this.pka.isOtherKeyValidated()){
+				initiateSMP();
+			}
 		}
 		else throw new ArbitraryMessageReceivedException("Non ho potuto eseguire il match di nessun Header!!!");
 		
@@ -164,6 +177,23 @@ public class SMSPublicKeyManagement extends BroadcastReceiver {
 	private void saveOnFileThePublicKeyObtained() {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	/**
+	 * Dopo la validazione salva su file la coppia telefono dell'altro/chiave.
+	 */
+	private void saveOnFileTheCoupleTelephoneAndKey() {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	/**
+	 * Controlla se su file esiste una coppia valida telefono dell'altro/chiave
+	 * @return
+	 */
+	private boolean isOtherKeyValidatedByMe() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 	/**
@@ -220,14 +250,21 @@ public class SMSPublicKeyManagement extends BroadcastReceiver {
 	private void sendMessage(String switcher) throws NoSuchAlgorithmException{
 		int bodySize;
 		int headerSize;
+		byte[] header;
+		byte[] body;
 		
 		if(switcher.equals("key")){
 			bodySize = this.pka.getMyPublicKey().length;
 			headerSize = this.PublicKeySentCode.length;
+			header = this.PublicKeySentCode;
+			body = this.pka.getMyPublicKey();
 		}
 		else if(switcher.equals("question")){
 			bodySize = this.pka.getSecretQuestion().getBytes().length;
 			headerSize = this.SecretQuestionSentCode.length;
+			body = this.pka.getSecretQuestion().getBytes();
+			header = this.SecretQuestionSentCode;
+			
 		}
 		else if(switcher.equals("hash")){
 			this.pka.doHashToSend();
@@ -235,11 +272,20 @@ public class SMSPublicKeyManagement extends BroadcastReceiver {
 			
 			bodySize = hash.getBytes().length;
 			headerSize = this.SecretAnswerAndPublicKeyHashSentCode.length;
+			header = this.SecretAnswerAndPublicKeyHashSentCode;
+			body = hash.getBytes();
+		}
+		else if(switcher.equals("ack")){
+			//mando due volte l'header perchè il parser si aspetta per forza dati dopo l'header.
+			bodySize = this.KeyValidatedCode.length;
+			headerSize = this.KeyValidatedCode.length;
+			header = this.KeyValidatedCode;
+			body = this.KeyValidatedCode;
 		}
 		else{
 			throw new IllegalArgumentException();
 		}
-		send(bodySize, headerSize);
+		send(bodySize, headerSize, header, body);
 	}
 	
 	/**
@@ -247,10 +293,10 @@ public class SMSPublicKeyManagement extends BroadcastReceiver {
 	 * @param bodySize : dimensione in byte del corpo del messaggio
 	 * @param headerSize : dimensione in byte dell'header del messaggio
 	 */
-	private void send(int bodySize, int headerSize){
+	private void send(int bodySize, int headerSize, byte[] header, byte[] body){
 		byte[] message = new byte[bodySize + headerSize];
-		System.arraycopy(this.SecretQuestionSentCode, 0, message, 0, headerSize);
-		System.arraycopy(this.pka.getSecretQuestion().getBytes(), 0, message, headerSize, bodySize);
+		System.arraycopy(header, 0, message, 0, headerSize);
+		System.arraycopy(body, 0, message, headerSize, bodySize);
 		
 		this.manager.sendDataMessage(this.other, null, (short)999, message, null, null);
 	}
