@@ -7,7 +7,8 @@ import java.security.SecureRandom;
 
 public class PasswordUtils {
 
-	public static final int SALT_LENGTH = 32; //256 bit, come la lunghezza del digest di sha256
+	public static final int SALT_LENGTH = 32; // 256 bit, come la lunghezza del
+												// digest di sha256
 
 	public static byte[] nextSalt() {
 		byte[] salt = new byte[SALT_LENGTH];
@@ -26,6 +27,15 @@ public class PasswordUtils {
 			e.printStackTrace();
 			return null;
 		}
+	}
+
+	public static boolean comparePasswords(String p1, String p2) {
+		if (p1.equals(p2)) {
+			return true;
+		} else {
+			return false;
+		}
+
 	}
 
 }

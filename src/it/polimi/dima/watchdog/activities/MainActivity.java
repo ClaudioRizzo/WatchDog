@@ -30,6 +30,7 @@ public class MainActivity extends ActionBarActivity {
 		SharedPreferences settings = getSharedPreferences(
 				MyPrefFiles.PREF_INIT, 0);
 		boolean wizardDone = settings.getBoolean("wizardDone", false);
+		getSupportActionBar().setTitle(R.string.default_tab);
 		setContentView(R.layout.activity_main_layout);
 
 		mDrawerUtil = new MyDrawerUtility();
@@ -37,7 +38,7 @@ public class MainActivity extends ActionBarActivity {
 		mDrawerUtil.InitializeDrawerList(this, R.id.drawer_layout,
 				R.id.left_drawer);
 		mDrawerUtil.handleOpenCloseDrawer(this, R.id.drawer_layout);
-		getSupportActionBar().setTitle(R.string.default_tab);
+		
 
 		if (wizardDone) {
 			if (findViewById(R.id.main_fragment_container) != null) {
@@ -80,13 +81,23 @@ public class MainActivity extends ActionBarActivity {
 		 * return super.onOptionsItemSelected(item); }
 		 */
 
-		if (item.getItemId() == R.id.prova_sms) {
+		/*if (item.getItemId() == R.id.prova_sms) {
 			SmsManager man = SmsManager.getDefault();
 			man.sendDataMessage("+393466342499", null, (short) 7777,
 					"ciao".getBytes(), null, null);
 
+		}*/
+		
+		switch (item.getItemId()) {
+		case R.id.settings_panel:
+			Intent intent = new Intent(this, SettingsActivity.class);
+			startActivity(intent);
+		default:
+			return super.onOptionsItemSelected(item);
+
 		}
-		return super.onOptionsItemSelected(item);
+		
+		
 	}
 
 	@Override

@@ -61,6 +61,14 @@
             android:name="it.polimi.dima.watchdog.activities.InitializationWizardActivity"
             android:theme="@style/Theme.AppCompat.Light" >
         </activity>
+        <activity
+            android:name="it.polimi.dima.watchdog.activities.SettingsActivity"
+            android:theme="@style/Theme.AppCompat.Light" >
+            <meta-data
+            android:name="android.support.PARENT_ACTIVITY"
+            android:value="it.polimi.dima.watchdog.activities.MainActivity" />
+        </activity>
+        
     </application>
 
 </manifest>

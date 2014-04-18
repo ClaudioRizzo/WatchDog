@@ -8,6 +8,11 @@
         <item>Status</item>
     </string-array>
     
+    <!-- Strings Array for settings activity -->
+    <string-array name="array_settings">
+        <item>Associate a Number</item>
+    </string-array>
+    
 
     <string name="app_name">WatchDog</string>
     <string name="default_tab">Gps</string>
@@ -17,6 +22,7 @@
     <string name="action_share">Share Application</string>
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
+    <string name="settings_title">Settings</string>
 
     <!-- Action Bar Titles -->
     <string name="gps_title">Gps</string>

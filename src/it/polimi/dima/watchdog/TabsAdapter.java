@@ -1,12 +1,16 @@
-package it.polimi.dima.watchdog.activities;
+package it.polimi.dima.watchdog;
 
 import it.polimi.dima.watchdog.factory.FeatureEnum;
 import it.polimi.dima.watchdog.factory.FeatureFactory;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentStatePagerAdapter;
 
+/**
+ * classe usata per gestire le tabs nei fragment che ne hanno bisogno
+ * @author claudio
+ *
+ */
 public class TabsAdapter extends FragmentPagerAdapter {
 
 	private int tabsNum;

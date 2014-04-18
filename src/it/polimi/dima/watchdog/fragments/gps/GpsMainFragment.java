@@ -1,7 +1,7 @@
 package it.polimi.dima.watchdog.fragments.gps;
 
 import it.polimi.dima.watchdog.R;
-import it.polimi.dima.watchdog.activities.TabsAdapter;
+import it.polimi.dima.watchdog.TabsAdapter;
 import it.polimi.dima.watchdog.factory.FeatureEnum;
 import it.polimi.dima.watchdog.fragments.smsRemote.SmsRemoteMainFragment;
 import android.app.Activity;

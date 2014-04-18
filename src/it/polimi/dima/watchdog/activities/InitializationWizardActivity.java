@@ -35,8 +35,6 @@ public class InitializationWizardActivity extends ActionBarActivity implements
 	}
 
 
-	//TODO: pensare a un modo intelligente di gestire le stringhe delle preferences
-	//Evitare di averle scritte sparse nel codice. Aggiungerle a PrefFiles?
 	@Override
 	public void getWizardChanges(boolean wizardDone, String hashToSave, String salt) {
 		SharedPreferences settings = getSharedPreferences(MyPrefFiles.PREF_INIT, 0);
@@ -50,13 +48,13 @@ public class InitializationWizardActivity extends ActionBarActivity implements
 		String privateKey = Base64.encodeToString(privateKeyBytes, Base64.DEFAULT);
 		
 		//saving preferences
-		editor.putBoolean("wizardDone", wizardDone);
-		editor.putString("psswd_hash_salted", hashToSave);
-		editor.putString("salt", salt);
+		editor.putBoolean(MyPrefFiles.WIZARD_DONE, wizardDone);
+		editor.putString(MyPrefFiles.PSSWD_HASH_SALTED, hashToSave);
+		editor.putString(MyPrefFiles.SALT, salt);
 		
 		
-		editor.putString("user_pub_key", pubKey);
-		editor.putString("user_private_key", privateKey);
+		editor.putString(MyPrefFiles.PUB_KEY, pubKey);
+		editor.putString(MyPrefFiles.PRI_KEY, privateKey);
 		
 		editor.commit();
 		
