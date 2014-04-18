@@ -12,6 +12,9 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Base64;
 
+//TODO: verificare che la password inserita rispetti i nostri standard di sicurezza
+//da verificare
+
 public class InitializationWizardActivity extends ActionBarActivity implements
 		OnPasswordInizializedListener {
 
