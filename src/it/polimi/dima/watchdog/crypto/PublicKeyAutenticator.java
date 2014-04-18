@@ -27,6 +27,10 @@ public class PublicKeyAutenticator {
 		return this.myPublicKey;
 	}
 	
+	public byte[] getReceivedPublicKey(){
+		return this.receivedPublicKey;
+	}
+	
 	public String getSecretQuestion(){
 		return this.secretQuestion;
 	}

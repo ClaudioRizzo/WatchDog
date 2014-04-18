@@ -7,12 +7,15 @@ import java.util.Arrays;
 
 import it.polimi.dima.watchdog.crypto.PublicKeyAutenticator;
 import it.polimi.dima.watchdog.exceptions.ArbitraryMessageReceivedException;
+import it.polimi.dima.watchdog.exceptions.NoSuchPreferenceFoundException;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.telephony.SmsManager;
 import android.telephony.SmsMessage;
+import android.util.Base64;
 import android.util.Log;
 
 /**
@@ -34,6 +37,11 @@ public class SMSPublicKeyManagement extends BroadcastReceiver {
 	private SmsManager manager;
 	private String other;
 	private byte[] message;
+	
+	private Context ctx;
+	private String publicKeysFile = "resources/keyring";
+	private String notValidatedPublicKeysFile = "resources/keysquare"; //Ovviamente è un pun xD
+	private String secretQuestionAndAnswerFile = "resources/secrets";
 
 	/**
 	 * L'utente A vuole aggiungere l'utente B alla lista di telefoni "rescue": per prima cosa lancia questo
@@ -70,6 +78,7 @@ public class SMSPublicKeyManagement extends BroadcastReceiver {
 	 */
 	@Override
 	public void onReceive(Context context, Intent intent) {
+		this.ctx = context;
 		final Bundle bundle = intent.getExtras();
 
 		try {
@@ -95,15 +104,16 @@ public class SMSPublicKeyManagement extends BroadcastReceiver {
 	 * @throws ArbitraryMessageReceivedException 
 	 * @throws UnsupportedEncodingException 
 	 * @throws NoSuchAlgorithmException 
+	 * @throws NoSuchPreferenceFoundException 
 	 */
-	private void manageReceivedMessage() throws ArbitraryMessageReceivedException, UnsupportedEncodingException, NoSuchAlgorithmException {
+	private void manageReceivedMessage() throws ArbitraryMessageReceivedException, UnsupportedEncodingException, NoSuchAlgorithmException, NoSuchPreferenceFoundException {
 		if(this.message.equals(this.PublicKeyRequestCode)){
 			this.pka = new PublicKeyAutenticator(getPublicKey(), null, null);
 			sendMessage("key");
 		}
 		else if(receivedMessageStartsWith(this.PublicKeySentCode)){
 			this.pka = new PublicKeyAutenticator(null, getSecretQuestion(), null);
-			saveOnFileThePublicKeyObtained();
+			saveOnFileThePublicKeyObtained(unwrapContent(this.PublicKeySentCode));
 			sendMessage("question");
 		}
 		else if(receivedMessageStartsWith(this.SecretQuestionSentCode)){
@@ -149,6 +159,9 @@ public class SMSPublicKeyManagement extends BroadcastReceiver {
 		byte[] message = new byte[messageLength];
 		System.arraycopy(this.message, prefix.length, message, 0, messageLength);
 		
+		if(prefix.equals(this.PublicKeySentCode) || prefix.equals(this.SecretAnswerAndPublicKeyHashSentCode)){
+			return Base64.encodeToString(message, Base64.DEFAULT);
+		}
 		return new String(message, "UTF-8");
 	}
 	
@@ -165,26 +178,35 @@ public class SMSPublicKeyManagement extends BroadcastReceiver {
 	/**
 	 * Recupera da file la chiave pubblica collezionata precedentemente.
 	 * @return
+	 * @throws NoSuchPreferenceFoundException 
 	 */
-	private byte[] getKeyToVerify() {
-		// TODO Auto-generated method stub
-		return null;
+	private byte[] getKeyToVerify() throws NoSuchPreferenceFoundException {
+		SharedPreferences sp = this.ctx.getSharedPreferences(this.notValidatedPublicKeysFile, Context.MODE_PRIVATE);
+		String otherPubMaybe = sp.getString(this.other, null);
+		if(otherPubMaybe == null){
+			throw new NoSuchPreferenceFoundException("Non esiste tale chiave pubblica!!!");
+		}
+		return Base64.decode(otherPubMaybe, Base64.DEFAULT);
 	}
 
 	/**
 	 * Salva su file la chiave pubblica ricevuta.
 	 */
-	private void saveOnFileThePublicKeyObtained() {
-		// TODO Auto-generated method stub
-		
+	private void saveOnFileThePublicKeyObtained(String otherPubMaybe) {//è già in base64
+		SharedPreferences sp = this.ctx.getSharedPreferences(this.notValidatedPublicKeysFile, Context.MODE_PRIVATE);
+		SharedPreferences.Editor editor = sp.edit();
+		editor.putString(this.other, otherPubMaybe);
+		editor.commit();
 	}
 	
 	/**
 	 * Dopo la validazione salva su file la coppia telefono dell'altro/chiave.
 	 */
 	private void saveOnFileTheCoupleTelephoneAndKey() {
-		// TODO Auto-generated method stub
-		
+		SharedPreferences sp = this.ctx.getSharedPreferences(this.publicKeysFile, Context.MODE_PRIVATE);
+		SharedPreferences.Editor editor = sp.edit();
+		editor.putString(this.other, Base64.encodeToString(this.pka.getReceivedPublicKey(), Base64.DEFAULT));
+		editor.commit();
 	}
 	
 	/**
@@ -192,35 +214,54 @@ public class SMSPublicKeyManagement extends BroadcastReceiver {
 	 * @return
 	 */
 	private boolean isOtherKeyValidatedByMe() {
-		// TODO Auto-generated method stub
-		return false;
+		SharedPreferences sp = this.ctx.getSharedPreferences(this.publicKeysFile, Context.MODE_PRIVATE);
+		String otherPub = sp.getString(this.other, null);
+		if(otherPub == null){
+			return false;
+		}
+		return true;
 	}
 
 	/**
-	 * Da file ritorna la risposta segreta
+	 * Da file ritorna la risposta segreta (TODO bisogna lasciarla in chiaro?)
 	 * @return
+	 * @throws NoSuchPreferenceFoundException 
 	 */
-	private String getSecretAnswer() {
-		// TODO Auto-generated method stub
-		return null;
+	private String getSecretAnswer() throws NoSuchPreferenceFoundException {
+		SharedPreferences sp = this.ctx.getSharedPreferences(this.secretQuestionAndAnswerFile, Context.MODE_PRIVATE);
+		String answer = sp.getString("secretAnswer", null);
+		if(answer == null){
+			throw new NoSuchPreferenceFoundException("Non esiste la risposta segreta!!!");
+		}
+		return answer;
 	}
 
 	/**
 	 * Da file ritorna la domanda segreta
 	 * @return
+	 * @throws NoSuchPreferenceFoundException 
 	 */
-	private String getSecretQuestion() {
-		// TODO Auto-generated method stub
-		return null;
+	private String getSecretQuestion() throws NoSuchPreferenceFoundException {
+		SharedPreferences sp = this.ctx.getSharedPreferences(this.secretQuestionAndAnswerFile, Context.MODE_PRIVATE);
+		String question = sp.getString("secretQuestion", null);
+		if(question == null){
+			throw new NoSuchPreferenceFoundException("Non esiste la domanda segreta!!!");
+		}
+		return question;
 	}
 
 	/**
 	 * Da file ritorna la propria chiave pubblica
 	 * @return
+	 * @throws NoSuchPreferenceFoundException 
 	 */
-	private byte[] getPublicKey() {
-		// TODO Auto-generated method stub
-		return null;
+	private byte[] getPublicKey() throws NoSuchPreferenceFoundException {
+		SharedPreferences sp = this.ctx.getSharedPreferences(this.publicKeysFile, Context.MODE_PRIVATE);
+		String myPub = sp.getString("myPublicKey", null);
+		if(myPub == null){
+			throw new NoSuchPreferenceFoundException("Non ho una chiave pubblica!!!");
+		}
+		return Base64.decode(myPub, Base64.DEFAULT);
 	}
 	
 	/**
