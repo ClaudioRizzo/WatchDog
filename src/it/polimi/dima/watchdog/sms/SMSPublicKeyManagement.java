@@ -129,7 +129,9 @@ public class SMSPublicKeyManagement extends BroadcastReceiver {
 			this.pka.doHashToCheck();
 			this.pka.setReceivedHash(unwrapContent(this.SecretAnswerAndPublicKeyHashSentCode));
 			if(!this.pka.checkForEquality()){
-				//TODO gestire la mancata validazione della chiave.
+				deleteKeyNotValidated();
+				//TODO notificare l'attività della mancata validazione in modo da restituire un messaggio di
+				//errore
 			}
 			else{
 				this.pka.setOtherKeyValidated(true);
@@ -206,6 +208,16 @@ public class SMSPublicKeyManagement extends BroadcastReceiver {
 		SharedPreferences sp = this.ctx.getSharedPreferences(this.publicKeysFile, Context.MODE_PRIVATE);
 		SharedPreferences.Editor editor = sp.edit();
 		editor.putString(this.other, Base64.encodeToString(this.pka.getReceivedPublicKey(), Base64.DEFAULT));
+		editor.commit();
+	}
+	
+	/**
+	 * Metodo chiamato dopo il fallimento della validazione: la chiave in "standby" viene cancellata.
+	 */
+	private void deleteKeyNotValidated() {
+		SharedPreferences sp = this.ctx.getSharedPreferences(this.notValidatedPublicKeysFile, Context.MODE_PRIVATE);
+		SharedPreferences.Editor editor = sp.edit();
+		editor.remove(this.other);
 		editor.commit();
 	}
 	
