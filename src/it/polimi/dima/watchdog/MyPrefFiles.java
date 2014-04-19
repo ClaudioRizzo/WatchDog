@@ -40,4 +40,14 @@ public class MyPrefFiles {
 	 * valore chiave per la key_private
 	 */
 	public static final String PRI_KEY = "private_key";
+	
+	/**
+	 * Domanda segreta per l'SMP
+	 */
+	public static final String SECRET_Q = "secretQuestion";
+	
+	/**
+	 * Risposta segreta per l'SMP
+	 */
+	public static final String SECRET_A = "secretAnswer";
 }

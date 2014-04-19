@@ -1,11 +1,11 @@
 package it.polimi.dima.watchdog.activities;
 
 import it.polimi.dima.watchdog.MyPrefFiles;
-import it.polimi.dima.watchdog.PasswordUtils;
 import it.polimi.dima.watchdog.R;
 import it.polimi.dima.watchdog.crypto.ECKeyPairGenerator;
 import it.polimi.dima.watchdog.fragments.wizard.InitializeWizardFragment;
 import it.polimi.dima.watchdog.fragments.wizard.InitializeWizardFragment.OnPasswordInizializedListener;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -40,7 +40,7 @@ public class InitializationWizardActivity extends ActionBarActivity implements
 
 	@Override
 	public void getWizardChanges(boolean wizardDone, String hashToSave, String salt) {
-		SharedPreferences settings = getSharedPreferences(MyPrefFiles.PREF_INIT, 0);
+		SharedPreferences settings = getSharedPreferences(MyPrefFiles.PREF_INIT, Context.MODE_PRIVATE);
 		SharedPreferences.Editor editor = settings.edit();
 		ECKeyPairGenerator mkeyGen = new ECKeyPairGenerator();
 		mkeyGen.generateKeyPair();

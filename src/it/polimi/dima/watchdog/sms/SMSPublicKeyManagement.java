@@ -5,6 +5,8 @@ import java.math.BigInteger;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 
+import it.polimi.dima.watchdog.MyPrefFiles;
+import it.polimi.dima.watchdog.MyPrefFiles2;
 import it.polimi.dima.watchdog.crypto.PublicKeyAutenticator;
 import it.polimi.dima.watchdog.exceptions.ArbitraryMessageReceivedException;
 import it.polimi.dima.watchdog.exceptions.NoSuchPreferenceFoundException;
@@ -39,9 +41,6 @@ public class SMSPublicKeyManagement extends BroadcastReceiver {
 	private byte[] message;
 	
 	private Context ctx;
-	private String publicKeysFile = "resources/keyring";
-	private String notValidatedPublicKeysFile = "resources/keysquare"; //Ovviamente è un pun xD
-	private String secretQuestionAndAnswerFile = "resources/secrets";
 
 	/**
 	 * L'utente A vuole aggiungere l'utente B alla lista di telefoni "rescue": per prima cosa lancia questo
@@ -183,7 +182,7 @@ public class SMSPublicKeyManagement extends BroadcastReceiver {
 	 * @throws NoSuchPreferenceFoundException 
 	 */
 	private byte[] getKeyToVerify() throws NoSuchPreferenceFoundException {
-		SharedPreferences sp = this.ctx.getSharedPreferences(this.notValidatedPublicKeysFile, Context.MODE_PRIVATE);
+		SharedPreferences sp = this.ctx.getSharedPreferences(MyPrefFiles2.PREF_INIT, Context.MODE_PRIVATE);
 		String otherPubMaybe = sp.getString(this.other, null);
 		if(otherPubMaybe == null){
 			throw new NoSuchPreferenceFoundException("Non esiste tale chiave pubblica!!!");
@@ -195,7 +194,7 @@ public class SMSPublicKeyManagement extends BroadcastReceiver {
 	 * Salva su file la chiave pubblica ricevuta.
 	 */
 	private void saveOnFileThePublicKeyObtained(String otherPubMaybe) {//è già in base64
-		SharedPreferences sp = this.ctx.getSharedPreferences(this.notValidatedPublicKeysFile, Context.MODE_PRIVATE);
+		SharedPreferences sp = this.ctx.getSharedPreferences(MyPrefFiles2.PREF_INIT, Context.MODE_PRIVATE);
 		SharedPreferences.Editor editor = sp.edit();
 		editor.putString(this.other, otherPubMaybe);
 		editor.commit();
@@ -205,7 +204,7 @@ public class SMSPublicKeyManagement extends BroadcastReceiver {
 	 * Dopo la validazione salva su file la coppia telefono dell'altro/chiave.
 	 */
 	private void saveOnFileTheCoupleTelephoneAndKey() {
-		SharedPreferences sp = this.ctx.getSharedPreferences(this.publicKeysFile, Context.MODE_PRIVATE);
+		SharedPreferences sp = this.ctx.getSharedPreferences(MyPrefFiles.PREF_INIT, Context.MODE_PRIVATE);
 		SharedPreferences.Editor editor = sp.edit();
 		editor.putString(this.other, Base64.encodeToString(this.pka.getReceivedPublicKey(), Base64.DEFAULT));
 		editor.commit();
@@ -215,7 +214,7 @@ public class SMSPublicKeyManagement extends BroadcastReceiver {
 	 * Metodo chiamato dopo il fallimento della validazione: la chiave in "standby" viene cancellata.
 	 */
 	private void deleteKeyNotValidated() {
-		SharedPreferences sp = this.ctx.getSharedPreferences(this.notValidatedPublicKeysFile, Context.MODE_PRIVATE);
+		SharedPreferences sp = this.ctx.getSharedPreferences(MyPrefFiles2.PREF_INIT, Context.MODE_PRIVATE);
 		SharedPreferences.Editor editor = sp.edit();
 		editor.remove(this.other);
 		editor.commit();
@@ -226,7 +225,7 @@ public class SMSPublicKeyManagement extends BroadcastReceiver {
 	 * @return
 	 */
 	private boolean isOtherKeyValidatedByMe() {
-		SharedPreferences sp = this.ctx.getSharedPreferences(this.publicKeysFile, Context.MODE_PRIVATE);
+		SharedPreferences sp = this.ctx.getSharedPreferences(MyPrefFiles.PREF_INIT, Context.MODE_PRIVATE);
 		String otherPub = sp.getString(this.other, null);
 		if(otherPub == null){
 			return false;
@@ -240,8 +239,8 @@ public class SMSPublicKeyManagement extends BroadcastReceiver {
 	 * @throws NoSuchPreferenceFoundException 
 	 */
 	private String getSecretAnswer() throws NoSuchPreferenceFoundException {
-		SharedPreferences sp = this.ctx.getSharedPreferences(this.secretQuestionAndAnswerFile, Context.MODE_PRIVATE);
-		String answer = sp.getString("secretAnswer", null);
+		SharedPreferences sp = this.ctx.getSharedPreferences(MyPrefFiles.PREF_INIT, Context.MODE_PRIVATE);
+		String answer = sp.getString(MyPrefFiles.SECRET_A, null);
 		if(answer == null){
 			throw new NoSuchPreferenceFoundException("Non esiste la risposta segreta!!!");
 		}
@@ -254,8 +253,8 @@ public class SMSPublicKeyManagement extends BroadcastReceiver {
 	 * @throws NoSuchPreferenceFoundException 
 	 */
 	private String getSecretQuestion() throws NoSuchPreferenceFoundException {
-		SharedPreferences sp = this.ctx.getSharedPreferences(this.secretQuestionAndAnswerFile, Context.MODE_PRIVATE);
-		String question = sp.getString("secretQuestion", null);
+		SharedPreferences sp = this.ctx.getSharedPreferences(MyPrefFiles.PREF_INIT, Context.MODE_PRIVATE);
+		String question = sp.getString(MyPrefFiles.SECRET_Q, null);
 		if(question == null){
 			throw new NoSuchPreferenceFoundException("Non esiste la domanda segreta!!!");
 		}
@@ -268,8 +267,8 @@ public class SMSPublicKeyManagement extends BroadcastReceiver {
 	 * @throws NoSuchPreferenceFoundException 
 	 */
 	private byte[] getPublicKey() throws NoSuchPreferenceFoundException {
-		SharedPreferences sp = this.ctx.getSharedPreferences(this.publicKeysFile, Context.MODE_PRIVATE);
-		String myPub = sp.getString("myPublicKey", null);
+		SharedPreferences sp = this.ctx.getSharedPreferences(MyPrefFiles.PREF_INIT, Context.MODE_PRIVATE);
+		String myPub = sp.getString(MyPrefFiles.PUB_KEY, null);
 		if(myPub == null){
 			throw new NoSuchPreferenceFoundException("Non ho una chiave pubblica!!!");
 		}
