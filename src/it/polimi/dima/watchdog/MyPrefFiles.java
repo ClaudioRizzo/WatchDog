@@ -22,32 +22,39 @@ public class MyPrefFiles {
 	public static final String WIZARD_DONE = "wizardDone";
 	
 	/**
-	 * valore chiave per la password salata
+	 * File che contiene l'hash della propria password e il sale corrispondente.
 	 */
-	public static final String PSSWD_HASH_SALTED = "password_hash_salted";
+	public static final String PASSWORD_AND_SALT = "password_and_salt";
 	
 	/**
-	 * valore chiave per il sale della password
+	 * file che contiene le chiavi pubbliche già validate.
 	 */
-	public static final String SALT = "salt";
+	public static final String KEYRING = "keyring";
 	
 	/**
-	 * valore chiave per la key_pub
+	 * file che contiene i sali delle password di tutti i telefoni abbinati (in modo che quando bisogna digitare
+	 * su questo telefono una password di un altro telefono da "salvare" si possa fare l'hash correttamente).
 	 */
-	public static final String PUB_KEY = "key_pub";
+	public static final String HASHRING = "hashring"; //OVVIO PUN xD
 	
 	/**
-	 * valore chiave per la key_private
+	 * file che contiene le proprie chiavi.
 	 */
-	public static final String PRI_KEY = "private_key";
+	public static final String MY_KEYS = "mykeys";
 	
 	/**
-	 * Domanda segreta per l'SMP
+	 * file che contiene domanda e risposta segrete per l'SMP.
 	 */
-	public static final String SECRET_Q = "secretQuestion";
+	public static final String SECRET_Q_A = "secret_question_and_answer";
 	
 	/**
-	 * Risposta segreta per l'SMP
+	 * file che contiene le chiavi pubbliche non ancora validate.
 	 */
-	public static final String SECRET_A = "secretAnswer";
+	public static final String KEYSQUARE = "keysquare"; //OVVIO PUN xD
+	
+	/**
+	 * file che contiene la chiave pubblica da usare per inviare il prossimo messaggio o per decrittare il primo
+	 * che arriva.
+	 */
+	public static final String CURRENT_AES_KEY = "current_aes_key";
 }

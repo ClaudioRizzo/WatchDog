@@ -40,8 +40,12 @@ public class InitializationWizardActivity extends ActionBarActivity implements
 
 	@Override
 	public void getWizardChanges(boolean wizardDone, String hashToSave, String salt) {
-		SharedPreferences settings = getSharedPreferences(MyPrefFiles.PREF_INIT, Context.MODE_PRIVATE);
-		SharedPreferences.Editor editor = settings.edit();
+		SharedPreferences keys = getSharedPreferences(MyPrefFiles.MY_KEYS, Context.MODE_PRIVATE);
+		SharedPreferences password = getSharedPreferences(MyPrefFiles.PASSWORD_AND_SALT, Context.MODE_PRIVATE);
+		SharedPreferences wizard = getSharedPreferences(MyPrefFiles.WIZARD_DONE, Context.MODE_PRIVATE);
+		SharedPreferences.Editor editor1 = keys.edit();
+		SharedPreferences.Editor editor2 = password.edit();
+		SharedPreferences.Editor editor3 = wizard.edit();
 		ECKeyPairGenerator mkeyGen = new ECKeyPairGenerator();
 		mkeyGen.generateKeyPair();
 		
@@ -51,15 +55,15 @@ public class InitializationWizardActivity extends ActionBarActivity implements
 		String privateKey = Base64.encodeToString(privateKeyBytes, Base64.DEFAULT);
 		
 		//saving preferences
-		editor.putBoolean(MyPrefFiles.WIZARD_DONE, wizardDone);
-		editor.putString(MyPrefFiles.PSSWD_HASH_SALTED, hashToSave);
-		editor.putString(MyPrefFiles.SALT, salt);
+		editor1.putString("myPub", pubKey);
+		editor1.putString("myPriv", privateKey);
+		editor2.putString("myPasswordHash", hashToSave);
+		editor2.putString("myPasswordSalt", salt);
+		editor3.putBoolean(MyPrefFiles.WIZARD_DONE, wizardDone);
 		
-		
-		editor.putString(MyPrefFiles.PUB_KEY, pubKey);
-		editor.putString(MyPrefFiles.PRI_KEY, privateKey);
-		
-		editor.commit();
+		editor1.commit();
+		editor2.commit();
+		editor3.commit();
 		
 		//start MainActivity
 		Intent intent = new Intent(this, MainActivity.class);
