@@ -5,6 +5,7 @@ import it.polimi.dima.watchdog.MyPrefFiles;
 import it.polimi.dima.watchdog.R;
 import it.polimi.dima.watchdog.fragments.gps.GpsMainFragment;
 import it.polimi.dima.watchdog.fragments.smsRemote.SmsRemoteMainFragment;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -28,8 +29,8 @@ public class MainActivity extends ActionBarActivity {
 
 		// Restore preferences false if doesn't exist
 		SharedPreferences settings = getSharedPreferences(
-				MyPrefFiles.PREF_INIT, 0);
-		boolean wizardDone = settings.getBoolean("wizardDone", false);
+				MyPrefFiles.PREF_INIT, Context.MODE_PRIVATE);
+		boolean wizardDone = settings.getBoolean(MyPrefFiles.WIZARD_DONE, false);
 		getSupportActionBar().setTitle(R.string.default_tab);
 		setContentView(R.layout.activity_main_layout);
 
