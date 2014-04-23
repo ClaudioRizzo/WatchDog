@@ -68,6 +68,13 @@
             android:name="android.support.PARENT_ACTIVITY"
             android:value="it.polimi.dima.watchdog.activities.MainActivity" />
         </activity>
+        <activity
+            android:name="it.polimi.dima.watchdog.activities.AssociateNumberActivity"
+            android:theme="@style/Theme.AppCompat.Light" >
+            <meta-data
+            android:name="android.support.PARENT_ACTIVITY"
+            android:value="it.polimi.dima.watchdog.activities.SettingsActivity" />
+        </activity>
         
     </application>
 

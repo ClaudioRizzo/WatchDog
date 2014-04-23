@@ -28,6 +28,7 @@
     <string name="gps_title">Gps</string>
     <string name="status_title">Status</string>
     <string name="remote_title">Remote</string>
+    <string name="title_associate_number">Number Association</string>
     <!--  -->
     
     <!-- text view strings -->

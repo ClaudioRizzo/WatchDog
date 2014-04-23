@@ -1,6 +1,11 @@
 package it.polimi.dima.watchdog.fragments.actionBar;
 
 import it.polimi.dima.watchdog.R;
+import it.polimi.dima.watchdog.activities.AssociateNumberActivity;
+import it.polimi.dima.watchdog.activities.SettingsActivity;
+import it.polimi.dima.watchdog.fragments.wizard.InitializeWizardFragment.OnPasswordInizializedListener;
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.ListFragment;
@@ -16,6 +21,18 @@ import android.widget.ListView;
 
 public class SettingsFragment extends Fragment implements OnItemClickListener {
 
+	/**
+	 * Interfaccia che gestisce tutti i click sulla lista di impostazioni
+	 * @author claudio
+	 *
+	 */
+	public interface MyOnListItemClicked {
+		public void getClickOnAsscociateNumber();
+		
+	}
+	
+	private MyOnListItemClicked mCallBack; 
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -41,11 +58,25 @@ public class SettingsFragment extends Fragment implements OnItemClickListener {
 		switch (position) {
 		case 0:
 			Log.i("[DEBUG]", "Ho cliccato position " + position);
+			mCallBack.getClickOnAsscociateNumber();
 			break;
 		default:
 			break;
 
 		}
 	}
+	
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+
+		try {
+			this.mCallBack = (MyOnListItemClicked) activity;
+		} catch (ClassCastException e) {
+			throw new ClassCastException(activity.toString()
+					+ "must implement OnPasswordInizializedListener");
+		}
+	}
+	
 
 }
