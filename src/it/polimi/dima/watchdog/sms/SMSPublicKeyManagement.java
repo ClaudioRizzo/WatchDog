@@ -9,6 +9,7 @@ import it.polimi.dima.watchdog.MyPrefFiles;
 import it.polimi.dima.watchdog.crypto.PublicKeyAutenticator;
 import it.polimi.dima.watchdog.exceptions.ArbitraryMessageReceivedException;
 import it.polimi.dima.watchdog.exceptions.NoSuchPreferenceFoundException;
+import it.polimi.dima.watchdog.sms.DummyClass.DummyInterface;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -26,13 +27,14 @@ import android.util.Log;
  * @author emanuele
  *
  */
-public class SMSPublicKeyManagement extends BroadcastReceiver {
+public class SMSPublicKeyManagement extends BroadcastReceiver implements DummyInterface {
 
 	private byte[] PublicKeyRequestCode = new BigInteger("0xC0DE1FFF").toByteArray();
 	private byte[] PublicKeySentCode = new BigInteger("0xC0DE2FFF").toByteArray();
 	private byte[] SecretQuestionSentCode = new BigInteger("0xC0DE3FFF").toByteArray();
 	private byte[] SecretAnswerAndPublicKeyHashSentCode = new BigInteger("0xC0DE4FFF").toByteArray();
 	private byte[] KeyValidatedCode = new BigInteger("0xC0DE5FFF").toByteArray();
+	private byte[] IDontWantToAssociate = new BigInteger("0xC0DE6FFF").toByteArray();
 	
 	private PublicKeyAutenticator pka;
 	private SmsManager manager;
@@ -59,6 +61,7 @@ public class SMSPublicKeyManagement extends BroadcastReceiver {
 	 */
 	public SMSPublicKeyManagement() {
 		this.manager = SmsManager.getDefault();
+	
 	}
 	
 	/**
@@ -106,8 +109,10 @@ public class SMSPublicKeyManagement extends BroadcastReceiver {
 	 */
 	private void manageReceivedMessage() throws ArbitraryMessageReceivedException, UnsupportedEncodingException, NoSuchAlgorithmException, NoSuchPreferenceFoundException {
 		if(this.message.equals(this.PublicKeyRequestCode)){
-			this.pka = new PublicKeyAutenticator(getPublicKey(), null, null);
-			sendMessage("key");
+			DummyClass.getDumyInstance().setListener(this);
+		}
+		else if(this.message.equals(this.IDontWantToAssociate)){
+			//TODO notificare l'utente che la richiesta è stata rifiutata.
 		}
 		else if(receivedMessageStartsWith(this.PublicKeySentCode)){
 			this.pka = new PublicKeyAutenticator(null, getSecretQuestion(), null);
@@ -310,6 +315,12 @@ public class SMSPublicKeyManagement extends BroadcastReceiver {
 			header = this.PublicKeySentCode;
 			body = this.pka.getMyPublicKey();
 		}
+		else if(switcher.equals("idontwantyou")){
+			bodySize = 0;
+			headerSize = this.IDontWantToAssociate.length;
+			header = this.IDontWantToAssociate;
+			body = "".getBytes();
+		}
 		else if(switcher.equals("question")){
 			bodySize = this.pka.getSecretQuestion().getBytes().length;
 			headerSize = this.SecretQuestionSentCode.length;
@@ -350,6 +361,18 @@ public class SMSPublicKeyManagement extends BroadcastReceiver {
 		System.arraycopy(body, 0, message, headerSize, bodySize);
 		
 		this.manager.sendDataMessage(this.other, null, (short)999, message, null, null);
+	}
+
+	@Override
+	public void notifyChoice(boolean choice) throws NoSuchAlgorithmException, NoSuchPreferenceFoundException {
+		if(choice){
+			this.pka = new PublicKeyAutenticator(getPublicKey(), null, null);
+			sendMessage("key");
+		}
+		else{
+			sendMessage("idontwantyou");
+		}
+		
 	}
 
 
