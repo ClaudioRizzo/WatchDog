@@ -239,7 +239,7 @@ public class SMSPublicKeyManagement extends BroadcastReceiver {
 	 */
 	private String getSecretAnswer() throws NoSuchPreferenceFoundException {
 		SharedPreferences sp = this.ctx.getSharedPreferences(MyPrefFiles.SECRET_Q_A, Context.MODE_PRIVATE);
-		String answer = sp.getString("secret_answer", null);//TODO ricordarsi di settarla in inizializzazione
+		String answer = sp.getString(MyPrefFiles.SECRET_ANSWER, null);//TODO ricordarsi di settarla in inizializzazione
 		if(answer == null){
 			throw new NoSuchPreferenceFoundException("Non esiste la risposta segreta!!!");
 		}
@@ -253,7 +253,7 @@ public class SMSPublicKeyManagement extends BroadcastReceiver {
 	 */
 	private String getSecretQuestion() throws NoSuchPreferenceFoundException {
 		SharedPreferences sp = this.ctx.getSharedPreferences(MyPrefFiles.SECRET_Q_A, Context.MODE_PRIVATE);
-		String question = sp.getString("secret_question", null);//TODO ricordarsi di settarla in inizializzazione
+		String question = sp.getString(MyPrefFiles.SECRET_QUESTION, null);//TODO ricordarsi di settarla in inizializzazione
 		if(question == null){
 			throw new NoSuchPreferenceFoundException("Non esiste la domanda segreta!!!");
 		}
@@ -267,7 +267,7 @@ public class SMSPublicKeyManagement extends BroadcastReceiver {
 	 */
 	private byte[] getPublicKey() throws NoSuchPreferenceFoundException {
 		SharedPreferences sp = this.ctx.getSharedPreferences(MyPrefFiles.MY_KEYS, Context.MODE_PRIVATE);
-		String myPub = sp.getString("myPub", null);
+		String myPub = sp.getString(MyPrefFiles.MY_PUB, null);
 		if(myPub == null){
 			throw new NoSuchPreferenceFoundException("Non ho una chiave pubblica!!!");
 		}

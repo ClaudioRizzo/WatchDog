@@ -9,17 +9,14 @@ public class MyPrefFiles {
 
 	private MyPrefFiles() {
 		throw new IllegalAccessError("This constructur is private");
-	}
+	}	
+	
+	//QUI I NOMI DEI FILE
 	
 	/**
 	 * Stringa che identifica il nome di un file
 	 */
-	public static final String PREF_INIT = "MyInitFile";
-	
-	/**
-	 * valore chiave per sapere se il wizard è finito o no  
-	 */
-	public static final String WIZARD_DONE = "wizardDone";
+	public static final String PREF_INIT = "my_init_file";
 	
 	/**
 	 * File che contiene l'hash della propria password e il sale corrispondente.
@@ -57,4 +54,46 @@ public class MyPrefFiles {
 	 * che arriva.
 	 */
 	public static final String CURRENT_AES_KEY = "current_aes_key";
+	
+	//DA QUI IN POI CHIAVI
+	
+	/**
+	 * valore chiave per sapere se il wizard è finito o no.
+	 */
+	public static final String WIZARD_DONE = "wizardDone";
+	
+	/**
+	 * valore "chiave" per la propria chiave pubblica.
+	 */
+	public static final String MY_PUB = "my_public_key";
+	
+	/**
+	 * valore "chiave" per la propria chiave privata. 
+	 */
+	public static final String MY_PRIV = "my_private_key";
+	
+	/**
+	 * valore chiave per l'hash della propria password.
+	 */
+	public static final String MY_PASSWORD_HASH = "my_password_hash";
+	
+	/**
+	 * valore chiave per il sale con cui è stato costruito l'hash della propria password.
+	 */
+	public static final String MY_PASSWORD_SALT = "my_password_salt";
+	
+	/**
+	 * valore chiave per la risposta segreta.  
+	 */
+	public static final String SECRET_ANSWER = "secret_answer";
+	
+	/**
+	 * valore chiave per la domanda segreta.  
+	 */
+	public static final String SECRET_QUESTION = "secret_question";
+	
+	/**
+	 * valore "chiave" per la chiave corrente dell'AES.
+	 */
+	public static final String SESSION_KEY = "session_key";
 }

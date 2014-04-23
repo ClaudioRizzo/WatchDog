@@ -1,22 +1,27 @@
 package it.polimi.dima.watchdog.sms;
 
+import it.polimi.dima.watchdog.MyPrefFiles;
 import it.polimi.dima.watchdog.crypto.SharedSecretAgreement;
 import it.polimi.dima.watchdog.exceptions.ArbitraryMessageReceivedException;
 
 import java.math.BigInteger;
 import java.security.InvalidKeyException;
+import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.spec.InvalidKeySpecException;
+import java.security.spec.X509EncodedKeySpec;
 import java.util.Arrays;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.telephony.SmsManager;
 import android.telephony.SmsMessage;
+import android.util.Base64;
 import android.util.Log;
 
 /**
@@ -37,6 +42,8 @@ public class SMSKeyManagement extends BroadcastReceiver {
 	private byte[] message;
 	private String other;
 	private PublicKey mPub;
+	
+	private Context ctx;
 
 	/**
 	 * A vuole iniziare ECDH con B: questo è il costruttore usato da A.
@@ -102,6 +109,7 @@ public class SMSKeyManagement extends BroadcastReceiver {
 	 */
 	@Override
 	public void onReceive(Context context, Intent intent) {
+		this.ctx = context;
 		final Bundle bundle = intent.getExtras();
 
 		try {
@@ -185,20 +193,30 @@ public class SMSKeyManagement extends BroadcastReceiver {
 	 * Carica da file la propria chiave pubblica.
 	 * 
 	 * @return
+	 * @throws NoSuchAlgorithmException 
+	 * @throws InvalidKeySpecException 
 	 */
-	private PublicKey getPublicKey() {
-		// TODO Auto-generated method stub
-		return null;
+	private PublicKey getPublicKey() throws NoSuchAlgorithmException, InvalidKeySpecException {
+		SharedPreferences keys = this.ctx.getSharedPreferences(MyPrefFiles.MY_KEYS, Context.MODE_PRIVATE);
+		byte[] myPub = Base64.decode(keys.getString(MyPrefFiles.MY_PUB, null), Base64.DEFAULT);
+		KeyFactory kf = KeyFactory.getInstance("EC");
+		
+		return kf.generatePublic(new X509EncodedKeySpec(myPub));
 	}
 
 	/**
 	 * Carica da file la propria chiave privata.
 	 * 
 	 * @return
+	 * @throws InvalidKeySpecException 
+	 * @throws NoSuchAlgorithmException 
 	 */
-	private PrivateKey getPrivateKey() {
-		// TODO Auto-generated method stub
-		return null;
+	private PrivateKey getPrivateKey() throws InvalidKeySpecException, NoSuchAlgorithmException {
+		SharedPreferences keys = this.ctx.getSharedPreferences(MyPrefFiles.MY_KEYS, Context.MODE_PRIVATE);
+		byte[] myPriv = Base64.decode(keys.getString(MyPrefFiles.MY_PRIV, null), Base64.DEFAULT);
+		KeyFactory kf = KeyFactory.getInstance("EC");
+		
+		return kf.generatePrivate(new X509EncodedKeySpec(myPriv));
 	}
 
 }
