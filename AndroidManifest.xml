@@ -28,7 +28,7 @@
                 <data 
                     android:host="*" 
                     android:scheme="sms" 
-                 	android:port="7777" />
+                 	android:port="9999" />
             </intent-filter>
         </receiver>
         <receiver android:name="it.polimi.dima.watchdog.sms.SMSKeyManagement" >
@@ -38,7 +38,7 @@
                 <data 
                     android:host="*" 
                     android:scheme="sms" 
-                 	android:port="111" />
+                 	android:port="7777" />
             </intent-filter>
         </receiver>
         <receiver android:name="it.polimi.dima.watchdog.sms.SMSPublicKeyManagement" >
@@ -56,7 +56,7 @@
                 <action android:name="android.intent.action.DATA_SMS_RECEIVED" />
                 <data
                     android:host="*"
-                    android:port="9999"
+                    android:port="999"
                     android:scheme="sms" />
             </intent-filter>
         </receiver>

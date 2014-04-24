@@ -80,16 +80,15 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 	@Override
 	public void visit(PublicKeySentCodeMessage pubKeySentMsg) {
 		
-		//try {
-			//this.pka.setSecretQuestion(MyPrefFiles.getMyPreference(MyPrefFiles.SECRET_Q_A, MyPrefFiles.SECRET_QUESTION, this.ctx));
-			//MyPrefFiles.setMyPreference(MyPrefFiles.KEYSQUARE, this.other, Base64.encodeToString(pubKeySentMsg.getBody(), Base64.DEFAULT), ctx);
-			//sendMessage(this.other, (short) 999, this.pka.getSecretQuestion().getBytes());
+		try {
+			this.pka.setSecretQuestion(MyPrefFiles.getMyPreference(MyPrefFiles.SECRET_Q_A, MyPrefFiles.SECRET_QUESTION, this.ctx));
+			MyPrefFiles.setMyPreference(MyPrefFiles.KEYSQUARE, this.other, pubKeySentMsg.getBody(), ctx);
+			sendMessage(this.other, (short) 999, this.pka.getSecretQuestion().getBytes());
 			Log.i("[DEBUG]", "Visitor sembra funzionare");
-		//} catch (NoSuchPreferenceFoundException e) {
-		//	this.showShortToastMessage(e.getMessage());
-		//	e.printStackTrace();
-			//TODO: x ema: in questo caso c'è da cancellare qualcosa ? 
-		//}
+		} catch (NoSuchPreferenceFoundException e) {
+			this.showShortToastMessage(e.getMessage());
+			e.printStackTrace();
+		}
 
 		
 	}
@@ -153,14 +152,7 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 		byte[] body = new byte[bodyLength];
 		//+1 perchè non voglio copiare il terminatore dell'header
 		System.arraycopy(msg, SMSProtocol.HEADER_LENGTH, body, 0, bodyLength);
-		String bodyStr = "";
-		try {
-			bodyStr = new  String(body, "UTF-8");
-			
-		} catch (UnsupportedEncodingException e) {
-			
-			e.printStackTrace();
-		}
+		String bodyStr = Base64.encodeToString(body, Base64.DEFAULT);
 		return bodyStr;
 		
 		

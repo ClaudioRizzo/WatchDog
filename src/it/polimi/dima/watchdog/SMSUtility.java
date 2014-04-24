@@ -12,11 +12,11 @@ public class SMSUtility {
 	public static String CODE7 = "C0DE7FFF";
 	public static String CODE8 = "C0DE8FFF";
 	
-	final private static char[] hexArray = "0123456789ABCDEF".toCharArray();
+	private static final char[] hexArray = "0123456789ABCDEF".toCharArray();
 	
 	
 	/**
-	 * converte array di byt in stringa esadecimale
+	 * converte array di byte in stringa esadecimale
 	 * @param bytes
 	 * @return
 	 */
