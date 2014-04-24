@@ -32,9 +32,9 @@ import android.util.Log;
  */
 public class SMSKeyManagement extends BroadcastReceiver {
 
-	private byte[] hereIsMyPublicKey = new BigInteger("0xC0DE1FFF")
+	private byte[] hereIsMyPublicKey = new BigInteger("C0DE7FFF", 16)
 			.toByteArray();
-	private byte[] hereIsMyPublicKeyToo = new BigInteger("0xC0DE2FFF")
+	private byte[] hereIsMyPublicKeyToo = new BigInteger("C0DE8FFF", 16)
 			.toByteArray();
 
 	private SharedSecretAgreement ssa;

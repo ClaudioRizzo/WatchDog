@@ -1,5 +1,10 @@
 package it.polimi.dima.watchdog;
 
+import it.polimi.dima.watchdog.exceptions.NoSuchPreferenceFoundException;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.util.Base64;
+
 /**
  * Classe che raccoglie tutte le preferenze che si usano in questa applicazione
  * @author claudio
@@ -96,4 +101,42 @@ public class MyPrefFiles {
 	 * valore "chiave" per la chiave corrente dell'AES.
 	 */
 	public static final String SESSION_KEY = "session_key";
+	
+	
+	//Qui iniziano i metodi
+	
+	public static String getMyPreference(String fileName, String key, Context ctx) throws NoSuchPreferenceFoundException {
+		SharedPreferences sp = ctx.getSharedPreferences(fileName, Context.MODE_PRIVATE);
+		String answer = sp.getString(key, null);//TODO ricordarsi di settarla in inizializzazione
+		
+		if(answer == null){
+			throw new NoSuchPreferenceFoundException("I/O Error");
+		}
+		return answer;
+	}
+	
+	public static void setMyPreference(String fileName, String key, String value,  Context ctx) {
+		SharedPreferences sp = ctx.getSharedPreferences(MyPrefFiles.KEYRING, Context.MODE_PRIVATE);
+		SharedPreferences.Editor editor = sp.edit();
+		editor.putString(key, value);
+		editor.commit();
+	}
+	
+	public static void deleteMyPreference(String fileName, String key, Context ctx) {
+		SharedPreferences sp = ctx.getSharedPreferences(fileName, Context.MODE_PRIVATE);
+		SharedPreferences.Editor editor = sp.edit();
+		editor.remove(key);
+		editor.commit();
+	}
+	
+	public static boolean existsPreference(String fileName, String key, Context ctx) {
+		SharedPreferences sp = ctx.getSharedPreferences(fileName, Context.MODE_PRIVATE);
+		String value = sp.getString(key, null);
+		if(value == null){
+			return false;
+		}
+		return true;
+	}
+	
+	
 }

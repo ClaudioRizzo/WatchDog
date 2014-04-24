@@ -121,7 +121,7 @@ public class SMSPublicKeyManagement extends BroadcastReceiver implements DummyIn
 		}
 		else if(receivedMessageStartsWith(this.SecretQuestionSentCode)){
 			this.pka = new PublicKeyAutenticator(getPublicKey(), null, null);
-			this.pka.setReceivedQuestion(unwrapContent(this.SecretQuestionSentCode));
+			this.pka.setSecretQuestion(unwrapContent(this.SecretQuestionSentCode));
 			this.pka.setSecretAnswer(getSecretAnswerFromUserInput());
 			sendMessage("hash");
 		}

@@ -1,11 +1,17 @@
 package it.polimi.dima.watchdog.sms.socialistMillionare;
 
+import it.polimi.dima.watchdog.MyPrefFiles;
+import it.polimi.dima.watchdog.crypto.PublicKeyAutenticator;
 import it.polimi.dima.watchdog.exceptions.ArbitraryMessageReceivedException;
+import it.polimi.dima.watchdog.exceptions.NoSuchPreferenceFoundException;
+import it.polimi.dima.watchdog.sms.socialistMillionare.factory.SocialistMillionaireFactory;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.telephony.SmsManager;
 import android.telephony.SmsMessage;
+import android.util.Base64;
 import android.util.Log;
 
 /**
@@ -18,26 +24,37 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 	//TODO: aggiungere tutti gli altri messaggi possibili al visitor
 	
 	private SMSProtocol recMsg;
-	private SmsMessage message;
-	public String other; //a turno sarà sender o receiver
+	private String other; //a turno sarà sender o receiver
+	private SocialistMillionaireFactory mSocMilFactory;
+	private PublicKeyAutenticator pka;
+	private Context ctx;
+	
+	
+	
 	
 	public SMSPublicKeyHandler() {
-		this.recMsg = new SMSProtocol(null, null);
+		this.mSocMilFactory = new SocialistMillionaireFactory();
+		this.pka = new PublicKeyAutenticator();
 	}
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
+		this.ctx = context;
 		final Bundle bundle = intent.getExtras();
 
 		try {
 			if (bundle != null) {
 				final Object[] pdusObj = (Object[]) bundle.get("pdus");
+				SmsMessage message = null;
+				
 				for (int i = 0; i < pdusObj.length; i++) {
-					this.message = SmsMessage.createFromPdu((byte[]) pdusObj[i]);
+					message = SmsMessage.createFromPdu((byte[]) pdusObj[i]);
 				}
-				this.other = this.message.getDisplayOriginatingAddress();
-				this.recMsg.setHeader(getHeader(this.message.getUserData()));
-				this.recMsg.setBody(getBody(this.message.getUserData()));
+				
+				this.other = message.getDisplayOriginatingAddress();
+				this.recMsg = mSocMilFactory.getMessage(getHeader(message.getUserData()));
+				this.recMsg.setBody(getBody(message.getUserData()));
+				this.recMsg.handle(this);
 			}
 			
 			
@@ -49,13 +66,22 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 	
 	@Override
 	public void visit(PublicKeyRequestCodeMessage pubKeyReqMsg) {
-		//TODO: gestione messaggio richiesta chiave pubblica
+		
 		
 	}
 
 	@Override
 	public void visit(PublicKeySentCodeMessage pubKeySentMsg) {
-		// TODO Auto-generated method stub
+		
+		try {
+			this.pka.setSecretQuestion(MyPrefFiles.getMyPreference(MyPrefFiles.SECRET_Q_A, MyPrefFiles.SECRET_QUESTION, this.ctx));
+			MyPrefFiles.setMyPreference(MyPrefFiles.KEYSQUARE, this.other, Base64.encodeToString(pubKeySentMsg.getBody(), Base64.DEFAULT), ctx);
+			sendMessage(this.other, (short) 999, this.pka.getSecretQuestion().getBytes());
+		} catch (NoSuchPreferenceFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 		
 	}
 
@@ -83,11 +109,6 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 		
 	}
 
-	@Override
-	public void visitCollection(SocialistMillionareMessageCollection collection) {
-		// TODO Auto-generated method stub
-		
-	}
 	
 	/**
 	 * Ritorna l'header del messaggio
@@ -121,6 +142,11 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 		System.arraycopy(msg, SMSProtocol.HEADER_LENGTH + 1, body, 0, bodyLength);
 		return body;
 		
+	}
+	
+	private void sendMessage(String number, short port, byte[] data) {
+		SmsManager man = SmsManager.getDefault();
+		man.sendDataMessage(number, null, port, data, null, null);
 	}
 
 }

@@ -59,7 +59,7 @@ public class PublicKeyAutenticator {
 		this.receivedHash = receivedHash;
 	}
 	
-	public void setReceivedQuestion(String question){
+	public void setSecretQuestion(String question){
 		this.secretQuestion = question;
 	}
 	

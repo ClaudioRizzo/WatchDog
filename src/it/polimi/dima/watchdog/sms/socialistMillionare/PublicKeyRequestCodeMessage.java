@@ -16,7 +16,7 @@ public class PublicKeyRequestCodeMessage extends SMSProtocol implements Socialis
 
 	@Override
 	public void handle(SMSPublicKeyVisitorInterface visitor) {
-		
+		visitor.visit(this);
 	}
 	
 	

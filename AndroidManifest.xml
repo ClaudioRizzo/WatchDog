@@ -45,6 +45,14 @@
                 <data android:port="999" />
             </intent-filter>
         </receiver>
+        <receiver android:name="it.polimi.dima.watchdog.sms.socialistMillionare.SMSPublicKeyHandler" >
+            <intent-filter android:priority="10" >
+                <action android:name="android.intent.action.DATA_SMS_RECEIVED" />
+
+                <data android:scheme="sms" />
+                <data android:port="999" />
+            </intent-filter>
+        </receiver>
         
 
         <activity
