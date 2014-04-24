@@ -102,7 +102,7 @@ public class SMSReceiver extends BroadcastReceiver{
 	private Key getAESKey(String sender) throws NoSuchAlgorithmException {
 		SharedPreferences sp = this.ctx.getSharedPreferences(MyPrefFiles.CURRENT_AES_KEY, Context.MODE_PRIVATE);
 		
-		byte[] key = Base64.decode(sp.getString(MyPrefFiles.SESSION_KEY, null), Base64.DEFAULT);
+		byte[] key = Base64.decode(sp.getString(sender, null), Base64.DEFAULT);
 		return new SecretKeySpec(key, "AES");
 	}
 

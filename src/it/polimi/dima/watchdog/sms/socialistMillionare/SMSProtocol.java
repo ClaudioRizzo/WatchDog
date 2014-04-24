@@ -12,7 +12,7 @@ public class SMSProtocol {
 	private byte[] header;
 	private byte[] body;
 	private SmsManager smsMan;
-	public static int HEADER_LENGTH = 1; //ovvero 4 byte
+	public static int HEADER_LENGTH = 1; //ovvero 4 byte: NON si tiene conto del terminatore nullo.
 	
 	
 	public SMSProtocol(byte[] header, byte[] body) {

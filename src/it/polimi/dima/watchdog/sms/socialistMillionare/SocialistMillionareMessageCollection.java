@@ -16,17 +16,17 @@ public class SocialistMillionareMessageCollection implements SocialistMillionare
 
 		this.messages = new SocialistMillionareMessageInterface[] {
 				new PublicKeyRequestCodeMessage(
-						new BigInteger("0xC0DE1FFF").toByteArray(), null),
+						new BigInteger("C0DE1FFF", 16).toByteArray(), null),
 				new PublicKeySentCodeMessage(
-						new BigInteger("0xC0DE2FFF").toByteArray(), null),
+						new BigInteger("C0DE2FFF", 16).toByteArray(), null),
 				new SecretQuestionSentCodeMessage(
-						new BigInteger("0xC0DE3FFF").toByteArray(), null),
+						new BigInteger("C0DE3FFF", 16).toByteArray(), null),
 				new SecretAnswerAndPublicKeyHashSentCodeMessage(
-						new BigInteger("0xC0DE4FFF").toByteArray(), null),
+						new BigInteger("C0DE4FFF", 16).toByteArray(), null),
 				new KeyValidatedCodeMessage(
-						new BigInteger("0xC0DE5FFF").toByteArray(), null),
+						new BigInteger("C0DE5FFF", 16).toByteArray(), null),
 				new IDontWantToAssociateMessage(
-						new BigInteger("0xC0DE6FFF").toByteArray(), null) };
+						new BigInteger("C0DE6FFF", 16).toByteArray(), null) };
 	}
 	
 	@Override
