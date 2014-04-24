@@ -1,7 +1,7 @@
 package it.polimi.dima.watchdog.sms.socialistMillionare.factory;
 
-import java.math.BigInteger;
 
+import android.util.Log;
 import it.polimi.dima.watchdog.SMSUtility;
 import it.polimi.dima.watchdog.exceptions.ArbitraryMessageReceivedException;
 import it.polimi.dima.watchdog.sms.socialistMillionare.IDontWantToAssociateMessage;
@@ -15,35 +15,26 @@ import it.polimi.dima.watchdog.sms.socialistMillionare.SecretQuestionSentCodeMes
 public class SocialistMillionaireFactory implements SMSProtocolInterface {
 
 	@Override
-	public SMSProtocol getMessage(byte[] header) throws ArbitraryMessageReceivedException {
+	public SMSProtocol getMessage(String header) throws ArbitraryMessageReceivedException {
+		
+		Log.i("[DEBUG] in factory ho ricevuto: ", header);
+		if (header.equals(SMSUtility.CODE1)) {
+			return new PublicKeyRequestCodeMessage(SMSUtility.CODE1, null);
+		} else if (header.equals(SMSUtility.CODE2)) {
+			return new PublicKeySentCodeMessage(SMSUtility.CODE2, null);
 
-		if (header.equals(new BigInteger(SMSUtility.CODE1, 16).toByteArray())) {
-			return new PublicKeyRequestCodeMessage(new BigInteger(SMSUtility.CODE1, 16)
-			.toByteArray(), null);
-		} else if (header.equals(new BigInteger(SMSUtility.CODE2, 16)
-				.toByteArray())) {
-			return new PublicKeySentCodeMessage(new BigInteger(SMSUtility.CODE2, 16)
-			.toByteArray(), null);
+		} else if (header.equals(SMSUtility.CODE3)) {
+			return new SecretQuestionSentCodeMessage (SMSUtility.CODE3, null);
 
-		} else if (header.equals(new BigInteger(SMSUtility.CODE3, 16)
-				.toByteArray())) {
-			return new SecretQuestionSentCodeMessage (new BigInteger(SMSUtility.CODE3, 16)
-			.toByteArray(), null);
+		} else if (header.equals(SMSUtility.CODE4)) {
+			return new SecretAnswerAndPublicKeyHashSentCodeMessage(SMSUtility.CODE4, null);
 
-		} else if (header.equals(new BigInteger(SMSUtility.CODE4, 16)
-				.toByteArray())) {
-			return new SecretAnswerAndPublicKeyHashSentCodeMessage(new BigInteger(SMSUtility.CODE4, 16)
-			.toByteArray(), null);
+		} else if (header.equals(SMSUtility.CODE5)) {
+			return new KeyValidatedCodeMessage(SMSUtility.CODE5, null);
 
-		} else if (header.equals(new BigInteger(SMSUtility.CODE5, 16)
-				.toByteArray())) {
-			return new KeyValidatedCodeMessage(new BigInteger(SMSUtility.CODE5, 16)
-			.toByteArray(), null);
-
-		} else if (header.equals(new BigInteger(SMSUtility.CODE6, 16)
-				.toByteArray())) {
+		} else if (header.equals(SMSUtility.CODE6)) {
 			return new IDontWantToAssociateMessage(
-					new BigInteger(SMSUtility.CODE6, 16).toByteArray(), null);
+					SMSUtility.CODE6, null);
 		}
 		else {
 			throw new ArbitraryMessageReceivedException("Messaggio con un header sconosciuto!!!");

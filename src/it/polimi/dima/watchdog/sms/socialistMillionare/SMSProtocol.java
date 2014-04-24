@@ -9,28 +9,28 @@ import android.telephony.SmsManager;
  */
 public class SMSProtocol implements SocialistMillionareMessageInterface {
 
-	private byte[] header;
-	private byte[] body;
+	private String header;
+	private String body;
 	private SmsManager smsMan;
 	public static int HEADER_LENGTH = 4; //ovvero 4 byte: NON si tiene conto del terminatore nullo.
 	
 	
-	public SMSProtocol(byte[] header, byte[] body) {
+	public SMSProtocol(String header, String body) {
 		this.header = header;
 		this.body = body;
 		this.smsMan = SmsManager.getDefault();
 	}
 	
-	public byte[] getHeader() {
+	public String getHeader() {
 		return header;
 	}
-	public void setHeader(byte[] header) {
+	public void setHeader(String header) {
 		this.header = header;
 	}
-	public byte[] getBody() {
+	public String getBody() {
 		return body;
 	}
-	public void setBody(byte[] body) {
+	public void setBody(String body) {
 		this.body = body;
 	}
 

@@ -25,35 +25,41 @@
             <intent-filter android:priority="10" >
                 <action android:name="android.intent.action.DATA_SMS_RECEIVED" />
 
-                <data android:scheme="sms" />
-                <data android:port="7777" />
+                <data 
+                    android:host="*" 
+                    android:scheme="sms" 
+                 	android:port="7777" />
             </intent-filter>
         </receiver>
         <receiver android:name="it.polimi.dima.watchdog.sms.SMSKeyManagement" >
             <intent-filter android:priority="10" >
                 <action android:name="android.intent.action.DATA_SMS_RECEIVED" />
 
-                <data android:scheme="sms" />
-                <data android:port="9999" />
+                <data 
+                    android:host="*" 
+                    android:scheme="sms" 
+                 	android:port="111" />
             </intent-filter>
         </receiver>
         <receiver android:name="it.polimi.dima.watchdog.sms.SMSPublicKeyManagement" >
             <intent-filter android:priority="10" >
                 <action android:name="android.intent.action.DATA_SMS_RECEIVED" />
 
-                <data android:scheme="sms" />
-                <data android:port="999" />
+                <data
+                    android:host="*" 
+                    android:scheme="sms"
+                 	android:port="111" />
             </intent-filter>
         </receiver>
         <receiver android:name="it.polimi.dima.watchdog.sms.socialistMillionare.SMSPublicKeyHandler" >
             <intent-filter android:priority="10" >
                 <action android:name="android.intent.action.DATA_SMS_RECEIVED" />
-
-                <data android:scheme="sms" />
-                <data android:port="999" />
+                <data
+                    android:host="*"
+                    android:port="9999"
+                    android:scheme="sms" />
             </intent-filter>
         </receiver>
-        
 
         <activity
             android:name="it.polimi.dima.watchdog.activities.MainActivity"

@@ -2,7 +2,7 @@ package it.polimi.dima.watchdog.sms.socialistMillionare;
 
 public class KeyValidatedCodeMessage extends SMSProtocol {
 
-	public KeyValidatedCodeMessage(byte[] header, byte[] body) {
+	public KeyValidatedCodeMessage(String header, String body) {
 		super(header, body);
 		
 	}

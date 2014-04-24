@@ -2,7 +2,7 @@ package it.polimi.dima.watchdog.sms.socialistMillionare;
 
 public class PublicKeySentCodeMessage extends SMSProtocol {
 
-	public PublicKeySentCodeMessage(byte[] header, byte[] body) {
+	public PublicKeySentCodeMessage(String header, String body) {
 		super(header, body);
 
 	}

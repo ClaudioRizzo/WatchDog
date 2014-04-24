@@ -2,7 +2,7 @@ package it.polimi.dima.watchdog.sms.socialistMillionare;
 
 public class SecretQuestionSentCodeMessage extends SMSProtocol {
 
-	public SecretQuestionSentCodeMessage(byte[] header, byte[] body) {
+	public SecretQuestionSentCodeMessage(String header, String body) {
 		super(header, body);
 
 	}

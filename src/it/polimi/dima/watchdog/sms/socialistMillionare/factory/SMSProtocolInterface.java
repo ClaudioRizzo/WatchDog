@@ -5,5 +5,5 @@ import it.polimi.dima.watchdog.sms.socialistMillionare.SMSProtocol;
 
 public interface SMSProtocolInterface {
 
-	SMSProtocol getMessage(byte[] header) throws ArbitraryMessageReceivedException;
+	SMSProtocol getMessage(String header) throws ArbitraryMessageReceivedException;
 }

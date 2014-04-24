@@ -1,6 +1,10 @@
 package it.polimi.dima.watchdog.sms.socialistMillionare;
 
+import java.io.UnsupportedEncodingException;
+import java.math.BigInteger;
+
 import it.polimi.dima.watchdog.MyPrefFiles;
+import it.polimi.dima.watchdog.SMSUtility;
 import it.polimi.dima.watchdog.crypto.PublicKeyAutenticator;
 import it.polimi.dima.watchdog.exceptions.ArbitraryMessageReceivedException;
 import it.polimi.dima.watchdog.exceptions.NoSuchPreferenceFoundException;
@@ -13,6 +17,7 @@ import android.telephony.SmsManager;
 import android.telephony.SmsMessage;
 import android.util.Base64;
 import android.util.Log;
+import android.widget.Toast;
 
 /**
  * This class handles the messagges by using the visitor patter which is upon the messages. Should extend BroadCastReceiver
@@ -59,7 +64,9 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 			
 			
 		} catch (Exception e) {
-			Log.e("SmsReceiver", e.toString());
+			e.printStackTrace();
+			Log.i("[DEBUG]", "Sono sempre io ... -.-'");
+			Log.e("[Error] PublicKeyHandler", e.toString());
 		}
 		
 	}
@@ -73,14 +80,16 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 	@Override
 	public void visit(PublicKeySentCodeMessage pubKeySentMsg) {
 		
-		try {
-			this.pka.setSecretQuestion(MyPrefFiles.getMyPreference(MyPrefFiles.SECRET_Q_A, MyPrefFiles.SECRET_QUESTION, this.ctx));
-			MyPrefFiles.setMyPreference(MyPrefFiles.KEYSQUARE, this.other, Base64.encodeToString(pubKeySentMsg.getBody(), Base64.DEFAULT), ctx);
-			sendMessage(this.other, (short) 999, this.pka.getSecretQuestion().getBytes());
-		} catch (NoSuchPreferenceFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		//try {
+			//this.pka.setSecretQuestion(MyPrefFiles.getMyPreference(MyPrefFiles.SECRET_Q_A, MyPrefFiles.SECRET_QUESTION, this.ctx));
+			//MyPrefFiles.setMyPreference(MyPrefFiles.KEYSQUARE, this.other, Base64.encodeToString(pubKeySentMsg.getBody(), Base64.DEFAULT), ctx);
+			//sendMessage(this.other, (short) 999, this.pka.getSecretQuestion().getBytes());
+			Log.i("[DEBUG]", "Visitor sembra funzionare");
+		//} catch (NoSuchPreferenceFoundException e) {
+		//	this.showShortToastMessage(e.getMessage());
+		//	e.printStackTrace();
+			//TODO: x ema: in questo caso c'è da cancellare qualcosa ? 
+		//}
 
 		
 	}
@@ -116,37 +125,56 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 	 * @return
 	 * @throws ArbitraryMessageReceivedException
 	 */
-	private byte[] getHeader(byte[] msg) throws ArbitraryMessageReceivedException {
+	private String getHeader(byte[] msg) throws ArbitraryMessageReceivedException {
 		
 		//-1 è perchè c'è anche il terminatore
-		if(msg.length - 1 < SMSProtocol.HEADER_LENGTH){
+		if(msg.length < SMSProtocol.HEADER_LENGTH){
 			throw new ArbitraryMessageReceivedException("Messaggio inaspettato: troppo corto!!!");
 		}
 		byte[] header = new byte[SMSProtocol.HEADER_LENGTH];
-		System.arraycopy(msg, 0, header, 0, SMSProtocol.HEADER_LENGTH);
-		return header;
+		System.arraycopy(msg, 0, header, 0, SMSProtocol.HEADER_LENGTH);		
+		
+		
+		return SMSUtility.bytesToHex(header);
 		
 	}
 	
-	private byte[] getBody(byte[] msg) throws ArbitraryMessageReceivedException {
+	
+	
+	private String getBody(byte[] msg) throws ArbitraryMessageReceivedException {
 		
-		if(msg.length - 1 < SMSProtocol.HEADER_LENGTH){
+		if(msg.length < SMSProtocol.HEADER_LENGTH){
 			throw new ArbitraryMessageReceivedException("Messaggio inaspettato: troppo corto!!!");
 		}
 		//android pare (dalla javadoc) non aggiungere un terminatore all'array di byte quando si usa getUserData(). In caso contrario la lunghezza
 		//va decurtata di 1.
 		//Il -1 che c'è già serve a tenere conto del terminatore nullo dell'header.
-		int bodyLength = msg.length - SMSProtocol.HEADER_LENGTH -1;
+		int bodyLength = msg.length - SMSProtocol.HEADER_LENGTH;
 		byte[] body = new byte[bodyLength];
 		//+1 perchè non voglio copiare il terminatore dell'header
-		System.arraycopy(msg, SMSProtocol.HEADER_LENGTH + 1, body, 0, bodyLength);
-		return body;
+		System.arraycopy(msg, SMSProtocol.HEADER_LENGTH, body, 0, bodyLength);
+		String bodyStr = "";
+		try {
+			bodyStr = new  String(body, "UTF-8");
+			
+		} catch (UnsupportedEncodingException e) {
+			
+			e.printStackTrace();
+		}
+		return bodyStr;
+		
 		
 	}
 	
 	private void sendMessage(String number, short port, byte[] data) {
 		SmsManager man = SmsManager.getDefault();
 		man.sendDataMessage(number, null, port, data, null, null);
+	}
+	
+
+	private void showShortToastMessage(String message) {
+		Toast toast = Toast.makeText(ctx, message, Toast.LENGTH_SHORT);
+		toast.show();
 	}
 
 }

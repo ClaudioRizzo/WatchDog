@@ -21,7 +21,7 @@ import android.telephony.SmsMessage;
 import android.util.Base64;
 import android.util.Log;
 
-public class SMSReceiver extends BroadcastReceiver{
+public class SMSReceiver extends BroadcastReceiver {
 	
 	private String sender; //sarà il numero di telefono del mittente
 	private byte[] message; //sarà il messaggio crittografato ricevuto

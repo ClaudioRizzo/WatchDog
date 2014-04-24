@@ -2,7 +2,7 @@ package it.polimi.dima.watchdog.sms.socialistMillionare;
 
 public class IDontWantToAssociateMessage extends SMSProtocol {
 
-	public IDontWantToAssociateMessage(byte[] header, byte[] body) {
+	public IDontWantToAssociateMessage(String header, String body) {
 		super(header, body);
 	}
 

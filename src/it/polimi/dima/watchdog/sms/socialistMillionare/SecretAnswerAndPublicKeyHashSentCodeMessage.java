@@ -2,8 +2,8 @@ package it.polimi.dima.watchdog.sms.socialistMillionare;
 
 public class SecretAnswerAndPublicKeyHashSentCodeMessage extends SMSProtocol {
 
-	public SecretAnswerAndPublicKeyHashSentCodeMessage(byte[] header,
-			byte[] body) {
+	public SecretAnswerAndPublicKeyHashSentCodeMessage(String header,
+			String body) {
 		super(header, body);
 	}
 

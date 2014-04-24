@@ -10,7 +10,7 @@ package it.polimi.dima.watchdog.sms.socialistMillionare;
  */
 public class PublicKeyRequestCodeMessage extends SMSProtocol implements SocialistMillionareMessageInterface {
 
-	public PublicKeyRequestCodeMessage(byte[] header, byte[] body) {
+	public PublicKeyRequestCodeMessage(String header, String body) {
 		super(header, body);
 	}
 

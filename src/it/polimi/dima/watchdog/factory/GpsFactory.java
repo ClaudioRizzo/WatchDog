@@ -1,8 +1,8 @@
 package it.polimi.dima.watchdog.factory;
 
+import it.polimi.dima.watchdog.fragments.gps.DummyGps;
 import it.polimi.dima.watchdog.fragments.gps.LocalizationFragment;
 import it.polimi.dima.watchdog.fragments.gps.PerimeterFragment;
-import it.polimi.dima.watchdog.fragments.smsRemote.DummyGps;
 import android.support.v4.app.Fragment;
 
 public class GpsFactory extends FeatureFactory {
