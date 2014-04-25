@@ -1,9 +1,29 @@
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/text_view_associate_number"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:gravity="center_vertical"
-    android:text="@string/hello_world"
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
     android:paddingLeft="16dp"
     android:paddingRight="16dp"
-    android:textColor="#000"/>
+    android:orientation="vertical" >
+    <EditText
+        android:id="@+id/edit_text_associate_number"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:inputType="numberSigned"
+        android:hint="@string/edit_text_phone" />
+    <EditText
+        android:id="@+id/edit_text_associate_question"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/edit_text_question" />
+    <EditText
+        android:id="@+id/edit_text_associate_answer"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/edit_text_answer" />
+    <Button
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:text="@string/hello_world" />
+</LinearLayout>

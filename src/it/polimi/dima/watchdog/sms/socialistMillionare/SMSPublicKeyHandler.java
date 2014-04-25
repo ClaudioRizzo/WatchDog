@@ -26,7 +26,7 @@ import android.widget.Toast;
  */
 public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicKeyVisitorInterface {
 
-	//TODO: aggiungere tutti gli altri messaggi possibili al visitor
+	
 	
 	private SMSProtocol recMsg;
 	private String other; //a turno sarà sender o receiver
@@ -65,7 +65,7 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 			
 		} catch (Exception e) {
 			e.printStackTrace();
-			Log.i("[DEBUG]", "Sono sempre io ... -.-'");
+			Log.i("[DEBUG]", "SMSPubblicKey: Sono sempre io ... -.-'");
 			Log.e("[Error] PublicKeyHandler", e.toString());
 		}
 		
