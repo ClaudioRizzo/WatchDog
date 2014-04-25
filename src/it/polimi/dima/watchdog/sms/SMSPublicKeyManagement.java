@@ -21,8 +21,7 @@ import android.util.Base64;
 import android.util.Log;
 
 /**
- * Classe in cui il protocollo del socialista milionario è utilizzato tramite invio di SMS per validare la
- * chiave pubblica di un altro telefono.
+ * Ricordarsi di cancellare la classe alla fine
  * 
  * @author emanuele
  *
@@ -128,7 +127,7 @@ public class SMSPublicKeyManagement extends BroadcastReceiver implements DummyIn
 		else if(receivedMessageStartsWith(this.SecretAnswerAndPublicKeyHashSentCode)){
 			this.pka = new PublicKeyAutenticator(null, null, getSecretAnswer());
 			//recupera da file la chiave pubblica ricevuta precedentemente
-			this.pka.setReceivedPublicKey(getKeyToVerify());
+			//this.pka.setReceivedPublicKey(getKeyToVerify());
 			this.pka.doHashToCheck();
 			this.pka.setReceivedHash(unwrapContent(this.SecretAnswerAndPublicKeyHashSentCode));
 			if(!this.pka.checkForEquality()){

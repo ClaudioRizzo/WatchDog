@@ -5,7 +5,6 @@ import java.security.NoSuchAlgorithmException;
 import it.polimi.dima.watchdog.MyPrefFiles;
 import it.polimi.dima.watchdog.SMSUtility;
 import it.polimi.dima.watchdog.crypto.PublicKeyAutenticator;
-import it.polimi.dima.watchdog.exceptions.ArbitraryMessageReceivedException;
 import it.polimi.dima.watchdog.exceptions.NoSuchPreferenceFoundException;
 import it.polimi.dima.watchdog.sms.socialistMillionare.factory.SocialistMillionaireFactory;
 import android.content.BroadcastReceiver;
@@ -15,8 +14,6 @@ import android.os.Bundle;
 import android.telephony.SmsMessage;
 import android.util.Base64;
 import android.util.Log;
-import android.widget.Toast;
-
 /**
  * This class handles the messagges by using the visitor patter which is upon the messages. Should extend BroadCastReceiver
  * @author claudio, emanuele
@@ -55,8 +52,8 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 				}
 				
 				this.other = message.getDisplayOriginatingAddress();
-				this.recMsg = mSocMilFactory.getMessage(getHeader(message.getUserData()));
-				this.recMsg.setBody(getBody(message.getUserData()));
+				this.recMsg = this.mSocMilFactory.getMessage(SMSUtility.getHeader(message.getUserData()));
+				this.recMsg.setBody(SMSUtility.getBody(message.getUserData()));
 				this.recMsg.handle(this);
 			}
 			
@@ -79,7 +76,7 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 		} 
 		catch (NoSuchPreferenceFoundException e) 
 		{
-			this.showShortToastMessage(e.getMessage());
+			SMSUtility.showShortToastMessage(e.getMessage(), this.ctx);
 			e.printStackTrace();
 		}
 		
@@ -97,7 +94,7 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 		}
 		catch (NoSuchPreferenceFoundException e) 
 		{
-			this.showShortToastMessage(e.getMessage());
+			SMSUtility.showShortToastMessage(e.getMessage(), this.ctx);
 			e.printStackTrace();
 		}
 
@@ -117,12 +114,12 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 		} 
 		catch (NoSuchPreferenceFoundException e) 
 		{
-			this.showShortToastMessage(e.getMessage());
+			SMSUtility.showShortToastMessage(e.getMessage(), this.ctx);
 			e.printStackTrace();
 		}
 		catch (NoSuchAlgorithmException e)
 		{
-			this.showShortToastMessage(e.getMessage());
+			SMSUtility.showShortToastMessage(e.getMessage(), this.ctx);
 			e.printStackTrace();
 		}
 		
@@ -149,12 +146,12 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 		} 
 		catch (NoSuchPreferenceFoundException e) 
 		{
-			this.showShortToastMessage(e.getMessage());
+			SMSUtility.showShortToastMessage(e.getMessage(), this.ctx);
 			e.printStackTrace();
 		}
 		catch (NoSuchAlgorithmException e)
 		{
-			this.showShortToastMessage(e.getMessage());
+			SMSUtility.showShortToastMessage(e.getMessage(), this.ctx);
 			e.printStackTrace();
 		}
 		
@@ -174,57 +171,4 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 		// TODO gestire l'errore
 		
 	}
-
-	
-	/**
-	 * Ritorna l'header del messaggio
-	 * @param msg
-	 * @return
-	 * @throws ArbitraryMessageReceivedException
-	 */
-	private String getHeader(byte[] msg) throws ArbitraryMessageReceivedException {
-		
-		if(msg.length < SMSProtocol.HEADER_LENGTH){
-			throw new ArbitraryMessageReceivedException("Messaggio inaspettato: troppo corto!!!");
-		}
-		byte[] header = new byte[SMSProtocol.HEADER_LENGTH];
-		System.arraycopy(msg, 0, header, 0, SMSProtocol.HEADER_LENGTH);		
-		
-		
-		return SMSUtility.bytesToHex(header);
-		
-	}
-	
-	
-	
-	private String getBody(byte[] msg) throws ArbitraryMessageReceivedException {
-		
-		if(msg.length < SMSProtocol.HEADER_LENGTH){
-			throw new ArbitraryMessageReceivedException("Messaggio inaspettato: troppo corto!!!");
-		}
-		//TODO: controlla body null
-		//android pare (dalla javadoc) non aggiungere un terminatore all'array di byte quando si usa getUserData(). In caso contrario la lunghezza
-		//va decurtata di 1.
-		int bodyLength = msg.length - SMSProtocol.HEADER_LENGTH;
-		
-		if(bodyLength == 0){
-			return null;
-		}
-		
-		byte[] body = new byte[bodyLength];
-		System.arraycopy(msg, SMSProtocol.HEADER_LENGTH, body, 0, bodyLength);
-		String bodyStr = Base64.encodeToString(body, Base64.DEFAULT);
-		return bodyStr;
-		
-		
-	}
-	
-	
-	
-
-	private void showShortToastMessage(String message) {
-		Toast toast = Toast.makeText(ctx, message, Toast.LENGTH_SHORT);
-		toast.show();
-	}
-
 }

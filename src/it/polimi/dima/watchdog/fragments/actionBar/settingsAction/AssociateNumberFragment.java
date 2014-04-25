@@ -5,14 +5,12 @@ import it.polimi.dima.watchdog.R;
 import it.polimi.dima.watchdog.SMSUtility;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 
 public class AssociateNumberFragment extends Fragment implements OnClickListener {
 
@@ -36,7 +34,7 @@ public class AssociateNumberFragment extends Fragment implements OnClickListener
 		
 		//TODO: Effettuare validazione degli input ! 
 		this.getAndSaveQuestion();
-		this.getAndSaveQuestion();
+		this.getAndSaveAnswer();
 		this.getNumberAndStart();
 	}
 	

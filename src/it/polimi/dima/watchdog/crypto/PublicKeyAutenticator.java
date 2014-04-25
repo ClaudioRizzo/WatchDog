@@ -51,11 +51,7 @@ public class PublicKeyAutenticator {
 		return this.myKeyIsValidated;
 	}
 	
-	/**
-	 * Riceve la chiave direttamente come array di byte.
-	 * @param receivedPublicKey
-	 */
-	public void setReceivedPublicKey(byte[] receivedPublicKey){
+	private void setReceivedPublicKey(byte[] receivedPublicKey){
 		this.receivedPublicKey = receivedPublicKey;
 	}
 	
@@ -64,7 +60,7 @@ public class PublicKeyAutenticator {
 	 * @param receivedPublicKey
 	 */
 	public void setReceivedPublicKey(String receivedPublicKey){
-		this.receivedPublicKey = Base64.decode(receivedPublicKey, Base64.DEFAULT);
+		setReceivedPublicKey(Base64.decode(receivedPublicKey, Base64.DEFAULT));
 	}
 	
 	public void setReceivedHash(String receivedHash){
