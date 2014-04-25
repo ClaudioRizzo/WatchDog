@@ -1,5 +1,7 @@
 package it.polimi.dima.watchdog;
 
+import android.telephony.SmsManager;
+
 /**
  * 
  * @author claudio, emanuele
@@ -69,5 +71,16 @@ public class SMSUtility {
 	                             + Character.digit(s.charAt(i+1), 16));
 	    }
 	    return data;
+	}
+	
+	public static void sendMessage(String number, short port, byte[] header, byte[] data) {
+		SmsManager man = SmsManager.getDefault();
+		int dataLength = data == null ? 0 : data.length;
+		byte[] message = new byte[header.length + dataLength];
+		System.arraycopy(header, 0, message, 0, header.length);
+		if(data != null) {
+			System.arraycopy(data, 0, message, header.length, data.length);
+		}
+		man.sendDataMessage(number, null, port, message, null, null);
 	}
 }

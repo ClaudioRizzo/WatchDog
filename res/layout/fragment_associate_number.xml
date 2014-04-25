@@ -22,6 +22,7 @@
         android:layout_height="wrap_content"
         android:hint="@string/edit_text_answer" />
     <Button
+        android:id="@+id/button_associate"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:layout_gravity="right"

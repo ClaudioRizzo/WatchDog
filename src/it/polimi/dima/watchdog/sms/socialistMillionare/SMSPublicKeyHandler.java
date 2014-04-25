@@ -75,7 +75,8 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 		try 
 		{
 			this.pka.setMyPublicKey(MyPrefFiles.getMyPreference(MyPrefFiles.MY_KEYS, MyPrefFiles.MY_PUB, this.ctx));
-			sendMessage(this.other, SMSUtility.SMP_PORT, SMSUtility.hexStringToByteArray(SMSUtility.CODE2), this.pka.getMyPublicKey());
+			SMSUtility.sendMessage(this.other, SMSUtility.SMP_PORT, SMSUtility.hexStringToByteArray(SMSUtility.CODE2), this.pka.getMyPublicKey());
+			Log.i("[DEBUG]", "ok sono nella gestione richiesta");
 		} 
 		catch (NoSuchPreferenceFoundException e) 
 		{
@@ -92,7 +93,7 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 		{
 			this.pka.setSecretQuestion(MyPrefFiles.getMyPreference(MyPrefFiles.SECRET_Q_A, MyPrefFiles.SECRET_QUESTION, this.ctx));
 			MyPrefFiles.setMyPreference(MyPrefFiles.KEYSQUARE, this.other, pubKeySentMsg.getBody(), this.ctx);
-			sendMessage(this.other, SMSUtility.SMP_PORT, SMSUtility.hexStringToByteArray(SMSUtility.CODE3), this.pka.getSecretQuestion().getBytes());
+			SMSUtility.sendMessage(this.other, SMSUtility.SMP_PORT, SMSUtility.hexStringToByteArray(SMSUtility.CODE3), this.pka.getSecretQuestion().getBytes());
 			Log.i("[DEBUG]", "Visitor sembra funzionare");
 		}
 		catch (NoSuchPreferenceFoundException e) 
@@ -113,7 +114,7 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 			//TODO aspettare la risposta dell'utente
 			this.pka.setSecretAnswer("DUMMY"); //ovviamente al posto di dummy ci va ciò che l'utente ha inserito.
 			this.pka.doHashToSend();
-			sendMessage(this.other, SMSUtility.SMP_PORT, SMSUtility.hexStringToByteArray(SMSUtility.CODE4), this.pka.getHashToSend().getBytes());
+			SMSUtility.sendMessage(this.other, SMSUtility.SMP_PORT, SMSUtility.hexStringToByteArray(SMSUtility.CODE4), this.pka.getHashToSend().getBytes());
 		} 
 		catch (NoSuchPreferenceFoundException e) 
 		{
@@ -144,7 +145,7 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 			else{
 				String keyValidated = Base64.encodeToString(this.pka.getReceivedPublicKey(), Base64.DEFAULT);
 				MyPrefFiles.setMyPreference(MyPrefFiles.KEYRING, this.other, keyValidated, this.ctx);
-				sendMessage(this.other, SMSUtility.SMP_PORT, SMSUtility.hexStringToByteArray(SMSUtility.CODE5), SMSUtility.hexStringToByteArray(SMSUtility.CODE5));
+				SMSUtility.sendMessage(this.other, SMSUtility.SMP_PORT, SMSUtility.hexStringToByteArray(SMSUtility.CODE5), SMSUtility.hexStringToByteArray(SMSUtility.CODE5));
 			}
 		} 
 		catch (NoSuchPreferenceFoundException e) 
@@ -164,7 +165,7 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 	public void visit(KeyValidatedCodeMessage keyValMsg) {
 		this.pka.setOtherKeyValidated(MyPrefFiles.existsPreference(MyPrefFiles.KEYRING, this.other, this.ctx));
 		if(!this.pka.isOtherKeyValidated()){
-			sendMessage(this.other, SMSUtility.SMP_PORT, SMSUtility.hexStringToByteArray(SMSUtility.CODE1), SMSUtility.hexStringToByteArray(SMSUtility.CODE1));
+			SMSUtility.sendMessage(this.other, SMSUtility.SMP_PORT, SMSUtility.hexStringToByteArray(SMSUtility.CODE1), SMSUtility.hexStringToByteArray(SMSUtility.CODE1));
 		}
 		
 	}
@@ -202,6 +203,7 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 		if(msg.length < SMSProtocol.HEADER_LENGTH){
 			throw new ArbitraryMessageReceivedException("Messaggio inaspettato: troppo corto!!!");
 		}
+		//TODO: controlla body null
 		//android pare (dalla javadoc) non aggiungere un terminatore all'array di byte quando si usa getUserData(). In caso contrario la lunghezza
 		//va decurtata di 1.
 		int bodyLength = msg.length - SMSProtocol.HEADER_LENGTH;
@@ -213,13 +215,7 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 		
 	}
 	
-	private void sendMessage(String number, short port, byte[] header, byte[] data) {
-		SmsManager man = SmsManager.getDefault();
-		byte[] message = new byte[header.length + data.length];
-		System.arraycopy(header, 0, message, 0, header.length);
-		System.arraycopy(data, 0, message, header.length, data.length);
-		man.sendDataMessage(number, null, port, data, null, null);
-	}
+	
 	
 
 	private void showShortToastMessage(String message) {
