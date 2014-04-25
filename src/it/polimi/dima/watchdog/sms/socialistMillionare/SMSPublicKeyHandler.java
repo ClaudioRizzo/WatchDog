@@ -20,7 +20,7 @@ import android.widget.Toast;
 
 /**
  * This class handles the messagges by using the visitor patter which is upon the messages. Should extend BroadCastReceiver
- * @author claudio
+ * @author claudio, emanuele
  *
  */
 public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicKeyVisitorInterface {

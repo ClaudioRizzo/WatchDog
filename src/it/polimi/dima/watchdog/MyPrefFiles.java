@@ -6,7 +6,7 @@ import android.content.SharedPreferences;
 
 /**
  * Classe che raccoglie tutte le preferenze che si usano in questa applicazione
- * @author claudio
+ * @author claudio, emanuele
  *
  */
 public class MyPrefFiles {

@@ -1,5 +1,10 @@
 package it.polimi.dima.watchdog;
 
+/**
+ * 
+ * @author claudio, emanuele
+ *
+ */
 public class SMSUtility {
 
 	/**
