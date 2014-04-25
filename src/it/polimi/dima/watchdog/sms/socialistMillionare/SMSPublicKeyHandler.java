@@ -12,7 +12,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.telephony.SmsManager;
 import android.telephony.SmsMessage;
 import android.util.Base64;
 import android.util.Log;
@@ -166,13 +165,13 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 	public void visit(KeyValidatedCodeMessage keyValMsg) {
 		this.pka.setOtherKeyValidated(MyPrefFiles.existsPreference(MyPrefFiles.KEYRING, this.other, this.ctx));
 		if(!this.pka.isOtherKeyValidated()){
-			SMSUtility.sendMessage(this.other, SMSUtility.SMP_PORT, SMSUtility.hexStringToByteArray(SMSUtility.CODE1), SMSUtility.hexStringToByteArray(SMSUtility.CODE1));
+			SMSUtility.sendMessage(this.other, SMSUtility.SMP_PORT, SMSUtility.hexStringToByteArray(SMSUtility.CODE1), null);
 		}
 		
 	}
 
 	@Override
-	public void visit(IDontWantToAssociateMessage noAssMsg) {
+	public void visit(IDontWantToAssociateCodeMessage noAssMsg) {
 		// TODO gestire l'errore
 		
 	}
@@ -208,6 +207,11 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 		//android pare (dalla javadoc) non aggiungere un terminatore all'array di byte quando si usa getUserData(). In caso contrario la lunghezza
 		//va decurtata di 1.
 		int bodyLength = msg.length - SMSProtocol.HEADER_LENGTH;
+		
+		if(bodyLength == 0){
+			return null;
+		}
+		
 		byte[] body = new byte[bodyLength];
 		System.arraycopy(msg, SMSProtocol.HEADER_LENGTH, body, 0, bodyLength);
 		String bodyStr = Base64.encodeToString(body, Base64.DEFAULT);

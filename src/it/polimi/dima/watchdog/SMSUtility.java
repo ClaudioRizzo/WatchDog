@@ -1,5 +1,7 @@
 package it.polimi.dima.watchdog;
 
+import java.util.regex.Pattern;
+
 import android.telephony.SmsManager;
 
 /**
@@ -10,43 +12,63 @@ import android.telephony.SmsManager;
 public class SMSUtility {
 
 	/**
-	 * PublicKeyRequestCode
+	 * PublicKeyRequestCode (for SMP only) : header del messaggio che chiede all'altro la chiave pubblica.
 	 */
 	public static String CODE1 = "C0DE1FFF";
 	/**
-	 * PublicKeySentCode
+	 * PublicKeySentCode (for SMP only) : header del messaggio che manda la chiave pubblica a chi l'ha chiesta.
 	 */
 	public static String CODE2 = "C0DE2FFF";
 	/**
-	 * SecretQuestionSentCode
+	 * SecretQuestionSentCode (for SMP only) : header del messaggio che manda la domanda segreta all'altro.
 	 */
 	public static String CODE3 = "C0DE3FFF";
 	/**
-	 * SecretAnswerAndPublicKeyHashSentCode
+	 * SecretAnswerAndPublicKeyHashSentCode (for SMP only) : header del messaggio che manda l'hash di
+	 * propria chiave pubblica || risposta segreta all'altro.
 	 */
 	public static String CODE4 = "C0DE4FFF";
 	/**
-	 * KeyValidatedCode
+	 * KeyValidatedCode (for SMP only) : header del messaggio che conferma l'avvenuta validazione della chiave
+	 * pubblica.
 	 */
 	public static String CODE5 = "C0DE5FFF";
 	/**
-	 * IDontWantToAssociate
+	 * IDontWantToAssociateCode (for SMP only) : header del messaggio che informa dell'abort del processo di
+	 * validazione della chiave (vale per tutti i possibili errori, non solo per la mancata uguaglianza degli
+	 * hash).
 	 */
 	public static String CODE6 = "C0DE6FFF";
+	/**
+	 * HereIsMyPublicKeyCode (for ECDH only) : header del messaggio di colui che invia per primo all'altro la
+	 * propria chiave pubblica.
+	 */
 	public static String CODE7 = "C0DE7FFF";
+	/**
+	 * HereIsMyPublicKeyTooCode (for ECDH only) : header del messaggio di colui che invia all'altro la propria
+	 * chiave pubblica solo dopo aver ricevuto quella dell'altro.
+	 */
 	public static String CODE8 = "C0DE8FFF";
 	
 	private static final char[] hexArray = "0123456789ABCDEF".toCharArray();
-	
+	/**
+	 * Porta su cui vengono ricevuti solo i messaggi del SMP.
+	 */
 	public static final short SMP_PORT = (short) 999;
+	/**
+	 * Porta su cui vengono ricevuti solo i messaggi di ECDH.
+	 */
 	public static final short ECDH_PORT = (short) 7777;
+	/**
+	 * Porta su cui vengono ricevuti solo i messaggi di controllo remoto.
+	 */
 	public static final short COMMAND_PORT = (short) 9999;
 	
 	
 	/**
-	 * converte array di byte in stringa esadecimale
-	 * @param bytes
-	 * @return
+	 * Converte un array byte[] nella corrispondente stringa esadecimale.
+	 * @param bytes : l'array di byte da convertire
+	 * @return la stringa esadecimale corrispondente
 	 */
 	public static String bytesToHex(byte[] bytes) {
 	    char[] hexChars = new char[bytes.length * 2];
@@ -59,11 +81,16 @@ public class SMSUtility {
 	}
 	
 	/**
-	 * converte stringa esadecimale in array di byte
-	 * @param s
-	 * @return
+	 * Converte la stringa da esadecimale a byte[], oppure lancia un'eccezione.
+	 * 
+	 * @param s : la stringa in input
+	 * @return la conversione in byte[] di s
+	 * @throws IllegalArgumentException : se s non è una stringa esadecimale
 	 */
-	public static byte[] hexStringToByteArray(String s) {
+	public static byte[] hexStringToByteArray(String s) throws IllegalArgumentException {
+		if(!Pattern.compile("^[0-9A-Fa-f]+$").matcher(s).matches()){
+			throw new IllegalArgumentException("La stringa in input non è esadecimale!!!");
+		}
 	    int len = s.length();
 	    byte[] data = new byte[len / 2];
 	    for (int i = 0; i < len; i += 2) {
@@ -73,13 +100,21 @@ public class SMSUtility {
 	    return data;
 	}
 	
-	public static void sendMessage(String number, short port, byte[] header, byte[] data) {
+	/**
+	 * Manda il messaggio dopo aver concatenato header e body.
+	 * 
+	 * @param number : il numero di telefono del destinatario
+	 * @param port : la porta su cui il destinatario riceverà il messaggio
+	 * @param header : l'header del messaggio
+	 * @param body : il corpo del messaggio
+	 */
+	public static void sendMessage(String number, short port, byte[] header, byte[] body) {
 		SmsManager man = SmsManager.getDefault();
-		int dataLength = data == null ? 0 : data.length;
+		int dataLength = body == null ? 0 : body.length;
 		byte[] message = new byte[header.length + dataLength];
 		System.arraycopy(header, 0, message, 0, header.length);
-		if(data != null) {
-			System.arraycopy(data, 0, message, header.length, data.length);
+		if(body != null) {
+			System.arraycopy(body, 0, message, header.length, body.length);
 		}
 		man.sendDataMessage(number, null, port, message, null, null);
 	}

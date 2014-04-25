@@ -29,12 +29,12 @@ import android.util.Log;
  */
 public class SMSPublicKeyManagement extends BroadcastReceiver implements DummyInterface {
 
-	private byte[] PublicKeyRequestCode = new BigInteger("0xC0DE1FFF").toByteArray();
-	private byte[] PublicKeySentCode = new BigInteger("0xC0DE2FFF").toByteArray();
-	private byte[] SecretQuestionSentCode = new BigInteger("0xC0DE3FFF").toByteArray();
-	private byte[] SecretAnswerAndPublicKeyHashSentCode = new BigInteger("0xC0DE4FFF").toByteArray();
-	private byte[] KeyValidatedCode = new BigInteger("0xC0DE5FFF").toByteArray();
-	private byte[] IDontWantToAssociate = new BigInteger("0xC0DE6FFF").toByteArray();
+	private byte[] PublicKeyRequestCode = new BigInteger("C0DE1FFF").toByteArray();
+	private byte[] PublicKeySentCode = new BigInteger("C0DE2FFF").toByteArray();
+	private byte[] SecretQuestionSentCode = new BigInteger("C0DE3FFF").toByteArray();
+	private byte[] SecretAnswerAndPublicKeyHashSentCode = new BigInteger("C0DE4FFF").toByteArray();
+	private byte[] KeyValidatedCode = new BigInteger("C0DE5FFF").toByteArray();
+	private byte[] IDontWantToAssociateCode = new BigInteger("C0DE6FFF").toByteArray();
 	
 	private PublicKeyAutenticator pka;
 	private SmsManager manager;
@@ -111,7 +111,7 @@ public class SMSPublicKeyManagement extends BroadcastReceiver implements DummyIn
 		if(this.message.equals(this.PublicKeyRequestCode)){
 			DummyClass.getDumyInstance().setListener(this);
 		}
-		else if(this.message.equals(this.IDontWantToAssociate)){
+		else if(this.message.equals(this.IDontWantToAssociateCode)){
 			//TODO notificare l'utente che la richiesta è stata rifiutata.
 		}
 		else if(receivedMessageStartsWith(this.PublicKeySentCode)){
@@ -317,8 +317,8 @@ public class SMSPublicKeyManagement extends BroadcastReceiver implements DummyIn
 		}
 		else if(switcher.equals("idontwantyou")){
 			bodySize = 0;
-			headerSize = this.IDontWantToAssociate.length;
-			header = this.IDontWantToAssociate;
+			headerSize = this.IDontWantToAssociateCode.length;
+			header = this.IDontWantToAssociateCode;
 			body = "".getBytes();
 		}
 		else if(switcher.equals("question")){

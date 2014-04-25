@@ -32,9 +32,9 @@ import android.util.Log;
  */
 public class SMSKeyManagement extends BroadcastReceiver {
 
-	private byte[] hereIsMyPublicKey = new BigInteger("C0DE7FFF", 16)
+	private byte[] HereIsMyPublicKeyCode = new BigInteger("C0DE7FFF", 16)
 			.toByteArray();
-	private byte[] hereIsMyPublicKeyToo = new BigInteger("C0DE8FFF", 16)
+	private byte[] HereIsMyPublicKeyTooCode = new BigInteger("C0DE8FFF", 16)
 			.toByteArray();
 
 	private SharedSecretAgreement ssa;
@@ -79,7 +79,7 @@ public class SMSKeyManagement extends BroadcastReceiver {
 	 */
 	public void initiateECDH() {
 		byte[] mPub = this.mPub.getEncoded();
-		int headerSize = this.hereIsMyPublicKey.length;
+		int headerSize = this.HereIsMyPublicKeyCode.length;
 		int bodySize = mPub.length;
 		sendPublicKey(mPub, headerSize, bodySize);
 
@@ -95,7 +95,7 @@ public class SMSKeyManagement extends BroadcastReceiver {
 	private void sendPublicKey(byte[] key, int headerSize, int bodySize) {
 		byte[] message = new byte[headerSize + bodySize];
 
-		System.arraycopy(this.hereIsMyPublicKey, 0, message, 0, headerSize);
+		System.arraycopy(this.HereIsMyPublicKeyCode, 0, message, 0, headerSize);
 		System.arraycopy(mPub, 0, message, headerSize, bodySize);
 
 		this.manager.sendDataMessage(this.other, null, (short) 9999, message,
@@ -140,16 +140,16 @@ public class SMSKeyManagement extends BroadcastReceiver {
 	private void manageReceivedMessage()
 			throws ArbitraryMessageReceivedException, InvalidKeyException,
 			NoSuchAlgorithmException, InvalidKeySpecException {
-		if (receivedMessageStartsWith(this.hereIsMyPublicKey)) {
+		if (receivedMessageStartsWith(this.HereIsMyPublicKeyCode)) {
 			this.ssa = new SharedSecretAgreement(getPrivateKey(),
-					unwrapContent(this.hereIsMyPublicKey));
+					unwrapContent(this.HereIsMyPublicKeyCode));
 			this.ssa.generateSharedSecret();
 			this.mPub = getPublicKey();
-			sendPublicKey(mPub.getEncoded(), this.hereIsMyPublicKeyToo.length,
+			sendPublicKey(mPub.getEncoded(), this.HereIsMyPublicKeyTooCode.length,
 					mPub.getEncoded().length);
-		} else if (receivedMessageStartsWith(this.hereIsMyPublicKeyToo)) {
+		} else if (receivedMessageStartsWith(this.HereIsMyPublicKeyTooCode)) {
 			this.ssa = new SharedSecretAgreement(getPrivateKey(),
-					unwrapContent(this.hereIsMyPublicKeyToo));
+					unwrapContent(this.HereIsMyPublicKeyTooCode));
 			this.ssa.generateSharedSecret();
 		}
 
