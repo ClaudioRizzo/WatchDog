@@ -2,17 +2,38 @@ package it.polimi.dima.watchdog;
 
 public class SMSUtility {
 
-	
+	/**
+	 * PublicKeyRequestCode
+	 */
 	public static String CODE1 = "C0DE1FFF";
+	/**
+	 * PublicKeySentCode
+	 */
 	public static String CODE2 = "C0DE2FFF";
+	/**
+	 * SecretQuestionSentCode
+	 */
 	public static String CODE3 = "C0DE3FFF";
+	/**
+	 * SecretAnswerAndPublicKeyHashSentCode
+	 */
 	public static String CODE4 = "C0DE4FFF";
+	/**
+	 * KeyValidatedCode
+	 */
 	public static String CODE5 = "C0DE5FFF";
+	/**
+	 * IDontWantToAssociate
+	 */
 	public static String CODE6 = "C0DE6FFF";
 	public static String CODE7 = "C0DE7FFF";
 	public static String CODE8 = "C0DE8FFF";
 	
 	private static final char[] hexArray = "0123456789ABCDEF".toCharArray();
+	
+	public static final short SMP_PORT = (short) 999;
+	public static final short ECDH_PORT = (short) 7777;
+	public static final short COMMAND_PORT = (short) 9999;
 	
 	
 	/**

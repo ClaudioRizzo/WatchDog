@@ -1,7 +1,6 @@
 package it.polimi.dima.watchdog.sms.socialistMillionare;
 
-import java.io.UnsupportedEncodingException;
-import java.math.BigInteger;
+import java.security.NoSuchAlgorithmException;
 
 import it.polimi.dima.watchdog.MyPrefFiles;
 import it.polimi.dima.watchdog.SMSUtility;
@@ -73,19 +72,31 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 	
 	@Override
 	public void visit(PublicKeyRequestCodeMessage pubKeyReqMsg) {
-		
+		try 
+		{
+			this.pka.setMyPublicKey(MyPrefFiles.getMyPreference(MyPrefFiles.MY_KEYS, MyPrefFiles.MY_PUB, this.ctx));
+			sendMessage(this.other, SMSUtility.SMP_PORT, SMSUtility.hexStringToByteArray(SMSUtility.CODE2), this.pka.getMyPublicKey());
+		} 
+		catch (NoSuchPreferenceFoundException e) 
+		{
+			this.showShortToastMessage(e.getMessage());
+			e.printStackTrace();
+		}
 		
 	}
 
 	@Override
 	public void visit(PublicKeySentCodeMessage pubKeySentMsg) {
 		
-		try {
+		try 
+		{
 			this.pka.setSecretQuestion(MyPrefFiles.getMyPreference(MyPrefFiles.SECRET_Q_A, MyPrefFiles.SECRET_QUESTION, this.ctx));
-			MyPrefFiles.setMyPreference(MyPrefFiles.KEYSQUARE, this.other, pubKeySentMsg.getBody(), ctx);
-			sendMessage(this.other, (short) 999, this.pka.getSecretQuestion().getBytes());
+			MyPrefFiles.setMyPreference(MyPrefFiles.KEYSQUARE, this.other, pubKeySentMsg.getBody(), this.ctx);
+			sendMessage(this.other, SMSUtility.SMP_PORT, SMSUtility.hexStringToByteArray(SMSUtility.CODE3), this.pka.getSecretQuestion().getBytes());
 			Log.i("[DEBUG]", "Visitor sembra funzionare");
-		} catch (NoSuchPreferenceFoundException e) {
+		}
+		catch (NoSuchPreferenceFoundException e) 
+		{
 			this.showShortToastMessage(e.getMessage());
 			e.printStackTrace();
 		}
@@ -94,26 +105,73 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 	}
 
 	@Override
-	public void visit(SecretAnswerAndPublicKeyHashSentCodeMessage secAnswMsg) {
-		// TODO Auto-generated method stub
+	public void visit(SecretQuestionSentCodeMessage secQuestMsg) {
+		try 
+		{
+			this.pka.setMyPublicKey(MyPrefFiles.getMyPreference(MyPrefFiles.MY_KEYS, MyPrefFiles.MY_PUB, this.ctx));
+			this.pka.setSecretQuestion(secQuestMsg.getBody());
+			//TODO aspettare la risposta dell'utente
+			this.pka.setSecretAnswer("DUMMY"); //ovviamente al posto di dummy ci va ciò che l'utente ha inserito.
+			this.pka.doHashToSend();
+			sendMessage(this.other, SMSUtility.SMP_PORT, SMSUtility.hexStringToByteArray(SMSUtility.CODE4), this.pka.getHashToSend().getBytes());
+		} 
+		catch (NoSuchPreferenceFoundException e) 
+		{
+			this.showShortToastMessage(e.getMessage());
+			e.printStackTrace();
+		}
+		catch (NoSuchAlgorithmException e)
+		{
+			this.showShortToastMessage(e.getMessage());
+			e.printStackTrace();
+		}
 		
 	}
-
+	
 	@Override
-	public void visit(SecretQuestionSentCodeMessage secQuestMsg) {
-		// TODO Auto-generated method stub
+	public void visit(SecretAnswerAndPublicKeyHashSentCodeMessage secAnswMsg) {
+		try 
+		{
+			this.pka.setSecretAnswer(MyPrefFiles.getMyPreference(MyPrefFiles.SECRET_Q_A, MyPrefFiles.SECRET_ANSWER, this.ctx));
+			this.pka.setReceivedPublicKey(MyPrefFiles.getMyPreference(MyPrefFiles.KEYSQUARE, this.other, this.ctx));
+			this.pka.doHashToCheck();
+			this.pka.setReceivedHash(secAnswMsg.getBody());
+			//la chiave è cancellata dal keysquare sempre e comunque
+			MyPrefFiles.deleteMyPreference(MyPrefFiles.KEYSQUARE, this.other, this.ctx);
+			if(!this.pka.checkForEquality()){
+				//TODO notificare a sè stesso e all'altro la mancata validazione.
+			}
+			else{
+				String keyValidated = Base64.encodeToString(this.pka.getReceivedPublicKey(), Base64.DEFAULT);
+				MyPrefFiles.setMyPreference(MyPrefFiles.KEYRING, this.other, keyValidated, this.ctx);
+				sendMessage(this.other, SMSUtility.SMP_PORT, SMSUtility.hexStringToByteArray(SMSUtility.CODE5), SMSUtility.hexStringToByteArray(SMSUtility.CODE5));
+			}
+		} 
+		catch (NoSuchPreferenceFoundException e) 
+		{
+			this.showShortToastMessage(e.getMessage());
+			e.printStackTrace();
+		}
+		catch (NoSuchAlgorithmException e)
+		{
+			this.showShortToastMessage(e.getMessage());
+			e.printStackTrace();
+		}
 		
 	}
 
 	@Override
 	public void visit(KeyValidatedCodeMessage keyValMsg) {
-		// TODO Auto-generated method stub
+		this.pka.setOtherKeyValidated(MyPrefFiles.existsPreference(MyPrefFiles.KEYRING, this.other, this.ctx));
+		if(!this.pka.isOtherKeyValidated()){
+			sendMessage(this.other, SMSUtility.SMP_PORT, SMSUtility.hexStringToByteArray(SMSUtility.CODE1), SMSUtility.hexStringToByteArray(SMSUtility.CODE1));
+		}
 		
 	}
 
 	@Override
 	public void visit(IDontWantToAssociateMessage noAssMsg) {
-		// TODO Auto-generated method stub
+		// TODO gestire l'errore
 		
 	}
 
@@ -126,7 +184,6 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 	 */
 	private String getHeader(byte[] msg) throws ArbitraryMessageReceivedException {
 		
-		//-1 è perchè c'è anche il terminatore
 		if(msg.length < SMSProtocol.HEADER_LENGTH){
 			throw new ArbitraryMessageReceivedException("Messaggio inaspettato: troppo corto!!!");
 		}
@@ -147,10 +204,8 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 		}
 		//android pare (dalla javadoc) non aggiungere un terminatore all'array di byte quando si usa getUserData(). In caso contrario la lunghezza
 		//va decurtata di 1.
-		//Il -1 che c'è già serve a tenere conto del terminatore nullo dell'header.
 		int bodyLength = msg.length - SMSProtocol.HEADER_LENGTH;
 		byte[] body = new byte[bodyLength];
-		//+1 perchè non voglio copiare il terminatore dell'header
 		System.arraycopy(msg, SMSProtocol.HEADER_LENGTH, body, 0, bodyLength);
 		String bodyStr = Base64.encodeToString(body, Base64.DEFAULT);
 		return bodyStr;
@@ -158,8 +213,11 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 		
 	}
 	
-	private void sendMessage(String number, short port, byte[] data) {
+	private void sendMessage(String number, short port, byte[] header, byte[] data) {
 		SmsManager man = SmsManager.getDefault();
+		byte[] message = new byte[header.length + data.length];
+		System.arraycopy(header, 0, message, 0, header.length);
+		System.arraycopy(data, 0, message, header.length, data.length);
 		man.sendDataMessage(number, null, port, data, null, null);
 	}
 	
