@@ -3,11 +3,10 @@ package it.polimi.dima.watchdog;
 import it.polimi.dima.watchdog.exceptions.NoSuchPreferenceFoundException;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Base64;
 
 /**
  * Classe che raccoglie tutte le preferenze che si usano in questa applicazione
- * @author claudio
+ * @author claudio, emanuele
  *
  */
 public class MyPrefFiles {

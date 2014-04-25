@@ -1,5 +1,6 @@
 package it.polimi.dima.watchdog;
 
+import android.annotation.SuppressLint;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -10,6 +11,7 @@ public class PasswordUtils {
 	public static final int SALT_LENGTH = 32; // 256 bit, come la lunghezza del
 												// digest di sha256
 
+	@SuppressLint("TrulyRandom")
 	public static byte[] nextSalt() {
 		byte[] salt = new byte[SALT_LENGTH];
 		SecureRandom sr = new SecureRandom();
