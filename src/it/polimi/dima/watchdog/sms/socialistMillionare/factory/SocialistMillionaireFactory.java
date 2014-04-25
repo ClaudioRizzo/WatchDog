@@ -4,7 +4,7 @@ package it.polimi.dima.watchdog.sms.socialistMillionare.factory;
 import android.util.Log;
 import it.polimi.dima.watchdog.SMSUtility;
 import it.polimi.dima.watchdog.exceptions.ArbitraryMessageReceivedException;
-import it.polimi.dima.watchdog.sms.socialistMillionare.IDontWantToAssociateMessage;
+import it.polimi.dima.watchdog.sms.socialistMillionare.IDontWantToAssociateCodeMessage;
 import it.polimi.dima.watchdog.sms.socialistMillionare.KeyValidatedCodeMessage;
 import it.polimi.dima.watchdog.sms.socialistMillionare.PublicKeyRequestCodeMessage;
 import it.polimi.dima.watchdog.sms.socialistMillionare.PublicKeySentCodeMessage;
@@ -33,7 +33,7 @@ public class SocialistMillionaireFactory implements SMSProtocolInterface {
 			return new KeyValidatedCodeMessage(SMSUtility.CODE5, null);
 
 		} else if (header.equals(SMSUtility.CODE6)) {
-			return new IDontWantToAssociateMessage(
+			return new IDontWantToAssociateCodeMessage(
 					SMSUtility.CODE6, null);
 		}
 		else {

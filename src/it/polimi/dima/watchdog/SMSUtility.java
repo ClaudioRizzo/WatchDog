@@ -12,36 +12,56 @@ import android.telephony.SmsManager;
 public class SMSUtility {
 
 	/**
-	 * PublicKeyRequestCode
+	 * PublicKeyRequestCode (for SMP only) : header del messaggio che chiede all'altro la chiave pubblica.
 	 */
 	public static String CODE1 = "C0DE1FFF";
 	/**
-	 * PublicKeySentCode
+	 * PublicKeySentCode (for SMP only) : header del messaggio che manda la chiave pubblica a chi l'ha chiesta.
 	 */
 	public static String CODE2 = "C0DE2FFF";
 	/**
-	 * SecretQuestionSentCode
+	 * SecretQuestionSentCode (for SMP only) : header del messaggio che manda la domanda segreta all'altro.
 	 */
 	public static String CODE3 = "C0DE3FFF";
 	/**
-	 * SecretAnswerAndPublicKeyHashSentCode
+	 * SecretAnswerAndPublicKeyHashSentCode (for SMP only) : header del messaggio che manda l'hash di
+	 * propria chiave pubblica || risposta segreta all'altro.
 	 */
 	public static String CODE4 = "C0DE4FFF";
 	/**
-	 * KeyValidatedCode
+	 * KeyValidatedCode (for SMP only) : header del messaggio che conferma l'avvenuta validazione della chiave
+	 * pubblica.
 	 */
 	public static String CODE5 = "C0DE5FFF";
 	/**
-	 * IDontWantToAssociate
+	 * IDontWantToAssociateCode (for SMP only) : header del messaggio che informa dell'abort del processo di
+	 * validazione della chiave (vale per tutti i possibili errori, non solo per la mancata uguaglianza degli
+	 * hash).
 	 */
 	public static String CODE6 = "C0DE6FFF";
+	/**
+	 * HereIsMyPublicKeyCode (for ECDH only) : header del messaggio di colui che invia per primo all'altro la
+	 * propria chiave pubblica.
+	 */
 	public static String CODE7 = "C0DE7FFF";
+	/**
+	 * HereIsMyPublicKeyTooCode (for ECDH only) : header del messaggio di colui che invia all'altro la propria
+	 * chiave pubblica solo dopo aver ricevuto quella dell'altro.
+	 */
 	public static String CODE8 = "C0DE8FFF";
 	
 	private static final char[] hexArray = "0123456789ABCDEF".toCharArray();
-	
+	/**
+	 * Porta su cui vengono ricevuti solo i messaggi del SMP.
+	 */
 	public static final short SMP_PORT = (short) 999;
+	/**
+	 * Porta su cui vengono ricevuti solo i messaggi di ECDH.
+	 */
 	public static final short ECDH_PORT = (short) 7777;
+	/**
+	 * Porta su cui vengono ricevuti solo i messaggi di controllo remoto.
+	 */
 	public static final short COMMAND_PORT = (short) 9999;
 	
 	

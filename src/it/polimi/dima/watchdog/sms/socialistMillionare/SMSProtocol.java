@@ -1,13 +1,15 @@
 package it.polimi.dima.watchdog.sms.socialistMillionare;
 
+import it.polimi.dima.watchdog.sms.ecdh.EllipticCurvesDiffieHellmanMessageInterface;
+import it.polimi.dima.watchdog.sms.ecdh.SMSKeyExchangeVisitorInterface;
 import android.telephony.SmsManager;
 
 /**
  * A protocol message should extends this class
- * @author claudio
+ * @author claudio, emanuele
  *
  */
-public class SMSProtocol implements SocialistMillionareMessageInterface {
+public class SMSProtocol implements SocialistMillionareMessageInterface, EllipticCurvesDiffieHellmanMessageInterface {
 
 	private String header; //MUST be base64
 	private String body; //MUST be Base64
@@ -40,6 +42,12 @@ public class SMSProtocol implements SocialistMillionareMessageInterface {
 
 	@Override
 	public void handle(SMSPublicKeyVisitorInterface visitor) {
+		/**/
+		
+	}
+
+	@Override
+	public void handle(SMSKeyExchangeVisitorInterface visitor) {
 		/**/
 		
 	}

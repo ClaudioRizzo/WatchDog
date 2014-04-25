@@ -12,6 +12,6 @@ public interface SMSPublicKeyVisitorInterface {
 	public void visit(SecretAnswerAndPublicKeyHashSentCodeMessage secAnswMsg);
 	public void visit(SecretQuestionSentCodeMessage secQuestMsg);
 	public void visit(KeyValidatedCodeMessage keyValMsg);
-	public void visit(IDontWantToAssociateMessage noAssMsg);
+	public void visit(IDontWantToAssociateCodeMessage noAssMsg);
 	
 }
