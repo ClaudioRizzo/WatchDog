@@ -4,6 +4,7 @@ import it.polimi.dima.watchdog.PasswordUtils;
 import it.polimi.dima.watchdog.R;
 
 import java.security.NoSuchAlgorithmException;
+import java.util.regex.Pattern;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -47,9 +48,13 @@ public class InitializeWizardFragment extends Fragment implements
 		TextView mTextView = (TextView) fragView
 				.findViewById(R.id.user_password);
 		String cleanPassword = mTextView.getText().toString();
-		// System.out.println("[DEBUG] sono la password: " + cleanPassword);
-		// System.out.println("[DEBUG] sono la password: " +
-		// getHash(cleanPassword));
+		
+		while(!Pattern.matches("(?!^[0-9]*$)(?!^[a-zA-Z]*$)^([a-zA-Z0-9]{8,20})$", cleanPassword)){
+			/*TODO notificare che la password può essere composta solo da lettere maiuscole e minuscole e numeri
+			e che deve contenere almeno un numero e almeno una lettera (maiuscola o minuscola non ha importanza)
+			e che deve essere lunga almeno 8 caratteri e non più di 20. Quindi chiedere di immetterla di nuovo
+			e salvarla di nuovo in cleanPassword*/
+		}
 		String hashToSave = this.getHash(cleanPassword);
 		mCallBack.getWizardChanges(true, hashToSave, this.salt);
 

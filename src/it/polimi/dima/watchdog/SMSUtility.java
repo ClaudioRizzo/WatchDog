@@ -1,5 +1,7 @@
 package it.polimi.dima.watchdog;
 
+import java.util.regex.Pattern;
+
 import android.telephony.SmsManager;
 
 /**
@@ -44,9 +46,9 @@ public class SMSUtility {
 	
 	
 	/**
-	 * converte array di byte in stringa esadecimale
-	 * @param bytes
-	 * @return
+	 * Converte un array byte[] nella corrispondente stringa esadecimale.
+	 * @param bytes : l'array di byte da convertire
+	 * @return la stringa esadecimale corrispondente
 	 */
 	public static String bytesToHex(byte[] bytes) {
 	    char[] hexChars = new char[bytes.length * 2];
@@ -59,11 +61,16 @@ public class SMSUtility {
 	}
 	
 	/**
-	 * converte stringa esadecimale in array di byte
-	 * @param s
-	 * @return
+	 * Converte la stringa da esadecimale a byte[], oppure lancia un'eccezione.
+	 * 
+	 * @param s : la stringa in input
+	 * @return la conversione in byte[] di s
+	 * @throws IllegalArgumentException : se s non è una stringa esadecimale
 	 */
-	public static byte[] hexStringToByteArray(String s) {
+	public static byte[] hexStringToByteArray(String s) throws IllegalArgumentException {
+		if(!Pattern.compile("^[0-9A-Fa-f]+$").matcher(s).matches()){
+			throw new IllegalArgumentException("La stringa in input non è esadecimale!!!");
+		}
 	    int len = s.length();
 	    byte[] data = new byte[len / 2];
 	    for (int i = 0; i < len; i += 2) {
@@ -73,13 +80,21 @@ public class SMSUtility {
 	    return data;
 	}
 	
-	public static void sendMessage(String number, short port, byte[] header, byte[] data) {
+	/**
+	 * Manda il messaggio dopo aver concatenato header e body.
+	 * 
+	 * @param number : il numero di telefono del destinatario
+	 * @param port : la porta su cui il destinatario riceverà il messaggio
+	 * @param header : l'header del messaggio
+	 * @param body : il corpo del messaggio
+	 */
+	public static void sendMessage(String number, short port, byte[] header, byte[] body) {
 		SmsManager man = SmsManager.getDefault();
-		int dataLength = data == null ? 0 : data.length;
+		int dataLength = body == null ? 0 : body.length;
 		byte[] message = new byte[header.length + dataLength];
 		System.arraycopy(header, 0, message, 0, header.length);
-		if(data != null) {
-			System.arraycopy(data, 0, message, header.length, data.length);
+		if(body != null) {
+			System.arraycopy(body, 0, message, header.length, body.length);
 		}
 		man.sendDataMessage(number, null, port, message, null, null);
 	}
