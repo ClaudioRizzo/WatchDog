@@ -2,6 +2,7 @@ package it.polimi.dima.watchdog.crypto;
 
 import android.annotation.SuppressLint;
 import android.util.Base64;
+import it.polimi.dima.watchdog.CryptoUtility;
 
 import java.security.InvalidKeyException;
 import java.security.KeyFactory;
@@ -37,7 +38,7 @@ public class SharedSecretAgreement {
 	}
 	
 	private void setMyPrivateKey(byte[] key) throws NoSuchAlgorithmException, InvalidKeySpecException{
-		KeyFactory kf = KeyFactory.getInstance("EC");
+		KeyFactory kf = KeyFactory.getInstance(CryptoUtility.EC);
 		this.myPrivateKey = kf.generatePrivate(new X509EncodedKeySpec(key));
 	}
 	
@@ -46,7 +47,7 @@ public class SharedSecretAgreement {
 	}
 	
 	private void setTokenReceived(byte[] token) throws InvalidKeySpecException, NoSuchAlgorithmException {
-		KeyFactory kf = KeyFactory.getInstance("EC");
+		KeyFactory kf = KeyFactory.getInstance(CryptoUtility.EC);
 		this.otherPublicKey = kf.generatePublic(new X509EncodedKeySpec(token));
 		
 	}
@@ -64,7 +65,7 @@ public class SharedSecretAgreement {
 	 */
 	@SuppressLint("TrulyRandom")
 	public void generateSharedSecret() throws InvalidKeyException, NoSuchAlgorithmException, InvalidKeySpecException{
-		KeyAgreement ka = KeyAgreement.getInstance("ECDH");
+		KeyAgreement ka = KeyAgreement.getInstance(CryptoUtility.ECDH);
 		ka.init(this.myPrivateKey);
 		ka.doPhase(this.otherPublicKey, true);
 		this.sharedSecret = ka.generateSecret();

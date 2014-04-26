@@ -29,8 +29,6 @@ import it.polimi.dima.watchdog.exceptions.ErrorInSignatureCheckingException;
  */
 public class SMSParser {
 	
-	//public static final String SMS_EXTRA_NAME ="pdus";
-	
 	private byte[] smsEncrypted; //sms crittato
 	private Key decryptionKey; //chiave dell'AES
 	private PublicKey oPub; //chiave pubblica del mittente, usata per verificare la firma

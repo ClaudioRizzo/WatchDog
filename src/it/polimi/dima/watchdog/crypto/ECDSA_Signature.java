@@ -1,14 +1,17 @@
 package it.polimi.dima.watchdog.crypto;
 
 import java.io.UnsupportedEncodingException;
-import java.math.BigInteger;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.Signature;
 import java.security.SignatureException;
+import java.util.regex.Pattern;
 
+import android.util.Base64;
+import it.polimi.dima.watchdog.CryptoUtility;
+import it.polimi.dima.watchdog.PasswordUtils;
 import it.polimi.dima.watchdog.exceptions.*;
 
 /**
@@ -29,14 +32,14 @@ public class ECDSA_Signature {
 	private String ptx;
 	private byte[] plaintext;
 	private Signature sig;
-	private String string_signature;
+	private String stringSignature; //Base64
 	private byte[] signature;
 	private PublicKey oPub;
 	private PrivateKey mPriv;
 	private byte[] signatureToVerify;
 	
 	public String getStringSignature(){
-		return this.string_signature;
+		return this.stringSignature;
 	}
 	
 	public byte[] getSignature(){
@@ -67,7 +70,7 @@ public class ECDSA_Signature {
 		this.ptx = ptx;
 		this.mPriv = priv;
 		
-		if(!this.mPriv.getAlgorithm().toString().equals("EC")){
+		if(!this.mPriv.getAlgorithm().toString().equals(CryptoUtility.EC)){
 			throw new NoECDSAKeyPairGeneratedException();
 		}
 	}
@@ -84,7 +87,7 @@ public class ECDSA_Signature {
 		this.plaintext = ptx;
 		this.mPriv = priv;
 		
-		if(!this.mPriv.getAlgorithm().toString().equals("EC")){
+		if(!this.mPriv.getAlgorithm().toString().equals(CryptoUtility.EC)){
 			throw new NoECDSAKeyPairGeneratedException();
 		}
 	}
@@ -109,12 +112,15 @@ public class ECDSA_Signature {
 	 * (quella dell'utente che ha firmato il messaggio) e la firma da verificare sotto forma di stringa.
 	 * @param ptx : il messaggio
 	 * @param pub : la chiave pubblica del mittente
-	 * @param signature : la firma da verificare
+	 * @param signature : la firma da verificare in Base64
 	 */
-	public ECDSA_Signature(String ptx, PublicKey pub, String signature){
+	public ECDSA_Signature(String ptx, PublicKey pub, String signature){//signature è in Base64
+		if (!Pattern.matches(CryptoUtility.BASE64_REGEX, signature)) {
+			throw new IllegalArgumentException("La stringa passata come firma non è in base64");
+		}
 		this.plaintext = ptx.getBytes();
 		this.oPub = pub;
-		this.signatureToVerify = signature.getBytes();
+		this.signatureToVerify = Base64.decode(signature, Base64.DEFAULT);
 	}
 	
 	
@@ -125,11 +131,11 @@ public class ECDSA_Signature {
 	 */
 	public void sign() throws NoSignatureDoneException{
 		try {
-			this.sig = Signature.getInstance("SHA1withECDSA");
+			this.sig = Signature.getInstance(CryptoUtility.ECDSA_SHA1);
 			this.sig.initSign(this.mPriv);
 			
 			if(this.plaintext == null && this.ptx != null){
-				byte[] strByte = this.ptx.getBytes("UTF-8");
+				byte[] strByte = this.ptx.getBytes(PasswordUtils.UTF_8);
 		        this.sig.update(strByte);
 			}
 			else{
@@ -139,7 +145,7 @@ public class ECDSA_Signature {
 
 	        this.signature = this.sig.sign();
 	        
-	        this.string_signature = new BigInteger(1, this.signature).toString(16);
+	        this.stringSignature = Base64.encodeToString(this.signature, Base64.DEFAULT);
 		}
 		catch (NoSuchAlgorithmException e) {
 			this.sig = null;
@@ -166,7 +172,7 @@ public class ECDSA_Signature {
 	 */
 	public boolean verifySignature() throws ErrorInSignatureCheckingException{
 		try{
-			Signature verify = Signature.getInstance("SHA1withECDSA");
+			Signature verify = Signature.getInstance(CryptoUtility.ECDSA_SHA1);
 			verify.initVerify(this.oPub);
 			verify.update(this.plaintext);
 			return verify.verify(this.signatureToVerify);

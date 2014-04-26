@@ -4,7 +4,6 @@ import it.polimi.dima.watchdog.sms.commands.CommandMessageInterface;
 import it.polimi.dima.watchdog.sms.commands.SMSCommandVisitorInterface;
 import it.polimi.dima.watchdog.sms.ecdh.EllipticCurvesDiffieHellmanMessageInterface;
 import it.polimi.dima.watchdog.sms.ecdh.SMSKeyExchangeVisitorInterface;
-import android.telephony.SmsManager;
 
 /**
  * A protocol message should extends this class
@@ -15,14 +14,13 @@ public class SMSProtocol implements SocialistMillionaireMessageInterface, Ellipt
 
 	private String header; //MUST be base64
 	private String body; //MUST be Base64
-	private SmsManager smsMan;
+	//private SmsManager smsMan;
 	public static int HEADER_LENGTH = 4; //ovvero 4 byte: NON si tiene conto del terminatore nullo.
 	
 	
 	public SMSProtocol(String header, String body) {
 		this.header = header;
 		this.body = body;
-		this.smsMan = SmsManager.getDefault();
 	}
 	
 	public String getHeader() {
@@ -36,10 +34,6 @@ public class SMSProtocol implements SocialistMillionaireMessageInterface, Ellipt
 	}
 	public void setBody(String body) {
 		this.body = body;
-	}
-
-	public SmsManager getSmsMan() {
-		return smsMan;
 	}
 
 	@Override

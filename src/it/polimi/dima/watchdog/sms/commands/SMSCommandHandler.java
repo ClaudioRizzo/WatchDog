@@ -9,6 +9,7 @@ import java.security.spec.X509EncodedKeySpec;
 
 import javax.crypto.spec.SecretKeySpec;
 
+import it.polimi.dima.watchdog.CryptoUtility;
 import it.polimi.dima.watchdog.MyPrefFiles;
 import it.polimi.dima.watchdog.SMSUtility;
 import it.polimi.dima.watchdog.exceptions.NoSuchPreferenceFoundException;
@@ -46,7 +47,7 @@ public class SMSCommandHandler extends BroadcastReceiver implements SMSCommandVi
 
 		try {
 			if (bundle != null) {
-				final Object[] pdusObj = (Object[]) bundle.get("pdus");
+				final Object[] pdusObj = (Object[]) bundle.get(SMSUtility.SMS_EXTRA_NAME);
 				SmsMessage message = null;
 				
 				for (int i = 0; i < pdusObj.length; i++) {
@@ -79,11 +80,11 @@ public class SMSCommandHandler extends BroadcastReceiver implements SMSCommandVi
 		
 		String decKey = MyPrefFiles.getMyPreference(MyPrefFiles.CURRENT_AES_KEY, this.other, this.ctx);
 		byte[] decKeyValue = Base64.decode(decKey, Base64.DEFAULT);
-		Key decryptionKey = new SecretKeySpec(decKeyValue, "AES");
+		Key decryptionKey = new SecretKeySpec(decKeyValue, CryptoUtility.AES_256);
 		
 		String otherPub = MyPrefFiles.getMyPreference(MyPrefFiles.KEYRING, this.other, this.ctx);
 		byte[] otherPubValue = Base64.decode(otherPub, Base64.DEFAULT);
-		KeyFactory kf = KeyFactory.getInstance("EC");
+		KeyFactory kf = KeyFactory.getInstance(CryptoUtility.EC);
 		PublicKey oPub = kf.generatePublic(new X509EncodedKeySpec(otherPubValue));
 		
 		String storedHash = MyPrefFiles.getMyPreference(MyPrefFiles.PASSWORD_AND_SALT, MyPrefFiles.MY_PASSWORD_HASH, this.ctx);

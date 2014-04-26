@@ -2,6 +2,7 @@ package it.polimi.dima.watchdog.crypto;
 
 import android.annotation.SuppressLint;
 import android.util.Base64;
+import it.polimi.dima.watchdog.CryptoUtility;
 
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
@@ -9,6 +10,7 @@ import java.security.Key;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.Security;
+import java.util.regex.Pattern;
 
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Hex;
@@ -97,7 +99,7 @@ public class AES_256_GCM_Crypto implements Crypto {
 		this.plaintext = ptx;
 		this.keyString = keyString;
 		this.keyValue = Hex.decodeHex(this.keyString.toCharArray());//DatatypeConverter.parseHexBinary(this.keyString);
-		this.key = new SecretKeySpec(this.keyValue, "AES");
+		this.key = new SecretKeySpec(this.keyValue, CryptoUtility.AES_256);
 	}
 
 	/**
@@ -117,7 +119,7 @@ public class AES_256_GCM_Crypto implements Crypto {
 		}
 		this.plaintext = ptx;
 		this.keyValue = keyValue;
-		this.key = new SecretKeySpec(this.keyValue, "AES");
+		this.key = new SecretKeySpec(this.keyValue, CryptoUtility.AES_256);
 	}
 
 	/**
@@ -134,7 +136,7 @@ public class AES_256_GCM_Crypto implements Crypto {
 	public AES_256_GCM_Crypto(byte[] ptx, Key key) throws DecoderException {
 		String dummy = "0000000000000000000000000000000000000000000000000000000000000000";
 		byte[] dummyArray = Hex.decodeHex(dummy.toCharArray());//DatatypeConverter.parseHexBinary(dummy);
-		Key dummyKey = new SecretKeySpec(dummyArray, "AES");
+		Key dummyKey = new SecretKeySpec(dummyArray, CryptoUtility.AES_256);
 
 		if (key.getEncoded().length != dummyKey.getEncoded().length) {
 			throw new IllegalArgumentException("La chiave non è di 256 bit");
@@ -148,17 +150,13 @@ public class AES_256_GCM_Crypto implements Crypto {
 	 * Costruttore in decrypt mode con chiave e ciphertext passato come array di
 	 * byte.
 	 * 
-	 * @param key
-	 *            : la chiave
-	 * @param ctx
-	 *            : il ciphertext passato come array di byte
+	 * @param key : la chiave
+	 * @param ctx : il ciphertext passato come array di byte
 	 */
 	public AES_256_GCM_Crypto(Key key, byte[] ctx) {
 		this.key = key;
 		this.ctx = ctx;
-		this.base64_ctx = Base64.encodeToString(this.ctx, Base64.DEFAULT);//DatatypeConverter.printBase64Binary(this.ctx); // giusto
-																			// per
-																			// completezza
+		this.base64_ctx = Base64.encodeToString(this.ctx, Base64.DEFAULT);
 	}
 
 	/**
@@ -166,25 +164,16 @@ public class AES_256_GCM_Crypto implements Crypto {
 	 * in base64; se la stringa non matcha il pattern delle stringhe ben formate
 	 * in base64 viene lanciata un'eccezione.
 	 * 
-	 * @param key
-	 *            : la chiave
-	 * @param ctx
-	 *            : il ciphertext passato come stringa in base64
+	 * @param key : la chiave
+	 * @param ctx : il ciphertext passato come stringa in base64
 	 */
 	public AES_256_GCM_Crypto(Key key, String ctx) {
-		// nulla di esoterico: solo l'espressione regolare che matcha una
-		// stringa in base64: una serie opzionale
-		// di gruppi di 4 caratteri (ammessi numeri, lettere maiuscole e non,
-		// più e slash) seguita da un gruppo
-		// di quattro caratteri in cui uno o due uguali fanno da padding.
-		String pattern = "^([A-Za-z0-9+/]{4})*([A-Za-z0-9+/]{4}|[A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{2}==)$";
-		if (!ctx.matches(pattern)) {
-			throw new IllegalArgumentException(
-					"La stringa passata come chiave non è in base64");
+		if (!Pattern.matches(CryptoUtility.BASE64_REGEX, ctx)) {
+			throw new IllegalArgumentException("La stringa passata come chiave non è in base64");
 		}
 		this.key = key;
 		this.base64_ctx = ctx;
-		this.ctx = Base64.decode(this.base64_ctx, Base64.DEFAULT);//DatatypeConverter.parseBase64Binary(this.base64_ctx);
+		this.ctx = Base64.decode(this.base64_ctx, Base64.DEFAULT);
 	}
 
 	/**
@@ -206,7 +195,7 @@ public class AES_256_GCM_Crypto implements Crypto {
 
 		// crea una nuova istanza di uno stato dell'aes con GCM come modo e
 		// nessun padding (con GCM non serve)
-		Cipher ctx = Cipher.getInstance("AES/GCM/NoPadding");
+		Cipher ctx = Cipher.getInstance(CryptoUtility.AES_256_GCM_NO_PADDING);
 
 		// inizializza lo stato
 		ctx.init(Cipher.ENCRYPT_MODE, this.key, gmcps);
@@ -241,7 +230,7 @@ public class AES_256_GCM_Crypto implements Crypto {
 
 		// crea una nuova istanza di uno stato dell'aes con GCM come modo e
 		// nessun padding (con GCM non serve)
-		Cipher ctx = Cipher.getInstance("AES/GCM/NoPadding");
+		Cipher ctx = Cipher.getInstance(CryptoUtility.AES_256_GCM_NO_PADDING);
 
 		// inizializza lo stato
 		ctx.init(Cipher.DECRYPT_MODE, this.key, gmcps);

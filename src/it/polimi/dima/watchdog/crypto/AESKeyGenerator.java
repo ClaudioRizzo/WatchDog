@@ -1,5 +1,7 @@
 package it.polimi.dima.watchdog.crypto;
 
+import it.polimi.dima.watchdog.CryptoUtility;
+
 import java.security.InvalidKeyException;
 import java.security.Key;
 import java.security.NoSuchAlgorithmException;
@@ -54,8 +56,8 @@ public class AESKeyGenerator {
 	
 	public Key generateKey() throws NoSuchAlgorithmException, InvalidKeyException{
 		
-		SecretKeySpec keyspec = new SecretKeySpec(this.sec, "HmacSHA256");
-        Mac prf = Mac.getInstance("HmacSHA256");
+		SecretKeySpec keyspec = new SecretKeySpec(this.sec, CryptoUtility.HMAC_SHA_256);
+        Mac prf = Mac.getInstance(CryptoUtility.HMAC_SHA_256);
         prf.init(keyspec);
         
         int hLen = prf.getMacLength();
@@ -73,12 +75,12 @@ public class AESKeyGenerator {
             byte dk[] = new byte[dkLen];
             System.arraycopy(result, 0, dk, 0, dkLen);
             this.keyValue = dk;
-            this.key = new SecretKeySpec(this.keyValue, "AES");
+            this.key = new SecretKeySpec(this.keyValue, CryptoUtility.AES_256);
             return this.key;
         }
 		
         this.keyValue = result;
-        this.key = new SecretKeySpec(this.keyValue, "AES");
+        this.key = new SecretKeySpec(this.keyValue, CryptoUtility.AES_256);
 		return this.key;
 	}
 

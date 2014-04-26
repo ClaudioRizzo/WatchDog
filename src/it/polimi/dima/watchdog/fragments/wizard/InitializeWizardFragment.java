@@ -51,7 +51,7 @@ public class InitializeWizardFragment extends Fragment implements
 		String cleanPassword = mTextView.getText().toString();
 		
 		//TODO scommentare alla fine
-		/*while(!Pattern.matches("(?!^[0-9]*$)(?!^[a-zA-Z]*$)^([a-zA-Z0-9-_@%&#,;:./<!>=?`~]{8,20})$", cleanPassword)){
+		/*while(!Pattern.matches(PasswordUtils.PASSWORD_REGEX, cleanPassword)){
 			//TODO notificare che la password può essere composta solo da lettere maiuscole e minuscole e numeri
 			//e che deve contenere almeno un numero e almeno una lettera (maiuscola o minuscola non ha importanza)
 			//e che deve essere lunga almeno 8 caratteri e non più di 20. Quindi chiedere di immetterla di nuovo

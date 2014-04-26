@@ -1,5 +1,8 @@
 package it.polimi.dima.watchdog.sms;
 
+import it.polimi.dima.watchdog.CryptoUtility;
+import it.polimi.dima.watchdog.PasswordUtils;
+import it.polimi.dima.watchdog.SMSUtility;
 import it.polimi.dima.watchdog.crypto.AES_256_GCM_Crypto;
 import it.polimi.dima.watchdog.crypto.ECDSA_Signature;
 import it.polimi.dima.watchdog.exceptions.NoECDSAKeyPairGeneratedException;
@@ -40,7 +43,6 @@ public class CommandSMS {
 	private byte[] finalMessage; // hash(password) || text
 	private byte[] signature; //firma digitale
 	private byte[] finalSignedAndEncryptedMessage; //messaggio firmato e crittografato
-	private final short SMS_PORT = 7777;
 	private String dest; //serve per memorizzare il destinatario
 	
 	
@@ -82,9 +84,9 @@ public class CommandSMS {
 	 */
 	public void construct() throws NoSuchAlgorithmException, IOException, NoECDSAKeyPairGeneratedException, NoSignatureDoneException, DecoderException, InvalidKeyException, NoSuchPaddingException, InvalidAlgorithmParameterException, NoSuchProviderException, IllegalBlockSizeException, BadPaddingException{
 		if(this.finalMessage == null && this.text != null){
-			MessageDigest digest = MessageDigest.getInstance("SHA-256");
+			MessageDigest digest = MessageDigest.getInstance(CryptoUtility.SHA_256);
 			//l'hash sarà lungo 256 bit
-			this.passwordHash = digest.digest(this.password.getBytes("UTF-8"));
+			this.passwordHash = digest.digest(this.password.getBytes(PasswordUtils.UTF_8));
 			
 			//in pratica si crea una struttura hash(password) || text
 			//Sapendo che l'hash è lungo 256 bit, è comodo alla ricezione separare le due parti se l'hash...
@@ -138,7 +140,7 @@ public class CommandSMS {
 	 */
 	public void send(){
 		SmsManager smsManager = SmsManager.getDefault();
-		smsManager.sendDataMessage(this.dest, null, this.SMS_PORT, this.finalSignedAndEncryptedMessage, null, null);
+		smsManager.sendDataMessage(this.dest, null, SMSUtility.COMMAND_PORT, this.finalSignedAndEncryptedMessage, null, null);
 	}
 	
 	

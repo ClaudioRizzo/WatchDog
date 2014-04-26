@@ -18,6 +18,10 @@ import android.widget.Toast;
 public class SMSUtility {
 
 	/**
+	 * Da usare nel metodo onReceive delle classi che ricevono sms.
+	 */
+	public static final String SMS_EXTRA_NAME ="pdus";
+	/**
 	 * PublicKeyRequestCode (for SMP only) : header del messaggio che chiede all'altro la chiave pubblica.
 	 */
 	public static String CODE1 = "C0DE1FFF";

@@ -2,7 +2,6 @@
 <resources>
 
     <!-- Strings Array for drawer -->
-    <!--  -->
     <string-array name="gen_features_array">
         <item>Gps</item>
         <item>Remote</item>
@@ -10,54 +9,61 @@
     </string-array>
     
     <!-- Strings Array for settings activity -->
-    <!--  -->
     <string-array name="array_settings">
         <item>Associate a Number</item>
     </string-array>
     
-    <!--  -->
+    <!-- Application name -->
     <string name="app_name">WatchDog</string>
-    <!--  -->
+    <!-- GPS tab -->
     <string name="default_tab">Gps</string>
-    <!--  -->
+    <!-- Test string -->
     <string name="hello_world">Hello world!</string>
-    <!--  -->
+    <!-- Settings -->
     <string name="action_settings">Settings</string>
-    <!--  -->
+    <!-- Rate the application on the store -->
     <string name="action_rateus">Rate Us</string>
-    <!--  -->
+    <!-- Share the application -->
     <string name="action_share">Share Application</string>
-    <!--  -->
+    <!-- Open the navigation drawer -->
     <string name="drawer_open">Open navigation drawer</string>
-    <!--  -->
+    <!-- Close the navigation drawer -->
     <string name="drawer_close">Close navigation drawer</string>
-    <!--  -->
+    <!-- Settings title -->
     <string name="settings_title">Settings</string>
 
     <!-- Action Bar Titles -->
-    <!--  -->
+    <!-- GPS title -->
     <string name="gps_title">Gps</string>
-    <!--  -->
+    <!-- Status title -->
     <string name="status_title">Status</string>
-    <!--  -->
+    <!-- Remote title -->
     <string name="remote_title">Remote</string>
-    <!--  -->
+    <!-- Number association title -->
     <string name="title_associate_number">Number Association</string>
     
     <!-- text view strings -->
-    <!--  -->
+    <!-- Phone number string -->
     <string name="edit_text_phone">Phone Number</string>
-    <!--  -->
+    <!-- Password string -->
     <string name="edit_text_password">Password</string>
-    <!--  -->
+    <!-- Secret question string -->
     <string name="edit_text_question">Secret Question</string>
-    <!--  -->
+    <!-- Secret answer string -->
     <string name="edit_text_answer">Secret Answer</string>
     
-    
+    <!-- Fragments body strings-->
+    <!-- Siren On string -->
+    <string name="siren_on">Siren On</string>
+    <!-- Siren Off string -->
+    <string name="siren_off">Siren Off</string>
+    <!-- Perimeter string -->
+    <string name="perimeter">Perimeter</string>
+    <!-- SMS Test string -->
+    <string name="sms_test">Try sms</string>
     
     <!--  Button Strings -->
-    <!--  -->
+    <!-- Localize button string -->
     <string name="button_localize">Localize</string>
 
 </resources>

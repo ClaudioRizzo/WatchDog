@@ -1,5 +1,7 @@
 package it.polimi.dima.watchdog.crypto;
 
+import android.annotation.SuppressLint;
+import it.polimi.dima.watchdog.CryptoUtility;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
@@ -24,10 +26,11 @@ public class ECKeyPairGenerator {
 	 * Genera una coppia di chiavi pubblica/privata tramite le curve ellittiche.
 	 */
 	//TODO leggere il warning per android <= 4.3 e agire di conseguenza
+	@SuppressLint("TrulyRandom")
 	public void generateKeyPair() {
 		try{
-			KeyPairGenerator keyGen = KeyPairGenerator.getInstance("EC");
-	        SecureRandom random = SecureRandom.getInstance("SHA1PRNG");
+			KeyPairGenerator keyGen = KeyPairGenerator.getInstance(CryptoUtility.EC);
+	        SecureRandom random = SecureRandom.getInstance(CryptoUtility.SHA1_PRNG);
 
 	        keyGen.initialize(256, random);
 

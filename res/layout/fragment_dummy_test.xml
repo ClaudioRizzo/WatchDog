@@ -9,7 +9,7 @@
         android:id="@+id/button_sent_tryal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Try sms" />
+        android:text="@string/sms_test" />
 </LinearLayout>
 
 

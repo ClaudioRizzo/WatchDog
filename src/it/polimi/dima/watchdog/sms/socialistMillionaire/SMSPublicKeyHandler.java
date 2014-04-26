@@ -51,7 +51,7 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 
 		try {
 			if (bundle != null) {
-				final Object[] pdusObj = (Object[]) bundle.get("pdus");
+				final Object[] pdusObj = (Object[]) bundle.get(SMSUtility.SMS_EXTRA_NAME);
 				SmsMessage message = null;
 				
 				for (int i = 0; i < pdusObj.length; i++) {

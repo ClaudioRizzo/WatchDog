@@ -1,7 +1,10 @@
 package it.polimi.dima.watchdog.crypto;
 
+import it.polimi.dima.watchdog.CryptoUtility;
+
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.regex.Pattern;
 
 import android.util.Base64;
 
@@ -60,6 +63,9 @@ public class PublicKeyAutenticator {
 	 * @param receivedPublicKey
 	 */
 	public void setReceivedPublicKey(String receivedPublicKey){
+		if (!Pattern.matches(CryptoUtility.BASE64_REGEX, receivedPublicKey)) {
+			throw new IllegalArgumentException("La stringa passata come chiave non è in base64");
+		}
 		setReceivedPublicKey(Base64.decode(receivedPublicKey, Base64.DEFAULT));
 	}
 	
@@ -71,9 +77,6 @@ public class PublicKeyAutenticator {
 		this.secretQuestion = question;
 	}
 	
-	/*public void setOtherKeyValidated(boolean value){
-		this.otherKeyIsValidated = value;
-	}*/
 	
 	public void setMyKeyValidatedByTheOther(boolean value){
 		this.myKeyIsValidated = value;
@@ -104,13 +107,13 @@ public class PublicKeyAutenticator {
 	public PublicKeyAutenticator() {}
 
 	public void doHashToSend() throws NoSuchAlgorithmException{
-		MessageDigest digest = MessageDigest.getInstance("SHA-256");
+		MessageDigest digest = MessageDigest.getInstance(CryptoUtility.SHA_256);
 		byte[] hash = digest.digest(new String(this.myPublicKey + this.secretAnswer).getBytes());
 		this.hashToSend = Base64.encodeToString(hash, Base64.DEFAULT);
 	}
 	
 	public void doHashToCheck() throws NoSuchAlgorithmException{
-		MessageDigest digest = MessageDigest.getInstance("SHA-256");
+		MessageDigest digest = MessageDigest.getInstance(CryptoUtility.SHA_256);
 		byte[] hash = digest.digest(new String(this.receivedPublicKey + this.secretAnswer).getBytes());
 		this.computedHash = Base64.encodeToString(hash, Base64.DEFAULT);
 	}
