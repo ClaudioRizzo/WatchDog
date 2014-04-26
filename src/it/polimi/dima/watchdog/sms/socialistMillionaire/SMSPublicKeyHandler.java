@@ -1,10 +1,12 @@
 package it.polimi.dima.watchdog.sms.socialistMillionaire;
 
+import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.Map;
 
 import it.polimi.dima.watchdog.MyPrefFiles;
+import it.polimi.dima.watchdog.PasswordUtils;
 import it.polimi.dima.watchdog.SMSUtility;
 import it.polimi.dima.watchdog.activities.MainActivity;
 import it.polimi.dima.watchdog.crypto.PublicKeyAutenticator;
@@ -32,7 +34,7 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 
 	
 	
-	private SMSProtocol recMsg;
+	private SMSProtocol recMsg; //RICORDARSI che il body è SEMPRE in Base64 !!!
 	private String other; //a turno sarà sender o receiver
 	private SocialistMillionaireFactory mSocMilFactory;
 	private PublicKeyAutenticator pka;
@@ -62,6 +64,8 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 				
 				this.other = message.getDisplayOriginatingAddress();
 				this.recMsg = this.mSocMilFactory.getMessage(SMSUtility.getHeader(message.getUserData()));
+				//ricordarsi che getBody prende il body e lo restituisce convertito in Base64 !!!
+				//Oppure torna null se il body non c'è
 				this.recMsg.setBody(SMSUtility.getBody(message.getUserData()));
 				this.recMsg.handle(this);
 			}
@@ -104,6 +108,8 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 		
 		try 
 		{
+			//la secret question settata non è in Base64 (è una stringa normale -> vedi AssociateNumberFragment),
+			//quindi niente conversione richiesta
 			this.pka.setSecretQuestion(MyPrefFiles.getMyPreference(MyPrefFiles.SECRET_Q_A, MyPrefFiles.SECRET_QUESTION, this.ctx));
 			MyPrefFiles.setMyPreference(MyPrefFiles.KEYSQUARE, this.other, pubKeySentMsg.getBody(), this.ctx);
 			SMSUtility.sendMessage(this.other, SMSUtility.SMP_PORT, SMSUtility.hexStringToByteArray(SMSUtility.CODE3), this.pka.getSecretQuestion().getBytes());
@@ -125,7 +131,9 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 		{
 			Log.i("[DEBUG]", "Sono arrivato al punto critico");
 			this.pka.setMyPublicKey(MyPrefFiles.getMyPreference(MyPrefFiles.MY_KEYS, MyPrefFiles.MY_PUB, this.ctx));
-			this.pka.setSecretQuestion(secQuestMsg.getBody());
+			String question = new String(Base64.decode(secQuestMsg.getBody(), Base64.DEFAULT), PasswordUtils.UTF_8);
+			this.pka.setSecretQuestion(question);
+			//TODO notificare all'utente la domanda segreta
 			//TODO aspettare la risposta dell'utente
 			this.pka.setSecretAnswer("DUMMY"); //ovviamente al posto di dummy ci va ciò che l'utente ha inserito.
 			this.pka.doHashToSend();
@@ -136,7 +144,7 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 			}
 			
 			//TODO: scommentare quando si è finita la gestione utente 
-			//SMSUtility.sendMessage(this.other, SMSUtility.SMP_PORT, SMSUtility.hexStringToByteArray(SMSUtility.CODE4), this.pka.getHashToSend().getBytes());
+			//SMSUtility.sendMessage(this.other, SMSUtility.SMP_PORT, SMSUtility.hexStringToByteArray(SMSUtility.CODE4), this.pka.getHashToSend());
 		} 
 		catch (NoSuchPreferenceFoundException e) 
 		{
@@ -145,6 +153,12 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 			handleErrorOrException();
 		}
 		catch (NoSuchAlgorithmException e)
+		{
+			SMSUtility.showShortToastMessage(e.getMessage(), this.ctx);
+			e.printStackTrace();
+			handleErrorOrException();
+		}
+		catch (UnsupportedEncodingException e)
 		{
 			SMSUtility.showShortToastMessage(e.getMessage(), this.ctx);
 			e.printStackTrace();
@@ -160,6 +174,7 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 			this.pka.setSecretAnswer(MyPrefFiles.getMyPreference(MyPrefFiles.SECRET_Q_A, MyPrefFiles.SECRET_ANSWER, this.ctx));
 			this.pka.setReceivedPublicKey(MyPrefFiles.getMyPreference(MyPrefFiles.KEYSQUARE, this.other, this.ctx));
 			this.pka.doHashToCheck();
+			//giustamente è in Base64
 			this.pka.setReceivedHash(secAnswMsg.getBody());
 			//la chiave è cancellata dal keysquare sempre e comunque
 			MyPrefFiles.deleteMyPreference(MyPrefFiles.KEYSQUARE, this.other, this.ctx);
@@ -169,12 +184,11 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 			else{
 				String keyValidated = Base64.encodeToString(this.pka.getReceivedPublicKey(), Base64.DEFAULT);
 				MyPrefFiles.setMyPreference(MyPrefFiles.KEYRING, this.other, keyValidated, this.ctx);
-				SMSUtility.sendMessage(this.other, SMSUtility.SMP_PORT, SMSUtility.hexStringToByteArray(SMSUtility.CODE5), null);
+				String salt = MyPrefFiles.getMyPreference(MyPrefFiles.PASSWORD_AND_SALT, MyPrefFiles.MY_PASSWORD_SALT, this.ctx);
+				SMSUtility.sendMessage(this.other, SMSUtility.SMP_PORT, SMSUtility.hexStringToByteArray(SMSUtility.CODE5), salt.getBytes());
 				
 				//supponendo che ECDH possa essere fatto una volta per tutte
-				byte[] secret = generateCommonSecret();
-				String secretBase64 = Base64.encodeToString(secret, Base64.DEFAULT);
-				MyPrefFiles.setMyPreference(MyPrefFiles.SHARED_SECRETS, this.other, secretBase64, this.ctx);
+				doECDH();
 			}
 		} 
 		catch (NoSuchPreferenceFoundException e) 
@@ -200,42 +214,24 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 
 	@Override
 	public void visit(KeyValidatedCodeMessage keyValMsg) {
-		try
-		{
-			this.pka.setMyKeyValidatedByTheOther(MyPrefFiles.existsPreference(MyPrefFiles.KEYRING, this.other, this.ctx));
-			if(!this.pka.isMyKeyValidatedByTheOther()){
+		try{
+			//Se ricevo questo messaggio l'altro ha validato la mia chiave pubblica.
+			//Se non ho già validato la chiave pubblica dell'altro faccio partire smp in modo simmetrico.
+			if (!MyPrefFiles.existsPreference(MyPrefFiles.KEYRING, this.other, this.ctx)) {
 				SMSUtility.sendMessage(this.other, SMSUtility.SMP_PORT, SMSUtility.hexStringToByteArray(SMSUtility.CODE1), null);
 			}
-			else{
-				
-				//supponendo che ECDH possa essere fatto una volta per tutte
-				byte[] secret = generateCommonSecret();
-				String secretBase64 = Base64.encodeToString(secret, Base64.DEFAULT);
-				MyPrefFiles.setMyPreference(MyPrefFiles.SHARED_SECRETS, this.other, secretBase64, this.ctx);
-				//TODO mandare all'altro il sale con cui è stata salata la propria password, gestire
-				//l'arrivo di tale messaggio, rispondere con un ack e gestire l'arrivo dell'ack.
-			}
+			//Prendo il sale che mi è stato inviato insieme alla conferma di validazione e lo salvo nell'hashring.
+			String salt = new String(Base64.decode(this.recMsg.getBody(), Base64.DEFAULT),PasswordUtils.UTF_8);
+			MyPrefFiles.setMyPreference(MyPrefFiles.HASHRING, this.other, salt, this.ctx);
 		}
-		catch (NoSuchPreferenceFoundException e)
-		{
-			SMSUtility.showShortToastMessage(e.getMessage(), this.ctx);
-			e.printStackTrace();
-			handleErrorOrException();
-		}
-		catch (InvalidKeySpecException e)
-		{
-			SMSUtility.showShortToastMessage(e.getMessage(), this.ctx);
-			e.printStackTrace();
-			handleErrorOrException();
-		}
-		catch (NoSuchAlgorithmException e)
+		catch (UnsupportedEncodingException e)
 		{
 			SMSUtility.showShortToastMessage(e.getMessage(), this.ctx);
 			e.printStackTrace();
 			handleErrorOrException();
 		}
 		
-		
+	
 	}
 
 	@Override
@@ -273,6 +269,9 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 		if(MyPrefFiles.existsPreference(MyPrefFiles.SHARED_SECRETS, this.other, this.ctx)){
 			MyPrefFiles.deleteMyPreference(MyPrefFiles.SHARED_SECRETS, this.other, this.ctx);
 		}
+		if(MyPrefFiles.existsPreference(MyPrefFiles.HASHRING, this.other, this.ctx)){
+			MyPrefFiles.deleteMyPreference(MyPrefFiles.HASHRING, this.other, this.ctx);
+		}
 	}
 	
 	/**
@@ -309,6 +308,12 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 		// mId allows you to update the notification later on.
 		mNotificationManager.notify(0, mBuilder.build());
 	
+	}
+	
+	private void doECDH() throws NoSuchAlgorithmException, InvalidKeySpecException, NoSuchPreferenceFoundException{
+		byte[] secret = generateCommonSecret();
+		String secretBase64 = Base64.encodeToString(secret, Base64.DEFAULT);
+		MyPrefFiles.setMyPreference(MyPrefFiles.SHARED_SECRETS, this.other, secretBase64, this.ctx);
 	}
 	
 }

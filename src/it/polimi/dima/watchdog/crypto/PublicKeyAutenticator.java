@@ -18,13 +18,11 @@ import android.util.Base64;
 public class PublicKeyAutenticator {
 	private byte[] myPublicKey;
 	private byte[] receivedPublicKey;
-	private String secretQuestion;
+	private String secretQuestion; //non è in Base64
 	private String secretAnswer;
-	private String receivedHash; //hash(bPublicKey,secretAnswerGivenByB) --> l'hash che l'altro mi ha inviato
-	private String computedHash; //hash(receivedPublicKey,secretAnswer) --> l'hash che devo calcolare per vedere se l'altro sa la risposta
-	private String hashToSend;   //hash(myPublicKey,secretAnswer) --> l'hash che devo mandare per provare che so la risposta
-	private boolean myKeyIsValidated;
-	//private boolean otherKeyIsValidated;
+	private String receivedHash; //in Base64
+	private String computedHash; //in Base64
+	private byte[] hashToSend;   //come byte[], senza codifica Base64, comodo per essere inviato
 	
 	public byte[] getMyPublicKey(){
 		return this.myPublicKey;
@@ -38,7 +36,7 @@ public class PublicKeyAutenticator {
 		return this.secretQuestion;
 	}
 	
-	public String getHashToSend(){
+	public byte[] getHashToSend(){
 		return this.hashToSend;
 	}
 	
@@ -48,10 +46,6 @@ public class PublicKeyAutenticator {
 	
 	public void setSecretAnswer(String answer){
 		this.secretAnswer = answer;
-	}
-	
-	public boolean isMyKeyValidatedByTheOther(){
-		return this.myKeyIsValidated;
 	}
 	
 	private void setReceivedPublicKey(byte[] receivedPublicKey){
@@ -75,11 +69,6 @@ public class PublicKeyAutenticator {
 	
 	public void setSecretQuestion(String question){
 		this.secretQuestion = question;
-	}
-	
-	
-	public void setMyKeyValidatedByTheOther(boolean value){
-		this.myKeyIsValidated = value;
 	}
 	
 	/**
@@ -108,8 +97,7 @@ public class PublicKeyAutenticator {
 
 	public void doHashToSend() throws NoSuchAlgorithmException{
 		MessageDigest digest = MessageDigest.getInstance(CryptoUtility.SHA_256);
-		byte[] hash = digest.digest(new String(this.myPublicKey + this.secretAnswer).getBytes());
-		this.hashToSend = Base64.encodeToString(hash, Base64.DEFAULT);
+		this.hashToSend = digest.digest(new String(this.myPublicKey + this.secretAnswer).getBytes());
 	}
 	
 	public void doHashToCheck() throws NoSuchAlgorithmException{
