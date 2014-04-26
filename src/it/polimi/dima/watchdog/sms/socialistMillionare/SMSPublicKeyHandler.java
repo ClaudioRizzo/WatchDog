@@ -219,6 +219,7 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 	@Override
 	public void visit(IDontWantToAssociateCodeMessage noAssMsg) {
 		erasePreferences();
+		//TODO notificare il fragment di quello che è successo
 	}
 	
 	/**
@@ -258,6 +259,7 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 	 */
 	private void handleErrorOrException(){
 		erasePreferences();
+		//TODO notificare il fragment di quello che è successo
 		SMSUtility.sendMessage(this.other, SMSUtility.SMP_PORT, SMSUtility.hexStringToByteArray(SMSUtility.CODE6), null);
 	}
 }
