@@ -21,7 +21,7 @@ public class PublicKeyAutenticator {
 	private String computedHash; //hash(receivedPublicKey,secretAnswer) --> l'hash che devo calcolare per vedere se l'altro sa la risposta
 	private String hashToSend;   //hash(myPublicKey,secretAnswer) --> l'hash che devo mandare per provare che so la risposta
 	private boolean myKeyIsValidated;
-	private boolean otherKeyIsValidated;
+	//private boolean otherKeyIsValidated;
 	
 	public byte[] getMyPublicKey(){
 		return this.myPublicKey;
@@ -39,9 +39,9 @@ public class PublicKeyAutenticator {
 		return this.hashToSend;
 	}
 	
-	public boolean isOtherKeyValidated(){
+	/*public boolean isOtherKeyValidated(){
 		return this.otherKeyIsValidated;
-	}
+	}*/
 	
 	public void setSecretAnswer(String answer){
 		this.secretAnswer = answer;
@@ -71,12 +71,12 @@ public class PublicKeyAutenticator {
 		this.secretQuestion = question;
 	}
 	
-	public void setOtherKeyValidated(boolean value){
+	/*public void setOtherKeyValidated(boolean value){
 		this.otherKeyIsValidated = value;
-	}
+	}*/
 	
 	public void setMyKeyValidatedByTheOther(boolean value){
-		this.otherKeyIsValidated = value;
+		this.myKeyIsValidated = value;
 	}
 	
 	/**

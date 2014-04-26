@@ -59,6 +59,11 @@ public class MyPrefFiles {
 	 */
 	public static final String CURRENT_AES_KEY = "current_aes_key";
 	
+	/**
+	 * file che contiene i segreti condivisi tra me e ogni telefono associato.
+	 */
+	public static final String SHARED_SECRETS = "shared_secrets";
+	
 	//DA QUI IN POI CHIAVI
 	
 	/**
