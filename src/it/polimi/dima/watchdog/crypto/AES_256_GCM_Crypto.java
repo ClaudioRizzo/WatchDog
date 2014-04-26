@@ -227,7 +227,7 @@ public class AES_256_GCM_Crypto implements Crypto {
 	 * converte in stringa e lo ritorna.
 	 */
 	@SuppressLint("NewApi")
-	public String decrypt() throws NoSuchAlgorithmException,
+	public byte[] decrypt() throws NoSuchAlgorithmException,
 			NoSuchProviderException, NoSuchPaddingException,
 			InvalidKeyException, InvalidAlgorithmParameterException,
 			IllegalBlockSizeException, BadPaddingException {
@@ -248,12 +248,9 @@ public class AES_256_GCM_Crypto implements Crypto {
 
 		// esegue tutti i round dell'aes al contrario
 		this.plaintext = ctx.doFinal(this.ctx);
+		
+		return this.plaintext;
 
-		// converte lo stato finale in una stringa
-		this.ptx = new String(this.plaintext);
-
-		// ritorna il messaggio decriptato
-		return this.ptx;
 	}
 
 }

@@ -31,10 +31,10 @@ import android.telephony.SmsManager;
  * @author emanuele
  *
  */
-public class SMS {
+public class CommandSMS {
 	private PrivateKey myPrivateKey; //chiave per la firma digitale
 	private Key encryptionKey; //chiave dell'AES
-	private String text;
+	private byte[] text;
 	private String password;
 	private byte[] passwordHash; //hash(password)
 	private byte[] finalMessage; // hash(password) || text
@@ -52,53 +52,16 @@ public class SMS {
 	public byte[] getFinalSignedAndEncryptedMessage(){
 		return this.finalSignedAndEncryptedMessage;
 	}
+	
 	/**
 	 * Costruttore con testo e password alla fine del quale il messaggio sarà pronto per essere spedito.
-	 * 
-	 * @param text : il testo in chiaro del messaggio
-	 * @param password : la password che verrà "allegata" al messaggio
-	 * @param mPriv : la chiave privata del mittente che verrà usata per firmare digitalmente il messaggio
-	 * @param key : la chiave che varrà usata per crittare il messaggio
-	 * @throws NoSuchAlgorithmException
-	 * @throws IOException
-	 * @throws NoECDSAKeyPairGeneratedException 
-	 * @throws NoSignatureDoneException 
-	 * @throws DecoderException 
-	 * @throws BadPaddingException 
-	 * @throws IllegalBlockSizeException 
-	 * @throws NoSuchProviderException 
-	 * @throws InvalidAlgorithmParameterException 
-	 * @throws NoSuchPaddingException 
-	 * @throws InvalidKeyException 
 	 */
-	public SMS(String text, String password, PrivateKey mPriv, Key key, String dest) throws NoSuchAlgorithmException, IOException, NoECDSAKeyPairGeneratedException, NoSignatureDoneException, DecoderException, InvalidKeyException, NoSuchPaddingException, InvalidAlgorithmParameterException, NoSuchProviderException, IllegalBlockSizeException, BadPaddingException{
-		this.text = sanitize(text);
+	public CommandSMS(byte[] text, String password, PrivateKey mPriv, Key key, String dest){
+		this.text = text;
 		this.password = password;
 		this.myPrivateKey = mPriv;
 		this.encryptionKey = key;
 		this.dest = dest;
-		construct();
-	}
-	
-
-	/**
-	 * Sostituisce tutti gli spazi presenti nel messaggio con dei caratteri underscore. Questo perchè il
-	 * carattere spazio sarà utilizzato come separatore tra messaggio e firma
-	 * 
-	 * @param text : il testo del messaggio
-	 * @return text privato di tutti gli eventuali spazi in coda
-	 */
-	private String sanitize(String text) {
-		if(text == null || text == " "){
-			throw new IllegalArgumentException("Un messaggio nullo o formato solo da uno spazio non è accettabile!!!");
-		}
-		byte[] string = text.getBytes();
-		for(int i=0; i<string.length; i++){
-			if(string[i] == ' '){
-				string[i] = '_';
-			}
-		}
-		return new String(string);
 	}
 
 	/**
@@ -117,19 +80,18 @@ public class SMS {
 	 * @throws NoSuchPaddingException 
 	 * @throws InvalidKeyException 
 	 */
-	private void construct() throws NoSuchAlgorithmException, IOException, NoECDSAKeyPairGeneratedException, NoSignatureDoneException, DecoderException, InvalidKeyException, NoSuchPaddingException, InvalidAlgorithmParameterException, NoSuchProviderException, IllegalBlockSizeException, BadPaddingException{
+	public void construct() throws NoSuchAlgorithmException, IOException, NoECDSAKeyPairGeneratedException, NoSignatureDoneException, DecoderException, InvalidKeyException, NoSuchPaddingException, InvalidAlgorithmParameterException, NoSuchProviderException, IllegalBlockSizeException, BadPaddingException{
 		if(this.finalMessage == null && this.text != null){
 			MessageDigest digest = MessageDigest.getInstance("SHA-256");
 			//l'hash sarà lungo 256 bit
 			this.passwordHash = digest.digest(this.password.getBytes("UTF-8"));
-			byte[] text = this.text.getBytes();
 			
 			//in pratica si crea una struttura hash(password) || text
 			//Sapendo che l'hash è lungo 256 bit, è comodo alla ricezione separare le due parti se l'hash...
 			//...è in testa
-			this.finalMessage = new byte[this.passwordHash.length + text.length];
+			this.finalMessage = new byte[this.passwordHash.length + this.text.length];
 			System.arraycopy(this.passwordHash, 0, this.finalMessage, 0, this.passwordHash.length);
-			System.arraycopy(text, 0, this.finalMessage, this.passwordHash.length, text.length);
+			System.arraycopy(text, 0, this.finalMessage, this.passwordHash.length, this.text.length);
 			
 			sign();
 			encrypt();
@@ -150,7 +112,7 @@ public class SMS {
 
 	/**
 	 * Critta la struttura  messaggio || ' ' || firma  con l'AES-256-GCM. Il carattere spazio servirà al parser
-	 * per separare firma da messaggio, perchè la lunghezza della firma ECDSA è veriabile.
+	 * per separare firma da messaggio, perchè la lunghezza della firma ECDSA è variabile.
 	 * 
 	 * @throws DecoderException
 	 * @throws InvalidKeyException

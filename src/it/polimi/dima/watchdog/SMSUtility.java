@@ -56,6 +56,41 @@ public class SMSUtility {
 	 */
 	public static String CODE8 = "C0DE8FFF";
 	
+	/**
+	 * SirenOnCode (for commands only)
+	 */
+	public static String SIREN_ON = "C0DE01FF";
+	
+	/**
+	 * SirenOffCode (for commands only)
+	 */
+	public static String SIREN_OFF = "C0DE01FF";
+	
+	/**
+	 * MarkStolenCode (for commands only)
+	 */
+	public static String MARK_STOLEN = "C0DE01FF";
+	
+	/**
+	 * MarkLostCode (for commands only)
+	 */
+	public static String MARK_LOST = "C0DE01FF";
+	
+	/**
+	 * MarkLostOrStolenCode (for commands only)
+	 */
+	public static String MARK_LOST_OR_STOLEN = "C0DE01FF";
+	
+	/**
+	 * MarkFoundCode (for commands only)
+	 */
+	public static String MARK_FOUND = "C0DE01FF";
+	
+	/**
+	 * LocateCode (for commands only)
+	 */
+	public static String LOCATE = "C0DE01FF";
+	
 	private static final char[] hexArray = "0123456789ABCDEF".toCharArray();
 	/**
 	 * Porta su cui vengono ricevuti solo i messaggi del SMP.

@@ -4,7 +4,7 @@ import it.polimi.dima.watchdog.exceptions.ArbitraryMessageReceivedException;
 import it.polimi.dima.watchdog.sms.socialistMillionare.SMSProtocol;
 
 /**
- * Questa interfaccia sarà implementata dalle factory di SMP ed ECDH.
+ * Questa interfaccia sarà implementata dalle factory di SMP, ECDH (forse) e command message.
  * @author claudio
  *
  */

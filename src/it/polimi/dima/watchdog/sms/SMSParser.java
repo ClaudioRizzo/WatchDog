@@ -21,7 +21,7 @@ import it.polimi.dima.watchdog.exceptions.ErrorInSignatureCheckingException;
 
 /**
  * Classe che si occupa di spacchettare il contenuto di un sms, dividendolo in hash della password e testo.
- * Esegue anche la comparazione di tale hash con quello salvato (dove? TODO) per verificare che il telefono
+ * Esegue anche la comparazione di tale hash con quello salvato per verificare che il telefono
  * del mittente (già autenticato) non sia utilizzato da malintenzionati.
  * 
  * @author emanuele
@@ -29,37 +29,26 @@ import it.polimi.dima.watchdog.exceptions.ErrorInSignatureCheckingException;
  */
 public class SMSParser {
 	
-	public static final String SMS_EXTRA_NAME ="pdus";
+	//public static final String SMS_EXTRA_NAME ="pdus";
 	
-	public byte[] smsEncrypted; //sms crittato
-	public Key decryptionKey; //chiave dell'AES
-	public PublicKey oPub; //chiave pubblica del mittente, usata per verificare la firma
-	public byte[] sms; //sms decrittato (hash(password) || text)
-	public byte[] signature; //firma scorporata dal messaggio
-	public String plaintext; //parte testuale del messaggio senza la password
-	public byte[] passwordHash; //l'hash della password proveniente dal messaggio
-	public byte[] storedPasswordHash; //l'hash della password presente nel telefono ricevente
+	private byte[] smsEncrypted; //sms crittato
+	private Key decryptionKey; //chiave dell'AES
+	private PublicKey oPub; //chiave pubblica del mittente, usata per verificare la firma
+	private byte[] sms; //sms decrittato (hash(password) || text)
+	private byte[] signature; //firma scorporata dal messaggio
+	private byte[] plaintext; //parte testuale del messaggio senza la password
+	private byte[] passwordHash; //l'hash della password proveniente dal messaggio
+	private byte[] storedPasswordHash; //l'hash della password presente nel telefono ricevente
+	
+	public byte[] getPlaintext(){
+		return this.plaintext;
+	}
 	
 	/**
 	 * Costurttore che alla fine popola la classe con il messaggio originale dopo averne controllato l'integrità
 	 * mediante firma e la correttezza della password.
-	 * 
-	 * @param smsEncrypted
-	 * @param decryptionKey
-	 * @param oPub
-	 * @param storedPasswordHash
-	 * @throws DecoderException
-	 * @throws InvalidKeyException
-	 * @throws NoSuchAlgorithmException
-	 * @throws NoSuchProviderException
-	 * @throws NoSuchPaddingException
-	 * @throws InvalidAlgorithmParameterException
-	 * @throws IllegalBlockSizeException
-	 * @throws BadPaddingException
-	 * @throws ArbitraryMessageReceivedException
-	 * @throws ErrorInSignatureCheckingException
 	 */
-	public SMSParser(byte[] smsEncrypted, Key decryptionKey, PublicKey oPub, byte[] storedPasswordHash) throws DecoderException, InvalidKeyException, NoSuchAlgorithmException, NoSuchProviderException, NoSuchPaddingException, InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException, ArbitraryMessageReceivedException, ErrorInSignatureCheckingException{
+	public SMSParser(byte[] smsEncrypted, Key decryptionKey, PublicKey oPub, byte[] storedPasswordHash){
 		this.smsEncrypted = smsEncrypted;
 		this.decryptionKey = decryptionKey;
 		this.oPub = oPub;
@@ -128,8 +117,7 @@ public class SMSParser {
 	}
 	
 	/**
-	 * Scompone il messaggio separando testo e password. Chiama poi in sequenza i metodi per verificare la
-	 * password e reagire al testo.
+	 * Scompone il messaggio separando testo e password. Chiama poi il metodo per verificare la password.
 	 * 
 	 * @throws ArbitraryMessageReceivedException
 	 */
@@ -138,88 +126,6 @@ public class SMSParser {
 		if(!validate()){
 			throw new ArbitraryMessageReceivedException("La password non è corretta!!!");
 		}
-		react();
-	}
-
-	/**
-	 * Fa uno switch sul testo del messaggio ricevuto e dà il via alla "reazione" a seconda del match. Lancia
-	 * un'eccezione se il testo del messaggio è qualcosa di non previsto (non matcha nessun valore della enum).
-	 * 
-	 * @throws ArbitraryMessageReceivedException
-	 */
-	private void react() throws ArbitraryMessageReceivedException{
-		
-		SMSValues smsValues = new SMSValues();
-		
-		switch(smsValues.getValues().get(this.plaintext)){
-		case SIREN_ON :
-			turnOnSiren();
-			break;
-		
-		case SIREN_OFF :
-			turnOffSiren();
-			break;
-		
-		case MARK_LOST :
-			markPhoneLost();
-			break;
-			
-		case MARK_STOLEN :
-			markPhoneStolen();
-			break;
-		
-		case MARK_LOST_OR_STOLEN :
-			markPhoneLostOrStolen();
-			break;
-			
-		case MARK_FOUND :
-			markPhoneFound();
-			break;
-		
-		case LOCATE :
-			locatePhone();
-			break;
-			
-		default :
-			throw new ArbitraryMessageReceivedException("Il comando inviato non esiste!!!");
-			
-		}
-		
-	}
-
-	private void locatePhone() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	private void markPhoneFound() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	private void markPhoneLostOrStolen() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	private void markPhoneStolen() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	private void markPhoneLost() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	private void turnOffSiren() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	private void turnOnSiren() {
-		// TODO Auto-generated method stub
-		
 	}
 
 	/**
@@ -228,8 +134,8 @@ public class SMSParser {
 	private void decompose() {
 		System.arraycopy(this.sms, 0, this.passwordHash, 0, 32);
 		byte[] plaintext = new byte[this.sms.length-32];
-		System.arraycopy(this.sms, 32, this.passwordHash, 0, this.sms.length-32);
-		this.plaintext = new String(plaintext);
+		System.arraycopy(this.sms, 32, plaintext, 0, this.sms.length-32);
+		this.plaintext = plaintext;
 	}
 
 	/**
@@ -237,8 +143,6 @@ public class SMSParser {
 	 * @return true in caso affermativo, false altrimenti
 	 */
 	private boolean validate() {
-		//String received = Base64.encodeBase64String(this.passwordHash);
-		//String stored = Base64.encodeBase64String(this.storedPasswordHash);
 		String received = Base64.encodeToString(this.passwordHash, Base64.DEFAULT);
 		String stored = Base64.encodeToString(this.storedPasswordHash, Base64.DEFAULT);
 		return received.equals(stored);
