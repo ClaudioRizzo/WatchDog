@@ -10,7 +10,6 @@ import it.polimi.dima.watchdog.crypto.PublicKeyAutenticator;
 import it.polimi.dima.watchdog.crypto.SharedSecretAgreement;
 import it.polimi.dima.watchdog.exceptions.NoSuchPreferenceFoundException;
 import it.polimi.dima.watchdog.sms.socialistMillionare.factory.SocialistMillionaireFactory;
-import android.R;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
@@ -79,6 +78,11 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 	public void visit(PublicKeyRequestCodeMessage pubKeyReqMsg) {
 		try 
 		{
+			//se la richiesta deriva da un telefono già precedentemente associato o in attesa di associazione,
+			//allora per qualche motivo il suo proprietario non ha più i miei dati, quindi io devo cancellare
+			//i suoi e ripartire da zero.
+			erasePreferences();
+			
 			this.pka.setMyPublicKey(MyPrefFiles.getMyPreference(MyPrefFiles.MY_KEYS, MyPrefFiles.MY_PUB, this.ctx));
 			SMSUtility.sendMessage(this.other, SMSUtility.SMP_PORT, SMSUtility.hexStringToByteArray(SMSUtility.CODE2), this.pka.getMyPublicKey());
 			Log.i("[DEBUG]", "ok sono nella gestione richiesta");
@@ -201,6 +205,8 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 				byte[] secret = generateCommonSecret();
 				String secretBase64 = Base64.encodeToString(secret, Base64.DEFAULT);
 				MyPrefFiles.setMyPreference(MyPrefFiles.SHARED_SECRETS, this.other, secretBase64, this.ctx);
+				//TODO mandare all'altro il sale con cui è stata salata la propria password, gestire
+				//l'arrivo di tale messaggio, rispondere con un ack e gestire l'arrivo dell'ack.
 			}
 		}
 		catch (NoSuchPreferenceFoundException e)
@@ -274,7 +280,7 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 	
 	private void notifyUser() {
 		NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(ctx)
-		.setSmallIcon(R.drawable.stat_notify_chat)
+		.setSmallIcon(android.R.drawable.stat_notify_chat)
 		.setContentTitle("prova")
 		.setContentText("hello world")
 		.setAutoCancel(true);

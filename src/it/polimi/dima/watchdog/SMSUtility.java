@@ -97,13 +97,21 @@ public class SMSUtility {
 	 */
 	public static final short SMP_PORT = (short) 999;
 	/**
-	 * Porta su cui vengono ricevuti solo i messaggi di ECDH.
+	 * Porta su cui vengono ricevuti solo i messaggi di ECDH. (Probabilmente inutile TODO)
 	 */
-	public static final short ECDH_PORT = (short) 7777;
+	public static final short ECDH_PORT = (short) 111;
+	/**
+	 * Porta su cui viene ricevuto solo il sale da dare in pasto al keygen di AES. TODO
+	 */
+	public static final short AES_KEYGEN_SALT_PORT = (short) 7777;
 	/**
 	 * Porta su cui vengono ricevuti solo i messaggi di controllo remoto.
 	 */
 	public static final short COMMAND_PORT = (short) 9999;
+	/**
+	 * Porta usata esclusivamente per i test (TODO aggiungere al manifest le classi che testano)
+	 */
+	public static final short TEST_PORT = (short) 777;
 	
 	
 	/**

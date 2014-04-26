@@ -8,7 +8,8 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.TextView;
+//TODO scommentare alla fine
+//import android.widget.TextView;
 
 public class LocalizationFragment extends Fragment implements OnClickListener {
 
@@ -31,6 +32,7 @@ public class LocalizationFragment extends Fragment implements OnClickListener {
 		
 	}
 	
+	/*TODO scommentare alla fine
 	private String getPhoneNumber(View view) {
 		TextView mTextView = (TextView) view.findViewById(R.id.phone_number1);
 		String phoneNum = mTextView.getText().toString();
@@ -41,7 +43,7 @@ public class LocalizationFragment extends Fragment implements OnClickListener {
 		TextView mTextView = (TextView) view.findViewById(R.id.password_localize_1);
 		String cleanPassword = mTextView.getText().toString();
 		return cleanPassword;
-	}
+	}*/
 	
 	
 }

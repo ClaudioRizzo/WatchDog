@@ -3,15 +3,11 @@ package it.polimi.dima.watchdog.activities;
 import it.polimi.dima.watchdog.R;
 import it.polimi.dima.watchdog.fragments.actionBar.SettingsFragment;
 import it.polimi.dima.watchdog.fragments.actionBar.SettingsFragment.MyOnListItemClicked;
-import it.polimi.dima.watchdog.fragments.gps.GpsMainFragment;
-import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBarActivity;
 import android.view.MenuItem;
-import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
 
 /**
  * Setting activity

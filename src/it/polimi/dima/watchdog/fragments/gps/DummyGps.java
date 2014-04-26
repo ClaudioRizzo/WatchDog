@@ -1,7 +1,5 @@
 package it.polimi.dima.watchdog.fragments.gps;
 
-import java.math.BigInteger;
-
 import it.polimi.dima.watchdog.R;
 import it.polimi.dima.watchdog.SMSUtility;
 import android.os.Bundle;
@@ -37,7 +35,7 @@ public class DummyGps extends Fragment implements OnClickListener {
 		Log.i("[DEBUG]", "Ho cliccato la prova");
 		SmsManager man = SmsManager.getDefault();
 		byte[] message = SMSUtility.hexStringToByteArray(SMSUtility.CODE2); //provo solo l'header
-		man.sendDataMessage("+393466342499", null, (short) 9999,
+		man.sendDataMessage("+393466342499", null, SMSUtility.SMP_PORT,
 				message, null, null);
 		
 	}

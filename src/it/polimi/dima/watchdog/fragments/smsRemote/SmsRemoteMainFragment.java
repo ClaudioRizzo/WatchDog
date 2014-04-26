@@ -3,7 +3,6 @@ package it.polimi.dima.watchdog.fragments.smsRemote;
 import it.polimi.dima.watchdog.R;
 import it.polimi.dima.watchdog.TabsAdapter;
 import it.polimi.dima.watchdog.factory.FeatureEnum;
-import it.polimi.dima.watchdog.fragments.gps.GpsMainFragment;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -28,18 +27,18 @@ public class SmsRemoteMainFragment extends Fragment {
 		View v = (View) inflater.inflate(R.layout.fragment_sms_remote_main, container,
 				false);
 
-		mAdapter = new TabsAdapter(getChildFragmentManager(), 2,
+		this.mAdapter = new TabsAdapter(getChildFragmentManager(), 2,
 				FeatureEnum.REMOTE);
-		mViewPager = (ViewPager) v.findViewById(R.id.sms_remote_pager);
+		this.mViewPager = (ViewPager) v.findViewById(R.id.sms_remote_pager);
 
-		mViewPager.setAdapter(mAdapter);
+		this.mViewPager.setAdapter(this.mAdapter);
 		// Inflate the layout for this fragment
 		return v;
 	}
 
 	@Override
 	public void onAttach(Activity activity) {
-		myContext = (ActionBarActivity) activity;
+		setMyContext((ActionBarActivity) activity);
 		super.onAttach(activity);
 	}
 	
@@ -47,5 +46,15 @@ public class SmsRemoteMainFragment extends Fragment {
 	public void onResume() {
 		super.onResume();
 		((ActionBarActivity) getActivity()).getSupportActionBar().setTitle(SmsRemoteMainFragment.TAG);
+	}
+
+	//TODO utile????
+	public ActionBarActivity getMyContext() {
+		return this.myContext;
+	}
+
+	//TODO utile????
+	public void setMyContext(ActionBarActivity myContext) {
+		this.myContext = myContext;
 	}
 }
