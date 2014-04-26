@@ -4,13 +4,19 @@ import java.security.NoSuchAlgorithmException;
 
 import it.polimi.dima.watchdog.MyPrefFiles;
 import it.polimi.dima.watchdog.SMSUtility;
+import it.polimi.dima.watchdog.activities.MainActivity;
 import it.polimi.dima.watchdog.crypto.PublicKeyAutenticator;
 import it.polimi.dima.watchdog.exceptions.NoSuchPreferenceFoundException;
 import it.polimi.dima.watchdog.sms.socialistMillionare.factory.SocialistMillionaireFactory;
+import android.R;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.TaskStackBuilder;
 import android.telephony.SmsMessage;
 import android.util.Base64;
 import android.util.Log;
@@ -73,6 +79,7 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 			this.pka.setMyPublicKey(MyPrefFiles.getMyPreference(MyPrefFiles.MY_KEYS, MyPrefFiles.MY_PUB, this.ctx));
 			SMSUtility.sendMessage(this.other, SMSUtility.SMP_PORT, SMSUtility.hexStringToByteArray(SMSUtility.CODE2), this.pka.getMyPublicKey());
 			Log.i("[DEBUG]", "ok sono nella gestione richiesta");
+			this.notifyUser();
 			
 		} 
 		catch (NoSuchPreferenceFoundException e) 
@@ -106,12 +113,13 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 	public void visit(SecretQuestionSentCodeMessage secQuestMsg) {
 		try 
 		{
+			Log.i("[DEBUG]", "Sono arrivato al punto critico");
 			this.pka.setMyPublicKey(MyPrefFiles.getMyPreference(MyPrefFiles.MY_KEYS, MyPrefFiles.MY_PUB, this.ctx));
 			this.pka.setSecretQuestion(secQuestMsg.getBody());
 			//TODO aspettare la risposta dell'utente
 			this.pka.setSecretAnswer("DUMMY"); //ovviamente al posto di dummy ci va ciò che l'utente ha inserito.
 			this.pka.doHashToSend();
-			SMSUtility.sendMessage(this.other, SMSUtility.SMP_PORT, SMSUtility.hexStringToByteArray(SMSUtility.CODE4), this.pka.getHashToSend().getBytes());
+			//SMSUtility.sendMessage(this.other, SMSUtility.SMP_PORT, SMSUtility.hexStringToByteArray(SMSUtility.CODE4), this.pka.getHashToSend().getBytes());
 		} 
 		catch (NoSuchPreferenceFoundException e) 
 		{
@@ -172,4 +180,31 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 		// TODO gestire l'errore
 		
 	}
+	
+	private void notifyUser() {
+		NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(ctx)
+		.setSmallIcon(R.drawable.stat_notify_chat)
+		.setContentTitle("prova")
+		.setContentText("hello world")
+		.setAutoCancel(true);
+		
+		Intent resultIntent = new Intent(ctx, MainActivity.class);
+		TaskStackBuilder stackBuilder = TaskStackBuilder.create(ctx);
+		
+		stackBuilder.addParentStack(MainActivity.class);
+		// Adds the Intent that starts the Activity to the top of the stack
+		stackBuilder.addNextIntent(resultIntent);
+		PendingIntent resultPendingIntent =
+		        stackBuilder.getPendingIntent(
+		            0,
+		            PendingIntent.FLAG_UPDATE_CURRENT
+		        );
+		mBuilder.setContentIntent(resultPendingIntent);
+		NotificationManager mNotificationManager =
+		    (NotificationManager) ctx.getSystemService(Context.NOTIFICATION_SERVICE);
+		// mId allows you to update the notification later on.
+		mNotificationManager.notify(0, mBuilder.build());
+	
+	}
+	
 }
