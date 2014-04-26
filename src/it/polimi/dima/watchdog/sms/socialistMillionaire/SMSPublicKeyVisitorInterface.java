@@ -1,4 +1,4 @@
-package it.polimi.dima.watchdog.sms.socialistMillionare;
+package it.polimi.dima.watchdog.sms.socialistMillionaire;
 
 /**
  * Visitors Interface for the message exchanging in the SMP

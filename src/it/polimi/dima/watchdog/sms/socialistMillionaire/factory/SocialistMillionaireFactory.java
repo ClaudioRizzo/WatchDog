@@ -1,16 +1,16 @@
-package it.polimi.dima.watchdog.sms.socialistMillionare.factory;
+package it.polimi.dima.watchdog.sms.socialistMillionaire.factory;
 
 
 import android.util.Log;
 import it.polimi.dima.watchdog.SMSUtility;
 import it.polimi.dima.watchdog.exceptions.ArbitraryMessageReceivedException;
-import it.polimi.dima.watchdog.sms.socialistMillionare.IDontWantToAssociateCodeMessage;
-import it.polimi.dima.watchdog.sms.socialistMillionare.KeyValidatedCodeMessage;
-import it.polimi.dima.watchdog.sms.socialistMillionare.PublicKeyRequestCodeMessage;
-import it.polimi.dima.watchdog.sms.socialistMillionare.PublicKeySentCodeMessage;
-import it.polimi.dima.watchdog.sms.socialistMillionare.SMSProtocol;
-import it.polimi.dima.watchdog.sms.socialistMillionare.SecretAnswerAndPublicKeyHashSentCodeMessage;
-import it.polimi.dima.watchdog.sms.socialistMillionare.SecretQuestionSentCodeMessage;
+import it.polimi.dima.watchdog.sms.socialistMillionaire.IDontWantToAssociateCodeMessage;
+import it.polimi.dima.watchdog.sms.socialistMillionaire.KeyValidatedCodeMessage;
+import it.polimi.dima.watchdog.sms.socialistMillionaire.PublicKeyRequestCodeMessage;
+import it.polimi.dima.watchdog.sms.socialistMillionaire.PublicKeySentCodeMessage;
+import it.polimi.dima.watchdog.sms.socialistMillionaire.SMSProtocol;
+import it.polimi.dima.watchdog.sms.socialistMillionaire.SecretAnswerAndPublicKeyHashSentCodeMessage;
+import it.polimi.dima.watchdog.sms.socialistMillionaire.SecretQuestionSentCodeMessage;
 
 public class SocialistMillionaireFactory implements SMSProtocolInterface {
 

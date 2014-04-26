@@ -13,7 +13,7 @@ import it.polimi.dima.watchdog.MyPrefFiles;
 import it.polimi.dima.watchdog.SMSUtility;
 import it.polimi.dima.watchdog.exceptions.NoSuchPreferenceFoundException;
 import it.polimi.dima.watchdog.sms.SMSParser;
-import it.polimi.dima.watchdog.sms.socialistMillionare.SMSProtocol;
+import it.polimi.dima.watchdog.sms.socialistMillionaire.SMSProtocol;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;

@@ -1,4 +1,4 @@
-package it.polimi.dima.watchdog.sms.socialistMillionare;
+package it.polimi.dima.watchdog.sms.socialistMillionaire;
 
 
 
@@ -8,7 +8,7 @@ package it.polimi.dima.watchdog.sms.socialistMillionare;
  * @author claudio
  *
  */
-public class PublicKeyRequestCodeMessage extends SMSProtocol implements SocialistMillionareMessageInterface {
+public class PublicKeyRequestCodeMessage extends SMSProtocol implements SocialistMillionaireMessageInterface {
 
 	public PublicKeyRequestCodeMessage(String header, String body) {
 		super(header, body);

@@ -1,6 +1,6 @@
 package it.polimi.dima.watchdog.sms.ecdh;
 
-import it.polimi.dima.watchdog.sms.socialistMillionare.SMSProtocol;
+import it.polimi.dima.watchdog.sms.socialistMillionaire.SMSProtocol;
 
 /**
  * 

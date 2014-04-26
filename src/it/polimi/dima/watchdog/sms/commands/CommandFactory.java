@@ -3,8 +3,8 @@ package it.polimi.dima.watchdog.sms.commands;
 import android.util.Log;
 import it.polimi.dima.watchdog.SMSUtility;
 import it.polimi.dima.watchdog.exceptions.ArbitraryMessageReceivedException;
-import it.polimi.dima.watchdog.sms.socialistMillionare.SMSProtocol;
-import it.polimi.dima.watchdog.sms.socialistMillionare.factory.SMSProtocolInterface;
+import it.polimi.dima.watchdog.sms.socialistMillionaire.SMSProtocol;
+import it.polimi.dima.watchdog.sms.socialistMillionaire.factory.SMSProtocolInterface;
 
 /**
  * 

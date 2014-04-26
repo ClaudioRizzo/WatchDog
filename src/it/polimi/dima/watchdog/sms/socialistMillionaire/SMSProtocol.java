@@ -1,4 +1,4 @@
-package it.polimi.dima.watchdog.sms.socialistMillionare;
+package it.polimi.dima.watchdog.sms.socialistMillionaire;
 
 import it.polimi.dima.watchdog.sms.commands.CommandMessageInterface;
 import it.polimi.dima.watchdog.sms.commands.SMSCommandVisitorInterface;
@@ -11,7 +11,7 @@ import android.telephony.SmsManager;
  * @author claudio, emanuele
  *
  */
-public class SMSProtocol implements SocialistMillionareMessageInterface, EllipticCurvesDiffieHellmanMessageInterface, CommandMessageInterface {
+public class SMSProtocol implements SocialistMillionaireMessageInterface, EllipticCurvesDiffieHellmanMessageInterface, CommandMessageInterface {
 
 	private String header; //MUST be base64
 	private String body; //MUST be Base64

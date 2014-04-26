@@ -1,4 +1,4 @@
-package it.polimi.dima.watchdog.sms.socialistMillionare;
+package it.polimi.dima.watchdog.sms.socialistMillionaire;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
@@ -9,7 +9,7 @@ import it.polimi.dima.watchdog.activities.MainActivity;
 import it.polimi.dima.watchdog.crypto.PublicKeyAutenticator;
 import it.polimi.dima.watchdog.crypto.SharedSecretAgreement;
 import it.polimi.dima.watchdog.exceptions.NoSuchPreferenceFoundException;
-import it.polimi.dima.watchdog.sms.socialistMillionare.factory.SocialistMillionaireFactory;
+import it.polimi.dima.watchdog.sms.socialistMillionaire.factory.SocialistMillionaireFactory;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;

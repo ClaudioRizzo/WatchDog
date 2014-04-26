@@ -1,11 +1,11 @@
-package it.polimi.dima.watchdog.sms.socialistMillionare;
+package it.polimi.dima.watchdog.sms.socialistMillionaire;
 
 /**
  * This Interface is needed to implement the visitor pattern in the SMP with reference to the exchanging message part.
  * @author claudio
  *
  */
-public interface SocialistMillionareMessageInterface {
+public interface SocialistMillionaireMessageInterface {
 
 	public void handle(SMSPublicKeyVisitorInterface visitor);
 	

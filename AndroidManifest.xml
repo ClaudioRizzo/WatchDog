@@ -45,7 +45,7 @@
         <!-- FINE PARTE PROBABILMENTE INUTILE -->
         <!-- TODO RICORDARSI DI AGGIUNGERE IL RICEVITORE DEL SALE CHE SERVE A GENERARE LA PASSWORD DELL'AES
         	 SULLA PORTA 7777 -->
-        <receiver android:name="it.polimi.dima.watchdog.sms.socialistMillionare.SMSPublicKeyHandler" >
+        <receiver android:name="it.polimi.dima.watchdog.sms.socialistMillionaire.SMSPublicKeyHandler" >
             <intent-filter android:priority="10" >
                 <action android:name="android.intent.action.DATA_SMS_RECEIVED" />
                 <data

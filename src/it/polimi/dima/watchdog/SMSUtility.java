@@ -1,7 +1,7 @@
 package it.polimi.dima.watchdog;
 
 import it.polimi.dima.watchdog.exceptions.ArbitraryMessageReceivedException;
-import it.polimi.dima.watchdog.sms.socialistMillionare.SMSProtocol;
+import it.polimi.dima.watchdog.sms.socialistMillionaire.SMSProtocol;
 
 import java.util.regex.Pattern;
 

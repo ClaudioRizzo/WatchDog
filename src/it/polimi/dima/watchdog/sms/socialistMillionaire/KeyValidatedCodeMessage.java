@@ -1,4 +1,4 @@
-package it.polimi.dima.watchdog.sms.socialistMillionare;
+package it.polimi.dima.watchdog.sms.socialistMillionaire;
 
 public class KeyValidatedCodeMessage extends SMSProtocol {
 
