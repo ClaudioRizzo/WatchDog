@@ -1,11 +1,13 @@
 package it.polimi.dima.watchdog.sms.socialistMillionare;
 
 import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 
 import it.polimi.dima.watchdog.MyPrefFiles;
 import it.polimi.dima.watchdog.SMSUtility;
 import it.polimi.dima.watchdog.activities.MainActivity;
 import it.polimi.dima.watchdog.crypto.PublicKeyAutenticator;
+import it.polimi.dima.watchdog.crypto.SharedSecretAgreement;
 import it.polimi.dima.watchdog.exceptions.NoSuchPreferenceFoundException;
 import it.polimi.dima.watchdog.sms.socialistMillionare.factory.SocialistMillionaireFactory;
 import android.R;
@@ -68,6 +70,7 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 			e.printStackTrace();
 			Log.i("[DEBUG]", "SMSPubblicKey: Sono sempre io ... -.-'");
 			Log.e("[Error] PublicKeyHandler", e.toString());
+			handleErrorOrException();
 		}
 		
 	}
@@ -86,6 +89,7 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 		{
 			SMSUtility.showShortToastMessage(e.getMessage(), this.ctx);
 			e.printStackTrace();
+			handleErrorOrException();
 		}
 		
 	}
@@ -104,6 +108,7 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 		{
 			SMSUtility.showShortToastMessage(e.getMessage(), this.ctx);
 			e.printStackTrace();
+			handleErrorOrException();
 		}
 
 		
@@ -125,11 +130,13 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 		{
 			SMSUtility.showShortToastMessage(e.getMessage(), this.ctx);
 			e.printStackTrace();
+			handleErrorOrException();
 		}
 		catch (NoSuchAlgorithmException e)
 		{
 			SMSUtility.showShortToastMessage(e.getMessage(), this.ctx);
 			e.printStackTrace();
+			handleErrorOrException();
 		}
 		
 	}
@@ -145,40 +152,123 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 			//la chiave è cancellata dal keysquare sempre e comunque
 			MyPrefFiles.deleteMyPreference(MyPrefFiles.KEYSQUARE, this.other, this.ctx);
 			if(!this.pka.checkForEquality()){
-				//TODO notificare a sè stesso e all'altro la mancata validazione.
+				handleErrorOrException();
 			}
 			else{
 				String keyValidated = Base64.encodeToString(this.pka.getReceivedPublicKey(), Base64.DEFAULT);
 				MyPrefFiles.setMyPreference(MyPrefFiles.KEYRING, this.other, keyValidated, this.ctx);
-				SMSUtility.sendMessage(this.other, SMSUtility.SMP_PORT, SMSUtility.hexStringToByteArray(SMSUtility.CODE5), SMSUtility.hexStringToByteArray(SMSUtility.CODE5));
+				SMSUtility.sendMessage(this.other, SMSUtility.SMP_PORT, SMSUtility.hexStringToByteArray(SMSUtility.CODE5), null);
+				
+				//supponendo che ECDH possa essere fatto una volta per tutte
+				byte[] secret = generateCommonSecret();
+				String secretBase64 = Base64.encodeToString(secret, Base64.DEFAULT);
+				MyPrefFiles.setMyPreference(MyPrefFiles.SHARED_SECRETS, this.other, secretBase64, this.ctx);
 			}
 		} 
 		catch (NoSuchPreferenceFoundException e) 
 		{
 			SMSUtility.showShortToastMessage(e.getMessage(), this.ctx);
 			e.printStackTrace();
+			handleErrorOrException();
 		}
 		catch (NoSuchAlgorithmException e)
 		{
 			SMSUtility.showShortToastMessage(e.getMessage(), this.ctx);
 			e.printStackTrace();
+			handleErrorOrException();
+		}
+		catch (InvalidKeySpecException e)
+		{
+			SMSUtility.showShortToastMessage(e.getMessage(), this.ctx);
+			e.printStackTrace();
+			handleErrorOrException();
 		}
 		
 	}
 
 	@Override
 	public void visit(KeyValidatedCodeMessage keyValMsg) {
-		this.pka.setOtherKeyValidated(MyPrefFiles.existsPreference(MyPrefFiles.KEYRING, this.other, this.ctx));
-		if(!this.pka.isOtherKeyValidated()){
-			SMSUtility.sendMessage(this.other, SMSUtility.SMP_PORT, SMSUtility.hexStringToByteArray(SMSUtility.CODE1), null);
+		try
+		{
+			this.pka.setMyKeyValidatedByTheOther(MyPrefFiles.existsPreference(MyPrefFiles.KEYRING, this.other, this.ctx));
+			if(!this.pka.isMyKeyValidatedByTheOther()){
+				SMSUtility.sendMessage(this.other, SMSUtility.SMP_PORT, SMSUtility.hexStringToByteArray(SMSUtility.CODE1), null);
+			}
+			else{
+				
+				//supponendo che ECDH possa essere fatto una volta per tutte
+				byte[] secret = generateCommonSecret();
+				String secretBase64 = Base64.encodeToString(secret, Base64.DEFAULT);
+				MyPrefFiles.setMyPreference(MyPrefFiles.SHARED_SECRETS, this.other, secretBase64, this.ctx);
+			}
 		}
+		catch (NoSuchPreferenceFoundException e)
+		{
+			SMSUtility.showShortToastMessage(e.getMessage(), this.ctx);
+			e.printStackTrace();
+			handleErrorOrException();
+		}
+		catch (InvalidKeySpecException e)
+		{
+			SMSUtility.showShortToastMessage(e.getMessage(), this.ctx);
+			e.printStackTrace();
+			handleErrorOrException();
+		}
+		catch (NoSuchAlgorithmException e)
+		{
+			SMSUtility.showShortToastMessage(e.getMessage(), this.ctx);
+			e.printStackTrace();
+			handleErrorOrException();
+		}
+		
 		
 	}
 
 	@Override
 	public void visit(IDontWantToAssociateCodeMessage noAssMsg) {
-		// TODO gestire l'errore
+		erasePreferences();
+		//TODO notificare il fragment di quello che è successo
+	}
+	
+	/**
+	 * Metodo che genera il segreto condiviso alla fine della validazione delle chiavi pubbliche.
+	 * @throws NoSuchPreferenceFoundException
+	 * @throws NoSuchAlgorithmException
+	 * @throws InvalidKeySpecException
+	 */
+	private byte[] generateCommonSecret() throws NoSuchPreferenceFoundException, NoSuchAlgorithmException, InvalidKeySpecException{
+		SharedSecretAgreement ssa = new SharedSecretAgreement();
+		String myPriv = MyPrefFiles.getMyPreference(MyPrefFiles.MY_KEYS, MyPrefFiles.MY_PRIV, this.ctx);
+		String otherPub = MyPrefFiles.getMyPreference(MyPrefFiles.KEYRING, this.other, this.ctx);
+		ssa.setMyPrivateKey(myPriv);
+		ssa.setTokenReceived(otherPub);
 		
+		return ssa.getSharedSecret();
+	}
+	
+	/**
+	 * Se qualcosa va storto in SMP o ECDH tutte le preferenze relative all'altro utente vanno cancellate.
+	 */
+	private void erasePreferences(){
+		if(MyPrefFiles.existsPreference(MyPrefFiles.KEYRING, this.other, this.ctx)){
+			MyPrefFiles.deleteMyPreference(MyPrefFiles.KEYRING, this.other, this.ctx);
+		}
+		if(MyPrefFiles.existsPreference(MyPrefFiles.KEYSQUARE, this.other, this.ctx)){
+			MyPrefFiles.deleteMyPreference(MyPrefFiles.KEYSQUARE, this.other, this.ctx);
+		}
+		if(MyPrefFiles.existsPreference(MyPrefFiles.SHARED_SECRETS, this.other, this.ctx)){
+			MyPrefFiles.deleteMyPreference(MyPrefFiles.SHARED_SECRETS, this.other, this.ctx);
+		}
+	}
+	
+	/**
+	 * Se qualcosa va storto vengono cancellate tutte le preferenze relative all'altro utente e quest'ultimo viene
+	 * esortato a fare lo stesso.
+	 */
+	private void handleErrorOrException(){
+		erasePreferences();
+		//TODO notificare il fragment di quello che è successo
+		SMSUtility.sendMessage(this.other, SMSUtility.SMP_PORT, SMSUtility.hexStringToByteArray(SMSUtility.CODE6), null);
 	}
 	
 	private void notifyUser() {

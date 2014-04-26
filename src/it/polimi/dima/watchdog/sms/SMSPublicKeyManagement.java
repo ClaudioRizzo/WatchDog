@@ -136,17 +136,17 @@ public class SMSPublicKeyManagement extends BroadcastReceiver implements DummyIn
 				//errore
 			}
 			else{
-				this.pka.setOtherKeyValidated(true);
+				//this.pka.setOtherKeyValidated(true);
 				saveOnFileTheCoupleTelephoneAndKey();
 				sendMessage("ack");
 			}
 		}
 		else if(receivedMessageStartsWith(this.KeyValidatedCode)){
 			this.pka = new PublicKeyAutenticator();
-			this.pka.setOtherKeyValidated(isOtherKeyValidatedByMe());
-			if(!this.pka.isOtherKeyValidated()){
+			//this.pka.setOtherKeyValidated(isOtherKeyValidatedByMe());
+			/*if(!this.pka.isOtherKeyValidated()){
 				initiateSMP();
-			}
+			}*/
 		}
 		else throw new ArbitraryMessageReceivedException("Non ho potuto eseguire il match di nessun Header!!!");
 		
