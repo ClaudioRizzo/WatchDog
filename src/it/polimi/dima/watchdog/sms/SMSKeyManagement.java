@@ -25,7 +25,7 @@ import android.util.Base64;
 import android.util.Log;
 
 /**
- * In questa classe viene implementato ECDH tramite l'invio di sms.
+ * Di tutta questa classe si salva solo initiateECDH() che verrà copiato nel fragment da cui inizierà ECDH.
  * 
  * @author emanuele
  * 
@@ -140,7 +140,7 @@ public class SMSKeyManagement extends BroadcastReceiver {
 	private void manageReceivedMessage()
 			throws ArbitraryMessageReceivedException, InvalidKeyException,
 			NoSuchAlgorithmException, InvalidKeySpecException {
-		if (receivedMessageStartsWith(this.HereIsMyPublicKeyCode)) {
+		/*if (receivedMessageStartsWith(this.HereIsMyPublicKeyCode)) {
 			this.ssa = new SharedSecretAgreement(getPrivateKey(),
 					unwrapContent(this.HereIsMyPublicKeyCode));
 			this.ssa.generateSharedSecret();
@@ -151,7 +151,7 @@ public class SMSKeyManagement extends BroadcastReceiver {
 			this.ssa = new SharedSecretAgreement(getPrivateKey(),
 					unwrapContent(this.HereIsMyPublicKeyTooCode));
 			this.ssa.generateSharedSecret();
-		}
+		}*/
 
 	}
 

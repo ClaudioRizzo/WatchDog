@@ -6,6 +6,11 @@ import it.polimi.dima.watchdog.exceptions.ArbitraryMessageReceivedException;
 import it.polimi.dima.watchdog.sms.socialistMillionare.SMSProtocol;
 import it.polimi.dima.watchdog.sms.socialistMillionare.factory.SMSProtocolInterface;
 
+/**
+ * Factory per gli header di ECDH.
+ * @author emanuele
+ *
+ */
 public class EllipticCurvesDiffieHellmanFactory implements SMSProtocolInterface {
 
 	@Override

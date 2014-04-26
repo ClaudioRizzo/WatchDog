@@ -1,6 +1,7 @@
 package it.polimi.dima.watchdog.crypto;
 
 import android.annotation.SuppressLint;
+import android.util.Base64;
 
 import java.security.InvalidKeyException;
 import java.security.KeyFactory;
@@ -26,20 +27,30 @@ import javax.crypto.KeyAgreement;
  */
 public class SharedSecretAgreement {
 	private PrivateKey myPrivateKey;
-	private byte[] otherPublicKey;
+	private PublicKey otherPublicKey;
 	private byte[] sharedSecret;
 	 
+	public SharedSecretAgreement(){}
 	
-	
-	public SharedSecretAgreement(PrivateKey mPr, byte[] otherPublicKey){
-		this.myPrivateKey = mPr;
-		this.otherPublicKey = otherPublicKey;
+	public void setMyPrivateKey(String key) throws NoSuchAlgorithmException, InvalidKeySpecException{
+		setMyPrivateKey(Base64.decode(key, Base64.DEFAULT));
 	}
 	
-	public void setTokenReceived(byte[] token){
-		this.otherPublicKey = token;
+	private void setMyPrivateKey(byte[] key) throws NoSuchAlgorithmException, InvalidKeySpecException{
+		KeyFactory kf = KeyFactory.getInstance("EC");
+		this.myPrivateKey = kf.generatePrivate(new X509EncodedKeySpec(key));
 	}
 	
+	public void setTokenReceived(String token) throws InvalidKeySpecException, NoSuchAlgorithmException{
+		setTokenReceived(Base64.decode(token, Base64.DEFAULT));
+	}
+	
+	private void setTokenReceived(byte[] token) throws InvalidKeySpecException, NoSuchAlgorithmException {
+		KeyFactory kf = KeyFactory.getInstance("EC");
+		this.otherPublicKey = kf.generatePublic(new X509EncodedKeySpec(token));
+		
+	}
+
 	public byte[] getSharedSecret(){
 		return this.sharedSecret;
 	}
@@ -55,9 +66,7 @@ public class SharedSecretAgreement {
 	public void generateSharedSecret() throws InvalidKeyException, NoSuchAlgorithmException, InvalidKeySpecException{
 		KeyAgreement ka = KeyAgreement.getInstance("ECDH");
 		ka.init(this.myPrivateKey);
-		KeyFactory kf = KeyFactory.getInstance("EC");
-		PublicKey otherPub = kf.generatePublic(new X509EncodedKeySpec(this.otherPublicKey));
-		ka.doPhase(otherPub, true);
+		ka.doPhase(this.otherPublicKey, true);
 		this.sharedSecret = ka.generateSecret();
 	}
 

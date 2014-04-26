@@ -1,8 +1,14 @@
 package it.polimi.dima.watchdog;
 
+import it.polimi.dima.watchdog.exceptions.ArbitraryMessageReceivedException;
+import it.polimi.dima.watchdog.sms.socialistMillionare.SMSProtocol;
+
 import java.util.regex.Pattern;
 
+import android.content.Context;
 import android.telephony.SmsManager;
+import android.util.Base64;
+import android.widget.Toast;
 
 /**
  * 
@@ -117,5 +123,47 @@ public class SMSUtility {
 			System.arraycopy(body, 0, message, header.length, body.length);
 		}
 		man.sendDataMessage(number, null, port, message, null, null);
+	}
+	
+	/**
+	 * Ritorna l'header del messaggio
+	 * @param msg
+	 * @return
+	 * @throws ArbitraryMessageReceivedException
+	 */
+	public static String getHeader(byte[] msg) throws ArbitraryMessageReceivedException {
+		
+		if(msg.length < SMSProtocol.HEADER_LENGTH){
+			throw new ArbitraryMessageReceivedException("Messaggio inaspettato: troppo corto!!!");
+		}
+		byte[] header = new byte[SMSProtocol.HEADER_LENGTH];
+		System.arraycopy(msg, 0, header, 0, SMSProtocol.HEADER_LENGTH);		
+		
+		
+		return SMSUtility.bytesToHex(header);	
+	}
+	
+	public static String getBody(byte[] msg) throws ArbitraryMessageReceivedException {
+		
+		if(msg.length < SMSProtocol.HEADER_LENGTH){
+			throw new ArbitraryMessageReceivedException("Messaggio inaspettato: troppo corto!!!");
+		}
+		//android pare (dalla javadoc) non aggiungere un terminatore all'array di byte quando si usa getUserData(). In caso contrario la lunghezza
+		//va decurtata di 1.
+		int bodyLength = msg.length - SMSProtocol.HEADER_LENGTH;
+		
+		if(bodyLength == 0){
+			return null;
+		}
+		
+		byte[] body = new byte[bodyLength];
+		System.arraycopy(msg, SMSProtocol.HEADER_LENGTH, body, 0, bodyLength);
+		String bodyStr = Base64.encodeToString(body, Base64.DEFAULT);
+		return bodyStr;
+	}
+	
+	public static void showShortToastMessage(String message, Context ctx) {
+		Toast toast = Toast.makeText(ctx, message, Toast.LENGTH_SHORT);
+		toast.show();
 	}
 }
