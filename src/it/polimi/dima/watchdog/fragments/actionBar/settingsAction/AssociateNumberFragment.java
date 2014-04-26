@@ -3,8 +3,10 @@ package it.polimi.dima.watchdog.fragments.actionBar.settingsAction;
 import it.polimi.dima.watchdog.MyPrefFiles;
 import it.polimi.dima.watchdog.R;
 import it.polimi.dima.watchdog.SMSUtility;
+import it.polimi.dima.watchdog.exceptions.NoSuchPreferenceFoundException;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -34,6 +36,13 @@ public class AssociateNumberFragment extends Fragment implements OnClickListener
 		
 		//TODO: Effettuare validazione degli input ! 
 		this.getAndSaveQuestion();
+		try {
+			MyPrefFiles.getMyPreference(MyPrefFiles.SECRET_Q_A, MyPrefFiles.SECRET_QUESTION, getActivity().getApplicationContext());
+		} catch (NoSuchPreferenceFoundException e) {
+			Log.i("[DEBUG]", "L'errore è qui");
+			e.printStackTrace();
+			return;
+		}
 		this.getAndSaveAnswer();
 		this.getNumberAndStart();
 	}
@@ -43,6 +52,7 @@ public class AssociateNumberFragment extends Fragment implements OnClickListener
 		EditText mQuestionEditText = (EditText) fragView
 				.findViewById(R.id.edit_text_associate_question);
 		String mQuestion = mQuestionEditText.getText().toString();
+		Log.i("[DEBUG]", mQuestion);
 		MyPrefFiles.setMyPreference(MyPrefFiles.SECRET_Q_A,
 				MyPrefFiles.SECRET_QUESTION, mQuestion, getActivity()
 						.getApplicationContext());

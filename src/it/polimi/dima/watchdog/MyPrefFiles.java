@@ -121,7 +121,7 @@ public class MyPrefFiles {
 	
 	//se value è una chiave deve essere Base64
 	public static void setMyPreference(String fileName, String key, String value,  Context ctx) {
-		SharedPreferences sp = ctx.getSharedPreferences(MyPrefFiles.KEYRING, Context.MODE_PRIVATE);
+		SharedPreferences sp = ctx.getSharedPreferences(fileName, Context.MODE_PRIVATE);
 		SharedPreferences.Editor editor = sp.edit();
 		editor.putString(key, value);
 		editor.commit();

@@ -124,6 +124,7 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 			//TODO aspettare la risposta dell'utente
 			this.pka.setSecretAnswer("DUMMY"); //ovviamente al posto di dummy ci va ciò che l'utente ha inserito.
 			this.pka.doHashToSend();
+			//TODO: scommentare quando si è finita la gestione utente 
 			//SMSUtility.sendMessage(this.other, SMSUtility.SMP_PORT, SMSUtility.hexStringToByteArray(SMSUtility.CODE4), this.pka.getHashToSend().getBytes());
 		} 
 		catch (NoSuchPreferenceFoundException e) 
