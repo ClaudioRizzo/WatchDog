@@ -2,6 +2,7 @@ package it.polimi.dima.watchdog.sms.socialistMillionaire;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
+import java.util.Map;
 
 import it.polimi.dima.watchdog.MyPrefFiles;
 import it.polimi.dima.watchdog.SMSUtility;
@@ -15,6 +16,7 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
@@ -86,7 +88,6 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 			this.pka.setMyPublicKey(MyPrefFiles.getMyPreference(MyPrefFiles.MY_KEYS, MyPrefFiles.MY_PUB, this.ctx));
 			SMSUtility.sendMessage(this.other, SMSUtility.SMP_PORT, SMSUtility.hexStringToByteArray(SMSUtility.CODE2), this.pka.getMyPublicKey());
 			Log.i("[DEBUG]", "ok sono nella gestione richiesta");
-			this.notifyUser();
 			
 		} 
 		catch (NoSuchPreferenceFoundException e) 
@@ -128,6 +129,12 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 			//TODO aspettare la risposta dell'utente
 			this.pka.setSecretAnswer("DUMMY"); //ovviamente al posto di dummy ci va ciò che l'utente ha inserito.
 			this.pka.doHashToSend();
+			Map<String, ?> prova =  ctx.getSharedPreferences(MyPrefFiles.KEYSQUARE, Context.MODE_PRIVATE).getAll();
+			
+			for(String n: prova.keySet()) {
+				Log.i("[DEBUG]", "sono il numero "+n);
+			}
+			
 			//TODO: scommentare quando si è finita la gestione utente 
 			//SMSUtility.sendMessage(this.other, SMSUtility.SMP_PORT, SMSUtility.hexStringToByteArray(SMSUtility.CODE4), this.pka.getHashToSend().getBytes());
 		} 

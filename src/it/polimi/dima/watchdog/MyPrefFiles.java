@@ -1,5 +1,7 @@
 package it.polimi.dima.watchdog;
 
+import java.util.Map;
+
 import it.polimi.dima.watchdog.exceptions.NoSuchPreferenceFoundException;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -141,6 +143,11 @@ public class MyPrefFiles {
 			return false;
 		}
 		return true;
+	}
+	
+	public static Map<String, ?> getPrefMap(String fileName, Context ctx) {
+		SharedPreferences sp = ctx.getSharedPreferences(fileName, Context.MODE_PRIVATE);
+		return sp.getAll();
 	}
 	
 	
