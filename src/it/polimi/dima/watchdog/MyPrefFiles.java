@@ -14,7 +14,7 @@ import android.content.SharedPreferences;
 public class MyPrefFiles {
 
 	private MyPrefFiles() {
-		throw new IllegalAccessError("This constructur is private");
+		throw new IllegalAccessError("Costruttore privato!!!");
 	}	
 	
 	//QUI I NOMI DEI FILE
@@ -113,12 +113,12 @@ public class MyPrefFiles {
 	
 	public static String getMyPreference(String fileName, String key, Context ctx) throws NoSuchPreferenceFoundException {
 		SharedPreferences sp = ctx.getSharedPreferences(fileName, Context.MODE_PRIVATE);
-		String answer = sp.getString(key, null);//TODO ricordarsi di settarla in inizializzazione
+		String preference = sp.getString(key, null);
 		
-		if(answer == null){
+		if(preference == null){
 			throw new NoSuchPreferenceFoundException("I/O Error");
 		}
-		return answer;
+		return preference;
 	}
 	
 	//se value è una chiave deve essere Base64
@@ -143,6 +143,24 @@ public class MyPrefFiles {
 			return false;
 		}
 		return true;
+	}
+	
+	/**
+	 * Se qualcosa va storto in SMP o ECDH tutte le preferenze relative all'altro utente vanno cancellate.
+	 */
+	public static void erasePreferences(String phoneNumber, Context ctx){
+		if(MyPrefFiles.existsPreference(MyPrefFiles.KEYRING, phoneNumber, ctx)){
+			MyPrefFiles.deleteMyPreference(MyPrefFiles.KEYRING, phoneNumber, ctx);
+		}
+		if(MyPrefFiles.existsPreference(MyPrefFiles.KEYSQUARE, phoneNumber, ctx)){
+			MyPrefFiles.deleteMyPreference(MyPrefFiles.KEYSQUARE, phoneNumber, ctx);
+		}
+		if(MyPrefFiles.existsPreference(MyPrefFiles.SHARED_SECRETS, phoneNumber, ctx)){
+			MyPrefFiles.deleteMyPreference(MyPrefFiles.SHARED_SECRETS, phoneNumber, ctx);
+		}
+		if(MyPrefFiles.existsPreference(MyPrefFiles.HASHRING, phoneNumber, ctx)){
+			MyPrefFiles.deleteMyPreference(MyPrefFiles.HASHRING, phoneNumber, ctx);
+		}
 	}
 	
 	public static Map<String, ?> getPrefMap(String fileName, Context ctx) {

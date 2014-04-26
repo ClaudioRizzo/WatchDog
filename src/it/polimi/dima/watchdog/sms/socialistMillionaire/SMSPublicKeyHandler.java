@@ -18,7 +18,6 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
@@ -87,7 +86,7 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 			//se la richiesta deriva da un telefono già precedentemente associato o in attesa di associazione,
 			//allora per qualche motivo il suo proprietario non ha più i miei dati, quindi io devo cancellare
 			//i suoi e ripartire da zero.
-			erasePreferences();
+			MyPrefFiles.erasePreferences(this.other, this.ctx);
 			
 			this.pka.setMyPublicKey(MyPrefFiles.getMyPreference(MyPrefFiles.MY_KEYS, MyPrefFiles.MY_PUB, this.ctx));
 			SMSUtility.sendMessage(this.other, SMSUtility.SMP_PORT, SMSUtility.hexStringToByteArray(SMSUtility.CODE2), this.pka.getMyPublicKey());
@@ -236,12 +235,13 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 
 	@Override
 	public void visit(IDontWantToAssociateCodeMessage noAssMsg) {
-		erasePreferences();
+		MyPrefFiles.erasePreferences(this.other, this.ctx);
 		//TODO notificare il fragment di quello che è successo
 	}
 	
 	/**
 	 * Metodo che genera il segreto condiviso alla fine della validazione delle chiavi pubbliche.
+	 * 
 	 * @throws NoSuchPreferenceFoundException
 	 * @throws NoSuchAlgorithmException
 	 * @throws InvalidKeySpecException
@@ -257,29 +257,11 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 	}
 	
 	/**
-	 * Se qualcosa va storto in SMP o ECDH tutte le preferenze relative all'altro utente vanno cancellate.
-	 */
-	private void erasePreferences(){
-		if(MyPrefFiles.existsPreference(MyPrefFiles.KEYRING, this.other, this.ctx)){
-			MyPrefFiles.deleteMyPreference(MyPrefFiles.KEYRING, this.other, this.ctx);
-		}
-		if(MyPrefFiles.existsPreference(MyPrefFiles.KEYSQUARE, this.other, this.ctx)){
-			MyPrefFiles.deleteMyPreference(MyPrefFiles.KEYSQUARE, this.other, this.ctx);
-		}
-		if(MyPrefFiles.existsPreference(MyPrefFiles.SHARED_SECRETS, this.other, this.ctx)){
-			MyPrefFiles.deleteMyPreference(MyPrefFiles.SHARED_SECRETS, this.other, this.ctx);
-		}
-		if(MyPrefFiles.existsPreference(MyPrefFiles.HASHRING, this.other, this.ctx)){
-			MyPrefFiles.deleteMyPreference(MyPrefFiles.HASHRING, this.other, this.ctx);
-		}
-	}
-	
-	/**
 	 * Se qualcosa va storto vengono cancellate tutte le preferenze relative all'altro utente e quest'ultimo viene
 	 * esortato a fare lo stesso.
 	 */
 	private void handleErrorOrException(){
-		erasePreferences();
+		MyPrefFiles.erasePreferences(this.other, this.ctx);
 		//TODO notificare il fragment di quello che è successo
 		SMSUtility.sendMessage(this.other, SMSUtility.SMP_PORT, SMSUtility.hexStringToByteArray(SMSUtility.CODE6), null);
 	}
@@ -310,6 +292,13 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 	
 	}
 	
+	/**
+	 * Chiama il metodo per generare il segreto codiviso e salva quest'ultimo nelle preferenze.
+	 * 
+	 * @throws NoSuchAlgorithmException
+	 * @throws InvalidKeySpecException
+	 * @throws NoSuchPreferenceFoundException
+	 */
 	private void doECDH() throws NoSuchAlgorithmException, InvalidKeySpecException, NoSuchPreferenceFoundException{
 		byte[] secret = generateCommonSecret();
 		String secretBase64 = Base64.encodeToString(secret, Base64.DEFAULT);
