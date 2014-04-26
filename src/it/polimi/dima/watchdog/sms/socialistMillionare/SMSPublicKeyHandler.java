@@ -71,9 +71,9 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 		try 
 		{
 			this.pka.setMyPublicKey(MyPrefFiles.getMyPreference(MyPrefFiles.MY_KEYS, MyPrefFiles.MY_PUB, this.ctx));
-			//SMSUtility.sendMessage(this.other, SMSUtility.SMP_PORT, SMSUtility.hexStringToByteArray(SMSUtility.CODE2), this.pka.getMyPublicKey());
+			SMSUtility.sendMessage(this.other, SMSUtility.SMP_PORT, SMSUtility.hexStringToByteArray(SMSUtility.CODE2), this.pka.getMyPublicKey());
 			Log.i("[DEBUG]", "ok sono nella gestione richiesta");
-			this.showShortToastMessage("RICEVUTO");
+			
 		} 
 		catch (NoSuchPreferenceFoundException e) 
 		{
