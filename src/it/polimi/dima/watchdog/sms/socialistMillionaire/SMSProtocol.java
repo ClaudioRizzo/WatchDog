@@ -1,5 +1,6 @@
 package it.polimi.dima.watchdog.sms.socialistMillionaire;
 
+import android.content.Context;
 import it.polimi.dima.watchdog.sms.commands.CommandMessageInterface;
 import it.polimi.dima.watchdog.sms.commands.SMSCommandVisitorInterface;
 import it.polimi.dima.watchdog.sms.ecdh.EllipticCurvesDiffieHellmanMessageInterface;
@@ -34,6 +35,12 @@ public class SMSProtocol implements SocialistMillionaireMessageInterface, Ellipt
 	}
 	public void setBody(String body) {
 		this.body = body;
+	}
+	
+	public  void validate(String otherNumber, Context ctx) throws Exception {
+		/*
+		 * nothing to do in here 
+		 */
 	}
 
 	@Override

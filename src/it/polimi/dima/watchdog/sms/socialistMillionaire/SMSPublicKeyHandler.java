@@ -84,7 +84,7 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 	public void visit(PublicKeyRequestCodeMessage pubKeyReqMsg) {
 		try 
 		{
-			validateMessage(pubKeyReqMsg);
+			pubKeyReqMsg.validate(other, ctx);
 			
 			this.pka.setMyPublicKey(MyPrefFiles.getMyPreference(MyPrefFiles.MY_KEYS, MyPrefFiles.MY_PUB, this.ctx));
 			SMSUtility.sendMessage(this.other, SMSUtility.SMP_PORT, SMSUtility.hexStringToByteArray(SMSUtility.CODE2), this.pka.getMyPublicKey());
@@ -104,7 +104,7 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 	public void visit(PublicKeySentCodeMessage pubKeySentMsg) {
 		try 
 		{
-			validateMessage(pubKeySentMsg);
+			pubKeySentMsg.validate(other, ctx);
 			
 			//la secret question settata non è in Base64 (è una stringa normale -> vedi AssociateNumberFragment),
 			//quindi niente conversione richiesta
@@ -133,7 +133,7 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 		try 
 		{
 			//serve per debug: siamo arrivati al punto critico
-			validateMessage(secQuestMsg);
+			secQuestMsg.validate(other, ctx);
 			
 			this.pka.setMyPublicKey(MyPrefFiles.getMyPreference(MyPrefFiles.MY_KEYS, MyPrefFiles.MY_PUB, this.ctx));
 			String question = new String(Base64.decode(secQuestMsg.getBody(), Base64.DEFAULT), PasswordUtils.UTF_8);
@@ -176,7 +176,7 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 	public void visit(SecretAnswerAndPublicKeyHashSentCodeMessage secAnswMsg) {
 		try 
 		{
-			validateMessage(secAnswMsg);
+			secAnswMsg.validate(other, ctx);
 			
 			this.pka.setSecretAnswer(MyPrefFiles.getMyPreference(MyPrefFiles.SECRET_Q_A, MyPrefFiles.SECRET_ANSWER, this.ctx));
 			this.pka.setReceivedPublicKey(MyPrefFiles.getMyPreference(MyPrefFiles.KEYSQUARE, this.other, this.ctx));
@@ -227,7 +227,7 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 	@Override
 	public void visit(KeyValidatedCodeMessage keyValMsg) {
 		try{
-			validateMessage(keyValMsg);
+			keyValMsg.validate(other, ctx);
 			
 			//Se ricevo questo messaggio ed esso passa la validazione, l'altro ha validato la mia chiave pubblica.
 			//Se non ho già validato la chiave pubblica dell'altro faccio partire smp in modo simmetrico.
@@ -254,7 +254,7 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 
 	@Override
 	public void visit(IDontWantToAssociateCodeMessage noAssMsg) {
-		validateMessage(noAssMsg);
+		noAssMsg.validate(other, ctx);;
 		
 		MyPrefFiles.erasePreferences(this.other, this.ctx);
 		//TODO notificare il fragment di quello che è successo
@@ -326,58 +326,7 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 		MyPrefFiles.setMyPreference(MyPrefFiles.SHARED_SECRETS, this.other, secretBase64, this.ctx);
 	}
 	
-	private void validateMessage(PublicKeyRequestCodeMessage pubKeyReqMsg){
-		//se la richiesta deriva da un telefono che compare già da qualche parte nelle mie preferenze,
-		//allora per qualche motivo il suo proprietario non ha più i miei dati, quindi io devo cancellare
-		//i suoi e ripartire da zero.
-		MyPrefFiles.erasePreferences(this.other, this.ctx);
-	}
 	
-	private void validateMessage(PublicKeySentCodeMessage pubKeySentMsg) throws ArbitraryMessageReceivedException{
-		//se mi arriva un messaggio del genere e ho qualche preferenza di quel numero già salvata
-		//devo bloccare tutto perchè è sicuramente un errore o un messaggio falso, in quanto nessuno
-		//deve inviare ad un altro la propria chiave pubblica se prima non è arrivato un messaggio
-		//di richiesta. Tale messaggio non può partire se chi lo manderebbe non ha prima cancellato
-		//tutte le preferenze che riguardano il destinatario.
-		if(MyPrefFiles.existsPreference(MyPrefFiles.KEYSQUARE, this.other, this.ctx) || MyPrefFiles.existsPreference(MyPrefFiles.KEYRING, this.other, this.ctx) || MyPrefFiles.existsPreference(MyPrefFiles.SHARED_SECRETS, this.other, this.ctx) || MyPrefFiles.existsPreference(MyPrefFiles.HASHRING, this.other, this.ctx)){
-			throw new ArbitraryMessageReceivedException("Messaggio ricevuto da un numero già presente!!!");
-		}
-	}
 	
-	private void validateMessage(SecretQuestionSentCodeMessage secQuestMsg){
-		//se mi arriva un messaggio con una domanda segreta lascio all'utente la libera scelta di cosa fare,
-		//chiunque sia il mittente: sia inviare l'hash, sia rifiutare non porta a nessun problema.
-		//Loggo il messaggio giusto per debug
-		Log.i("[DEBUG]", "Mi è arrivata una domanda segreta...");
-		Log.i("[DEBUG]", "...sono arrivato al punto critico");
-	}
-	
-	private void validateMessage(SecretAnswerAndPublicKeyHashSentCodeMessage secAnswMsg) throws ArbitraryMessageReceivedException{
-		//se ricevo un messaggio del genere da un numero non in attesa di validazione devo ignorarlo
-		//e non proseguire oltre.
-		if(!MyPrefFiles.existsPreference(MyPrefFiles.KEYSQUARE, this.other, this.ctx)){
-			throw new ArbitraryMessageReceivedException("Messaggio ricevuto da un numero non presente nel keysquare!!!");
-		}
-	}
-	
-	private void validateMessage(KeyValidatedCodeMessage keyValMsg) throws ArbitraryMessageReceivedException{
-		//se ricevo questo messaggio e ho il sale della password dell'altro utente già salvato, allora questo
-		//messaggio è un falso o un errore, perchè se qualcuno mi invia un sale, io devo aver già cancellato
-		//quello vecchio e questo avviene solo se l'altro mi ha chiesto di farlo perchè ha perso i miei dati
-		//e vuole ripetere l'associazione o se io ho perso i dati dell'altro e devo ripetere l'associazione.
-		//In ogni caso quando l'altro mi dice che la mia chiave è validata, io nonn posso avere il sale della
-		//sua password salvato. Quindi questo messaggio verrà ignorato e non si prosegue oltre.
-		if(MyPrefFiles.existsPreference(MyPrefFiles.HASHRING, this.other, this.ctx)){
-			throw new ArbitraryMessageReceivedException("Il sale è già presente!!!");
-		}
-	}
-	
-	private void validateMessage(IDontWantToAssociateCodeMessage noAssMsg){
-		
-		//TODO problema: se un malintenzionato manda questo messaggio spoofando il suo numero, verrebbero
-		//potenzialmente cancellate le preferenze di un altro senza che quest'ultimo lo sappia. Questo è
-		//drammatico perchè l'ignaro non può sapere che io non posso più inviargli comandi (e notificarlo è
-		//impossibile --> ricorsione infinita)
-	}
 	
 }
