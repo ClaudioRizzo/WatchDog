@@ -345,7 +345,7 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 	}
 	
 	private void validateMessage(SecretQuestionSentCodeMessage secQuestMsg){
-		//se mi arriva un messaggio con una domanda segreta lascio all'utente la libera scelta ci cosa fare,
+		//se mi arriva un messaggio con una domanda segreta lascio all'utente la libera scelta di cosa fare,
 		//chiunque sia il mittente: sia inviare l'hash, sia rifiutare non porta a nessun problema.
 		//Loggo il messaggio giusto per debug
 		Log.i("[DEBUG]", "Mi è arrivata una domanda segreta...");
@@ -375,7 +375,9 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 	private void validateMessage(IDontWantToAssociateCodeMessage noAssMsg){
 		
 		//TODO problema: se un malintenzionato manda questo messaggio spoofando il suo numero, verrebbero
-		//potenzialmente cancellate le preferenze di un altro senza che quest'ultimo lo sappia. 
+		//potenzialmente cancellate le preferenze di un altro senza che quest'ultimo lo sappia. Questo è
+		//drammatico perchè l'ignaro non può sapere che io non posso più inviargli comandi (e notificarlo è
+		//impossibile --> ricorsione infinita)
 	}
 	
 }
