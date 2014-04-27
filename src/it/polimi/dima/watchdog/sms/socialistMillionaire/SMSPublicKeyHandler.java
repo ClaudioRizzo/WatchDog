@@ -11,6 +11,7 @@ import it.polimi.dima.watchdog.SMSUtility;
 import it.polimi.dima.watchdog.activities.MainActivity;
 import it.polimi.dima.watchdog.crypto.PublicKeyAutenticator;
 import it.polimi.dima.watchdog.crypto.SharedSecretAgreement;
+import it.polimi.dima.watchdog.exceptions.ArbitraryMessageReceivedException;
 import it.polimi.dima.watchdog.exceptions.NoSuchPreferenceFoundException;
 import it.polimi.dima.watchdog.sms.socialistMillionaire.factory.SocialistMillionaireFactory;
 import android.app.NotificationManager;
@@ -72,7 +73,7 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 			
 		} catch (Exception e) {
 			e.printStackTrace();
-			Log.i("[DEBUG]", "SMSPubblicKey: Sono sempre io ... -.-'");
+			Log.i("[DEBUG]", "SMSPublicKey: Sono sempre io ... -.-'");
 			Log.e("[Error] PublicKeyHandler", e.toString());
 			handleErrorOrException();
 		}
@@ -83,7 +84,7 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 	public void visit(PublicKeyRequestCodeMessage pubKeyReqMsg) {
 		try 
 		{
-			//se la richiesta deriva da un telefono già precedentemente associato o in attesa di associazione,
+			//se la richiesta deriva da un telefono che compare già da qualche parte nelle mie preferenze,
 			//allora per qualche motivo il suo proprietario non ha più i miei dati, quindi io devo cancellare
 			//i suoi e ripartire da zero.
 			MyPrefFiles.erasePreferences(this.other, this.ctx);
@@ -104,9 +105,13 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 
 	@Override
 	public void visit(PublicKeySentCodeMessage pubKeySentMsg) {
-		
 		try 
 		{
+			//se mi arriva un messaggio del genere e ho qualche preferenza di quel numero già salvata
+			//devo bloccare tutto perchè è sicuramente un errore o un messaggio falso.
+			if(MyPrefFiles.existsPreference(MyPrefFiles.KEYSQUARE, this.other, this.ctx) || MyPrefFiles.existsPreference(MyPrefFiles.KEYRING, this.other, this.ctx) || MyPrefFiles.existsPreference(MyPrefFiles.SHARED_SECRETS, this.other, this.ctx) || MyPrefFiles.existsPreference(MyPrefFiles.HASHRING, this.other, this.ctx)){
+				throw new ArbitraryMessageReceivedException("Messaggio ricevuto da un numero già presente!!!");
+			}
 			//la secret question settata non è in Base64 (è una stringa normale -> vedi AssociateNumberFragment),
 			//quindi niente conversione richiesta
 			this.pka.setSecretQuestion(MyPrefFiles.getMyPreference(MyPrefFiles.SECRET_Q_A, MyPrefFiles.SECRET_QUESTION, this.ctx));
@@ -119,6 +124,11 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 			SMSUtility.showShortToastMessage(e.getMessage(), this.ctx);
 			e.printStackTrace();
 			handleErrorOrException();
+		}
+		catch (ArbitraryMessageReceivedException e)
+		{
+			SMSUtility.showShortToastMessage(e.getMessage(), this.ctx);
+			//L'idea è che il messaggio va ignorato senza cancellare niente.
 		}
 
 		
@@ -170,6 +180,10 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 	public void visit(SecretAnswerAndPublicKeyHashSentCodeMessage secAnswMsg) {
 		try 
 		{
+			//se ricevo un messaggio del genere da un numero non in atesa di validazione devo ignorarlo
+			if(!MyPrefFiles.existsPreference(MyPrefFiles.KEYSQUARE, this.other, this.ctx)){
+				throw new ArbitraryMessageReceivedException("Messaggio ricevuto da un numero non presente nel keysquare!!!");
+			}
 			this.pka.setSecretAnswer(MyPrefFiles.getMyPreference(MyPrefFiles.SECRET_Q_A, MyPrefFiles.SECRET_ANSWER, this.ctx));
 			this.pka.setReceivedPublicKey(MyPrefFiles.getMyPreference(MyPrefFiles.KEYSQUARE, this.other, this.ctx));
 			this.pka.doHashToCheck();
@@ -207,6 +221,11 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 			SMSUtility.showShortToastMessage(e.getMessage(), this.ctx);
 			e.printStackTrace();
 			handleErrorOrException();
+		}
+		catch (ArbitraryMessageReceivedException e)
+		{
+			SMSUtility.showShortToastMessage(e.getMessage(), this.ctx);
+			//L'idea è che il messaggio va ignorato senza cancellare niente.
 		}
 		
 	}
