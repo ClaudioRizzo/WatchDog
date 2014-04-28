@@ -1,20 +1,12 @@
 package it.polimi.dima.watchdog.sms;
 
-import java.security.InvalidAlgorithmParameterException;
-import java.security.InvalidKeyException;
 import java.security.Key;
-import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
 import java.security.PublicKey;
 
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
-
-import org.apache.commons.codec.DecoderException;
+import org.spongycastle.crypto.InvalidCipherTextException;
 
 import android.util.Base64;
-import it.polimi.dima.watchdog.crypto.AES_256_GCM_Crypto;
+import it.polimi.dima.watchdog.crypto.AES256GCM;
 import it.polimi.dima.watchdog.crypto.ECDSA_Signature;
 import it.polimi.dima.watchdog.exceptions.ArbitraryMessageReceivedException;
 import it.polimi.dima.watchdog.exceptions.ErrorInSignatureCheckingException;
@@ -57,21 +49,15 @@ public class SMSParser {
 	/**
 	 * Decritta il messaggio eseguendo tutti i round dell'AES al contrario
 	 * 
-	 * @throws DecoderException
-	 * @throws InvalidKeyException
-	 * @throws NoSuchAlgorithmException
-	 * @throws NoSuchProviderException
-	 * @throws NoSuchPaddingException
-	 * @throws InvalidAlgorithmParameterException
-	 * @throws IllegalBlockSizeException
-	 * @throws BadPaddingException
-	 * @throws ArbitraryMessageReceivedException
-	 * @throws ErrorInSignatureCheckingException
+	 * @throws ErrorInSignatureCheckingException 
+	 * @throws ArbitraryMessageReceivedException 
+	 * @throws InvalidCipherTextException 
+	 * @throws IllegalStateException 
 	 */
-	public void decrypt() throws DecoderException, InvalidKeyException, NoSuchAlgorithmException, NoSuchProviderException, NoSuchPaddingException, InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException, ArbitraryMessageReceivedException, ErrorInSignatureCheckingException {
-		AES_256_GCM_Crypto dec = new AES_256_GCM_Crypto(this.smsEncrypted, this.decryptionKey);
-		dec.decrypt();
-		byte[] decryptedSMS = dec.getPlaintext(); // messaggio || ' ' || firma
+	public void decrypt() throws IllegalStateException, InvalidCipherTextException, ArbitraryMessageReceivedException, ErrorInSignatureCheckingException {
+		//AES_256_GCM_Crypto dec = new AES_256_GCM_Crypto(this.smsEncrypted, this.decryptionKey);
+		AES256GCM dec = new AES256GCM(this.decryptionKey, this.smsEncrypted, null /*iv TODO*/);
+		byte[] decryptedSMS = dec.decrypt(); // messaggio || ' ' || firma
 		int spacePosition = getSpacePosition(decryptedSMS);
 		//copia la firma
 		System.arraycopy(decryptedSMS, spacePosition + 1, this.signature, 0, decryptedSMS.length - spacePosition - 1);

@@ -29,11 +29,11 @@ import android.util.Base64;
  */
 public class SMSCommandHandler extends BroadcastReceiver implements SMSCommandVisitorInterface{
 
-	public Context ctx;
-	public SMSProtocol recMsg;
-	public String other;
-	public CommandFactory comFac;
-	public SMSParser parser;
+	private Context ctx;
+	private SMSProtocol recMsg;
+	private String other;
+	private CommandFactory comFac;
+	private SMSParser parser;
 	
 	
 	public SMSCommandHandler(){
