@@ -188,6 +188,16 @@ public class MyPrefFiles {
 		if(MyPrefFiles.existsPreference(MyPrefFiles.HASHRING, phoneNumber, ctx)){
 			MyPrefFiles.deleteMyPreference(MyPrefFiles.HASHRING, phoneNumber, ctx);
 		}
+		
+		List<String> keys = MyPrefFiles.createKeysForSmpStatus(phoneNumber);
+		
+		//resetta il file che tiene lo stato del SMP
+		for(String s : keys){
+			if(MyPrefFiles.existsPreference(MyPrefFiles.SMP_STATUS, s, ctx)){
+				MyPrefFiles.deleteMyPreference(MyPrefFiles.SMP_STATUS, s, ctx);
+			}
+		}
+		
 	}
 	
 	/**
