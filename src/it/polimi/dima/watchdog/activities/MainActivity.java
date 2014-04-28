@@ -91,10 +91,18 @@ public class MainActivity extends ActionBarActivity {
 		case R.id.settings_panel:
 			Intent intent = new Intent(this, SettingsActivity.class);
 			startActivity(intent);
+			break;
+		case R.id.pending_requests_panel:
+			Intent intent1 = new Intent(this, PendingRequestsActivity.class);
+			startActivity(intent1);
+			break;
 		default:
-			return super.onOptionsItemSelected(item);
+			break;
+		}	
+		
+		return super.onOptionsItemSelected(item);
 
-		}
+		
 		
 		
 	}
