@@ -219,6 +219,14 @@ public class MyPrefFiles {
 		if(MyPrefFiles.existsPreference(MyPrefFiles.HASHRING, phoneNumber, ctx)){
 			return true;
 		}
+		
+		List<String> keys = MyPrefFiles.createKeysForSmpStatus(phoneNumber);
+		for(String s : keys){
+			if(MyPrefFiles.existsPreference(MyPrefFiles.SMP_STATUS, s, ctx)){
+				return true;
+			}
+		}
+		
 		return false;
 	}
 	
