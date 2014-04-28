@@ -1,7 +1,7 @@
 package it.polimi.dima.watchdog.sms.socialistMillionaire;
 
 import it.polimi.dima.watchdog.MyPrefFiles;
-import it.polimi.dima.watchdog.exceptions.ArbitraryMessageReceivedException;
+import it.polimi.dima.watchdog.exceptions.MessageWillBeIgnoredException;
 import android.content.Context;
 
 public class SecretAnswerAndPublicKeyHashSentCodeMessage extends SMSProtocol {
@@ -18,14 +18,13 @@ public class SecretAnswerAndPublicKeyHashSentCodeMessage extends SMSProtocol {
 	}
 
 	@Override
-	public void validate(String otherNumber, Context ctx) throws ArbitraryMessageReceivedException {
-		// se ricevo un messaggio del genere da un numero non in attesa di
-		// validazione devo ignorarlo
-		// e non proseguire oltre.
-		if (!MyPrefFiles.existsPreference(MyPrefFiles.KEYSQUARE, otherNumber,
-				ctx)) {
-			throw new ArbitraryMessageReceivedException(
-					"Messaggio ricevuto da un numero non presente nel keysquare!!!");
+	public void validate(String otherNumber, Context ctx) throws MessageWillBeIgnoredException {
+		// la richiesta va accettata solo se in smp_status non è segnato che ne ho già ricevuta una
+		// e se è segnato che ho inviato la domanda segreta
+		String key = otherNumber + MyPrefFiles.HASH_RECEIVED;
+		String key2 = otherNumber + MyPrefFiles.SECRET_QUESTION_FORWARDED;
+		if (MyPrefFiles.existsPreference(MyPrefFiles.SMP_STATUS, key, ctx) || !MyPrefFiles.existsPreference(MyPrefFiles.SMP_STATUS, key2, ctx)) {
+			throw new MessageWillBeIgnoredException();
 		}
 
 	}

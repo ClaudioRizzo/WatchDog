@@ -11,7 +11,7 @@ import it.polimi.dima.watchdog.SMSUtility;
 import it.polimi.dima.watchdog.activities.MainActivity;
 import it.polimi.dima.watchdog.crypto.PublicKeyAutenticator;
 import it.polimi.dima.watchdog.crypto.SharedSecretAgreement;
-import it.polimi.dima.watchdog.exceptions.ArbitraryMessageReceivedException;
+import it.polimi.dima.watchdog.exceptions.MessageWillBeIgnoredException;
 import it.polimi.dima.watchdog.exceptions.NoSuchPreferenceFoundException;
 import it.polimi.dima.watchdog.sms.socialistMillionaire.factory.SocialistMillionaireFactory;
 import android.app.NotificationManager;
@@ -84,10 +84,12 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 	public void visit(PublicKeyRequestCodeMessage pubKeyReqMsg) {
 		try 
 		{
-			pubKeyReqMsg.validate(other, ctx);
+			pubKeyReqMsg.validate(this.other, this.ctx);
 			
 			this.pka.setMyPublicKey(MyPrefFiles.getMyPreference(MyPrefFiles.MY_KEYS, MyPrefFiles.MY_PUB, this.ctx));
 			SMSUtility.sendMessage(this.other, SMSUtility.SMP_PORT, SMSUtility.hexStringToByteArray(SMSUtility.CODE2), this.pka.getMyPublicKey());
+			String preferenceKey = this.other + MyPrefFiles.PUB_KEY_FORWARDED;
+			MyPrefFiles.setMyPreference(MyPrefFiles.SMP_STATUS, preferenceKey, this.other, this.ctx);
 			Log.i("[DEBUG]", "ok sono nella gestione richiesta");
 			
 		} 
@@ -97,6 +99,10 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 			e.printStackTrace();
 			handleErrorOrException();
 		}
+		catch (MessageWillBeIgnoredException e)
+		{
+			//appunto si ignora il messaggio
+		}
 		
 	}
 
@@ -104,13 +110,15 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 	public void visit(PublicKeySentCodeMessage pubKeySentMsg) {
 		try 
 		{
-			pubKeySentMsg.validate(other, ctx);
+			pubKeySentMsg.validate(this.other, this.ctx);
 			
 			//la secret question settata non è in Base64 (è una stringa normale -> vedi AssociateNumberFragment),
 			//quindi niente conversione richiesta
 			this.pka.setSecretQuestion(MyPrefFiles.getMyPreference(MyPrefFiles.SECRET_Q_A, MyPrefFiles.SECRET_QUESTION, this.ctx));
 			MyPrefFiles.setMyPreference(MyPrefFiles.KEYSQUARE, this.other, pubKeySentMsg.getBody(), this.ctx);
 			SMSUtility.sendMessage(this.other, SMSUtility.SMP_PORT, SMSUtility.hexStringToByteArray(SMSUtility.CODE3), this.pka.getSecretQuestion().getBytes());
+			String preferenceKey = this.other + MyPrefFiles.SECRET_QUESTION_FORWARDED;
+			MyPrefFiles.setMyPreference(MyPrefFiles.SMP_STATUS, preferenceKey, this.other, this.ctx);
 			Log.i("[DEBUG]", "Visitor sembra funzionare");
 		}
 		catch (NoSuchPreferenceFoundException e) 
@@ -119,10 +127,9 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 			e.printStackTrace();
 			handleErrorOrException();
 		}
-		catch (ArbitraryMessageReceivedException e)
+		catch (MessageWillBeIgnoredException e)
 		{
-			SMSUtility.showShortToastMessage(e.getMessage(), this.ctx);
-			//L'idea è che il messaggio va ignorato senza cancellare niente.
+			//appunto si ignora il messaggio
 		}
 
 		
@@ -133,7 +140,7 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 		try 
 		{
 			//serve per debug: siamo arrivati al punto critico
-			secQuestMsg.validate(other, ctx);
+			secQuestMsg.validate(this.other, this.ctx);
 			
 			this.pka.setMyPublicKey(MyPrefFiles.getMyPreference(MyPrefFiles.MY_KEYS, MyPrefFiles.MY_PUB, this.ctx));
 			String question = new String(Base64.decode(secQuestMsg.getBody(), Base64.DEFAULT), PasswordUtils.UTF_8);
@@ -150,6 +157,8 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 			
 			//TODO: scommentare quando si è finita la gestione utente 
 			//SMSUtility.sendMessage(this.other, SMSUtility.SMP_PORT, SMSUtility.hexStringToByteArray(SMSUtility.CODE4), this.pka.getHashToSend());
+			String preferenceKey = this.other + MyPrefFiles.HASH_FORWARDED;
+			MyPrefFiles.setMyPreference(MyPrefFiles.SMP_STATUS, preferenceKey, this.other, this.ctx);
 		} 
 		catch (NoSuchPreferenceFoundException e) 
 		{
@@ -169,6 +178,10 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 			e.printStackTrace();
 			handleErrorOrException();
 		}
+		catch (MessageWillBeIgnoredException e)
+		{
+			//appunto si ignora il messaggio
+		}
 		
 	}
 	
@@ -176,7 +189,7 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 	public void visit(SecretAnswerAndPublicKeyHashSentCodeMessage secAnswMsg) {
 		try 
 		{
-			secAnswMsg.validate(other, ctx);
+			secAnswMsg.validate(this.other, this.ctx);
 			
 			this.pka.setSecretAnswer(MyPrefFiles.getMyPreference(MyPrefFiles.SECRET_Q_A, MyPrefFiles.SECRET_ANSWER, this.ctx));
 			this.pka.setReceivedPublicKey(MyPrefFiles.getMyPreference(MyPrefFiles.KEYSQUARE, this.other, this.ctx));
@@ -193,7 +206,8 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 				MyPrefFiles.setMyPreference(MyPrefFiles.KEYRING, this.other, keyValidated, this.ctx);
 				String salt = MyPrefFiles.getMyPreference(MyPrefFiles.PASSWORD_AND_SALT, MyPrefFiles.MY_PASSWORD_SALT, this.ctx);
 				SMSUtility.sendMessage(this.other, SMSUtility.SMP_PORT, SMSUtility.hexStringToByteArray(SMSUtility.CODE5), salt.getBytes());
-				
+				String preferenceKey = this.other + MyPrefFiles.ACK_AND_SALT_FORWARDED;
+				MyPrefFiles.setMyPreference(MyPrefFiles.SMP_STATUS, preferenceKey, this.other, this.ctx);
 				//supponendo che ECDH possa essere fatto una volta per tutte
 				doECDH();
 			}
@@ -216,10 +230,9 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 			e.printStackTrace();
 			handleErrorOrException();
 		}
-		catch (ArbitraryMessageReceivedException e)
+		catch (MessageWillBeIgnoredException e)
 		{
-			SMSUtility.showShortToastMessage(e.getMessage(), this.ctx);
-			//L'idea è che il messaggio va ignorato senza cancellare niente.
+			//appunto si ignora il messaggio
 		}
 		
 	}
@@ -227,12 +240,14 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 	@Override
 	public void visit(KeyValidatedCodeMessage keyValMsg) {
 		try{
-			keyValMsg.validate(other, ctx);
+			keyValMsg.validate(this.other, this.ctx);
 			
 			//Se ricevo questo messaggio ed esso passa la validazione, l'altro ha validato la mia chiave pubblica.
 			//Se non ho già validato la chiave pubblica dell'altro faccio partire smp in modo simmetrico.
 			if (!MyPrefFiles.existsPreference(MyPrefFiles.KEYRING, this.other, this.ctx)) {
 				SMSUtility.sendMessage(this.other, SMSUtility.SMP_PORT, SMSUtility.hexStringToByteArray(SMSUtility.CODE1), null);
+				String preferenceKey = this.other + MyPrefFiles.PUB_KEY_REQUEST_FORWARDED;
+				MyPrefFiles.setMyPreference(MyPrefFiles.SMP_STATUS, preferenceKey, this.other, this.ctx);
 			}
 			//Prendo il sale che mi è stato inviato insieme alla conferma di validazione e lo salvo nell'hashring.
 			String salt = new String(Base64.decode(this.recMsg.getBody(), Base64.DEFAULT),PasswordUtils.UTF_8);
@@ -244,9 +259,9 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 			e.printStackTrace();
 			handleErrorOrException();
 		}
-		catch (ArbitraryMessageReceivedException e){
-			SMSUtility.showShortToastMessage(e.getMessage(), this.ctx);
-			//L'idea è che il messaggio va ignorato senza cancellare niente.
+		catch (MessageWillBeIgnoredException e)
+		{
+			//appunto si ignora il messaggio
 		}
 		
 	
@@ -254,10 +269,24 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 
 	@Override
 	public void visit(IDontWantToAssociateCodeMessage noAssMsg) {
-		noAssMsg.validate(other, ctx);;
+		try{
+			noAssMsg.validate(this.other, this.ctx);
+			if(MyPrefFiles.iHaveSomeReferencesToThisUser(this.other, this.ctx)){
+				MyPrefFiles.erasePreferences(this.other, this.ctx);
+				//TODO notificare il fragment di quello che è successo
+				
+				//la catena non va avanti all'infinito a causa dell'if. Dopo al massimo un messaggio di
+				//questo tipo a testa, entrambi non hanno più riferimenti all'altro
+				SMSUtility.sendMessage(this.other, SMSUtility.SMP_PORT, SMSUtility.hexStringToByteArray(SMSUtility.CODE6), null);
+			}
+			
+		}
+		catch (MessageWillBeIgnoredException e)
+		{
+			//appunto si ignora il messaggio
+		}
 		
-		MyPrefFiles.erasePreferences(this.other, this.ctx);
-		//TODO notificare il fragment di quello che è successo
+		
 	}
 	
 	/**

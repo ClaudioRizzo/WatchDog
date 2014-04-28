@@ -1,7 +1,7 @@
 package it.polimi.dima.watchdog.sms.socialistMillionaire;
 
 import it.polimi.dima.watchdog.MyPrefFiles;
-import it.polimi.dima.watchdog.exceptions.ArbitraryMessageReceivedException;
+import it.polimi.dima.watchdog.exceptions.MessageWillBeIgnoredException;
 import android.content.Context;
 
 public class PublicKeySentCodeMessage extends SMSProtocol {
@@ -18,28 +18,14 @@ public class PublicKeySentCodeMessage extends SMSProtocol {
 	}
 
 	@Override
-	public void validate(String otherNumber, Context ctx) throws ArbitraryMessageReceivedException {
-		// se mi arriva un messaggio del genere e ho qualche preferenza di quel
-		// numero già salvata
-		// devo bloccare tutto perchè è sicuramente un errore o un messaggio
-		// falso, in quanto nessuno
-		// deve inviare ad un altro la propria chiave pubblica se prima non è
-		// arrivato un messaggio
-		// di richiesta. Tale messaggio non può partire se chi lo manderebbe non
-		// ha prima cancellato
-		// tutte le preferenze che riguardano il destinatario.
-		if (MyPrefFiles.existsPreference(MyPrefFiles.KEYSQUARE, otherNumber,
-				ctx)
-				|| MyPrefFiles.existsPreference(MyPrefFiles.KEYRING,
-						otherNumber, ctx)
-				|| MyPrefFiles.existsPreference(MyPrefFiles.SHARED_SECRETS,
-						otherNumber, ctx)
-				|| MyPrefFiles.existsPreference(MyPrefFiles.HASHRING,
-						otherNumber, ctx)) {
-			throw new ArbitraryMessageReceivedException(
-					"Messaggio ricevuto da un numero già presente!!!");
+	public void validate(String otherNumber, Context ctx) throws MessageWillBeIgnoredException{
+		// la richiesta va accettata solo se in smp_status non è segnato che ne ho già ricevuta una
+		// e se è segnato che ne ho richiesta una.
+		String key = otherNumber + MyPrefFiles.PUB_KEY_RECEIVED;
+		String key2 = otherNumber + MyPrefFiles.PUB_KEY_REQUEST_FORWARDED;
+		if (MyPrefFiles.existsPreference(MyPrefFiles.SMP_STATUS, key, ctx) || !MyPrefFiles.existsPreference(MyPrefFiles.SMP_STATUS, key2, ctx)) {
+			throw new MessageWillBeIgnoredException();
 		}
-
 	}
 
 }

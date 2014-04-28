@@ -1,5 +1,7 @@
 package it.polimi.dima.watchdog;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import it.polimi.dima.watchdog.exceptions.NoSuchPreferenceFoundException;
@@ -66,6 +68,13 @@ public class MyPrefFiles {
 	 */
 	public static final String SHARED_SECRETS = "shared_secrets";
 	
+	/**
+	 * file che per ogni numero di telefono tiene traccia di cosa è stato già fatto e di cosa manca da fare
+	 * nel SMP. I riferimenti possono essere cancellati se incompleti alla ricezione di IDontWantToAssociate
+	 * e se completi alla ricezione di un apposito messaggio di reset.
+	 */
+	public static final String SMP_STATUS = "smp_status";
+	
 	//DA QUI IN POI CHIAVI
 	
 	/**
@@ -109,6 +118,20 @@ public class MyPrefFiles {
 	public static final String SESSION_KEY = "session_key";
 	
 	
+	//Qui i nomi di chiave parziali per il file smp_status
+	
+	public static final String PUB_KEY_REQUEST_FORWARDED = "pkrf";
+	public static final String PUB_KEY_RECEIVED = "pkr";
+	public static final String SECRET_QUESTION_FORWARDED = "sqf";
+	public static final String HASH_RECEIVED = "hr";
+	public static final String ACK_AND_SALT_FORWARDED = "asf";
+	public static final String PUB_KEY_REQUEST_RECEIVED = "pkrr";
+	public static final String PUB_KEY_FORWARDED = "pkf";
+	public static final String SECRET_QUESTION_RECEIVED = "sqr";
+	public static final String HASH_FORWARDED = "hf";
+	public static final String ACK_AND_SALT_RECEIVED = "asr";
+	
+	
 	//Qui iniziano i metodi
 	
 	public static String getMyPreference(String fileName, String key, Context ctx) throws NoSuchPreferenceFoundException {
@@ -127,6 +150,10 @@ public class MyPrefFiles {
 		SharedPreferences.Editor editor = sp.edit();
 		editor.putString(key, value);
 		editor.commit();
+	}
+	
+	public static void setMyPreference(String filename, String firstKeyHalf, String secondKeyHalf, String value, Context ctx){
+		
 	}
 	
 	public static void deleteMyPreference(String fileName, String key, Context ctx) {
@@ -163,10 +190,58 @@ public class MyPrefFiles {
 		}
 	}
 	
+	/**
+	 * Metodo che cerca nelle preferenze se esistono riferimenti ad un determinato numero di telefono.
+	 * @param phoneNumber
+	 * @param ctx
+	 * @return
+	 */
+	public static boolean iHaveSomeReferencesToThisUser(String phoneNumber, Context ctx){
+		if(MyPrefFiles.existsPreference(MyPrefFiles.KEYRING, phoneNumber, ctx)){
+			return true;
+		}
+		if(MyPrefFiles.existsPreference(MyPrefFiles.KEYSQUARE, phoneNumber, ctx)){
+			return true;
+		}
+		if(MyPrefFiles.existsPreference(MyPrefFiles.SHARED_SECRETS, phoneNumber, ctx)){
+			return true;
+		}
+		if(MyPrefFiles.existsPreference(MyPrefFiles.HASHRING, phoneNumber, ctx)){
+			return true;
+		}
+		return false;
+	}
+	
+	
+	public static boolean isSmpSuccessfullyFinished(String phoneNumber, Context ctx){
+		List<String> keys = MyPrefFiles.createKeysForSmpStatus(phoneNumber);
+		
+		for(String s : keys){
+			if(!existsPreference(MyPrefFiles.SMP_STATUS, s, ctx)){
+				return false;
+			}
+		}
+		return true;
+	}
+	
 	public static Map<String, ?> getPrefMap(String fileName, Context ctx) {
 		SharedPreferences sp = ctx.getSharedPreferences(fileName, Context.MODE_PRIVATE);
 		return sp.getAll();
 	}
 	
+	private static List<String> createKeysForSmpStatus(String phoneNumber){
+		List<String> keys = new ArrayList<String>();
+		keys.add(phoneNumber + MyPrefFiles.PUB_KEY_REQUEST_FORWARDED);
+		keys.add(phoneNumber + MyPrefFiles.PUB_KEY_RECEIVED);
+		keys.add(phoneNumber + MyPrefFiles.SECRET_QUESTION_FORWARDED);
+		keys.add(phoneNumber + MyPrefFiles.HASH_RECEIVED);
+		keys.add(phoneNumber + MyPrefFiles.ACK_AND_SALT_FORWARDED);
+		keys.add(phoneNumber + MyPrefFiles.PUB_KEY_REQUEST_RECEIVED);
+		keys.add(phoneNumber + MyPrefFiles.PUB_KEY_FORWARDED);
+		keys.add(phoneNumber + MyPrefFiles.SECRET_QUESTION_RECEIVED);
+		keys.add(phoneNumber + MyPrefFiles.HASH_FORWARDED);
+		keys.add(phoneNumber + MyPrefFiles.ACK_AND_SALT_RECEIVED);
+		return keys;
+	}
 	
 }

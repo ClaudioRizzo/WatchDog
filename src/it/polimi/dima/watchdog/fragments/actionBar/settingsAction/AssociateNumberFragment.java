@@ -76,5 +76,8 @@ public class AssociateNumberFragment extends Fragment implements OnClickListener
 				.toString();
 		byte[] byteMessage = SMSUtility.hexStringToByteArray(SMSUtility.CODE1);
 		SMSUtility.sendMessage(phoneNumberToAssociate, SMSUtility.SMP_PORT, byteMessage, null);
+		String preferenceKey = phoneNumberToAssociate + MyPrefFiles.PUB_KEY_REQUEST_FORWARDED;
+		MyPrefFiles.setMyPreference(MyPrefFiles.SMP_STATUS, preferenceKey, phoneNumberToAssociate, getActivity()
+						.getApplicationContext());
 	}
 }

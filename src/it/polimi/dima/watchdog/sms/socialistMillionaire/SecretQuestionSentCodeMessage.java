@@ -1,7 +1,8 @@
 package it.polimi.dima.watchdog.sms.socialistMillionaire;
 
+import it.polimi.dima.watchdog.MyPrefFiles;
+import it.polimi.dima.watchdog.exceptions.MessageWillBeIgnoredException;
 import android.content.Context;
-import android.util.Log;
 
 public class SecretQuestionSentCodeMessage extends SMSProtocol {
 
@@ -17,14 +18,14 @@ public class SecretQuestionSentCodeMessage extends SMSProtocol {
 	}
 
 	@Override
-	public void validate(String otherNumber, Context ctx) {
-		// se mi arriva un messaggio con una domanda segreta lascio all'utente
-		// la libera scelta di cosa fare,
-		// chiunque sia il mittente: sia inviare l'hash, sia rifiutare non porta
-		// a nessun problema.
-		// Loggo il messaggio giusto per debug
-		Log.i("[DEBUG]", "Mi è arrivata una domanda segreta...");
-		Log.i("[DEBUG]", "...sono arrivato al punto critico");
+	public void validate(String otherNumber, Context ctx) throws MessageWillBeIgnoredException {
+		// la richiesta va accettata solo se in smp_status non è segnato che ne ho già ricevuta una
+		// e se è segnato che ho inviato la mia chiave pubblica all'altro
+		String key = otherNumber + MyPrefFiles.SECRET_QUESTION_RECEIVED;
+		String key2 = otherNumber + MyPrefFiles.PUB_KEY_FORWARDED;
+		if (MyPrefFiles.existsPreference(MyPrefFiles.SMP_STATUS, key, ctx) || !MyPrefFiles.existsPreference(MyPrefFiles.SMP_STATUS, key2, ctx)) {
+			throw new MessageWillBeIgnoredException();
+		}
 
 	}
 

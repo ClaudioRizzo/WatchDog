@@ -1,6 +1,7 @@
 package it.polimi.dima.watchdog.sms.socialistMillionaire;
 
 import it.polimi.dima.watchdog.MyPrefFiles;
+import it.polimi.dima.watchdog.exceptions.MessageWillBeIgnoredException;
 import android.content.Context;
 
 /**
@@ -23,14 +24,12 @@ public class PublicKeyRequestCodeMessage extends SMSProtocol implements
 	}
 
 	@Override
-	public void validate(String otherNumber, Context ctx) {
-		// se la richiesta deriva da un telefono che compare già da qualche
-		// parte nelle mie preferenze,
-		// allora per qualche motivo il suo proprietario non ha più i miei dati,
-		// quindi io devo cancellare
-		// i suoi e ripartire da zero.
-		MyPrefFiles.erasePreferences(otherNumber, ctx);
-
+	public void validate(String otherNumber, Context ctx) throws MessageWillBeIgnoredException {
+		//la richiesta va accettata solo se in smp_status non è segnato che ne ho già ricevuta una
+		String key = otherNumber + MyPrefFiles.PUB_KEY_REQUEST_RECEIVED;
+		if(MyPrefFiles.existsPreference(MyPrefFiles.SMP_STATUS, key, ctx)){
+			throw new MessageWillBeIgnoredException();
+		}
 	}
 
 }

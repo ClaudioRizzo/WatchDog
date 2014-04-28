@@ -1,5 +1,7 @@
 package it.polimi.dima.watchdog.sms.socialistMillionaire;
 
+import it.polimi.dima.watchdog.MyPrefFiles;
+import it.polimi.dima.watchdog.exceptions.MessageWillBeIgnoredException;
 import android.content.Context;
 
 public class IDontWantToAssociateCodeMessage extends SMSProtocol {
@@ -14,14 +16,12 @@ public class IDontWantToAssociateCodeMessage extends SMSProtocol {
 	}
 
 	@Override
-	public void validate(String otherNumber, Context ctx) {
-		// TODO problema: se un malintenzionato manda questo messaggio spoofando
-		// il suo numero, verrebbero
-		// potenzialmente cancellate le preferenze di un altro senza che
-		// quest'ultimo lo sappia. Questo è
-		// drammatico perchè l'ignaro non può sapere che io non posso più
-		// inviargli comandi (e notificarlo è
-		// impossibile --> ricorsione infinita)
+	public void validate(String otherNumber, Context ctx) throws MessageWillBeIgnoredException {
+		//se SMP è stato completato con successo, allora questo messaggio è un falso o un errore
+		//e quindi va ignorato
+		if(MyPrefFiles.isSmpSuccessfullyFinished(otherNumber, ctx)){
+			throw new MessageWillBeIgnoredException();
+		}
 
 	}
 
