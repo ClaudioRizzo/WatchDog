@@ -12,6 +12,10 @@
         android:id="@+id/settings_panel"
         android:title="@string/action_settings"
         yourapp:showAsAction="never"/>
+    <item
+        android:id="@+id/pending_requests_panel"
+        android:title="@string/action_pending"
+        yourapp:showAsAction="never"/>
     
     <item
         android:id="@+id/rate_panel"

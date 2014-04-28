@@ -70,6 +70,10 @@
             android:theme="@style/Theme.AppCompat.Light" >
         </activity>
         <activity
+            android:name="it.polimi.dima.watchdog.activities.PendingRequestsActivity"
+            android:theme="@style/Theme.AppCompat.Light" >
+        </activity>
+        <activity
             android:name="it.polimi.dima.watchdog.activities.SettingsActivity"
             android:theme="@style/Theme.AppCompat.Light" >
             <meta-data

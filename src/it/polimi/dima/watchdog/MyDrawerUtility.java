@@ -123,6 +123,9 @@ public class MyDrawerUtility {
 		public void onItemClick(AdapterView<?> parent, View view, int position,
 				long id) {
 
+			/*
+			 * In questo metodo si gestiscono i click nel menu del drawer
+			 */
 			MainActivity mainActivity;
 			if (activity instanceof MainActivity) {
 				mainActivity = (MainActivity) activity;

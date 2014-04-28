@@ -1,11 +1,12 @@
 package it.polimi.dima.watchdog.activities;
 
 import it.polimi.dima.watchdog.R;
+import it.polimi.dima.watchdog.fragments.actionBar.PendingRequestsFragment;
 import it.polimi.dima.watchdog.fragments.wizard.InitializeWizardFragment;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 
-public class PendingRequestsActiviry extends ActionBarActivity {
+public class PendingRequestsActivity extends ActionBarActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -20,9 +21,9 @@ public class PendingRequestsActiviry extends ActionBarActivity {
 		}
 		
 		//TODO: creare il fragment da inserire nell'activity e cercare di capire che fare una lista dinamica usando listview e un adapter
-		InitializeWizardFragment mIniWizFrag = new InitializeWizardFragment();
+		PendingRequestsFragment mPendReqFrag = new PendingRequestsFragment();
 		getSupportFragmentManager().beginTransaction()
-				.add(R.id.pending_requests_container, mIniWizFrag).commit();
+				.add(R.id.pending_requests_container, mPendReqFrag).commit();
 
 	}
 	
