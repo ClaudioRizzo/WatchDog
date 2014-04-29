@@ -58,10 +58,9 @@ public class MyPrefFiles {
 	public static final String KEYSQUARE = "keysquare"; //OVVIO PUN xD
 	
 	/**
-	 * file che contiene la chiave pubblica da usare per inviare il prossimo messaggio o per decrittare il primo
-	 * che arriva.
+	 * file che contiene tutti i dati di una "sessione di comando"
 	 */
-	public static final String CURRENT_AES_KEY = "current_aes_key";
+	public static final String COMMAND_SESSION = "command_session";
 	
 	/**
 	 * file che contiene i segreti condivisi tra me e ogni telefono associato.
@@ -112,12 +111,6 @@ public class MyPrefFiles {
 	 */
 	public static final String SECRET_QUESTION = "secret_question";
 	
-	/**
-	 * valore "chiave" per la chiave corrente dell'AES.
-	 */
-	public static final String SESSION_KEY = "session_key";
-	
-	
 	//Qui i nomi di chiave parziali per il file smp_status
 	
 	public static final String PUB_KEY_REQUEST_FORWARDED = "pkrf";
@@ -130,6 +123,36 @@ public class MyPrefFiles {
 	public static final String SECRET_QUESTION_RECEIVED = "sqr";
 	public static final String HASH_FORWARDED = "hf";
 	public static final String ACK_AND_SALT_RECEIVED = "asr";
+	
+	//Qui i nomi di chiave parziali per il file command_session
+	
+	/**
+	 * Chiave paziale a cui verrà concatenato il numero di telefono dell'altro utente; indica il sale
+	 * che verrà usato insieme al segreto condiviso per generare la password del prossimo messaggio in
+	 * codifica Base64.
+	 */
+	public static final String SESSION_SALT = "session_salt"; //il valore sarà Base64
+	
+	/**
+	 * Chiave paziale a cui verrà concatenato il numero di telefono dell'altro utente; indica la chiave
+	 * di crittazione/decrittazione del prossimo messaggio in codifica Base64
+	 */
+	public static final String SESSION_KEY = "session_key"; //il valore sarà Base64
+	
+	/**
+	 * Chiave paziale a cui verrà concatenato il numero di telefono dell'altro utente; indica il vettore
+	 * di inizializzazione che verrà usato nella crittazione/decrittazione del prossimo messaggio in codifica
+	 * Base64.
+	 */
+	public static final String IV = "iv"; //il valore sarà Base64
+	
+	/**
+	 * Chiave paziale a cui verrà concatenato il numero di telefono dell'altro utente; indica un valore
+	 * stringa che simboleggia lo stato della sessione di comando; il valore puntato può assumere solo i
+	 * seguenti 8 valori: FREE, FLAG_M1_SENT, FLAG_M1_RECEIVED, FLAG_M2_SENT, FLAG_M2_RECEIVED,
+	 * FLAG_M3_SENT, FLAG_M3_RECEIVED, FLAG_M4_RECEIVED.
+	 */
+	public static final String COMMUNICATION_STATUS_WITH = "me_with_";
 	
 	
 	//Qui iniziano i metodi

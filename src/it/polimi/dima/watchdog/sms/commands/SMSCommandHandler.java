@@ -54,10 +54,52 @@ public class SMSCommandHandler extends BroadcastReceiver implements SMSCommandVi
 					message = SmsMessage.createFromPdu((byte[]) pdusObj[i]);
 				}
 				this.other = message.getDisplayOriginatingAddress();
-				this.parser = popolateParser(message);	
-				this.recMsg = this.comFac.getMessage(SMSUtility.bytesToHex(this.parser.getPlaintext()));
-				this.recMsg.setBody(SMSUtility.getBody(message.getUserData()));
-				this.recMsg.handle(this);
+				String myContext = getMyContext(context);
+				
+				if(myContext == "free"){//TODO mettere la stringa da qualche parte
+					
+				}
+				else if(myContext == "flag_m1_sent"){//TODO mettere la stringa da qualche parte
+					
+				}
+				else if(myContext == "flag_m2_sent"){//TODO mettere la stringa da qualche parte
+					//TODO: se arriva un timeout smettere immediatamente quello che si stava facendo e
+					//chiamare manageTimeout()
+					try{
+						//TODO stoppare il timeout
+						MyPrefFiles.deleteMyPreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + this.other, context);
+						MyPrefFiles.setMyPreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + this.other, "flag_m3_received", context);
+						
+						this.parser = popolateParser(message);	
+						this.recMsg = this.comFac.getMessage(SMSUtility.bytesToHex(this.parser.getPlaintext()));
+						this.recMsg.setBody(SMSUtility.getBody(message.getUserData()));
+						this.parser.decrypt();
+						this.recMsg.handle(this); //qui verrà fatto ciò che il messaggio chiede
+												  //compreso l'invio di un nuovo messaggio
+						
+						MyPrefFiles.deleteMyPreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + this.other, context);
+						MyPrefFiles.setMyPreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + this.other, "flag_m4_sent", context);
+						
+					}
+					catch(Exception e)
+					{
+						//TODO: se arriva un timeout smettere immediatamente quello che si stava facendo e
+						//chiamare manageTimeout()
+						MyPrefFiles.deleteMyPreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + this.other, context);
+						MyPrefFiles.setMyPreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + this.other, "flag_m2_sent", context);
+						
+						
+					}
+					
+				}
+				else if(myContext == "flag_m3_sent"){//TODO mettere la stringa da qualche parte
+	
+				}
+				else{
+					//il messaggio viene semplicemente ignorato senza fare altro
+				}
+				
+				
 				
 			}
 			
@@ -78,7 +120,7 @@ public class SMSCommandHandler extends BroadcastReceiver implements SMSCommandVi
 	private SMSParser popolateParser(SmsMessage sms) throws NoSuchPreferenceFoundException, NoSuchAlgorithmException, InvalidKeySpecException {
 		byte[] encryptedMessage = sms.getUserData();
 		
-		String decKey = MyPrefFiles.getMyPreference(MyPrefFiles.CURRENT_AES_KEY, this.other, this.ctx);
+		String decKey = MyPrefFiles.getMyPreference(MyPrefFiles.COMMAND_SESSION, this.other, this.ctx);
 		byte[] decKeyValue = Base64.decode(decKey, Base64.DEFAULT);
 		Key decryptionKey = new SecretKeySpec(decKeyValue, CryptoUtility.AES_256);
 		
@@ -91,6 +133,13 @@ public class SMSCommandHandler extends BroadcastReceiver implements SMSCommandVi
 		byte[] storedPasswordHash = Base64.decode(storedHash, Base64.DEFAULT);
 		
 		return new SMSParser(encryptedMessage, decryptionKey, oPub, storedPasswordHash);
+	}
+	
+	private String getMyContext(Context context) throws NoSuchPreferenceFoundException{
+		if(MyPrefFiles.existsPreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + this.other, context)){
+			return MyPrefFiles.getMyPreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + this.other, context);
+		}
+		return null;
 	}
 
 	@Override
@@ -133,6 +182,11 @@ public class SMSCommandHandler extends BroadcastReceiver implements SMSCommandVi
 	public void visit(LocateCodeMessage locateCodeMessage) {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	private void manageTimeout(Context ctx){
+		MyPrefFiles.deleteMyPreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + this.other, ctx);
+		MyPrefFiles.setMyPreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + this.other, "free", ctx);
 	}
 
 }
