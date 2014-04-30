@@ -90,6 +90,10 @@ public class SMSUtility {
 	 */
 	public static String MARK_FOUND = "C0DE01FF";
 	
+	public static String M1_HEADER = "C0DE001F";
+	public static String M2_HEADER = "C0DE002F";
+	public static String M4_HEADER = "C0DE004F";
+	
 	/**
 	 * LocateCode (for commands only)
 	 */
