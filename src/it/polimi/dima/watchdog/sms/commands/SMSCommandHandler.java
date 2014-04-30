@@ -1,26 +1,22 @@
 package it.polimi.dima.watchdog.sms.commands;
 
-import java.security.Key;
-import java.security.KeyFactory;
-import java.security.NoSuchAlgorithmException;
-import java.security.PublicKey;
-import java.security.spec.InvalidKeySpecException;
-import java.security.spec.X509EncodedKeySpec;
+import java.util.HashMap;
+import java.util.Map;
 
-import javax.crypto.spec.SecretKeySpec;
-
-import it.polimi.dima.watchdog.CryptoUtility;
 import it.polimi.dima.watchdog.MyPrefFiles;
 import it.polimi.dima.watchdog.SMSUtility;
 import it.polimi.dima.watchdog.exceptions.NoSuchPreferenceFoundException;
-import it.polimi.dima.watchdog.sms.SMSParser;
+import it.polimi.dima.watchdog.sms.commands.flags.CommandProtocolFlagsReactionInterface;
+import it.polimi.dima.watchdog.sms.commands.flags.StatusFree;
+import it.polimi.dima.watchdog.sms.commands.flags.StatusM1Sent;
+import it.polimi.dima.watchdog.sms.commands.flags.StatusM2Sent;
+import it.polimi.dima.watchdog.sms.commands.flags.StatusM3Sent;
 import it.polimi.dima.watchdog.sms.socialistMillionaire.SMSProtocol;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.telephony.SmsMessage;
-import android.util.Base64;
 
 /**
  * 
@@ -29,20 +25,17 @@ import android.util.Base64;
  */
 public class SMSCommandHandler extends BroadcastReceiver implements SMSCommandVisitorInterface{
 
-	private Context ctx;
 	private SMSProtocol recMsg;
 	private String other;
-	private CommandFactory comFac;
-	private SMSParser parser;
+	private Map<String,CommandProtocolFlagsReactionInterface> statusMap = new HashMap<String,CommandProtocolFlagsReactionInterface>();
 	
 	
 	public SMSCommandHandler(){
-		this.comFac = new CommandFactory();
+		initStatusMap();
 	}
 	
 	@Override
 	public void onReceive(Context context, Intent intent) {
-		this.ctx = context;
 		final Bundle bundle = intent.getExtras();
 
 		try {
@@ -56,51 +49,26 @@ public class SMSCommandHandler extends BroadcastReceiver implements SMSCommandVi
 				this.other = message.getDisplayOriginatingAddress();
 				String myContext = getMyContext(context);
 				
-				if(myContext == "free"){//TODO mettere la stringa da qualche parte
+				try{
+					if(this.statusMap.containsKey(this.statusMap.get(myContext))){
+						this.recMsg = this.statusMap.get(myContext).parse(context, message, this.other);
+						this.recMsg.handle(this);
+						//dopo aver inviato il messaggio setto come status il fatto che ho appena inviato quel messaggio (o free)
+						MyPrefFiles.deleteMyPreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + other, context);
+						MyPrefFiles.setMyPreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + other, StatusM2Sent.NEXT_SENT_STATUS, context);
+					}
+					else{
+						//si ignora il messaggio
+					}
 					
 				}
-				else if(myContext == "flag_m1_sent"){//TODO mettere la stringa da qualche parte
-					
-				}
-				else if(myContext == "flag_m2_sent"){//TODO mettere la stringa da qualche parte
+				catch(Exception e)
+				{
 					//TODO: se arriva un timeout smettere immediatamente quello che si stava facendo e
 					//chiamare manageTimeout()
-					try{
-						//TODO stoppare il timeout
-						MyPrefFiles.deleteMyPreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + this.other, context);
-						MyPrefFiles.setMyPreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + this.other, "flag_m3_received", context);
-						
-						this.parser = popolateParser(message);	
-						this.recMsg = this.comFac.getMessage(SMSUtility.bytesToHex(this.parser.getPlaintext()));
-						this.recMsg.setBody(SMSUtility.getBody(message.getUserData()));
-						this.parser.decrypt();
-						this.recMsg.handle(this); //qui verrà fatto ciò che il messaggio chiede
-												  //compreso l'invio di un nuovo messaggio
-						
-						MyPrefFiles.deleteMyPreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + this.other, context);
-						MyPrefFiles.setMyPreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + this.other, "flag_m4_sent", context);
-						
-					}
-					catch(Exception e)
-					{
-						//TODO: se arriva un timeout smettere immediatamente quello che si stava facendo e
-						//chiamare manageTimeout()
-						MyPrefFiles.deleteMyPreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + this.other, context);
-						MyPrefFiles.setMyPreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + this.other, "flag_m2_sent", context);
-						
-						
-					}
-					
-				}
-				else if(myContext == "flag_m3_sent"){//TODO mettere la stringa da qualche parte
-	
-				}
-				else{
-					//il messaggio viene semplicemente ignorato senza fare altro
-				}
-				
-				
-				
+					MyPrefFiles.deleteMyPreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + other, context);
+					MyPrefFiles.setMyPreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + other, this.statusMap.get(myContext).getCurrentStatus(), context);
+				}			
 			}
 			
 			
@@ -117,23 +85,7 @@ public class SMSCommandHandler extends BroadcastReceiver implements SMSCommandVi
 		
 	}
 	
-	private SMSParser popolateParser(SmsMessage sms) throws NoSuchPreferenceFoundException, NoSuchAlgorithmException, InvalidKeySpecException {
-		byte[] encryptedMessage = sms.getUserData();
-		
-		String decKey = MyPrefFiles.getMyPreference(MyPrefFiles.COMMAND_SESSION, this.other, this.ctx);
-		byte[] decKeyValue = Base64.decode(decKey, Base64.DEFAULT);
-		Key decryptionKey = new SecretKeySpec(decKeyValue, CryptoUtility.AES_256);
-		
-		String otherPub = MyPrefFiles.getMyPreference(MyPrefFiles.KEYRING, this.other, this.ctx);
-		byte[] otherPubValue = Base64.decode(otherPub, Base64.DEFAULT);
-		KeyFactory kf = KeyFactory.getInstance(CryptoUtility.EC);
-		PublicKey oPub = kf.generatePublic(new X509EncodedKeySpec(otherPubValue));
-		
-		String storedHash = MyPrefFiles.getMyPreference(MyPrefFiles.PASSWORD_AND_SALT, MyPrefFiles.MY_PASSWORD_HASH, this.ctx);
-		byte[] storedPasswordHash = Base64.decode(storedHash, Base64.DEFAULT);
-		
-		return new SMSParser(encryptedMessage, decryptionKey, oPub, storedPasswordHash);
-	}
+	
 	
 	private String getMyContext(Context context) throws NoSuchPreferenceFoundException{
 		if(MyPrefFiles.existsPreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + this.other, context)){
@@ -187,6 +139,13 @@ public class SMSCommandHandler extends BroadcastReceiver implements SMSCommandVi
 	private void manageTimeout(Context ctx){
 		MyPrefFiles.deleteMyPreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + this.other, ctx);
 		MyPrefFiles.setMyPreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + this.other, "free", ctx);
+	}
+	
+	private void initStatusMap(){
+		this.statusMap.put(StatusFree.CURRENT_STATUS, new StatusFree());
+		this.statusMap.put(StatusM1Sent.CURRENT_STATUS, new StatusM1Sent());
+		this.statusMap.put(StatusM2Sent.CURRENT_STATUS, new StatusM2Sent());
+		this.statusMap.put(StatusM3Sent.CURRENT_STATUS, new StatusM3Sent());
 	}
 
 }

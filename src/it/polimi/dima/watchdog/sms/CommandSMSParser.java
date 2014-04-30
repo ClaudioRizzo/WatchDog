@@ -19,7 +19,7 @@ import it.polimi.dima.watchdog.exceptions.ErrorInSignatureCheckingException;
  * @author emanuele
  *
  */
-public class SMSParser {
+public class CommandSMSParser {
 	
 	private byte[] smsEncrypted; //sms crittato
 	private Key decryptionKey; //chiave dell'AES
@@ -38,7 +38,7 @@ public class SMSParser {
 	 * Costurttore che alla fine popola la classe con il messaggio originale dopo averne controllato l'integrità
 	 * mediante firma e la correttezza della password.
 	 */
-	public SMSParser(byte[] smsEncrypted, Key decryptionKey, PublicKey oPub, byte[] storedPasswordHash){
+	public CommandSMSParser(byte[] smsEncrypted, Key decryptionKey, PublicKey oPub, byte[] storedPasswordHash){
 		this.smsEncrypted = smsEncrypted;
 		this.decryptionKey = decryptionKey;
 		this.oPub = oPub;
