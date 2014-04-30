@@ -2,7 +2,6 @@ package it.polimi.dima.watchdog.activities;
 
 import it.polimi.dima.watchdog.R;
 import it.polimi.dima.watchdog.fragments.actionBar.PendingRequestsFragment;
-import it.polimi.dima.watchdog.fragments.wizard.InitializeWizardFragment;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 

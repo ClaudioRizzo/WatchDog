@@ -1,14 +1,12 @@
 package it.polimi.dima.watchdog.crypto;
 
 import it.polimi.dima.watchdog.CryptoUtility;
-import it.polimi.dima.watchdog.MyPrefFiles;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.regex.Pattern;
 
 import android.util.Base64;
-import android.util.Log;
 
 /**
  * In questa classe avverrà l'autenticazione della chiave pubblica dell'altro telefono mediante il
@@ -106,41 +104,24 @@ public class PublicKeyAutenticator {
 	public PublicKeyAutenticator() {}
 
 	public void doHashToSend() throws NoSuchAlgorithmException{
-		byte[] myPub = this.myPublicKey;
-		byte[] answ = this.secretAnswer.getBytes();
-		byte[] input = new byte[myPub.length + answ.length];
-		System.arraycopy(myPub, 0, input, 0, myPub.length);
-		System.arraycopy(answ, 0, input, myPub.length, answ.length);
-		int length = input.length;
-		String input64 = Base64.encodeToString(input, Base64.DEFAULT);
-		Log.i("[DEBUG : lunghezza input a hashToSend]", String.valueOf(length));
-		Log.i("[DEBUG : input a hashToSend]", input64);
-		
-		
-		MessageDigest digest = MessageDigest.getInstance(CryptoUtility.SHA_256);
-		this.hashToSend = digest.digest(input);
+		this.hashToSend = computeHash(this.myPublicKey, this.secretAnswer.getBytes());
 	}
 	
 	public void doHashToCheck() throws NoSuchAlgorithmException{
-		byte[] oPub = this.receivedPublicKey;
-		byte[] answ = this.secretAnswer.getBytes();
-		byte[] input = new byte[oPub.length + answ.length];
-		System.arraycopy(oPub, 0, input, 0, oPub.length);
-		System.arraycopy(answ, 0, input, oPub.length, answ.length);
-		int length = input.length;
-		String input64 = Base64.encodeToString(input, Base64.DEFAULT);
-		Log.i("[DEBUG : lunghezza input a hashToCheck]", String.valueOf(length));
-		Log.i("[DEBUG : input a hashToCheck]", input64);
-		
-		
-		MessageDigest digest = MessageDigest.getInstance(CryptoUtility.SHA_256);
-		byte[] hash = digest.digest(input);
-		
-		this.computedHash = Base64.encodeToString(hash, Base64.DEFAULT);
+		this.computedHash = Base64.encodeToString(computeHash(this.receivedPublicKey, this.secretAnswer.getBytes()), Base64.DEFAULT);
 	}
 	
 	public boolean checkForEquality(){
 		return this.receivedHash.equals(this.computedHash);
+	}
+	
+	private byte[] computeHash(byte[] firstHalf, byte[] secondHalf) throws NoSuchAlgorithmException{
+		byte[] input = new byte[firstHalf.length + secondHalf.length];
+		System.arraycopy(firstHalf, 0, input, 0, firstHalf.length);
+		System.arraycopy(secondHalf, 0, input, firstHalf.length, secondHalf.length);
+		
+		MessageDigest digest = MessageDigest.getInstance(CryptoUtility.SHA_256);
+		return digest.digest(input);
 	}
 
 }

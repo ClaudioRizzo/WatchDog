@@ -3,12 +3,10 @@ package it.polimi.dima.watchdog.sms.socialistMillionaire;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
-import java.util.Map;
 
 import it.polimi.dima.watchdog.MyPrefFiles;
 import it.polimi.dima.watchdog.PasswordUtils;
 import it.polimi.dima.watchdog.SMSUtility;
-import it.polimi.dima.watchdog.activities.MainActivity;
 import it.polimi.dima.watchdog.activities.PendingRequestsActivity;
 import it.polimi.dima.watchdog.crypto.PublicKeyAutenticator;
 import it.polimi.dima.watchdog.crypto.SharedSecretAgreement;
@@ -110,7 +108,7 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements
 
 	@Override
 	public void visit(PublicKeySentCodeMessage pubKeySentMsg) {
-		Log.i("[DEBUG-SMP_B4_TRY]", "CODE_2");
+		Log.i("[DEBUG-SMP_BEFORE_TRY]", "CODE_2");
 		try {
 			pubKeySentMsg.validate(this.other, this.ctx);
 
@@ -185,14 +183,6 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements
 			this.pka.doHashToCheck();
 			// giustamente è in Base64
 			this.pka.setReceivedHash(secAnswMsg.getBody());
-			
-			/*Log.i("[DEBUG-PUB_MIA]", MyPrefFiles.getMyPreference(MyPrefFiles.MY_KEYS, MyPrefFiles.MY_PUB, ctx));
-			Log.i("[DEBUG-PUB_REC]", MyPrefFiles.getMyPreference(MyPrefFiles.KEYSQUARE, this.other, ctx));
-			
-			Log.i("[DEBUG-SECRET]", MyPrefFiles.getMyPreference(MyPrefFiles.SECRET_Q_A, MyPrefFiles.SECRET_ANSWER, ctx));
-			
-			Log.i("[DEBUG-HASH-REC]", pka.getReceivedHash() );
-			Log.i("[DEBUG-HASH-COMP]", pka.getComputedHash());*/
 
 			// la chiave è cancellata dal keysquare sempre e comunque
 			MyPrefFiles.deleteMyPreference(MyPrefFiles.KEYSQUARE, this.other,
