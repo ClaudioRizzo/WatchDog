@@ -106,13 +106,35 @@ public class PublicKeyAutenticator {
 	public PublicKeyAutenticator() {}
 
 	public void doHashToSend() throws NoSuchAlgorithmException{
+		byte[] myPub = this.myPublicKey;
+		byte[] answ = this.secretAnswer.getBytes();
+		byte[] input = new byte[myPub.length + answ.length];
+		System.arraycopy(myPub, 0, input, 0, myPub.length);
+		System.arraycopy(answ, 0, input, myPub.length, answ.length);
+		int length = input.length;
+		String input64 = Base64.encodeToString(input, Base64.DEFAULT);
+		Log.i("[DEBUG : lunghezza input a hashToSend]", String.valueOf(length));
+		Log.i("[DEBUG : input a hashToSend]", input64);
+		
+		
 		MessageDigest digest = MessageDigest.getInstance(CryptoUtility.SHA_256);
-		this.hashToSend = digest.digest(new String(this.myPublicKey + this.secretAnswer).getBytes());
+		this.hashToSend = digest.digest(input);
 	}
 	
 	public void doHashToCheck() throws NoSuchAlgorithmException{
+		byte[] oPub = this.receivedPublicKey;
+		byte[] answ = this.secretAnswer.getBytes();
+		byte[] input = new byte[oPub.length + answ.length];
+		System.arraycopy(oPub, 0, input, 0, oPub.length);
+		System.arraycopy(answ, 0, input, oPub.length, answ.length);
+		int length = input.length;
+		String input64 = Base64.encodeToString(input, Base64.DEFAULT);
+		Log.i("[DEBUG : lunghezza input a hashToCheck]", String.valueOf(length));
+		Log.i("[DEBUG : input a hashToCheck]", input64);
+		
+		
 		MessageDigest digest = MessageDigest.getInstance(CryptoUtility.SHA_256);
-		byte[] hash = digest.digest(new String(this.receivedPublicKey + this.secretAnswer).getBytes());
+		byte[] hash = digest.digest(input);
 		
 		this.computedHash = Base64.encodeToString(hash, Base64.DEFAULT);
 	}

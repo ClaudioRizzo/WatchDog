@@ -114,8 +114,11 @@ public class PendingRequestsAdapter extends BaseAdapter {
 					pka.setMyPublicKey(MyPrefFiles.getMyPreference(
 							MyPrefFiles.MY_KEYS, MyPrefFiles.MY_PUB, ctx));
 					
-					Log.i("[DEBUG-CHIAVE USATA PER HASH]", MyPrefFiles.getMyPreference(
-							MyPrefFiles.MY_KEYS, MyPrefFiles.MY_PUB, ctx));
+					/*Log.i("[DEBUG-CHIAVE USATA PER HASH]", MyPrefFiles.getMyPreference(
+							MyPrefFiles.MY_KEYS, MyPrefFiles.MY_PUB, ctx));*/
+					/*int keySize = Base64.decode(MyPrefFiles.getMyPreference(MyPrefFiles.MY_KEYS, MyPrefFiles.MY_PUB, ctx), Base64.DEFAULT).length;
+					String size = String.valueOf(keySize);
+					Log.i("[CHIAVE - LUNGHEZZA]", size);*/
 					
 					pka.setSecretAnswer(secAnsw);
 					pka.doHashToSend();

@@ -186,13 +186,13 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements
 			// giustamente è in Base64
 			this.pka.setReceivedHash(secAnswMsg.getBody());
 			
-			Log.i("[DEBUG-PUB_MIA]", MyPrefFiles.getMyPreference(MyPrefFiles.MY_KEYS, MyPrefFiles.MY_PUB, ctx));
+			/*Log.i("[DEBUG-PUB_MIA]", MyPrefFiles.getMyPreference(MyPrefFiles.MY_KEYS, MyPrefFiles.MY_PUB, ctx));
 			Log.i("[DEBUG-PUB_REC]", MyPrefFiles.getMyPreference(MyPrefFiles.KEYSQUARE, this.other, ctx));
 			
 			Log.i("[DEBUG-SECRET]", MyPrefFiles.getMyPreference(MyPrefFiles.SECRET_Q_A, MyPrefFiles.SECRET_ANSWER, ctx));
 			
 			Log.i("[DEBUG-HASH-REC]", pka.getReceivedHash() );
-			Log.i("[DEBUG-HASH-COMP]", pka.getComputedHash());
+			Log.i("[DEBUG-HASH-COMP]", pka.getComputedHash());*/
 
 			// la chiave è cancellata dal keysquare sempre e comunque
 			MyPrefFiles.deleteMyPreference(MyPrefFiles.KEYSQUARE, this.other,
@@ -200,6 +200,7 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements
 			if (!this.pka.checkForEquality()) {
 				handleErrorOrException();
 			} else {
+				Log.i("DEBUG", "CHIAVE VALIDATA!!!");
 				String keyValidated = Base64.encodeToString(
 						this.pka.getReceivedPublicKey(), Base64.DEFAULT);
 				MyPrefFiles.setMyPreference(MyPrefFiles.KEYRING, this.other,
