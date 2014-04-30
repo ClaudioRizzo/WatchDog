@@ -7,6 +7,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.regex.Pattern;
 
 import android.util.Base64;
+import android.util.Log;
 
 /**
  * In questa classe avverrà l'autenticazione della chiave pubblica dell'altro telefono mediante il
@@ -23,6 +24,14 @@ public class PublicKeyAutenticator {
 	private String receivedHash; //in Base64
 	private String computedHash; //in Base64
 	private byte[] hashToSend;   //come byte[], senza codifica Base64, comodo per essere inviato
+	
+	//TODO: cancella
+	public String getReceivedHash() {
+		return this.receivedHash;
+	}
+	public String getComputedHash() {
+		return this.computedHash;
+	}
 	
 	public byte[] getMyPublicKey(){
 		return this.myPublicKey;
@@ -57,7 +66,8 @@ public class PublicKeyAutenticator {
 	 * @param receivedPublicKey
 	 */
 	public void setReceivedPublicKey(String receivedPublicKey){
-		if (!Pattern.matches(CryptoUtility.BASE64_REGEX, receivedPublicKey)) {
+		Log.i("[DEBUG - chiave]", receivedPublicKey);
+		if (false && !Pattern.matches(CryptoUtility.BASE64_REGEX, receivedPublicKey)) {
 			throw new IllegalArgumentException("La stringa passata come chiave non è in base64");
 		}
 		setReceivedPublicKey(Base64.decode(receivedPublicKey, Base64.DEFAULT));

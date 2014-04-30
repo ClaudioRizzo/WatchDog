@@ -14,7 +14,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
-public class AssociateNumberFragment extends Fragment implements OnClickListener {
+public class AssociateNumberFragment extends Fragment implements
+		OnClickListener {
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -23,30 +24,31 @@ public class AssociateNumberFragment extends Fragment implements OnClickListener
 		View v = inflater.inflate(R.layout.fragment_associate_number,
 				container, false);
 
-		Button mButton = (Button) v
-				.findViewById(R.id.button_associate);
+		Button mButton = (Button) v.findViewById(R.id.button_associate);
 		mButton.setOnClickListener(this);
-		
+
 		return v;
 
 	}
 
 	@Override
 	public void onClick(View v) {
-		
-		//TODO: Effettuare validazione degli input ! 
+
+		Log.i("[DEBUG]", "Ho cliccato per inviare");
+		// TODO: Effettuare validazione degli input !
 		this.getAndSaveQuestion();
 		try {
-			MyPrefFiles.getMyPreference(MyPrefFiles.SECRET_Q_A, MyPrefFiles.SECRET_QUESTION, getActivity().getApplicationContext());
+			MyPrefFiles.getMyPreference(MyPrefFiles.SECRET_Q_A,
+					MyPrefFiles.SECRET_QUESTION, getActivity()
+							.getApplicationContext());
 		} catch (NoSuchPreferenceFoundException e) {
-			Log.i("[DEBUG]", "L'errore è qui");
 			e.printStackTrace();
 			return;
 		}
 		this.getAndSaveAnswer();
 		this.getNumberAndStart();
 	}
-	
+
 	private void getAndSaveQuestion() {
 		View fragView = getView();
 		EditText mQuestionEditText = (EditText) fragView
@@ -57,7 +59,7 @@ public class AssociateNumberFragment extends Fragment implements OnClickListener
 				MyPrefFiles.SECRET_QUESTION, mQuestion, getActivity()
 						.getApplicationContext());
 	}
-	
+
 	private void getAndSaveAnswer() {
 		View fragView = getView();
 		EditText mQuestionEditText = (EditText) fragView
@@ -67,7 +69,7 @@ public class AssociateNumberFragment extends Fragment implements OnClickListener
 				MyPrefFiles.SECRET_ANSWER, mQuestion, getActivity()
 						.getApplicationContext());
 	}
-	
+
 	private void getNumberAndStart() {
 		View fragView = getView();
 		EditText mPhoneToAssociateEditText = (EditText) fragView
@@ -75,9 +77,11 @@ public class AssociateNumberFragment extends Fragment implements OnClickListener
 		String phoneNumberToAssociate = mPhoneToAssociateEditText.getText()
 				.toString();
 		byte[] byteMessage = SMSUtility.hexStringToByteArray(SMSUtility.CODE1);
-		SMSUtility.sendMessage(phoneNumberToAssociate, SMSUtility.SMP_PORT, byteMessage, null);
-		String preferenceKey = phoneNumberToAssociate + MyPrefFiles.PUB_KEY_REQUEST_FORWARDED;
-		MyPrefFiles.setMyPreference(MyPrefFiles.SMP_STATUS, preferenceKey, phoneNumberToAssociate, getActivity()
-						.getApplicationContext());
+		SMSUtility.sendMessage(phoneNumberToAssociate, SMSUtility.SMP_PORT,
+				byteMessage, null);
+		String preferenceKey = phoneNumberToAssociate
+				+ MyPrefFiles.PUB_KEY_REQUEST_FORWARDED;
+		MyPrefFiles.setMyPreference(MyPrefFiles.SMP_STATUS, preferenceKey,
+				phoneNumberToAssociate, getActivity().getApplicationContext());
 	}
 }

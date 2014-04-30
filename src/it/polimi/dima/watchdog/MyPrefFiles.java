@@ -21,6 +21,12 @@ public class MyPrefFiles {
 	
 	//QUI I NOMI DEI FILE
 	
+	
+	/**
+	 * File delle richieste in attesa di accettazione
+	 */
+	public static final String PENDENT =  "pendent";
+	
 	/**
 	 * Stringa che identifica il nome di un file
 	 */

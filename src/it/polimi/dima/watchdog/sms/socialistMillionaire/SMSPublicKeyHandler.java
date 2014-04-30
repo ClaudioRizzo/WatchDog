@@ -9,6 +9,7 @@ import it.polimi.dima.watchdog.MyPrefFiles;
 import it.polimi.dima.watchdog.PasswordUtils;
 import it.polimi.dima.watchdog.SMSUtility;
 import it.polimi.dima.watchdog.activities.MainActivity;
+import it.polimi.dima.watchdog.activities.PendingRequestsActivity;
 import it.polimi.dima.watchdog.crypto.PublicKeyAutenticator;
 import it.polimi.dima.watchdog.crypto.SharedSecretAgreement;
 import it.polimi.dima.watchdog.exceptions.MessageWillBeIgnoredException;
@@ -52,7 +53,8 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 	public void onReceive(Context context, Intent intent) {
 		this.ctx = context;
 		final Bundle bundle = intent.getExtras();
-
+		
+		Log.i("[DEBUG-SMP]", "HO RICEVUTO IL MESSAGGIO");
 		try {
 			if (bundle != null) {
 				final Object[] pdusObj = (Object[]) bundle.get(SMSUtility.SMS_EXTRA_NAME);
@@ -90,7 +92,7 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 			SMSUtility.sendMessage(this.other, SMSUtility.SMP_PORT, SMSUtility.hexStringToByteArray(SMSUtility.CODE2), this.pka.getMyPublicKey());
 			String preferenceKey = this.other + MyPrefFiles.PUB_KEY_FORWARDED;
 			MyPrefFiles.setMyPreference(MyPrefFiles.SMP_STATUS, preferenceKey, this.other, this.ctx);
-			Log.i("[DEBUG]", "ok sono nella gestione richiesta");
+			Log.i("[DEBUG-SMP]", "CODE_1");
 			
 		} 
 		catch (NoSuchPreferenceFoundException e) 
@@ -108,6 +110,7 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 
 	@Override
 	public void visit(PublicKeySentCodeMessage pubKeySentMsg) {
+		Log.i("[DEBUG-SMP_B4_TRY]", "CODE_2");
 		try 
 		{
 			pubKeySentMsg.validate(this.other, this.ctx);
@@ -119,16 +122,18 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 			SMSUtility.sendMessage(this.other, SMSUtility.SMP_PORT, SMSUtility.hexStringToByteArray(SMSUtility.CODE3), this.pka.getSecretQuestion().getBytes());
 			String preferenceKey = this.other + MyPrefFiles.SECRET_QUESTION_FORWARDED;
 			MyPrefFiles.setMyPreference(MyPrefFiles.SMP_STATUS, preferenceKey, this.other, this.ctx);
-			Log.i("[DEBUG]", "Visitor sembra funzionare");
+			Log.i("[DEBUG-SMP]", "CODE_2");
 		}
 		catch (NoSuchPreferenceFoundException e) 
 		{
+			Log.i("[DEBUG-SMP-ERROR]", "CODE_2");
 			SMSUtility.showShortToastMessage(e.getMessage(), this.ctx);
 			e.printStackTrace();
 			handleErrorOrException();
 		}
 		catch (MessageWillBeIgnoredException e)
 		{
+			Log.i("[DEBUG-SMP-ERROR]", "CODE_2");
 			//appunto si ignora il messaggio
 		}
 
@@ -142,36 +147,15 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 			//serve per debug: siamo arrivati al punto critico
 			secQuestMsg.validate(this.other, this.ctx);
 			
-			this.pka.setMyPublicKey(MyPrefFiles.getMyPreference(MyPrefFiles.MY_KEYS, MyPrefFiles.MY_PUB, this.ctx));
+			
 			String question = new String(Base64.decode(secQuestMsg.getBody(), Base64.DEFAULT), PasswordUtils.UTF_8);
-			this.pka.setSecretQuestion(question);
-			//TODO notificare all'utente la domanda segreta
-			//TODO aspettare la risposta dell'utente
-			this.pka.setSecretAnswer("DUMMY"); //ovviamente al posto di dummy ci va ciò che l'utente ha inserito.
-			this.pka.doHashToSend();
-			Map<String, ?> prova =  ctx.getSharedPreferences(MyPrefFiles.KEYSQUARE, Context.MODE_PRIVATE).getAll();
+			//this.pka.setSecretQuestion(question);
+			MyPrefFiles.setMyPreference(MyPrefFiles.PENDENT, this.other, question, ctx);
 			
-			for(String n: prova.keySet()) {
-				Log.i("[DEBUG]", "sono il numero "+n);
-			}
-			
-			//TODO: scommentare quando si è finita la gestione utente 
-			//SMSUtility.sendMessage(this.other, SMSUtility.SMP_PORT, SMSUtility.hexStringToByteArray(SMSUtility.CODE4), this.pka.getHashToSend());
-			String preferenceKey = this.other + MyPrefFiles.HASH_FORWARDED;
-			MyPrefFiles.setMyPreference(MyPrefFiles.SMP_STATUS, preferenceKey, this.other, this.ctx);
+					
+			Log.i("[DEBUG-SMP]", "CODE_3");
+			this.notifyUser();
 		} 
-		catch (NoSuchPreferenceFoundException e) 
-		{
-			SMSUtility.showShortToastMessage(e.getMessage(), this.ctx);
-			e.printStackTrace();
-			handleErrorOrException();
-		}
-		catch (NoSuchAlgorithmException e)
-		{
-			SMSUtility.showShortToastMessage(e.getMessage(), this.ctx);
-			e.printStackTrace();
-			handleErrorOrException();
-		}
 		catch (UnsupportedEncodingException e)
 		{
 			SMSUtility.showShortToastMessage(e.getMessage(), this.ctx);
@@ -189,6 +173,7 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 	public void visit(SecretAnswerAndPublicKeyHashSentCodeMessage secAnswMsg) {
 		try 
 		{
+			Log.i("[DEBUG-SMP]", "CODE_4");
 			secAnswMsg.validate(this.other, this.ctx);
 			
 			this.pka.setSecretAnswer(MyPrefFiles.getMyPreference(MyPrefFiles.SECRET_Q_A, MyPrefFiles.SECRET_ANSWER, this.ctx));
@@ -196,6 +181,13 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 			this.pka.doHashToCheck();
 			//giustamente è in Base64
 			this.pka.setReceivedHash(secAnswMsg.getBody());
+			
+			Log.i("[DEBUG-HASH-REC]", pka.getReceivedHash());
+			Log.i("[DEBUG-HASH-REC]", pka.getComputedHash());
+			
+			
+			
+			
 			//la chiave è cancellata dal keysquare sempre e comunque
 			MyPrefFiles.deleteMyPreference(MyPrefFiles.KEYSQUARE, this.other, this.ctx);
 			if(!this.pka.checkForEquality()){
@@ -240,6 +232,7 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 	@Override
 	public void visit(KeyValidatedCodeMessage keyValMsg) {
 		try{
+			Log.i("[DEBUG]", "CODE_5");
 			keyValMsg.validate(this.other, this.ctx);
 			
 			//Se ricevo questo messaggio ed esso passa la validazione, l'altro ha validato la mia chiave pubblica.
@@ -323,10 +316,10 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 		.setContentText("hello world")
 		.setAutoCancel(true);
 		
-		Intent resultIntent = new Intent(ctx, MainActivity.class);
+		Intent resultIntent = new Intent(ctx, PendingRequestsActivity.class);
 		TaskStackBuilder stackBuilder = TaskStackBuilder.create(ctx);
 		
-		stackBuilder.addParentStack(MainActivity.class);
+		stackBuilder.addParentStack(PendingRequestsActivity.class);
 		// Adds the Intent that starts the Activity to the top of the stack
 		stackBuilder.addNextIntent(resultIntent);
 		PendingIntent resultPendingIntent =

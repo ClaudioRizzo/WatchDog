@@ -10,13 +10,25 @@
     <TextView
         android:id="@+id/text_view_pending1"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/hello_world" />
+        android:layout_height="wrap_content"/>
 
-    <TextView
-        android:id="@+id/text_view_pending2"
+    <EditText 
+        android:id="@+id/edit_text_secret_answer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/hello_world" />
+        android:hint="Secret Answer" />
+    
+    <Button 
+        android:id="@+id/button_accept_smp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="accept"/>
+    
+    <Button 
+        android:id="@+id/button_refuse_smp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="refuse"/>
+    
 
 </LinearLayout>
