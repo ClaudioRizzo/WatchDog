@@ -24,12 +24,12 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+//TODO: il secret rimane null 
 public class PendingRequestsAdapter extends BaseAdapter {
 
 	private Context ctx;
 	private LinkedList<SocialistRequestWrapper> data;
 	private static LayoutInflater inflater = null;
-	private String secretAnswer;
 
 	public PendingRequestsAdapter(Context ctx,
 			List<SocialistRequestWrapper> data) {
@@ -72,7 +72,6 @@ public class PendingRequestsAdapter extends BaseAdapter {
 
 		EditText secAnswerEditText = (EditText) mLinearLayout
 				.findViewById(R.id.edit_text_secret_answer);
-		this.secretAnswer = secAnswerEditText.getText().toString();
 
 		Button refuseButton = (Button) mLinearLayout
 				.findViewById(R.id.button_refuse_smp);
@@ -80,7 +79,8 @@ public class PendingRequestsAdapter extends BaseAdapter {
 				.findViewById(R.id.button_accept_smp);
 
 		handleRefuse(refuseButton, data.get(position).getNumber());
-		handleSend(sendButton, data.get(position).getNumber());
+		handleSend(sendButton, data.get(position).getNumber(),
+				secAnswerEditText);
 
 		return vi;
 	}
@@ -100,7 +100,8 @@ public class PendingRequestsAdapter extends BaseAdapter {
 		});
 	}
 
-	private void handleSend(Button sendButton, final String number) {
+	private void handleSend(Button sendButton, final String number,
+			final EditText editText) {
 
 		sendButton.setOnClickListener(new OnClickListener() {
 
@@ -108,17 +109,27 @@ public class PendingRequestsAdapter extends BaseAdapter {
 			public void onClick(View v) {
 				PublicKeyAutenticator pka = new PublicKeyAutenticator();
 				try {
-					Log.i("[DEBUG]", "Ho cliccato send");
-					pka.setMyPublicKey(MyPrefFiles.getMyPreference(MyPrefFiles.MY_KEYS, MyPrefFiles.MY_PUB, ctx));
-					pka.setSecretAnswer(secretAnswer);
-					pka.doHashToSend();
-					SMSUtility.sendMessage(number, SMSUtility.SMP_PORT, SMSUtility.hexStringToByteArray(SMSUtility.CODE4), pka.getHashToSend());
-					String preferenceKey = number + MyPrefFiles.HASH_FORWARDED;
-					Log.i("[DEBUG-HAS_ANSW", Base64.encodeToString(pka.getHashToSend(), Base64.DEFAULT));
-					MyPrefFiles.setMyPreference(MyPrefFiles.SMP_STATUS, preferenceKey, number, ctx);
-				
-				} catch (NoSuchPreferenceFoundException e) {
+					String secAnsw = editText.getText().toString();
+					Log.i("[DEBUG]", "Ho cliccato send: " + secAnsw);
+					pka.setMyPublicKey(MyPrefFiles.getMyPreference(
+							MyPrefFiles.MY_KEYS, MyPrefFiles.MY_PUB, ctx));
 					
+					Log.i("[DEBUG-CHIAVE USATA PER HASH]", MyPrefFiles.getMyPreference(
+							MyPrefFiles.MY_KEYS, MyPrefFiles.MY_PUB, ctx));
+					
+					pka.setSecretAnswer(secAnsw);
+					pka.doHashToSend();
+
+					SMSUtility.sendMessage(number, SMSUtility.SMP_PORT,
+							SMSUtility.hexStringToByteArray(SMSUtility.CODE4),
+							pka.getHashToSend());
+					String preferenceKey = number + MyPrefFiles.HASH_FORWARDED;
+
+					MyPrefFiles.setMyPreference(MyPrefFiles.SMP_STATUS,
+							preferenceKey, number, ctx);
+
+				} catch (NoSuchPreferenceFoundException e) {
+
 					SMSUtility.showShortToastMessage(e.getMessage(), ctx);
 					e.printStackTrace();
 					handleErrorOrException(number);
@@ -127,7 +138,6 @@ public class PendingRequestsAdapter extends BaseAdapter {
 					e.printStackTrace();
 					handleErrorOrException(number);
 				}
-				
 
 			}
 		});
@@ -139,11 +149,12 @@ public class PendingRequestsAdapter extends BaseAdapter {
 				+ socReqWrapper.getQuestion();
 		textView.setText(toShow);
 	}
-	
-	private void handleErrorOrException(String number){
+
+	private void handleErrorOrException(String number) {
 		MyPrefFiles.erasePreferences(number, this.ctx);
-		
-		SMSUtility.sendMessage(number, SMSUtility.SMP_PORT, SMSUtility.hexStringToByteArray(SMSUtility.CODE6), null);
+
+		SMSUtility.sendMessage(number, SMSUtility.SMP_PORT,
+				SMSUtility.hexStringToByteArray(SMSUtility.CODE6), null);
 	}
 
 }

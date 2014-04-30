@@ -1,6 +1,7 @@
 package it.polimi.dima.watchdog.crypto;
 
 import it.polimi.dima.watchdog.CryptoUtility;
+import it.polimi.dima.watchdog.MyPrefFiles;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -66,7 +67,6 @@ public class PublicKeyAutenticator {
 	 * @param receivedPublicKey
 	 */
 	public void setReceivedPublicKey(String receivedPublicKey){
-		Log.i("[DEBUG - chiave]", receivedPublicKey);
 		if (false && !Pattern.matches(CryptoUtility.BASE64_REGEX, receivedPublicKey)) {
 			throw new IllegalArgumentException("La stringa passata come chiave non è in base64");
 		}
@@ -113,6 +113,7 @@ public class PublicKeyAutenticator {
 	public void doHashToCheck() throws NoSuchAlgorithmException{
 		MessageDigest digest = MessageDigest.getInstance(CryptoUtility.SHA_256);
 		byte[] hash = digest.digest(new String(this.receivedPublicKey + this.secretAnswer).getBytes());
+		
 		this.computedHash = Base64.encodeToString(hash, Base64.DEFAULT);
 	}
 	
