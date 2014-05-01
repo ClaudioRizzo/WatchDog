@@ -8,8 +8,8 @@ import android.telephony.SmsMessage;
 public class StatusM1Sent implements CommandProtocolFlagsReactionInterface {
 
 	public static String CURRENT_STATUS = "m1_sent";
-	public static String STATUS_RECEIVED = "m2_received";
-	public static String NEXT_SENT_STATUS = StatusM3Sent.CURRENT_STATUS;//TODO da correggere
+	private static String STATUS_RECEIVED = "m2_received";
+	public static String NEXT_SENT_STATUS = StatusM3Sent.CURRENT_STATUS;
 
 	@Override
 	public SMSProtocol parse(Context context, SmsMessage message, String other)
@@ -22,7 +22,9 @@ public class StatusM1Sent implements CommandProtocolFlagsReactionInterface {
 	public String getCurrentStatus() {
 		return StatusM1Sent.CURRENT_STATUS;
 	}
-
 	
-
+	@Override
+	public String getNextSentStatus() {
+		return StatusM1Sent.NEXT_SENT_STATUS;
+	}
 }

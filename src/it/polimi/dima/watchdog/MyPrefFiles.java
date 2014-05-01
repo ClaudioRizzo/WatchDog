@@ -117,6 +117,9 @@ public class MyPrefFiles {
 	 */
 	public static final String SECRET_QUESTION = "secret_question";
 	
+	//Qui le chiavi parziali per il file SHARED_SECRETS
+	
+	
 	//Qui i nomi di chiave parziali per il file smp_status
 	
 	public static final String PUB_KEY_REQUEST_FORWARDED = "pkrf";
@@ -133,21 +136,14 @@ public class MyPrefFiles {
 	//Qui i nomi di chiave parziali per il file command_session
 	
 	/**
-	 * Chiave paziale a cui verrà concatenato il numero di telefono dell'altro utente; indica il sale
-	 * che verrà usato insieme al segreto condiviso per generare la password del prossimo messaggio in
-	 * codifica Base64.
-	 */
-	public static final String SESSION_SALT = "session_salt"; //il valore sarà Base64
-	
-	/**
-	 * Chiave paziale a cui verrà concatenato il numero di telefono dell'altro utente; indica la chiave
-	 * di crittazione/decrittazione del prossimo messaggio in codifica Base64
+	 * Chiave paziale a cui verrà preposto il numero di telefono dell'altro utente; indica la chiave
+	 * di decrittazione del prossimo messaggio in codifica Base64
 	 */
 	public static final String SESSION_KEY = "session_key"; //il valore sarà Base64
 	
 	/**
-	 * Chiave paziale a cui verrà concatenato il numero di telefono dell'altro utente; indica il vettore
-	 * di inizializzazione che verrà usato nella crittazione/decrittazione del prossimo messaggio in codifica
+	 * Chiave paziale a cui verrà preposto il numero di telefono dell'altro utente; indica il vettore
+	 * di inizializzazione che verrà usato nella decrittazione del prossimo messaggio in codifica
 	 * Base64.
 	 */
 	public static final String IV = "iv"; //il valore sarà Base64
@@ -219,14 +215,15 @@ public class MyPrefFiles {
 		}
 		
 		List<String> keys = MyPrefFiles.createKeysForSmpStatus(phoneNumber);
-		
 		//resetta il file che tiene lo stato del SMP
 		for(String s : keys){
 			if(MyPrefFiles.existsPreference(MyPrefFiles.SMP_STATUS, s, ctx)){
 				MyPrefFiles.deleteMyPreference(MyPrefFiles.SMP_STATUS, s, ctx);
 			}
 		}
-		
+		if(MyPrefFiles.existsPreference(MyPrefFiles.PENDENT, phoneNumber, ctx)){
+			MyPrefFiles.deleteMyPreference(MyPrefFiles.PENDENT, phoneNumber, ctx);
+		}
 	}
 	
 	/**
@@ -254,6 +251,10 @@ public class MyPrefFiles {
 			if(MyPrefFiles.existsPreference(MyPrefFiles.SMP_STATUS, s, ctx)){
 				return true;
 			}
+		}
+		
+		if(MyPrefFiles.existsPreference(MyPrefFiles.PENDENT, phoneNumber, ctx)){
+			return true;
 		}
 		
 		return false;

@@ -24,7 +24,12 @@ import it.polimi.dima.watchdog.sms.CommandSMSParser;
 import it.polimi.dima.watchdog.sms.commands.CommandFactory;
 import it.polimi.dima.watchdog.sms.socialistMillionaire.SMSProtocol;
 
-//Ho mandato m2, mi aspetto m3, lo parso e poi passo a free
+/**
+ * 
+ * @author emanuele
+ *
+ */
+//Ho mandato m2, mi aspetto m3, lo parso e lo ritorno
 public class StatusM2Sent implements CommandProtocolFlagsReactionInterface {
 
 	
@@ -32,7 +37,7 @@ public class StatusM2Sent implements CommandProtocolFlagsReactionInterface {
 	private CommandFactory comFac;
 	private CommandSMSParser parser;
 	public static String CURRENT_STATUS = "m2_sent";
-	public static String STATUS_RECEIVED = "m3_received";
+	private static String STATUS_RECEIVED = "m3_received";
 	public static String NEXT_SENT_STATUS = StatusFree.CURRENT_STATUS;
 
 	public StatusM2Sent(){
@@ -76,5 +81,9 @@ public class StatusM2Sent implements CommandProtocolFlagsReactionInterface {
 	public String getCurrentStatus() {
 		return StatusM2Sent.CURRENT_STATUS;
 	}
-
+	
+	@Override
+	public String getNextSentStatus() {
+		return StatusM2Sent.NEXT_SENT_STATUS;
+	}
 }

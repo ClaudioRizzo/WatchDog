@@ -115,7 +115,7 @@ public class ECDSA_Signature {
 	 * @param signature : la firma da verificare in Base64
 	 */
 	public ECDSA_Signature(String ptx, PublicKey pub, String signature){//signature è in Base64
-		if (!Pattern.matches(CryptoUtility.BASE64_REGEX, signature)) {
+		if (false && !Pattern.matches(CryptoUtility.BASE64_REGEX, signature)) {
 			throw new IllegalArgumentException("La stringa passata come firma non è in base64");
 		}
 		this.plaintext = ptx.getBytes();
