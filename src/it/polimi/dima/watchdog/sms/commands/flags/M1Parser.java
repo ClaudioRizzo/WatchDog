@@ -79,6 +79,7 @@ public class M1Parser {
 	}
 
 	private void separateMessageParts(int ivStartPosition, int saltStartPosition, int signatureStartPosition, int signatureLength) {
+		this.signature = new byte[signatureLength];
 		System.arraycopy(this.rawMessage, 0, this.header, 0, SMSProtocol.HEADER_LENGTH);
 		System.arraycopy(this.rawMessage, ivStartPosition, this.iv, 0, M1Parser.IV_LENGTH);
 		System.arraycopy(this.rawMessage, saltStartPosition, this.salt, 0, M1Parser.SALT_LENGTH);

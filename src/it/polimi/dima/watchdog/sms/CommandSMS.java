@@ -36,6 +36,7 @@ public class CommandSMS {
 	private byte[] signature; //firma digitale
 	private byte[] finalSignedAndEncryptedMessage; //messaggio firmato e crittografato
 	private String dest; //serve per memorizzare il destinatario
+	private byte[] iv;
 	
 	
 	
@@ -50,12 +51,13 @@ public class CommandSMS {
 	/**
 	 * Costruttore con testo e password alla fine del quale il messaggio sarà pronto per essere spedito.
 	 */
-	public CommandSMS(byte[] text, String password, PrivateKey mPriv, Key key, String dest){
+	public CommandSMS(byte[] text, String password, PrivateKey mPriv, Key key, String dest, byte[] iv){
 		this.text = text;
 		this.password = password;
 		this.myPrivateKey = mPriv;
 		this.encryptionKey = key;
 		this.dest = dest;
+		this.iv = iv;
 	}
 
 	/**
@@ -111,14 +113,11 @@ public class CommandSMS {
 		signaturePlusMessage[this.finalMessage.length] = ' ';
 		System.arraycopy(this.signature, 0, signaturePlusMessage, this.finalMessage.length + 1, this.signature.length);
 		//AES_256_GCM_Crypto enc = new AES_256_GCM_Crypto(signaturePlusMessage, this.encryptionKey);
-		AES256GCM enc = new AES256GCM(this.encryptionKey, signaturePlusMessage, null /*iv TODO*/);
+		AES256GCM enc = new AES256GCM(this.encryptionKey, signaturePlusMessage, this.iv);
 		enc.encrypt();
 		this.finalSignedAndEncryptedMessage = enc.getCiphertext();
 	}
 	
-	/**
-	 * Tutto da testare ancora (per esempio la porta va cambiata) TODO
-	 */
 	public void send(){
 		SmsManager smsManager = SmsManager.getDefault();
 		smsManager.sendDataMessage(this.dest, null, SMSUtility.COMMAND_PORT, this.finalSignedAndEncryptedMessage, null, null);

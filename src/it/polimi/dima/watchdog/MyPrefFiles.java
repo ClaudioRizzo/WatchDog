@@ -137,13 +137,13 @@ public class MyPrefFiles {
 	
 	/**
 	 * Chiave paziale a cui verrà preposto il numero di telefono dell'altro utente; indica la chiave
-	 * di decrittazione del prossimo messaggio in codifica Base64
+	 * di crittazione/decrittazione del prossimo messaggio in codifica Base64
 	 */
 	public static final String SESSION_KEY = "session_key"; //il valore sarà Base64
 	
 	/**
 	 * Chiave paziale a cui verrà preposto il numero di telefono dell'altro utente; indica il vettore
-	 * di inizializzazione che verrà usato nella decrittazione del prossimo messaggio in codifica
+	 * di inizializzazione che verrà usato nella crittazione/decrittazione del prossimo messaggio in codifica
 	 * Base64.
 	 */
 	public static final String IV = "iv"; //il valore sarà Base64
@@ -155,6 +155,18 @@ public class MyPrefFiles {
 	 * FLAG_M3_SENT, FLAG_M3_RECEIVED, FLAG_M4_RECEIVED.
 	 */
 	public static final String COMMUNICATION_STATUS_WITH = "me_with_";
+	
+	/**
+	 * Chiave parziale a cui verrà preposto il numero di telefono dell'altro utente; indica il comando che
+	 * si vuole mandare nella sessione. Tale comando deve essere contenuto in SMSUtility e NON è in Base64.
+	 */
+	public static final String TEMP_COMMAND = "temp_command";//TODO ricordarsi di inizializzare
+	
+	/**
+	 * Chiave parziale a cui verrà preposto il numero di telefono dell'altro utente; indica la password che
+	 * si vuole allegare al messaggio da mandare. NON è in Base64.
+	 */
+	public static final String OTHER_PASSWORD = "other_password";//TODO ricordarsi di inizializzare
 	
 	
 	//Qui iniziano i metodi

@@ -58,7 +58,7 @@ public class SMSCommandHandler extends BroadcastReceiver implements SMSCommandVi
 						//dopo aver inviato il messaggio setto come status il fatto che ho appena inviato quel messaggio (o free)
 						MyPrefFiles.deleteMyPreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + other, context);
 						MyPrefFiles.setMyPreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + other, this.statusMap.get(myContext).getNextSentStatus(), context);
-						//TODO far partire il timeout
+						//TODO far partire il timeout solo se il messaggio ricevuto non è m3 o m4
 					}
 					else{
 						//si ignora il messaggio
@@ -139,9 +139,20 @@ public class SMSCommandHandler extends BroadcastReceiver implements SMSCommandVi
 		
 	}
 	
-	private void manageTimeout(Context ctx){
+	private void manageTimeoutA(Context ctx){
 		MyPrefFiles.deleteMyPreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + this.other, ctx);
-		MyPrefFiles.setMyPreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + this.other, "free", ctx);
+		MyPrefFiles.setMyPreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + this.other, StatusFree.CURRENT_STATUS, ctx);
+		if(MyPrefFiles.existsPreference(MyPrefFiles.COMMAND_SESSION, this.other + MyPrefFiles.TEMP_COMMAND, ctx)){
+			MyPrefFiles.deleteMyPreference(MyPrefFiles.COMMAND_SESSION, this.other + MyPrefFiles.TEMP_COMMAND, ctx);
+		}
+		if(MyPrefFiles.existsPreference(MyPrefFiles.COMMAND_SESSION, this.other + MyPrefFiles.OTHER_PASSWORD, ctx)){
+			MyPrefFiles.deleteMyPreference(MyPrefFiles.COMMAND_SESSION, this.other + MyPrefFiles.OTHER_PASSWORD, ctx);
+		}
+	}
+	
+	private void manageTimeoutB(Context ctx){
+		MyPrefFiles.deleteMyPreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + this.other, ctx);
+		MyPrefFiles.setMyPreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + this.other, StatusFree.CURRENT_STATUS, ctx);
 	}
 	
 	private void initStatusMap(){

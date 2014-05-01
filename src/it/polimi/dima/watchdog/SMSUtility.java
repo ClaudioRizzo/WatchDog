@@ -68,27 +68,27 @@ public class SMSUtility {
 	/**
 	 * SirenOffCode (for commands only)
 	 */
-	public static String SIREN_OFF = "C0DE01FF";
+	public static String SIREN_OFF = "C0DE02FF";
 	
 	/**
 	 * MarkStolenCode (for commands only)
 	 */
-	public static String MARK_STOLEN = "C0DE01FF";
+	public static String MARK_STOLEN = "C0DE03FF";
 	
 	/**
 	 * MarkLostCode (for commands only)
 	 */
-	public static String MARK_LOST = "C0DE01FF";
+	public static String MARK_LOST = "C0DE04FF";
 	
 	/**
 	 * MarkLostOrStolenCode (for commands only)
 	 */
-	public static String MARK_LOST_OR_STOLEN = "C0DE01FF";
+	public static String MARK_LOST_OR_STOLEN = "C0DE05FF";
 	
 	/**
 	 * MarkFoundCode (for commands only)
 	 */
-	public static String MARK_FOUND = "C0DE01FF";
+	public static String MARK_FOUND = "C0DE06FF";
 	
 	public static String M1_HEADER = "C0DE001F";
 	public static String M2_HEADER = "C0DE002F";
