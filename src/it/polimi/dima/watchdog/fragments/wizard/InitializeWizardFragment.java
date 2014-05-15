@@ -1,11 +1,12 @@
 package it.polimi.dima.watchdog.fragments.wizard;
 
-import it.polimi.dima.watchdog.PasswordUtils;
 import it.polimi.dima.watchdog.R;
+import it.polimi.dima.watchdog.UTILITIES.PasswordUtils;
 
 import java.security.NoSuchAlgorithmException;
 //TODO scommentare alla fine
 //import java.util.regex.Pattern;
+
 
 import android.app.Activity;
 import android.os.Bundle;

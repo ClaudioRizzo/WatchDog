@@ -2,7 +2,7 @@ package it.polimi.dima.watchdog.crypto;
 
 import android.annotation.SuppressLint;
 import android.util.Base64;
-import it.polimi.dima.watchdog.CryptoUtility;
+import it.polimi.dima.watchdog.UTILITIES.CryptoUtility;
 
 import java.security.InvalidKeyException;
 import java.security.KeyFactory;

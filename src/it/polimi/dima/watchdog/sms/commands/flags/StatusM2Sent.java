@@ -14,15 +14,14 @@ import org.spongycastle.crypto.InvalidCipherTextException;
 import android.content.Context;
 import android.telephony.SmsMessage;
 import android.util.Base64;
-import it.polimi.dima.watchdog.CryptoUtility;
-import it.polimi.dima.watchdog.MyPrefFiles;
-import it.polimi.dima.watchdog.SMSUtility;
+import it.polimi.dima.watchdog.UTILITIES.CryptoUtility;
+import it.polimi.dima.watchdog.UTILITIES.MyPrefFiles;
+import it.polimi.dima.watchdog.UTILITIES.SMSUtility;
 import it.polimi.dima.watchdog.exceptions.ArbitraryMessageReceivedException;
 import it.polimi.dima.watchdog.exceptions.ErrorInSignatureCheckingException;
 import it.polimi.dima.watchdog.exceptions.NoSuchPreferenceFoundException;
-import it.polimi.dima.watchdog.sms.CommandSMSParser;
+import it.polimi.dima.watchdog.sms.ParsableSMS;
 import it.polimi.dima.watchdog.sms.commands.CommandFactory;
-import it.polimi.dima.watchdog.sms.socialistMillionaire.SMSProtocol;
 
 /**
  * 
@@ -33,9 +32,9 @@ import it.polimi.dima.watchdog.sms.socialistMillionaire.SMSProtocol;
 public class StatusM2Sent implements CommandProtocolFlagsReactionInterface {
 
 	
-	private SMSProtocol recMsg;
+	private ParsableSMS recMsg;
 	private CommandFactory comFac;
-	private CommandSMSParser parser;
+	private M3Parser parser;
 	public static String CURRENT_STATUS = "m2_sent";
 	private static String STATUS_RECEIVED = "m3_received";
 	public static String NEXT_SENT_STATUS = StatusFree.CURRENT_STATUS;
@@ -45,7 +44,7 @@ public class StatusM2Sent implements CommandProtocolFlagsReactionInterface {
 	}
 	
 	@Override
-	public SMSProtocol parse(Context context, SmsMessage message, String other) throws IllegalStateException, InvalidCipherTextException, ArbitraryMessageReceivedException, ErrorInSignatureCheckingException, NoSuchAlgorithmException, InvalidKeySpecException, NoSuchPreferenceFoundException {
+	public ParsableSMS parse(Context context, SmsMessage message, String other) throws IllegalStateException, InvalidCipherTextException, ArbitraryMessageReceivedException, ErrorInSignatureCheckingException, NoSuchAlgorithmException, InvalidKeySpecException, NoSuchPreferenceFoundException {
 		//TODO: se arriva un timeout smettere immediatamente quello che si stava facendo e
 		//chiamare manageTimeout()
 		//TODO stoppare il timeout
@@ -59,7 +58,7 @@ public class StatusM2Sent implements CommandProtocolFlagsReactionInterface {
 			return this.recMsg;	
 	}
 	
-	private CommandSMSParser popolateParser(SmsMessage sms, Context ctx, String other) throws NoSuchPreferenceFoundException, NoSuchAlgorithmException, InvalidKeySpecException {
+	private M3Parser popolateParser(SmsMessage sms, Context ctx, String other) throws NoSuchPreferenceFoundException, NoSuchAlgorithmException, InvalidKeySpecException {
 		byte[] encryptedMessage = sms.getUserData();
 		
 		String decKey = MyPrefFiles.getMyPreference(MyPrefFiles.COMMAND_SESSION, other, ctx);
@@ -74,7 +73,10 @@ public class StatusM2Sent implements CommandProtocolFlagsReactionInterface {
 		String storedHash = MyPrefFiles.getMyPreference(MyPrefFiles.PASSWORD_AND_SALT, MyPrefFiles.MY_PASSWORD_HASH, ctx);
 		byte[] storedPasswordHash = Base64.decode(storedHash, Base64.DEFAULT);
 		
-		return new CommandSMSParser(encryptedMessage, decryptionKey, oPub, storedPasswordHash);
+		String iv = MyPrefFiles.getMyPreference(MyPrefFiles.COMMAND_SESSION, other + MyPrefFiles.IV, ctx);
+		byte[] ivValue = Base64.decode(iv, Base64.DEFAULT);
+		
+		return new M3Parser(encryptedMessage, decryptionKey, oPub, storedPasswordHash, ivValue);
 	}
 
 	@Override

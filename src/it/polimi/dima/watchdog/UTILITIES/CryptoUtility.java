@@ -1,4 +1,4 @@
-package it.polimi.dima.watchdog;
+package it.polimi.dima.watchdog.UTILITIES;
 
 /**
  * Classe che contiene le stringhe che identificano gli algoritmi usati.

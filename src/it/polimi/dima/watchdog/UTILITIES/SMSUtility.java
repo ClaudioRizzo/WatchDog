@@ -1,7 +1,7 @@
-package it.polimi.dima.watchdog;
+package it.polimi.dima.watchdog.UTILITIES;
 
 import it.polimi.dima.watchdog.exceptions.ArbitraryMessageReceivedException;
-import it.polimi.dima.watchdog.sms.socialistMillionaire.SMSProtocol;
+import it.polimi.dima.watchdog.sms.ParsableSMS;
 
 import java.util.regex.Pattern;
 
@@ -184,11 +184,11 @@ public class SMSUtility {
 	 */
 	public static String getHeader(byte[] msg) throws ArbitraryMessageReceivedException {
 		
-		if(msg.length < SMSProtocol.HEADER_LENGTH){
+		if(msg.length < ParsableSMS.HEADER_LENGTH){
 			throw new ArbitraryMessageReceivedException("Messaggio inaspettato: troppo corto!!!");
 		}
-		byte[] header = new byte[SMSProtocol.HEADER_LENGTH];
-		System.arraycopy(msg, 0, header, 0, SMSProtocol.HEADER_LENGTH);		
+		byte[] header = new byte[ParsableSMS.HEADER_LENGTH];
+		System.arraycopy(msg, 0, header, 0, ParsableSMS.HEADER_LENGTH);		
 		
 		
 		return SMSUtility.bytesToHex(header);	
@@ -196,19 +196,19 @@ public class SMSUtility {
 	
 	public static String getBody(byte[] msg) throws ArbitraryMessageReceivedException {
 		
-		if(msg.length < SMSProtocol.HEADER_LENGTH){
+		if(msg.length < ParsableSMS.HEADER_LENGTH){
 			throw new ArbitraryMessageReceivedException("Messaggio inaspettato: troppo corto!!!");
 		}
 		//android pare (dalla javadoc) non aggiungere un terminatore all'array di byte quando si usa getUserData(). In caso contrario la lunghezza
 		//va decurtata di 1.
-		int bodyLength = msg.length - SMSProtocol.HEADER_LENGTH;
+		int bodyLength = msg.length - ParsableSMS.HEADER_LENGTH;
 		
 		if(bodyLength == 0){
 			return null;
 		}
 		
 		byte[] body = new byte[bodyLength];
-		System.arraycopy(msg, SMSProtocol.HEADER_LENGTH, body, 0, bodyLength);
+		System.arraycopy(msg, ParsableSMS.HEADER_LENGTH, body, 0, bodyLength);
 		String bodyStr = Base64.encodeToString(body, Base64.DEFAULT);
 		return bodyStr;
 	}

@@ -4,9 +4,9 @@ import java.security.KeyFactory;
 import java.security.PublicKey;
 import java.security.spec.X509EncodedKeySpec;
 
-import it.polimi.dima.watchdog.CryptoUtility;
-import it.polimi.dima.watchdog.MyPrefFiles;
-import it.polimi.dima.watchdog.sms.socialistMillionaire.SMSProtocol;
+import it.polimi.dima.watchdog.UTILITIES.CryptoUtility;
+import it.polimi.dima.watchdog.UTILITIES.MyPrefFiles;
+import it.polimi.dima.watchdog.sms.ParsableSMS;
 import android.content.Context;
 import android.telephony.SmsMessage;
 import android.util.Base64;
@@ -25,7 +25,7 @@ public class StatusM3Sent implements CommandProtocolFlagsReactionInterface {
 	public static String NEXT_SENT_STATUS = StatusFree.CURRENT_STATUS;
 
 	@Override
-	public SMSProtocol parse(Context context, SmsMessage message, String other) throws Exception {
+	public ParsableSMS parse(Context context, SmsMessage message, String other) throws Exception {
 		//TODO: se arriva un timeout smettere immediatamente quello che si stava facendo e
 		//chiamare manageTimeout()
 		//TODO stoppare il timeout

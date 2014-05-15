@@ -1,4 +1,4 @@
-package it.polimi.dima.watchdog.sms;
+package it.polimi.dima.watchdog.sms.commands.flags;
 
 import java.security.Key;
 import java.security.PublicKey;
@@ -19,10 +19,11 @@ import it.polimi.dima.watchdog.exceptions.ErrorInSignatureCheckingException;
  * @author emanuele
  *
  */
-public class CommandSMSParser {
+public class M3Parser {
 	
 	private byte[] smsEncrypted; //sms crittato
 	private Key decryptionKey; //chiave dell'AES
+	private byte[] iv;
 	private PublicKey oPub; //chiave pubblica del mittente, usata per verificare la firma
 	private byte[] sms; //sms decrittato (hash(password) || text)
 	private byte[] signature; //firma scorporata dal messaggio
@@ -38,11 +39,12 @@ public class CommandSMSParser {
 	 * Costurttore che alla fine popola la classe con il messaggio originale dopo averne controllato l'integrità
 	 * mediante firma e la correttezza della password.
 	 */
-	public CommandSMSParser(byte[] smsEncrypted, Key decryptionKey, PublicKey oPub, byte[] storedPasswordHash){
+	public M3Parser(byte[] smsEncrypted, Key decryptionKey, PublicKey oPub, byte[] storedPasswordHash, byte[] iv){
 		this.smsEncrypted = smsEncrypted;
 		this.decryptionKey = decryptionKey;
 		this.oPub = oPub;
 		this.storedPasswordHash = storedPasswordHash;
+		this.iv = iv;
 	}
 	
 	
@@ -56,7 +58,7 @@ public class CommandSMSParser {
 	 */
 	public void decrypt() throws IllegalStateException, InvalidCipherTextException, ArbitraryMessageReceivedException, ErrorInSignatureCheckingException {
 		//AES_256_GCM_Crypto dec = new AES_256_GCM_Crypto(this.smsEncrypted, this.decryptionKey);
-		AES256GCM dec = new AES256GCM(this.decryptionKey, this.smsEncrypted, null /*iv TODO*/);
+		AES256GCM dec = new AES256GCM(this.decryptionKey, this.smsEncrypted, this.iv);
 		byte[] decryptedSMS = dec.decrypt(); // messaggio || ' ' || firma
 		int spacePosition = getSpacePosition(decryptedSMS);
 		//copia la firma

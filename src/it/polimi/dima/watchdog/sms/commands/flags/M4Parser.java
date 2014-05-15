@@ -1,6 +1,6 @@
 package it.polimi.dima.watchdog.sms.commands.flags;
 
-import it.polimi.dima.watchdog.sms.socialistMillionaire.SMSProtocol;
+import it.polimi.dima.watchdog.sms.ParsableSMS;
 
 import java.security.PublicKey;
 
@@ -14,7 +14,7 @@ public class M4Parser {
 	public M4Parser(byte[] rawMessage, PublicKey oPub){
 		this.rawMessage = rawMessage;
 		this.oPub = oPub;
-		this.header = new byte[SMSProtocol.HEADER_LENGTH];
+		this.header = new byte[ParsableSMS.HEADER_LENGTH];
 	}
 	
 	public void parse(){

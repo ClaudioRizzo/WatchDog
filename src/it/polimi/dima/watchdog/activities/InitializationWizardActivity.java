@@ -1,7 +1,7 @@
 package it.polimi.dima.watchdog.activities;
 
-import it.polimi.dima.watchdog.MyPrefFiles;
 import it.polimi.dima.watchdog.R;
+import it.polimi.dima.watchdog.UTILITIES.MyPrefFiles;
 import it.polimi.dima.watchdog.crypto.ECKeyPairGenerator;
 import it.polimi.dima.watchdog.fragments.wizard.InitializeWizardFragment;
 import it.polimi.dima.watchdog.fragments.wizard.InitializeWizardFragment.OnPasswordInizializedListener;

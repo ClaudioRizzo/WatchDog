@@ -1,13 +1,13 @@
 package it.polimi.dima.watchdog.sms.commands;
 
-import it.polimi.dima.watchdog.sms.socialistMillionaire.SMSProtocol;
+import it.polimi.dima.watchdog.sms.ParsableSMS;
 
 /**
  * 
  * @author emanuele
  *
  */
-public class MarkStolenCodeMessage extends SMSProtocol {
+public class MarkStolenCodeMessage extends ParsableSMS {
 
 	public MarkStolenCodeMessage(String header, String body) {
 		super(header, body);

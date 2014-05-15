@@ -1,7 +1,8 @@
 package it.polimi.dima.watchdog.crypto;
 
 import android.annotation.SuppressLint;
-import it.polimi.dima.watchdog.CryptoUtility;
+import it.polimi.dima.watchdog.UTILITIES.CryptoUtility;
+
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;

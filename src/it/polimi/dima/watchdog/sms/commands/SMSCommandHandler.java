@@ -3,15 +3,15 @@ package it.polimi.dima.watchdog.sms.commands;
 import java.util.HashMap;
 import java.util.Map;
 
-import it.polimi.dima.watchdog.MyPrefFiles;
-import it.polimi.dima.watchdog.SMSUtility;
+import it.polimi.dima.watchdog.UTILITIES.MyPrefFiles;
+import it.polimi.dima.watchdog.UTILITIES.SMSUtility;
 import it.polimi.dima.watchdog.exceptions.NoSuchPreferenceFoundException;
+import it.polimi.dima.watchdog.sms.ParsableSMS;
 import it.polimi.dima.watchdog.sms.commands.flags.CommandProtocolFlagsReactionInterface;
 import it.polimi.dima.watchdog.sms.commands.flags.StatusFree;
 import it.polimi.dima.watchdog.sms.commands.flags.StatusM1Sent;
 import it.polimi.dima.watchdog.sms.commands.flags.StatusM2Sent;
 import it.polimi.dima.watchdog.sms.commands.flags.StatusM3Sent;
-import it.polimi.dima.watchdog.sms.socialistMillionaire.SMSProtocol;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -25,7 +25,7 @@ import android.telephony.SmsMessage;
  */
 public class SMSCommandHandler extends BroadcastReceiver implements SMSCommandVisitorInterface{
 
-	private SMSProtocol recMsg;
+	private ParsableSMS recMsg;
 	private String other;
 	private Map<String,CommandProtocolFlagsReactionInterface> statusMap = new HashMap<String,CommandProtocolFlagsReactionInterface>();
 	

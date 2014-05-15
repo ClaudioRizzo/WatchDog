@@ -1,10 +1,11 @@
 package it.polimi.dima.watchdog.sms.socialistMillionaire;
 
-import it.polimi.dima.watchdog.MyPrefFiles;
+import it.polimi.dima.watchdog.UTILITIES.MyPrefFiles;
 import it.polimi.dima.watchdog.exceptions.MessageWillBeIgnoredException;
+import it.polimi.dima.watchdog.sms.ParsableSMS;
 import android.content.Context;
 
-public class SecretQuestionSentCodeMessage extends SMSProtocol {
+public class SecretQuestionSentCodeMessage extends ParsableSMS {
 
 	public SecretQuestionSentCodeMessage(String header, String body) {
 		super(header, body);
@@ -17,6 +18,9 @@ public class SecretQuestionSentCodeMessage extends SMSProtocol {
 
 	}
 
+	/**
+	 * Decide se accettare o no il messaggio.
+	 */
 	@Override
 	public void validate(String otherNumber, Context ctx) throws MessageWillBeIgnoredException {
 		// la richiesta va accettata solo se in smp_status non è segnato che ne ho già ricevuta una

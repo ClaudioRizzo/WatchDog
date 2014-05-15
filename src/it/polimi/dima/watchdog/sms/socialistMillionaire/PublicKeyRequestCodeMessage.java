@@ -1,7 +1,8 @@
 package it.polimi.dima.watchdog.sms.socialistMillionaire;
 
-import it.polimi.dima.watchdog.MyPrefFiles;
+import it.polimi.dima.watchdog.UTILITIES.MyPrefFiles;
 import it.polimi.dima.watchdog.exceptions.MessageWillBeIgnoredException;
+import it.polimi.dima.watchdog.sms.ParsableSMS;
 import android.content.Context;
 
 /**
@@ -11,7 +12,7 @@ import android.content.Context;
  * @author claudio
  * 
  */
-public class PublicKeyRequestCodeMessage extends SMSProtocol implements
+public class PublicKeyRequestCodeMessage extends ParsableSMS implements
 		SocialistMillionaireMessageInterface {
 
 	public PublicKeyRequestCodeMessage(String header, String body) {
@@ -23,6 +24,9 @@ public class PublicKeyRequestCodeMessage extends SMSProtocol implements
 		visitor.visit(this);
 	}
 
+	/**
+	 * Decide se accettare o no il messaggio.
+	 */
 	@Override
 	public void validate(String otherNumber, Context ctx) throws MessageWillBeIgnoredException {
 		//la richiesta va accettata solo se in smp_status non è segnato che ne ho già ricevuta una

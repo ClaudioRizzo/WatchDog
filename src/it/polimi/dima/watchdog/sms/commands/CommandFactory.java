@@ -1,20 +1,20 @@
 package it.polimi.dima.watchdog.sms.commands;
 
 import android.util.Log;
-import it.polimi.dima.watchdog.SMSUtility;
+import it.polimi.dima.watchdog.UTILITIES.SMSUtility;
 import it.polimi.dima.watchdog.exceptions.ArbitraryMessageReceivedException;
-import it.polimi.dima.watchdog.sms.socialistMillionaire.SMSProtocol;
-import it.polimi.dima.watchdog.sms.socialistMillionaire.factory.SMSProtocolInterface;
+import it.polimi.dima.watchdog.sms.ParsableSMS;
+import it.polimi.dima.watchdog.sms.ParsebleSMSInterface;
 
 /**
  * 
  * @author emanuele
  *
  */
-public class CommandFactory implements SMSProtocolInterface {
+public class CommandFactory implements ParsebleSMSInterface {
 
 	@Override
-	public SMSProtocol getMessage(String header) throws ArbitraryMessageReceivedException {
+	public ParsableSMS getMessage(String header) throws ArbitraryMessageReceivedException {
 		Log.i("[DEBUG] in factory ho ricevuto: ", header); //per vedere l'header ricevuto
 		if(header.equals(SMSUtility.SIREN_ON)){
 			return new SirenOnCodeMessage(SMSUtility.SIREN_ON, null);

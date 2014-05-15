@@ -1,18 +1,15 @@
 package it.polimi.dima.watchdog.fragments.actionBar;
 
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
-import it.polimi.dima.watchdog.MyPrefFiles;
 import it.polimi.dima.watchdog.R;
-import it.polimi.dima.watchdog.SMSUtility;
+import it.polimi.dima.watchdog.UTILITIES.MyPrefFiles;
+import it.polimi.dima.watchdog.UTILITIES.SMSUtility;
 import it.polimi.dima.watchdog.crypto.PublicKeyAutenticator;
 import it.polimi.dima.watchdog.exceptions.NoSuchPreferenceFoundException;
 import android.content.Context;
-import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -85,6 +82,11 @@ public class PendingRequestsAdapter extends BaseAdapter {
 		return vi;
 	}
 
+	/**
+	 * Chiamato se l'utente rifiuta di associare i telefoni
+	 * @param refuseButton : il bottone di rifiuto
+	 * @param number : il numero dell'altro
+	 */
 	private void handleRefuse(Button refuseButton, final String number) {
 
 		refuseButton.setOnClickListener(new OnClickListener() {
@@ -92,44 +94,47 @@ public class PendingRequestsAdapter extends BaseAdapter {
 			@Override
 			public void onClick(View v) {
 				Log.i("[DEBUG]", "Ho cliccato il bottone rifiuto");
+				
+				//Cancello tutte le preferenze relative all'altro (compresa la richiesta pendente)...
 				MyPrefFiles.erasePreferences(number, ctx);
-				SMSUtility.sendMessage(number, SMSUtility.SMP_PORT,
-						SMSUtility.hexStringToByteArray(SMSUtility.CODE6), null);
-
+				
+				//... lo notifico...
+				SMSUtility.sendMessage(number, SMSUtility.SMP_PORT, SMSUtility.hexStringToByteArray(SMSUtility.CODE6), null);
 			}
 		});
 	}
 
-	private void handleSend(Button sendButton, final String number,
-			final EditText editText) {
+	private void handleSend(Button sendButton, final String number, final EditText editText) {
 
 		sendButton.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
+				//creo un pka...
 				PublicKeyAutenticator pka = new PublicKeyAutenticator();
 				try {
+					//... poi ottengo ciò che ho digitato...
 					String secAnsw = editText.getText().toString();
 					Log.i("[DEBUG]", "Ho cliccato send: " + secAnsw);
-					pka.setMyPublicKey(MyPrefFiles.getMyPreference(
-							MyPrefFiles.MY_KEYS, MyPrefFiles.MY_PUB, ctx));
 					
-					/*Log.i("[DEBUG-CHIAVE USATA PER HASH]", MyPrefFiles.getMyPreference(
-							MyPrefFiles.MY_KEYS, MyPrefFiles.MY_PUB, ctx));*/
-					/*int keySize = Base64.decode(MyPrefFiles.getMyPreference(MyPrefFiles.MY_KEYS, MyPrefFiles.MY_PUB, ctx), Base64.DEFAULT).length;
-					String size = String.valueOf(keySize);
-					Log.i("[CHIAVE - LUNGHEZZA]", size);*/
+					//... poi recupero la mia chiave pubblica...
+					pka.setMyPublicKey(MyPrefFiles.getMyPreference(MyPrefFiles.MY_KEYS, MyPrefFiles.MY_PUB, ctx));
 					
+					//... e setto nel pka anche la risposta da me digitata...
 					pka.setSecretAnswer(secAnsw);
+					
+					//... poi computo l'hash di mia chiave pubblica || risposta ...
 					pka.doHashToSend();
 
-					SMSUtility.sendMessage(number, SMSUtility.SMP_PORT,
-							SMSUtility.hexStringToByteArray(SMSUtility.CODE4),
-							pka.getHashToSend());
+					//... lo mando all'altro...
+					SMSUtility.sendMessage(number, SMSUtility.SMP_PORT, SMSUtility.hexStringToByteArray(SMSUtility.CODE4), pka.getHashToSend());
+					
+					//... segno in SMP_STATUS di aver inviato l'hash
 					String preferenceKey = number + MyPrefFiles.HASH_FORWARDED;
-
-					MyPrefFiles.setMyPreference(MyPrefFiles.SMP_STATUS,
-							preferenceKey, number, ctx);
+					MyPrefFiles.setMyPreference(MyPrefFiles.SMP_STATUS, preferenceKey, number, ctx);
+					
+					//... e tolgo dal file PENDENT la richiesta
+					MyPrefFiles.deleteMyPreference(MyPrefFiles.PENDENT, number, ctx);
 
 				} catch (NoSuchPreferenceFoundException e) {
 
@@ -154,10 +159,11 @@ public class PendingRequestsAdapter extends BaseAdapter {
 	}
 
 	private void handleErrorOrException(String number) {
+		//cancello tutte le preferenze relative all'altro utente...
 		MyPrefFiles.erasePreferences(number, this.ctx);
-
-		SMSUtility.sendMessage(number, SMSUtility.SMP_PORT,
-				SMSUtility.hexStringToByteArray(SMSUtility.CODE6), null);
+		
+		//... e lo notifico
+		SMSUtility.sendMessage(number, SMSUtility.SMP_PORT, SMSUtility.hexStringToByteArray(SMSUtility.CODE6), null);
 	}
 
 }

@@ -1,8 +1,8 @@
 package it.polimi.dima.watchdog.activities;
 
-import it.polimi.dima.watchdog.MyDrawerUtility;
-import it.polimi.dima.watchdog.MyPrefFiles;
 import it.polimi.dima.watchdog.R;
+import it.polimi.dima.watchdog.UTILITIES.MyDrawerUtility;
+import it.polimi.dima.watchdog.UTILITIES.MyPrefFiles;
 import it.polimi.dima.watchdog.fragments.gps.GpsMainFragment;
 import android.content.Context;
 import android.content.Intent;

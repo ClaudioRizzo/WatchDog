@@ -1,10 +1,10 @@
 package it.polimi.dima.watchdog.sms.commands.flags;
 
-import it.polimi.dima.watchdog.SMSUtility;
+import it.polimi.dima.watchdog.UTILITIES.SMSUtility;
 import it.polimi.dima.watchdog.crypto.ECDSA_Signature;
 import it.polimi.dima.watchdog.exceptions.ArbitraryMessageReceivedException;
 import it.polimi.dima.watchdog.exceptions.ErrorInSignatureCheckingException;
-import it.polimi.dima.watchdog.sms.socialistMillionaire.SMSProtocol;
+import it.polimi.dima.watchdog.sms.ParsableSMS;
 
 import java.security.PublicKey;
 
@@ -18,7 +18,7 @@ public class M2Parser {
 	public M2Parser(byte[] rawMessage, PublicKey oPub){
 		this.rawMessage = rawMessage;
 		this.oPub = oPub;
-		this.header = new byte[SMSProtocol.HEADER_LENGTH];
+		this.header = new byte[ParsableSMS.HEADER_LENGTH];
 	}
 	
 	public void parse() throws ArbitraryMessageReceivedException, ErrorInSignatureCheckingException{

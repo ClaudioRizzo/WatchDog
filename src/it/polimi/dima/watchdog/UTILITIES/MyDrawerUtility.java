@@ -1,5 +1,10 @@
-package it.polimi.dima.watchdog;
+package it.polimi.dima.watchdog.UTILITIES;
 
+import it.polimi.dima.watchdog.R;
+import it.polimi.dima.watchdog.R.array;
+import it.polimi.dima.watchdog.R.drawable;
+import it.polimi.dima.watchdog.R.layout;
+import it.polimi.dima.watchdog.R.string;
 import it.polimi.dima.watchdog.activities.MainActivity;
 import it.polimi.dima.watchdog.fragments.gps.GpsMainFragment;
 import it.polimi.dima.watchdog.fragments.smsRemote.SmsRemoteMainFragment;

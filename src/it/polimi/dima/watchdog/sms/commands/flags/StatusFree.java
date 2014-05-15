@@ -11,15 +11,15 @@ import java.security.spec.X509EncodedKeySpec;
 import android.content.Context;
 import android.telephony.SmsMessage;
 import android.util.Base64;
-import it.polimi.dima.watchdog.CryptoUtility;
-import it.polimi.dima.watchdog.MyPrefFiles;
-import it.polimi.dima.watchdog.SMSUtility;
+import it.polimi.dima.watchdog.UTILITIES.CryptoUtility;
+import it.polimi.dima.watchdog.UTILITIES.MyPrefFiles;
+import it.polimi.dima.watchdog.UTILITIES.SMSUtility;
 import it.polimi.dima.watchdog.crypto.AESKeyGenerator;
 import it.polimi.dima.watchdog.crypto.ECDSA_Signature;
 import it.polimi.dima.watchdog.exceptions.NoECDSAKeyPairGeneratedException;
 import it.polimi.dima.watchdog.exceptions.NoSignatureDoneException;
 import it.polimi.dima.watchdog.exceptions.NoSuchPreferenceFoundException;
-import it.polimi.dima.watchdog.sms.socialistMillionaire.SMSProtocol;
+import it.polimi.dima.watchdog.sms.ParsableSMS;
 
 /**
  * 
@@ -35,7 +35,7 @@ public class StatusFree implements CommandProtocolFlagsReactionInterface{
 	public static String NEXT_SENT_STATUS = StatusM2Sent.CURRENT_STATUS;//TODO da correggere
 	
 	@Override
-	public SMSProtocol parse(Context context, SmsMessage message, String other) throws Exception {//voglio poterle catchare tutte
+	public ParsableSMS parse(Context context, SmsMessage message, String other) throws Exception {//voglio poterle catchare tutte
 		//TODO: se arriva un timeout smettere immediatamente quello che si stava facendo e
 		//chiamare manageTimeout()
 		//TODO stoppare il timeout

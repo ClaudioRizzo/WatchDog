@@ -2,20 +2,21 @@ package it.polimi.dima.watchdog.sms.socialistMillionaire.factory;
 
 
 import android.util.Log;
-import it.polimi.dima.watchdog.SMSUtility;
+import it.polimi.dima.watchdog.UTILITIES.SMSUtility;
 import it.polimi.dima.watchdog.exceptions.ArbitraryMessageReceivedException;
+import it.polimi.dima.watchdog.sms.ParsableSMS;
+import it.polimi.dima.watchdog.sms.ParsebleSMSInterface;
 import it.polimi.dima.watchdog.sms.socialistMillionaire.IDontWantToAssociateCodeMessage;
 import it.polimi.dima.watchdog.sms.socialistMillionaire.KeyValidatedCodeMessage;
 import it.polimi.dima.watchdog.sms.socialistMillionaire.PublicKeyRequestCodeMessage;
 import it.polimi.dima.watchdog.sms.socialistMillionaire.PublicKeySentCodeMessage;
-import it.polimi.dima.watchdog.sms.socialistMillionaire.SMSProtocol;
 import it.polimi.dima.watchdog.sms.socialistMillionaire.SecretAnswerAndPublicKeyHashSentCodeMessage;
 import it.polimi.dima.watchdog.sms.socialistMillionaire.SecretQuestionSentCodeMessage;
 
-public class SocialistMillionaireFactory implements SMSProtocolInterface {
+public class SocialistMillionaireFactory implements ParsebleSMSInterface {
 
 	@Override
-	public SMSProtocol getMessage(String header) throws ArbitraryMessageReceivedException {
+	public ParsableSMS getMessage(String header) throws ArbitraryMessageReceivedException {
 		
 		Log.i("[DEBUG] in factory ho ricevuto: ", header);
 		if (header.equals(SMSUtility.CODE1)) {

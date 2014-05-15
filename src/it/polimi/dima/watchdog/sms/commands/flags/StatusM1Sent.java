@@ -13,13 +13,13 @@ import javax.crypto.spec.SecretKeySpec;
 
 import org.spongycastle.crypto.InvalidCipherTextException;
 
-import it.polimi.dima.watchdog.CryptoUtility;
-import it.polimi.dima.watchdog.MyPrefFiles;
+import it.polimi.dima.watchdog.UTILITIES.CryptoUtility;
+import it.polimi.dima.watchdog.UTILITIES.MyPrefFiles;
 import it.polimi.dima.watchdog.exceptions.NoECDSAKeyPairGeneratedException;
 import it.polimi.dima.watchdog.exceptions.NoSignatureDoneException;
 import it.polimi.dima.watchdog.exceptions.NoSuchPreferenceFoundException;
-import it.polimi.dima.watchdog.sms.CommandSMS;
-import it.polimi.dima.watchdog.sms.socialistMillionaire.SMSProtocol;
+import it.polimi.dima.watchdog.sms.ParsableSMS;
+import it.polimi.dima.watchdog.sms.commands.CommandSMS;
 import android.content.Context;
 import android.telephony.SmsMessage;
 import android.util.Base64;
@@ -33,7 +33,7 @@ public class StatusM1Sent implements CommandProtocolFlagsReactionInterface {
 	public static String NEXT_SENT_STATUS = StatusM3Sent.CURRENT_STATUS;
 
 	@Override
-	public SMSProtocol parse(Context context, SmsMessage message, String other) throws Exception {
+	public ParsableSMS parse(Context context, SmsMessage message, String other) throws Exception {
 		//TODO: se arriva un timeout smettere immediatamente quello che si stava facendo e
 		//chiamare manageTimeout()
 		//TODO stoppare il timeout

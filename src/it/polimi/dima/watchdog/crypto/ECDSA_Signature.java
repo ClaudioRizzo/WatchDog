@@ -10,8 +10,8 @@ import java.security.SignatureException;
 import java.util.regex.Pattern;
 
 import android.util.Base64;
-import it.polimi.dima.watchdog.CryptoUtility;
-import it.polimi.dima.watchdog.PasswordUtils;
+import it.polimi.dima.watchdog.UTILITIES.CryptoUtility;
+import it.polimi.dima.watchdog.UTILITIES.PasswordUtils;
 import it.polimi.dima.watchdog.exceptions.*;
 
 /**

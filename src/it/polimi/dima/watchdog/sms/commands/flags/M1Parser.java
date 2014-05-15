@@ -2,11 +2,11 @@ package it.polimi.dima.watchdog.sms.commands.flags;
 
 import java.security.PublicKey;
 
-import it.polimi.dima.watchdog.SMSUtility;
+import it.polimi.dima.watchdog.UTILITIES.SMSUtility;
 import it.polimi.dima.watchdog.crypto.ECDSA_Signature;
 import it.polimi.dima.watchdog.exceptions.ArbitraryMessageReceivedException;
 import it.polimi.dima.watchdog.exceptions.ErrorInSignatureCheckingException;
-import it.polimi.dima.watchdog.sms.socialistMillionaire.SMSProtocol;
+import it.polimi.dima.watchdog.sms.ParsableSMS;
 
 /**
  * 
@@ -25,7 +25,7 @@ public class M1Parser {
 	
 	public M1Parser(byte[] rawMessage, PublicKey oPub){
 		this.rawMessage = rawMessage;
-		this.header = new byte[SMSProtocol.HEADER_LENGTH];
+		this.header = new byte[ParsableSMS.HEADER_LENGTH];
 		this.salt = new byte[M1Parser.SALT_LENGTH];
 		this.iv = new byte[M1Parser.IV_LENGTH];
 		this.oPub = oPub;
@@ -41,11 +41,11 @@ public class M1Parser {
 	
 	public void parse() throws ArbitraryMessageReceivedException, ErrorInSignatureCheckingException {
 		try{
-			int ivStartPosition = SMSProtocol.HEADER_LENGTH;
+			int ivStartPosition = ParsableSMS.HEADER_LENGTH;
 			int saltStartPosition = ivStartPosition + M1Parser.IV_LENGTH;
 			int signatureStartPosition = saltStartPosition + M1Parser.SALT_LENGTH;
 			
-			int messageWithoutSignatureLength = SMSProtocol.HEADER_LENGTH + M1Parser.IV_LENGTH + M1Parser.SALT_LENGTH;
+			int messageWithoutSignatureLength = ParsableSMS.HEADER_LENGTH + M1Parser.IV_LENGTH + M1Parser.SALT_LENGTH;
 			int signatureLength = this.rawMessage.length - messageWithoutSignatureLength;
 			
 			if(signatureLength < 1){
@@ -80,7 +80,7 @@ public class M1Parser {
 
 	private void separateMessageParts(int ivStartPosition, int saltStartPosition, int signatureStartPosition, int signatureLength) {
 		this.signature = new byte[signatureLength];
-		System.arraycopy(this.rawMessage, 0, this.header, 0, SMSProtocol.HEADER_LENGTH);
+		System.arraycopy(this.rawMessage, 0, this.header, 0, ParsableSMS.HEADER_LENGTH);
 		System.arraycopy(this.rawMessage, ivStartPosition, this.iv, 0, M1Parser.IV_LENGTH);
 		System.arraycopy(this.rawMessage, saltStartPosition, this.salt, 0, M1Parser.SALT_LENGTH);
 		System.arraycopy(this.rawMessage, signatureStartPosition, this.signature, 0, signatureLength);
