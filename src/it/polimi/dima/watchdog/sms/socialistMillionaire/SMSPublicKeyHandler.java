@@ -27,7 +27,7 @@ import android.util.Base64;
 import android.util.Log;
 
 /**
- * This class handles the messagges by using the visitor patter which is upon
+ * This class handles the messages by using the visitor patter which is upon
  * the messages. Should extend BroadCastReceiver
  * 
  * @author claudio, emanuele
@@ -72,11 +72,12 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements
 			}
 
 		} catch (Exception e) {
-			e.printStackTrace();
-			Log.e("[Error] PublicKeyHandler", e.toString());
+			//notifica ...
+			SMSUtility.showShortToastMessage(e.getMessage(), this.ctx);
+			
+			//... e invio richiesta di stop forzato, oltre alla cancellazione delle preferenze
 			handleErrorOrException();
 		}
-
 	}
 
 	/**
@@ -104,13 +105,14 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements
 			MyPrefFiles.setMyPreference(MyPrefFiles.SMP_STATUS, preferenceKey, this.other, this.ctx);
 			
 		} catch (NoSuchPreferenceFoundException e) {
+			//notifica ...
 			SMSUtility.showShortToastMessage(e.getMessage(), this.ctx);
-			e.printStackTrace();
+			
+			//... e invio richiesta di stop forzato, oltre alla cancellazione delle preferenze
 			handleErrorOrException();
 		} catch (MessageWillBeIgnoredException e) {
 			// appunto si ignora il messaggio
 		}
-
 	}
 
 	/**
@@ -143,17 +145,20 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements
 			Log.i("[DEBUG-SMP_AFTER_SEND]", "CODE_2");
 			
 		} catch (NoSuchPreferenceFoundException e) {
-			Log.i("[DEBUG-SMP-ERROR]", "CODE_2");
+			//notifica ...
 			SMSUtility.showShortToastMessage(e.getMessage(), this.ctx);
-			e.printStackTrace();
+			
+			//... e invio richiesta di stop forzato, oltre alla cancellazione delle preferenze
 			handleErrorOrException();
 		} catch (MessageWillBeIgnoredException e) {
 			Log.i("[DEBUG-SMP-ERROR]", "CODE_2");
 			// appunto si ignora il messaggio
 		}
-
 	}
 
+	/**
+	 * Gestisco la ricezione di un messaggio che contiene una domanda segreta
+	 */
 	@Override
 	public void visit(SecretQuestionSentCodeMessage secQuestMsg) {
 		Log.i("[DEBUG-SMP]", "CODE_3");
@@ -173,15 +178,19 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements
 			this.notifyUser();
 			
 		} catch (UnsupportedEncodingException e) {
+			//notifica ...
 			SMSUtility.showShortToastMessage(e.getMessage(), this.ctx);
-			e.printStackTrace();
+			
+			//... e invio richiesta di stop forzato, oltre alla cancellazione delle preferenze
 			handleErrorOrException();
 		} catch (MessageWillBeIgnoredException e) {
 			// appunto si ignora il messaggio
 		}
-
 	}
 
+	/**
+	 * Gestisco la ricezione di un messaggio che contiene un hash
+	 */
 	@Override
 	public void visit(SecretAnswerAndPublicKeyHashSentCodeMessage secAnswMsg) {
 		Log.i("[DEBUG-SMP]", "CODE_4");
@@ -228,78 +237,90 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements
 				//infine computo il segreto condiviso
 				doECDH();
 			}
+			
 		} catch (NoSuchPreferenceFoundException e) {
+			//notifica ...
 			SMSUtility.showShortToastMessage(e.getMessage(), this.ctx);
-			e.printStackTrace();
+			
+			//... e invio richiesta di stop forzato, oltre alla cancellazione delle preferenze
 			handleErrorOrException();
 		} catch (NoSuchAlgorithmException e) {
+			//notifica ...
 			SMSUtility.showShortToastMessage(e.getMessage(), this.ctx);
-			e.printStackTrace();
+			
+			//... e invio richiesta di stop forzato, oltre alla cancellazione delle preferenze
 			handleErrorOrException();
 		} catch (InvalidKeySpecException e) {
+			//notifica ...
 			SMSUtility.showShortToastMessage(e.getMessage(), this.ctx);
-			e.printStackTrace();
+			
+			//... e invio richiesta di stop forzato, oltre alla cancellazione delle preferenze
 			handleErrorOrException();
 		} catch (MessageWillBeIgnoredException e) {
 			// appunto si ignora il messaggio
 		}
-
 	}
 
+	/**
+	 * Gestisco la ricezione di un messaggio di ack che contiene un sale
+	 */
 	@Override
 	public void visit(KeyValidatedCodeMessage keyValMsg) {
+		Log.i("[DEBUG]", "CODE_5");
 		try {
-			Log.i("[DEBUG]", "CODE_5");
+			//vedo se accettare il messaggio
 			keyValMsg.validate(this.other, this.ctx);
 
-			// Se ricevo questo messaggio ed esso passa la validazione, l'altro
-			// ha validato la mia chiave pubblica.
-			// Se non ho già validato la chiave pubblica dell'altro faccio
-			// partire smp in modo simmetrico.
+			//estrapolo dal messaggio ricevuto il sale...
+			String salt = new String(Base64.decode(this.recMsg.getBody(), Base64.DEFAULT), PasswordUtils.UTF_8);
+			
+			//... e lo salvo nell'HASHRING
+			MyPrefFiles.setMyPreference(MyPrefFiles.HASHRING, this.other, salt, this.ctx);
+			
+			//se non ho già validato la chiave dell'altro faccio partire SMP in modo simmetrico
 			if (!MyPrefFiles.existsPreference(MyPrefFiles.KEYRING, this.other, this.ctx)) {
+				//invio il messaggio di richiesta della chiave pubblica...
 				SMSUtility.sendMessage(this.other, SMSUtility.SMP_PORT, SMSUtility.hexStringToByteArray(SMSUtility.CODE1), null);
+				
+				//... e segno in SMP_STATUS di averlo inviato
 				String preferenceKey = this.other + MyPrefFiles.PUB_KEY_REQUEST_FORWARDED;
 				MyPrefFiles.setMyPreference(MyPrefFiles.SMP_STATUS, preferenceKey, this.other, this.ctx);
 			}
-			// Prendo il sale che mi è stato inviato insieme alla conferma di
-			// validazione e lo salvo nell'hashring.
-			String salt = new String(Base64.decode(this.recMsg.getBody(), Base64.DEFAULT), PasswordUtils.UTF_8);
-			MyPrefFiles.setMyPreference(MyPrefFiles.HASHRING, this.other, salt, this.ctx);
+			
 		} catch (UnsupportedEncodingException e) {
+			//notifica ...
 			SMSUtility.showShortToastMessage(e.getMessage(), this.ctx);
-			e.printStackTrace();
+			
+			//... e invio richiesta di stop forzato, oltre alla cancellazione delle preferenze
 			handleErrorOrException();
 		} catch (MessageWillBeIgnoredException e) {
 			// appunto si ignora il messaggio
 		}
-
 	}
 
+	/**
+	 * Gestisco la ricezione di un messaggio di stop forzato al protocollo
+	 */
 	@Override
 	public void visit(IDontWantToAssociateCodeMessage noAssMsg) {
+		Log.i("[DEBUG]", "CODE_6");
 		try {
+			//vedo se accettare il messaggio
 			noAssMsg.validate(this.other, this.ctx);
+			
+			/**
+			 * Il controllo sulla presenza di riferimenti all'altro utente nelle preferenze serve per non
+			 * mandare avanti all'infinito la catena di notifiche
+			 */
+			//se ho riferimenti all'altro utente nelle preferenze...
 			if (MyPrefFiles.iHaveSomeReferencesToThisUser(this.other, this.ctx)) {
-				MyPrefFiles.erasePreferences(this.other, this.ctx);
-				// TODO notificare il fragment di quello che è successo
-
-				// la catena non va avanti all'infinito a causa dell'if. Dopo al
-				// massimo un messaggio di
-				// questo tipo a testa, entrambi non hanno più riferimenti
-				// all'altro
-				SMSUtility
-						.sendMessage(
-								this.other,
-								SMSUtility.SMP_PORT,
-								SMSUtility
-										.hexStringToByteArray(SMSUtility.CODE6),
-								null);
+				//... li cancello ed esorto l'altro a fare lo stesso
+				handleErrorOrException();
 			}
 
 		} catch (MessageWillBeIgnoredException e) {
 			// appunto si ignora il messaggio
 		}
-
 	}
 
 	/**
@@ -310,14 +331,10 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements
 	 * @throws NoSuchAlgorithmException
 	 * @throws InvalidKeySpecException
 	 */
-	private byte[] generateCommonSecret()
-			throws NoSuchPreferenceFoundException, NoSuchAlgorithmException,
-			InvalidKeySpecException {
+	private byte[] generateCommonSecret() throws NoSuchPreferenceFoundException, NoSuchAlgorithmException, InvalidKeySpecException {
 		SharedSecretAgreement ssa = new SharedSecretAgreement();
-		String myPriv = MyPrefFiles.getMyPreference(MyPrefFiles.MY_KEYS,
-				MyPrefFiles.MY_PRIV, this.ctx);
-		String otherPub = MyPrefFiles.getMyPreference(MyPrefFiles.KEYRING,
-				this.other, this.ctx);
+		String myPriv = MyPrefFiles.getMyPreference(MyPrefFiles.MY_KEYS, MyPrefFiles.MY_PRIV, this.ctx);
+		String otherPub = MyPrefFiles.getMyPreference(MyPrefFiles.KEYRING, this.other, this.ctx);
 		ssa.setMyPrivateKey(myPriv);
 		ssa.setTokenReceived(otherPub);
 
@@ -329,10 +346,12 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements
 	 * all'altro utente e quest'ultimo viene esortato a fare lo stesso.
 	 */
 	private void handleErrorOrException() {
+		//cancello i riferimenti all'altro utente...
 		MyPrefFiles.erasePreferences(this.other, this.ctx);
 		// TODO notificare il fragment di quello che è successo
-		SMSUtility.sendMessage(this.other, SMSUtility.SMP_PORT,
-				SMSUtility.hexStringToByteArray(SMSUtility.CODE6), null);
+		
+		//... e lo notifico, esortandolo a fare lo stesso
+		SMSUtility.sendMessage(this.other, SMSUtility.SMP_PORT, SMSUtility.hexStringToByteArray(SMSUtility.CODE6), null);
 	}
 
 	private void notifyUser() {
@@ -349,7 +368,6 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements
 		NotificationManager mNotificationManager = (NotificationManager) this.ctx.getSystemService(Context.NOTIFICATION_SERVICE);
 		// mId allows you to update the notification later on.
 		mNotificationManager.notify(0, mBuilder.build());
-
 	}
 
 	/**
@@ -365,5 +383,4 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements
 		String secretBase64 = Base64.encodeToString(secret, Base64.DEFAULT);
 		MyPrefFiles.setMyPreference(MyPrefFiles.SHARED_SECRETS, this.other, secretBase64, this.ctx);
 	}
-
 }

@@ -137,13 +137,16 @@ public class PendingRequestsAdapter extends BaseAdapter {
 					MyPrefFiles.deleteMyPreference(MyPrefFiles.PENDENT, number, ctx);
 
 				} catch (NoSuchPreferenceFoundException e) {
-
+					//notifica ...
 					SMSUtility.showShortToastMessage(e.getMessage(), ctx);
-					e.printStackTrace();
+					
+					//... e invio richiesta di stop forzato, oltre alla cancellazione delle preferenze
 					handleErrorOrException(number);
 				} catch (NoSuchAlgorithmException e) {
+					//notifica ...
 					SMSUtility.showShortToastMessage(e.getMessage(), ctx);
-					e.printStackTrace();
+					
+					//... e invio richiesta di stop forzato, oltre alla cancellazione delle preferenze
 					handleErrorOrException(number);
 				}
 
