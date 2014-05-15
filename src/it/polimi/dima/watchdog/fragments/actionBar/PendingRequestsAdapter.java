@@ -165,7 +165,7 @@ public class PendingRequestsAdapter extends BaseAdapter {
 		//cancello tutte le preferenze relative all'altro utente...
 		MyPrefFiles.erasePreferences(number, this.ctx);
 		
-		//... e lo notifico
+		//... e lo notifico, chiedendogli di fare lo stesso
 		SMSUtility.sendMessage(number, SMSUtility.SMP_PORT, SMSUtility.hexStringToByteArray(SMSUtility.CODE6), null);
 	}
 

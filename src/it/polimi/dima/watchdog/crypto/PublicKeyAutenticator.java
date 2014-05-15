@@ -4,7 +4,7 @@ import it.polimi.dima.watchdog.UTILITIES.CryptoUtility;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.regex.Pattern;
+//import java.util.regex.Pattern;
 
 import android.util.Base64;
 
@@ -24,10 +24,7 @@ public class PublicKeyAutenticator {
 	private String computedHash; //in Base64
 	private byte[] hashToSend;   //come byte[], senza codifica Base64, comodo per essere inviato
 	
-	//TODO: cancella
-	public String getReceivedHash() {
-		return this.receivedHash;
-	}
+	
 	public String getComputedHash() {
 		return this.computedHash;
 	}
@@ -65,9 +62,10 @@ public class PublicKeyAutenticator {
 	 * @param receivedPublicKey
 	 */
 	public void setReceivedPublicKey(String receivedPublicKey){
-		if (false && !Pattern.matches(CryptoUtility.BASE64_REGEX, receivedPublicKey)) {
+		//TODO gestire il problema
+		/*if (!Pattern.matches(CryptoUtility.BASE64_REGEX, receivedPublicKey)) {
 			throw new IllegalArgumentException("La stringa passata come chiave non è in base64");
-		}
+		}*/
 		setReceivedPublicKey(Base64.decode(receivedPublicKey, Base64.DEFAULT));
 	}
 	

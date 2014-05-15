@@ -21,8 +21,8 @@
     <string name="hello_world">Hello world!</string>
     <!-- Settings -->
     <string name="action_settings">Settings</string>
-    
-    <string name="action_pending">Penging Requests</string>
+    <!-- Pending Requests -->
+    <string name="action_pending">Pending Requests</string>
     
     <!-- Rate the application on the store -->
     <string name="action_rateus">Rate Us</string>

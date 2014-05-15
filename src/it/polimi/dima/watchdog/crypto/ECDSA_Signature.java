@@ -7,7 +7,7 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.Signature;
 import java.security.SignatureException;
-import java.util.regex.Pattern;
+//import java.util.regex.Pattern;
 
 import android.util.Base64;
 import it.polimi.dima.watchdog.UTILITIES.CryptoUtility;
@@ -115,9 +115,10 @@ public class ECDSA_Signature {
 	 * @param signature : la firma da verificare in Base64
 	 */
 	public ECDSA_Signature(String ptx, PublicKey pub, String signature){//signature è in Base64
-		if (false && !Pattern.matches(CryptoUtility.BASE64_REGEX, signature)) {
+		//TODO gestire il problema
+		/*if (!Pattern.matches(CryptoUtility.BASE64_REGEX, signature)) {
 			throw new IllegalArgumentException("La stringa passata come firma non è in base64");
-		}
+		}*/
 		this.plaintext = ptx.getBytes();
 		this.oPub = pub;
 		this.signatureToVerify = Base64.decode(signature, Base64.DEFAULT);

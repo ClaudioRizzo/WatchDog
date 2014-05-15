@@ -151,7 +151,6 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements
 			//... e invio richiesta di stop forzato, oltre alla cancellazione delle preferenze
 			handleErrorOrException();
 		} catch (MessageWillBeIgnoredException e) {
-			Log.i("[DEBUG-SMP-ERROR]", "CODE_2");
 			// appunto si ignora il messaggio
 		}
 	}
