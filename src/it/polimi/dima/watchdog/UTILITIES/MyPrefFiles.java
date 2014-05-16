@@ -21,6 +21,10 @@ public class MyPrefFiles {
 	
 	//QUI I NOMI DEI FILE
 	
+	/**
+	 * File che contiene il mio numero di telefono
+	 */
+	public static final String MY_NUMBER_FILE = "my_number_file";
 	
 	/**
 	 * File delle richieste in attesa di accettazione da parte mia
@@ -90,6 +94,10 @@ public class MyPrefFiles {
 	//DA QUI IN POI CHIAVI
 	
 	//Chiavi generiche
+	/**
+	 * Valore che simboleggia il mio numero di telefono
+	 */
+	public static final String MY_PHONE_NUMBER = "my_phone_number";
 	
 	/**
 	 * valore chiave per sapere se il wizard è finito o no.
@@ -257,7 +265,7 @@ public class MyPrefFiles {
 	 * @param ctx : il contesto
 	 */
 	//se value è una chiave deve essere Base64
-	public static void setMyPreference(String fileName, String key, String value,  Context ctx) {
+	public static void setMyPreference(String fileName, String key, String value, Context ctx) {
 		SharedPreferences sp = ctx.getSharedPreferences(fileName, Context.MODE_PRIVATE);
 		SharedPreferences.Editor editor = sp.edit();
 		editor.putString(key, value);
@@ -295,10 +303,15 @@ public class MyPrefFiles {
 		return true;
 	}
 	
+	public static void replacePreference(String fileName, String key, String newValue, Context ctx){
+		MyPrefFiles.deleteMyPreference(fileName, key, ctx);
+		MyPrefFiles.setMyPreference(fileName, key, newValue, ctx);
+	}
+	
 	/**
 	 * Se qualcosa va storto nel SMP tutte le preferenze relative all'altro utente vanno cancellate.
 	 */
-	public static void erasePreferences(String phoneNumber, Context ctx){
+	public static void eraseSmpPreferences(String phoneNumber, Context ctx){
 		//cancellazione della chiave già validata dell'altro utente, se esiste
 		if(MyPrefFiles.existsPreference(MyPrefFiles.KEYRING, phoneNumber, ctx)){
 			MyPrefFiles.deleteMyPreference(MyPrefFiles.KEYRING, phoneNumber, ctx);
@@ -326,6 +339,11 @@ public class MyPrefFiles {
 		//se sto aspettando dall'altro la prova che validi la sua chiave pubblica, non devo più aspettarla
 		if(MyPrefFiles.existsPreference(MyPrefFiles.PENDENT, phoneNumber, ctx)){
 			MyPrefFiles.deleteMyPreference(MyPrefFiles.PENDENT, phoneNumber, ctx);
+		}
+		
+		//dato che non ha più senso avere uno stato della sessione di comando, lo cancello se esiste
+		if(MyPrefFiles.existsPreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + phoneNumber, ctx)){
+			MyPrefFiles.deleteMyPreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + phoneNumber, ctx);
 		}
 	}
 	
@@ -412,6 +430,25 @@ public class MyPrefFiles {
 		keys.add(phoneNumber + MyPrefFiles.HASH_FORWARDED);
 		keys.add(phoneNumber + MyPrefFiles.ACK_AND_SALT_RECEIVED);
 		return keys;
+	}
+	
+	
+	public static void eraseCommandSession(String other, Context ctx){
+		if(MyPrefFiles.existsPreference(MyPrefFiles.COMMAND_SESSION, other + MyPrefFiles.SESSION_KEY, ctx)){
+			MyPrefFiles.deleteMyPreference(MyPrefFiles.COMMAND_SESSION, other + MyPrefFiles.SESSION_KEY, ctx);
+		}
+		if(MyPrefFiles.existsPreference(MyPrefFiles.COMMAND_SESSION, other + MyPrefFiles.IV, ctx)){
+			MyPrefFiles.deleteMyPreference(MyPrefFiles.COMMAND_SESSION, other + MyPrefFiles.IV, ctx);
+		}
+		if(MyPrefFiles.existsPreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + other, ctx)){
+			MyPrefFiles.deleteMyPreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + other, ctx);
+		}
+		if(MyPrefFiles.existsPreference(MyPrefFiles.COMMAND_SESSION, other + MyPrefFiles.TEMP_COMMAND, ctx)){
+			MyPrefFiles.deleteMyPreference(MyPrefFiles.COMMAND_SESSION, other + MyPrefFiles.TEMP_COMMAND, ctx);
+		}
+		if(MyPrefFiles.existsPreference(MyPrefFiles.COMMAND_SESSION, other + MyPrefFiles.OTHER_PASSWORD, ctx)){
+			MyPrefFiles.deleteMyPreference(MyPrefFiles.COMMAND_SESSION, other + MyPrefFiles.OTHER_PASSWORD, ctx);
+		}
 	}
 	
 }

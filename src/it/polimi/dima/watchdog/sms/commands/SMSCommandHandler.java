@@ -12,6 +12,7 @@ import it.polimi.dima.watchdog.sms.commands.flags.StatusFree;
 import it.polimi.dima.watchdog.sms.commands.flags.StatusM1Sent;
 import it.polimi.dima.watchdog.sms.commands.flags.StatusM2Sent;
 import it.polimi.dima.watchdog.sms.commands.flags.StatusM3Sent;
+import it.polimi.dima.watchdog.sms.timeout.Timeout;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -56,9 +57,12 @@ public class SMSCommandHandler extends BroadcastReceiver implements SMSCommandVi
 							this.recMsg.handle(this);
 						}
 						//dopo aver inviato il messaggio setto come status il fatto che ho appena inviato quel messaggio (o free)
-						MyPrefFiles.deleteMyPreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + other, context);
-						MyPrefFiles.setMyPreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + other, this.statusMap.get(myContext).getNextSentStatus(), context);
-						//TODO far partire il timeout solo se il messaggio ricevuto non è m3 o m4
+						MyPrefFiles.replacePreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + this.other, this.statusMap.get(myContext).getNextSentStatus(), context);
+						
+						//se non sono in status free (e lo sono solo se ho ricevuto m3 o m4) faccio partire il timeout
+						if(!MyPrefFiles.getMyPreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + this.other, context).equals(StatusFree.CURRENT_STATUS)){
+							Timeout.getInstance(context).addTimeout(MyPrefFiles.getMyPreference(MyPrefFiles.MY_NUMBER_FILE, MyPrefFiles.MY_PHONE_NUMBER, context), myContext, SMSUtility.TIMEOUT_LENGTH);
+						}
 					}
 					else{
 						//si ignora il messaggio
@@ -67,10 +71,8 @@ public class SMSCommandHandler extends BroadcastReceiver implements SMSCommandVi
 				}
 				catch(Exception e)
 				{
-					//TODO: se arriva un timeout smettere immediatamente quello che si stava facendo e
-					//chiamare manageTimeout()
-					MyPrefFiles.deleteMyPreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + other, context);
-					MyPrefFiles.setMyPreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + other, this.statusMap.get(myContext).getCurrentStatus(), context);
+					MyPrefFiles.eraseCommandSession(this.other, context);
+					MyPrefFiles.setMyPreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + this.other, StatusFree.CURRENT_STATUS, context);
 				}			
 			}
 			
@@ -137,22 +139,6 @@ public class SMSCommandHandler extends BroadcastReceiver implements SMSCommandVi
 	public void visit(LocateCodeMessage locateCodeMessage) {
 		// TODO Auto-generated method stub
 		
-	}
-	
-	private void manageTimeoutA(Context ctx){
-		MyPrefFiles.deleteMyPreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + this.other, ctx);
-		MyPrefFiles.setMyPreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + this.other, StatusFree.CURRENT_STATUS, ctx);
-		if(MyPrefFiles.existsPreference(MyPrefFiles.COMMAND_SESSION, this.other + MyPrefFiles.TEMP_COMMAND, ctx)){
-			MyPrefFiles.deleteMyPreference(MyPrefFiles.COMMAND_SESSION, this.other + MyPrefFiles.TEMP_COMMAND, ctx);
-		}
-		if(MyPrefFiles.existsPreference(MyPrefFiles.COMMAND_SESSION, this.other + MyPrefFiles.OTHER_PASSWORD, ctx)){
-			MyPrefFiles.deleteMyPreference(MyPrefFiles.COMMAND_SESSION, this.other + MyPrefFiles.OTHER_PASSWORD, ctx);
-		}
-	}
-	
-	private void manageTimeoutB(Context ctx){
-		MyPrefFiles.deleteMyPreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + this.other, ctx);
-		MyPrefFiles.setMyPreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + this.other, StatusFree.CURRENT_STATUS, ctx);
 	}
 	
 	private void initStatusMap(){

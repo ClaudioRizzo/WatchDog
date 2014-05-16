@@ -57,7 +57,6 @@ public class M3Parser {
 	 * @throws IllegalStateException 
 	 */
 	public void decrypt() throws IllegalStateException, InvalidCipherTextException, ArbitraryMessageReceivedException, ErrorInSignatureCheckingException {
-		//AES_256_GCM_Crypto dec = new AES_256_GCM_Crypto(this.smsEncrypted, this.decryptionKey);
 		AES256GCM dec = new AES256GCM(this.decryptionKey, this.smsEncrypted, this.iv);
 		byte[] decryptedSMS = dec.decrypt(); // messaggio || ' ' || firma
 		int spacePosition = getSpacePosition(decryptedSMS);

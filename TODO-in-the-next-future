@@ -1,0 +1,4 @@
+1) nel wizard far aggiungere anche il proprio numero di telefono (e salvarlo nelle preferenze --> file e chiave sono già pronti), perché non c'è un modo sicuro di recuperarlo altrimenti.
+2) implementare un fragment che consenta l'invio di sms di comando (con la creazione di m1, il set del timeout e dello stato della sessione di comando)
+3) implementare le reazioni ai vari comandi
+4) nelle classi StatusM3Sent e M4Parser c'è da implementare cosa fare con i dati che ritornano a chi ha inviato il comando

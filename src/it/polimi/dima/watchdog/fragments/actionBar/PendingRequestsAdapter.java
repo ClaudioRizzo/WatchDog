@@ -96,7 +96,7 @@ public class PendingRequestsAdapter extends BaseAdapter {
 				Log.i("[DEBUG]", "Ho cliccato il bottone rifiuto");
 				
 				//Cancello tutte le preferenze relative all'altro (compresa la richiesta pendente)...
-				MyPrefFiles.erasePreferences(number, ctx);
+				MyPrefFiles.eraseSmpPreferences(number, ctx);
 				
 				//... lo notifico...
 				SMSUtility.sendMessage(number, SMSUtility.SMP_PORT, SMSUtility.hexStringToByteArray(SMSUtility.CODE6), null);
@@ -163,7 +163,7 @@ public class PendingRequestsAdapter extends BaseAdapter {
 
 	private void handleErrorOrException(String number) {
 		//cancello tutte le preferenze relative all'altro utente...
-		MyPrefFiles.erasePreferences(number, this.ctx);
+		MyPrefFiles.eraseSmpPreferences(number, this.ctx);
 		
 		//... e lo notifico, chiedendogli di fare lo stesso
 		SMSUtility.sendMessage(number, SMSUtility.SMP_PORT, SMSUtility.hexStringToByteArray(SMSUtility.CODE6), null);

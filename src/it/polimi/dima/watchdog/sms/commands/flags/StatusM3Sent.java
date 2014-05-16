@@ -7,6 +7,7 @@ import java.security.spec.X509EncodedKeySpec;
 import it.polimi.dima.watchdog.UTILITIES.CryptoUtility;
 import it.polimi.dima.watchdog.UTILITIES.MyPrefFiles;
 import it.polimi.dima.watchdog.sms.ParsableSMS;
+import it.polimi.dima.watchdog.sms.timeout.Timeout;
 import android.content.Context;
 import android.telephony.SmsMessage;
 import android.util.Base64;
@@ -26,11 +27,8 @@ public class StatusM3Sent implements CommandProtocolFlagsReactionInterface {
 
 	@Override
 	public ParsableSMS parse(Context context, SmsMessage message, String other) throws Exception {
-		//TODO: se arriva un timeout smettere immediatamente quello che si stava facendo e
-		//chiamare manageTimeout()
-		//TODO stoppare il timeout
-		MyPrefFiles.deleteMyPreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + other, context);
-		MyPrefFiles.setMyPreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + other, StatusM3Sent.STATUS_RECEIVED, context);
+		Timeout.getInstance(context).removeTimeout(MyPrefFiles.getMyPreference(MyPrefFiles.MY_NUMBER_FILE, MyPrefFiles.MY_PHONE_NUMBER, context) /*TODO inizializzarlo nel wizard*/, other);
+		MyPrefFiles.replacePreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + other, StatusM3Sent.STATUS_RECEIVED, context);
 		
 		byte[] publicKey = Base64.decode(MyPrefFiles.getMyPreference(MyPrefFiles.KEYRING, other, context),Base64.DEFAULT);
 		KeyFactory kf = KeyFactory.getInstance(CryptoUtility.EC);

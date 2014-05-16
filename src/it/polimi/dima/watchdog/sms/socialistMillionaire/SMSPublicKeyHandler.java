@@ -13,6 +13,7 @@ import it.polimi.dima.watchdog.crypto.SharedSecretAgreement;
 import it.polimi.dima.watchdog.exceptions.MessageWillBeIgnoredException;
 import it.polimi.dima.watchdog.exceptions.NoSuchPreferenceFoundException;
 import it.polimi.dima.watchdog.sms.ParsableSMS;
+import it.polimi.dima.watchdog.sms.commands.flags.StatusFree;
 import it.polimi.dima.watchdog.sms.socialistMillionaire.factory.SocialistMillionaireFactory;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -233,8 +234,11 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements
 				String preferenceKey = this.other + MyPrefFiles.ACK_AND_SALT_FORWARDED;
 				MyPrefFiles.setMyPreference(MyPrefFiles.SMP_STATUS, preferenceKey, this.other, this.ctx);
 				
-				//infine computo il segreto condiviso
+				//infine computo il segreto condiviso...
 				doECDH();
+				
+				//... e segno di essere disponibile a iniziare una sessione di comando
+				MyPrefFiles.setMyPreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + this.other, StatusFree.CURRENT_STATUS, this.ctx);
 			}
 			
 		} catch (NoSuchPreferenceFoundException e) {
@@ -346,7 +350,7 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements
 	 */
 	private void handleErrorOrException() {
 		//cancello i riferimenti all'altro utente...
-		MyPrefFiles.erasePreferences(this.other, this.ctx);
+		MyPrefFiles.eraseSmpPreferences(this.other, this.ctx);
 		// TODO notificare il fragment di quello che è successo
 		
 		//... e lo notifico, esortandolo a fare lo stesso

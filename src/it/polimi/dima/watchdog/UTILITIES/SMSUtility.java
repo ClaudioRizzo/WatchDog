@@ -18,6 +18,11 @@ import android.widget.Toast;
 public class SMSUtility {
 
 	/**
+	 * Durata del timeout: 120 secondi
+	 */
+	public static final int TIMEOUT_LENGTH = 120;
+	
+	/**
 	 * Da usare nel metodo onReceive delle classi che ricevono sms.
 	 */
 	public static final String SMS_EXTRA_NAME ="pdus";

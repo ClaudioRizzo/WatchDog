@@ -63,6 +63,9 @@ public class M1Parser {
 	}
 
 	private void verifyHeader(byte[] header) throws ArbitraryMessageReceivedException {
+		//se è scattato un timeout, lo status è tornato free, quindi il primo messaggio dopo il timeout viene
+		//trattato come un m1. Se non lo è si lancia un'eccezione che propagata causerà la cancellazione
+		//di tutte le preferenze della sessione di comando.
 		if(!this.header.equals(header)){
 			throw new ArbitraryMessageReceivedException();
 		}
