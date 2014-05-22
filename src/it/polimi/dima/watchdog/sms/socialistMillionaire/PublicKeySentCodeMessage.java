@@ -4,6 +4,7 @@ import it.polimi.dima.watchdog.UTILITIES.MyPrefFiles;
 import it.polimi.dima.watchdog.exceptions.MessageWillBeIgnoredException;
 import it.polimi.dima.watchdog.sms.ParsableSMS;
 import android.content.Context;
+import android.util.Log;
 
 public class PublicKeySentCodeMessage extends ParsableSMS {
 
@@ -22,17 +23,17 @@ public class PublicKeySentCodeMessage extends ParsableSMS {
 	 * Decide se accettare o no il messaggio.
 	 */
 	@Override
-	public void validate(String otherNumber, Context ctx)
-			throws MessageWillBeIgnoredException {
+	public void validate(String otherNumber, Context ctx) throws MessageWillBeIgnoredException {
 		// la richiesta va accettata solo se in smp_status non è segnato che ne
 		// ho già ricevuta una
 		// e se è segnato che ne ho richiesta una.
 		String key = otherNumber + MyPrefFiles.PUB_KEY_RECEIVED;
 		String key2 = otherNumber + MyPrefFiles.PUB_KEY_REQUEST_FORWARDED;
-
 		if (MyPrefFiles.existsPreference(MyPrefFiles.SMP_STATUS, key, ctx) || !MyPrefFiles.existsPreference(MyPrefFiles.SMP_STATUS, key2, ctx)) {
+			Log.i("[DEBUG_SMP]", "CODE_2 REJECTED");
 			throw new MessageWillBeIgnoredException();
 		}
+		Log.i("[DEBUG_SMP]", "CODE_2 ACCEPTED");
 	}
 
 }

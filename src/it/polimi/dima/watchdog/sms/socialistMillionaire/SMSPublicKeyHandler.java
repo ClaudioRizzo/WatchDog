@@ -53,7 +53,7 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements
 		this.ctx = context;
 		final Bundle bundle = intent.getExtras();
 
-		Log.i("[DEBUG-SMP]", "HO RICEVUTO IL MESSAGGIO");
+		Log.i("[DEBUG_SMP]", "SMS RECEIVED");
 		try {
 			if (bundle != null) {
 				final Object[] pdusObj = (Object[]) bundle.get(SMSUtility.SMS_EXTRA_NAME);
@@ -86,7 +86,7 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements
 	 */
 	@Override
 	public void visit(PublicKeyRequestCodeMessage pubKeyReqMsg) {
-		Log.i("[DEBUG-SMP]", "CODE_1");
+		Log.i("[DEBUG_SMP]", "CODE_1");
 		try {
 			//vedo se accettare il messaggio
 			pubKeyReqMsg.validate(this.other, this.ctx);
@@ -121,7 +121,7 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements
 	 */
 	@Override
 	public void visit(PublicKeySentCodeMessage pubKeySentMsg) {
-		Log.i("[DEBUG-SMP_BEFORE_TRY]", "CODE_2");
+		Log.i("[DEBUG_SMP_BEFORE_TRY]", "CODE_2");
 		try {
 			//vedo se accettare il messaggio
 			pubKeySentMsg.validate(this.other, this.ctx);
@@ -143,7 +143,7 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements
 			String preferenceKey = this.other + MyPrefFiles.SECRET_QUESTION_FORWARDED;
 			MyPrefFiles.setMyPreference(MyPrefFiles.SMP_STATUS, preferenceKey, this.other, this.ctx);
 			
-			Log.i("[DEBUG-SMP_AFTER_SEND]", "CODE_2");
+			Log.i("[DEBUG_SMP_AFTER_SEND]", "CODE_2");
 			
 		} catch (NoSuchPreferenceFoundException e) {
 			//notifica ...
@@ -161,7 +161,7 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements
 	 */
 	@Override
 	public void visit(SecretQuestionSentCodeMessage secQuestMsg) {
-		Log.i("[DEBUG-SMP]", "CODE_3");
+		Log.i("[DEBUG_SMP]", "CODE_3");
 		try {
 			//vedo se accettare il messaggio
 			secQuestMsg.validate(this.other, this.ctx);
@@ -193,7 +193,7 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements
 	 */
 	@Override
 	public void visit(SecretAnswerAndPublicKeyHashSentCodeMessage secAnswMsg) {
-		Log.i("[DEBUG-SMP]", "CODE_4");
+		Log.i("[DEBUG_SMP]", "CODE_4");
 		try {
 			//vedo se accettare il messaggio
 			secAnswMsg.validate(this.other, this.ctx);
@@ -215,10 +215,10 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements
 			
 			//se gli hash non coincidono il SMP si interrompe
 			if (!this.pka.checkForEquality()) {
-				Log.i("DEBUG", "CHIAVE NON VALIDATA!!!");
+				Log.i("DEBUG_SMP", "CHIAVE NON VALIDATA!!!");
 				handleErrorOrException();
 			} else {
-				Log.i("DEBUG", "CHIAVE VALIDATA!!!");
+				Log.i("DEBUG_SMP", "CHIAVE VALIDATA!!!");
 				
 				//salvo nel keyring la chiave appena validata...
 				String keyValidated = Base64.encodeToString(this.pka.getReceivedPublicKey(), Base64.DEFAULT);
@@ -269,7 +269,7 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements
 	 */
 	@Override
 	public void visit(KeyValidatedCodeMessage keyValMsg) {
-		Log.i("[DEBUG]", "CODE_5");
+		Log.i("[DEBUG_SMP]", "CODE_5");
 		try {
 			//vedo se accettare il messaggio
 			keyValMsg.validate(this.other, this.ctx);
@@ -280,14 +280,21 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements
 			//... e lo salvo nell'HASHRING
 			MyPrefFiles.setMyPreference(MyPrefFiles.HASHRING, this.other, salt, this.ctx);
 			
+			Log.i("[DEBUG_SMP]", "HALF_SMP_SUCCESSFULL");
+			
 			//se non ho già validato la chiave dell'altro faccio partire SMP in modo simmetrico
 			if (!MyPrefFiles.existsPreference(MyPrefFiles.KEYRING, this.other, this.ctx)) {
+				Log.i("[DEBUG_SMP]", "STARTING SMP SECOND HALF");
+				
 				//invio il messaggio di richiesta della chiave pubblica...
 				SMSUtility.sendMessage(this.other, SMSUtility.SMP_PORT, SMSUtility.hexStringToByteArray(SMSUtility.CODE1), null);
 				
 				//... e segno in SMP_STATUS di averlo inviato
 				String preferenceKey = this.other + MyPrefFiles.PUB_KEY_REQUEST_FORWARDED;
 				MyPrefFiles.setMyPreference(MyPrefFiles.SMP_STATUS, preferenceKey, this.other, this.ctx);
+			}
+			else{
+				Log.i("[DEBUG_SMP]", "FULL_SMP_SUCCESSFULL");
 			}
 			
 		} catch (UnsupportedEncodingException e) {
@@ -306,7 +313,7 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements
 	 */
 	@Override
 	public void visit(IDontWantToAssociateCodeMessage noAssMsg) {
-		Log.i("[DEBUG]", "CODE_6");
+		Log.i("[DEBUG_SMP]", "CODE_6");
 		try {
 			//vedo se accettare il messaggio
 			noAssMsg.validate(this.other, this.ctx);
@@ -349,6 +356,8 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements
 	 * all'altro utente e quest'ultimo viene esortato a fare lo stesso.
 	 */
 	private void handleErrorOrException() {
+		Log.i("[DEBUG_SMP]", "CAUGHT ERROR OR EXCEPTION");
+		
 		//cancello i riferimenti all'altro utente...
 		MyPrefFiles.eraseSmpPreferences(this.other, this.ctx);
 		// TODO notificare il fragment di quello che è successo
