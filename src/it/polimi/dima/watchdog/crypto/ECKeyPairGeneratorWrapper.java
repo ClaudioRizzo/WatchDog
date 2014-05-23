@@ -2,16 +2,12 @@ package it.polimi.dima.watchdog.crypto;
 
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
+import java.security.PrivateKey;
+import java.security.PublicKey;
 import java.security.SecureRandom;
 import java.security.Security;
 
-import org.spongycastle.crypto.AsymmetricCipherKeyPair;
-import org.spongycastle.crypto.generators.ECKeyPairGenerator;
-import org.spongycastle.crypto.params.ECDomainParameters;
-import org.spongycastle.crypto.params.ECKeyGenerationParameters;
 import org.spongycastle.jce.ECNamedCurveTable;
-import org.spongycastle.jce.interfaces.ECPrivateKey;
-import org.spongycastle.jce.interfaces.ECPublicKey;
 import org.spongycastle.jce.spec.ECParameterSpec;
 
 import android.annotation.SuppressLint;
@@ -21,22 +17,22 @@ import it.polimi.dima.watchdog.UTILITIES.CryptoUtility;
 
 public class ECKeyPairGeneratorWrapper {
 		
-	private ECPublicKey pub;
-	private ECPrivateKey priv;
+	private PublicKey pub;
+	private PrivateKey priv;
 	
-	public ECPublicKey getPublicKey() {
-		return pub;
+	public PublicKey getPublicKey() {
+		return this.pub;
 	}
 
-	public void setPublicKey(ECPublicKey pub) {
+	public void setPublicKey(PublicKey pub) {
 		this.pub = pub;
 	}
 
-	public ECPrivateKey getPrivateKey() {
-		return priv;
+	public PrivateKey getPrivateKey() {
+		return this.priv;
 	}
 
-	public void setPrivateKey(ECPrivateKey priv) {
+	public void setPrivateKey(PrivateKey priv) {
 		this.priv = priv;
 	}
 	
@@ -49,21 +45,19 @@ public class ECKeyPairGeneratorWrapper {
 	public void generateKeyPair() {
 		try{
 			Security.addProvider(new org.spongycastle.jce.provider.BouncyCastleProvider());
-			ECParameterSpec ecps = ECNamedCurveTable.getParameterSpec("prime192v1");
-			//ECDomainParameters ecdp = new ECDomainParameters(ecps.getCurve(), ecps.getG(), ecps.getN());
-			KeyPairGenerator eckpg = KeyPairGenerator.getInstance(CryptoUtility.EC, CryptoUtility.SC);
-			SecureRandom random = SecureRandom.getInstance(CryptoUtility.SHA1_PRNG);
-			//ECKeyGenerationParameters eckgp = new ECKeyGenerationParameters(ecdp, random);
+			ECParameterSpec ellipticCurvesParameterSpecifiers = ECNamedCurveTable.getParameterSpec("secp256r1");
+			KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance(CryptoUtility.EC, CryptoUtility.SC);
+			SecureRandom secureRandom = SecureRandom.getInstance(CryptoUtility.SHA1_PRNG);
 			
-			eckpg.initialize(ecps, random);
-			KeyPair pair = eckpg.generateKeyPair();
+			keyPairGenerator.initialize(ellipticCurvesParameterSpecifiers, secureRandom);
+			KeyPair pair = keyPairGenerator.generateKeyPair();
 			
 			if(pair == null){
 	        	Log.i("[DEBUG]", "NULL key generation");
 	        }
 			
-			this.pub = ((ECPublicKey) pair.getPublic());
-			this.priv = ((ECPrivateKey) pair.getPrivate());
+			this.pub = pair.getPublic();
+			this.priv = pair.getPrivate();
 			
 			if(this.priv == null){
 	        	Log.i("[DEBUG]", "NULL privkey generation");

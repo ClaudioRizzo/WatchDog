@@ -8,15 +8,14 @@ import java.security.InvalidKeyException;
 import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
+import java.security.PrivateKey;
+import java.security.PublicKey;
 import java.security.Security;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 
 import javax.crypto.KeyAgreement;
-
-import org.spongycastle.jce.interfaces.ECPrivateKey;
-import org.spongycastle.jce.interfaces.ECPublicKey;
 
 
 
@@ -30,8 +29,8 @@ import org.spongycastle.jce.interfaces.ECPublicKey;
  *
  */
 public class SharedSecretAgreement {
-	private ECPrivateKey myPrivateKey;
-	private ECPublicKey otherPublicKey;
+	private PrivateKey myPrivateKey;
+	private PublicKey otherPublicKey;
 	private byte[] sharedSecret;
 	 
 	public SharedSecretAgreement(){}
@@ -43,7 +42,7 @@ public class SharedSecretAgreement {
 	private void setMyPrivateKey(byte[] key) throws NoSuchAlgorithmException, InvalidKeySpecException, NoSuchProviderException{
 		Security.addProvider(new org.spongycastle.jce.provider.BouncyCastleProvider());
 		KeyFactory kf = KeyFactory.getInstance(CryptoUtility.EC, CryptoUtility.SC);
-		kf.generatePrivate(new PKCS8EncodedKeySpec(key));
+		this.myPrivateKey = kf.generatePrivate(new PKCS8EncodedKeySpec(key));
 	}
 	
 	public void setTokenReceived(String token) throws InvalidKeySpecException, NoSuchAlgorithmException, NoSuchProviderException{
@@ -53,7 +52,7 @@ public class SharedSecretAgreement {
 	private void setTokenReceived(byte[] token) throws InvalidKeySpecException, NoSuchAlgorithmException, NoSuchProviderException {
 		Security.addProvider(new org.spongycastle.jce.provider.BouncyCastleProvider());
 		KeyFactory kf = KeyFactory.getInstance(CryptoUtility.EC, CryptoUtility.SC);
-		kf.generatePublic(new X509EncodedKeySpec(token));
+		this.otherPublicKey = kf.generatePublic(new X509EncodedKeySpec(token));
 	}
 
 	public byte[] getSharedSecret(){
