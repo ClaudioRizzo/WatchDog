@@ -44,7 +44,7 @@ public class AssociateNumberFragment extends Fragment implements OnClickListener
 		// prendo la domanda digitata e la salva nelle preferenze
 		this.getAndSaveQuestion();
 		try {
-			MyPrefFiles.getMyPreference(MyPrefFiles.SECRET_Q_A, MyPrefFiles.SECRET_QUESTION, getActivity().getApplicationContext());
+			MyPrefFiles.getMyPreference(MyPrefFiles.SECRET_Q_A, this.otherNumber + MyPrefFiles.SECRET_QUESTION, getActivity().getApplicationContext());
 		} catch (NoSuchPreferenceFoundException e) {
 			e.printStackTrace();
 			return;
@@ -84,7 +84,7 @@ public class AssociateNumberFragment extends Fragment implements OnClickListener
 		String mQuestion = mQuestionEditText.getText().toString();
 		
 		//salvo nelle preferenze la risposta alla domanda segreta che sarà inviata all'altro più avanti
-		MyPrefFiles.setMyPreference(MyPrefFiles.SECRET_Q_A, MyPrefFiles.SECRET_ANSWER, mQuestion, getActivity().getApplicationContext());
+		MyPrefFiles.setMyPreference(MyPrefFiles.SECRET_Q_A, this.otherNumber + MyPrefFiles.SECRET_ANSWER, mQuestion, getActivity().getApplicationContext());
 	}
 
 	/**

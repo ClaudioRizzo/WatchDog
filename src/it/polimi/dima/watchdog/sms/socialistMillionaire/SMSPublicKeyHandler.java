@@ -243,23 +243,27 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements
 			
 		} catch (NoSuchPreferenceFoundException e) {
 			//notifica ...
+			e.printStackTrace();
 			SMSUtility.showShortToastMessage(e.getMessage(), this.ctx);
 			
 			//... e invio richiesta di stop forzato, oltre alla cancellazione delle preferenze
 			handleErrorOrException();
 		} catch (NoSuchAlgorithmException e) {
 			//notifica ...
+			e.printStackTrace();
 			SMSUtility.showShortToastMessage(e.getMessage(), this.ctx);
 			
 			//... e invio richiesta di stop forzato, oltre alla cancellazione delle preferenze
 			handleErrorOrException();
 		} catch (InvalidKeySpecException e) {
 			//notifica ...
+			e.printStackTrace();
 			SMSUtility.showShortToastMessage(e.getMessage(), this.ctx);
 			
 			//... e invio richiesta di stop forzato, oltre alla cancellazione delle preferenze
 			handleErrorOrException();
 		} catch (MessageWillBeIgnoredException e) {
+			e.printStackTrace();
 			// appunto si ignora il messaggio
 		}
 	}
