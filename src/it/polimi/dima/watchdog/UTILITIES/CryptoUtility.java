@@ -8,6 +8,10 @@ package it.polimi.dima.watchdog.UTILITIES;
  */
 public class CryptoUtility {
 	/**
+	 * Spongycastle provider
+	 */
+	public static final String SC = "SC";
+	/**
 	 * Elliptic Curves
 	 */
 	public static final String EC = "EC";

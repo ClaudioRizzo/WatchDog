@@ -15,16 +15,6 @@ import android.annotation.SuppressLint;
 import android.util.Log;
 import it.polimi.dima.watchdog.UTILITIES.CryptoUtility;
 
-//import java.security.InvalidAlgorithmParameterException;
-//import java.security.KeyPair;
-//import java.security.KeyPairGenerator;
-//import java.security.NoSuchAlgorithmException;
-//import java.security.PrivateKey;
-//import java.security.PublicKey;
-//import java.security.SecureRandom;
-//import java.security.spec.ECGenParameterSpec;
-//import java.security.spec.ECParameterSpec;
-
 
 public class ECKeyPairGeneratorWrapper {
 		

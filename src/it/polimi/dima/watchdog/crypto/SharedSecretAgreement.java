@@ -41,7 +41,7 @@ public class SharedSecretAgreement {
 	
 	private void setMyPrivateKey(byte[] key) throws NoSuchAlgorithmException, InvalidKeySpecException, NoSuchProviderException{
 		Security.addProvider(new org.spongycastle.jce.provider.BouncyCastleProvider());
-		KeyFactory kf = KeyFactory.getInstance(CryptoUtility.EC, "SC");
+		KeyFactory kf = KeyFactory.getInstance(CryptoUtility.EC, CryptoUtility.SC);
 		kf.generatePrivate(new X509EncodedKeySpec(key));
 	}
 	
@@ -51,7 +51,7 @@ public class SharedSecretAgreement {
 	
 	private void setTokenReceived(byte[] token) throws InvalidKeySpecException, NoSuchAlgorithmException, NoSuchProviderException {
 		Security.addProvider(new org.spongycastle.jce.provider.BouncyCastleProvider());
-		KeyFactory kf = KeyFactory.getInstance(CryptoUtility.EC, "SC");
+		KeyFactory kf = KeyFactory.getInstance(CryptoUtility.EC, CryptoUtility.SC);
 		kf.generatePublic(new X509EncodedKeySpec(token));
 	}
 
@@ -65,11 +65,12 @@ public class SharedSecretAgreement {
 	 * @throws InvalidKeyException 
 	 * @throws NoSuchAlgorithmException 
 	 * @throws InvalidKeySpecException 
+	 * @throws NoSuchProviderException 
 	 */
 	@SuppressLint("TrulyRandom")
-	public void generateSharedSecret() throws InvalidKeyException, NoSuchAlgorithmException, InvalidKeySpecException{
-		//Security.addProvider(new org.spongycastle.jce.provider.BouncyCastleProvider());
-		KeyAgreement ka = KeyAgreement.getInstance(CryptoUtility.ECDH);
+	public void generateSharedSecret() throws InvalidKeyException, NoSuchAlgorithmException, InvalidKeySpecException, NoSuchProviderException{
+		Security.addProvider(new org.spongycastle.jce.provider.BouncyCastleProvider());
+		KeyAgreement ka = KeyAgreement.getInstance(CryptoUtility.ECDH, CryptoUtility.SC);
 		ka.init(this.myPrivateKey);
 		ka.doPhase(this.otherPublicKey, true);
 		this.sharedSecret = ka.generateSecret();
