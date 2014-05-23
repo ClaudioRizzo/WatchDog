@@ -162,6 +162,8 @@ public class PendingRequestsAdapter extends BaseAdapter {
 	}
 
 	private void handleErrorOrException(String number) {
+		Log.i("[DEBUG_SMP]", "ERROR OR EXCEPTION IN ADAPTER");
+		
 		//cancello tutte le preferenze relative all'altro utente...
 		MyPrefFiles.eraseSmpPreferences(number, this.ctx);
 		

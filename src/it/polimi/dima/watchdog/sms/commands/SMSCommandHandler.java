@@ -18,6 +18,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.telephony.SmsMessage;
+import android.util.Log;
 
 /**
  * 
@@ -37,6 +38,7 @@ public class SMSCommandHandler extends BroadcastReceiver implements SMSCommandVi
 	
 	@Override
 	public void onReceive(Context context, Intent intent) {
+		Log.i("[DEBUG_COMMAND]", "MESSAGGIO RICEVUTO");
 		final Bundle bundle = intent.getExtras();
 
 		try {
@@ -138,6 +140,7 @@ public class SMSCommandHandler extends BroadcastReceiver implements SMSCommandVi
 	@Override
 	public void visit(LocateCodeMessage locateCodeMessage) {
 		// TODO Auto-generated method stub
+		Log.i("[DEBUG_COMMAND]", "LOCATE RICEVUTO");
 		
 	}
 	
