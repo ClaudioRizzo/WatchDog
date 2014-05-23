@@ -33,10 +33,10 @@ public class PublicKeyRequestCodeMessage extends ParsableSMS implements
 		//la richiesta va accettata solo se in smp_status non è segnato che ne ho già ricevuta una
 		String key = otherNumber + MyPrefFiles.PUB_KEY_REQUEST_RECEIVED;
 		if(MyPrefFiles.existsPreference(MyPrefFiles.SMP_STATUS, key, ctx)){
-			Log.i("[DEBUG_SMP]", "CODE_1 REJECTED");
+			Log.i("[DEBUG_SMP]", "[DEBUG_SMP] CODE_1 REJECTED");
 			throw new MessageWillBeIgnoredException();
 		}
-		Log.i("[DEBUG_SMP]", "CODE_1 ACCEPTED");
+		Log.i("[DEBUG_SMP]", "[DEBUG_SMP] CODE_1 ACCEPTED");
 	}
 
 }

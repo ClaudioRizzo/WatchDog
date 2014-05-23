@@ -93,7 +93,7 @@ public class PendingRequestsAdapter extends BaseAdapter {
 
 			@Override
 			public void onClick(View v) {
-				Log.i("[DEBUG]", "Ho cliccato il bottone rifiuto");
+				Log.i("[DEBUG]", "[DEBUG_SMP] Ho cliccato il bottone rifiuto");
 				
 				//Cancello tutte le preferenze relative all'altro (compresa la richiesta pendente)...
 				MyPrefFiles.eraseSmpPreferences(number, ctx);
@@ -115,7 +115,7 @@ public class PendingRequestsAdapter extends BaseAdapter {
 				try {
 					//... poi ottengo ciò che ho digitato...
 					String secAnsw = editText.getText().toString();
-					Log.i("[DEBUG]", "Ho cliccato send: " + secAnsw);
+					Log.i("[DEBUG]", "[DEBUG_SMP] Ho cliccato send: " + secAnsw);
 					
 					//... poi recupero la mia chiave pubblica...
 					pka.setMyPublicKey(MyPrefFiles.getMyPreference(MyPrefFiles.MY_KEYS, MyPrefFiles.MY_PUB, ctx));
@@ -162,7 +162,7 @@ public class PendingRequestsAdapter extends BaseAdapter {
 	}
 
 	private void handleErrorOrException(String number) {
-		Log.i("[DEBUG_SMP]", "ERROR OR EXCEPTION IN ADAPTER");
+		Log.i("[DEBUG_SMP]", "[DEBUG_SMP] ERROR OR EXCEPTION IN ADAPTER");
 		
 		//cancello tutte le preferenze relative all'altro utente...
 		MyPrefFiles.eraseSmpPreferences(number, this.ctx);

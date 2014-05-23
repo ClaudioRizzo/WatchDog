@@ -25,10 +25,10 @@ public class IDontWantToAssociateCodeMessage extends ParsableSMS {
 		//se SMP è stato completato con successo, allora questo messaggio è un falso o un errore
 		//e quindi va ignorato
 		if(MyPrefFiles.isSmpSuccessfullyFinishedByBoth(otherNumber, ctx)){
-			Log.i("[DEBUG_SMP]", "CODE_6 REJECTED");
+			Log.i("[DEBUG_SMP]", "[DEBUG_SMP] CODE_6 REJECTED");
 			throw new MessageWillBeIgnoredException();
 		}
-		Log.i("[DEBUG_SMP]", "CODE_6 ACCEPTED");
+		Log.i("[DEBUG_SMP]", "[DEBUG_SMP] CODE_6 ACCEPTED");
 	}
 
 }

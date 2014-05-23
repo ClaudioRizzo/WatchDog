@@ -1,6 +1,9 @@
 package it.polimi.dima.watchdog.crypto;
 
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
 import java.security.SecureRandom;
+import java.security.Security;
 
 import org.spongycastle.crypto.AsymmetricCipherKeyPair;
 import org.spongycastle.crypto.generators.ECKeyPairGenerator;
@@ -45,14 +48,15 @@ public class ECKeyPairGeneratorWrapper {
 	@SuppressLint("TrulyRandom")
 	public void generateKeyPair() {
 		try{
+			Security.addProvider(new org.spongycastle.jce.provider.BouncyCastleProvider());
 			ECParameterSpec ecps = ECNamedCurveTable.getParameterSpec("prime192v1");
-			ECDomainParameters ecdp = new ECDomainParameters(ecps.getCurve(), ecps.getG(), ecps.getN());
-			ECKeyPairGenerator eckpg = new ECKeyPairGenerator();
+			//ECDomainParameters ecdp = new ECDomainParameters(ecps.getCurve(), ecps.getG(), ecps.getN());
+			KeyPairGenerator eckpg = KeyPairGenerator.getInstance(CryptoUtility.EC, CryptoUtility.SC);
 			SecureRandom random = SecureRandom.getInstance(CryptoUtility.SHA1_PRNG);
-			ECKeyGenerationParameters eckgp = new ECKeyGenerationParameters(ecdp, random);
+			//ECKeyGenerationParameters eckgp = new ECKeyGenerationParameters(ecdp, random);
 			
-			eckpg.init(eckgp);
-			AsymmetricCipherKeyPair pair = eckpg.generateKeyPair();
+			eckpg.initialize(ecps, random);
+			KeyPair pair = eckpg.generateKeyPair();
 			
 			if(pair == null){
 	        	Log.i("[DEBUG]", "NULL key generation");

@@ -29,10 +29,10 @@ public class SecretAnswerAndPublicKeyHashSentCodeMessage extends ParsableSMS {
 		String key = otherNumber + MyPrefFiles.HASH_RECEIVED;
 		String key2 = otherNumber + MyPrefFiles.SECRET_QUESTION_FORWARDED;
 		if (MyPrefFiles.existsPreference(MyPrefFiles.SMP_STATUS, key, ctx) || !MyPrefFiles.existsPreference(MyPrefFiles.SMP_STATUS, key2, ctx)) {
-			Log.i("[DEBUG_SMP]", "CODE_4 REJECTED");
+			Log.i("[DEBUG_SMP]", "[DEBUG_SMP] CODE_4 REJECTED");
 			throw new MessageWillBeIgnoredException();
 		}
-		Log.i("[DEBUG_SMP]", "CODE_4 ACCEPTED");
+		Log.i("[DEBUG_SMP]", "[DEBUG_SMP] CODE_4 ACCEPTED");
 	}
 
 }

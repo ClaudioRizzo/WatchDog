@@ -18,7 +18,7 @@ public class SocialistMillionaireFactory implements ParsebleSMSInterface {
 	@Override
 	public ParsableSMS getMessage(String header) throws ArbitraryMessageReceivedException {
 		
-		Log.i("[DEBUG] in factory ho ricevuto: ", header);
+		Log.i("[DEBUG_SMP]", "[DEBUG_SMP] in factory ho ricevuto: " +  header);
 		if (header.equals(SMSUtility.CODE1)) {
 			return new PublicKeyRequestCodeMessage(SMSUtility.CODE1, null);
 		} else if (header.equals(SMSUtility.CODE2)) {
