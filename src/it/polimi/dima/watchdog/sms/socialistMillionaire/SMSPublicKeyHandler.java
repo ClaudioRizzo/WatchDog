@@ -2,6 +2,7 @@ package it.polimi.dima.watchdog.sms.socialistMillionaire;
 
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
 import java.security.spec.InvalidKeySpecException;
 
 import it.polimi.dima.watchdog.UTILITIES.MyPrefFiles;
@@ -77,7 +78,7 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements
 			SMSUtility.showShortToastMessage(e.getMessage(), this.ctx);
 			
 			//... e invio richiesta di stop forzato, oltre alla cancellazione delle preferenze
-			handleErrorOrException();
+			handleErrorOrException(e);
 		}
 	}
 
@@ -110,7 +111,7 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements
 			SMSUtility.showShortToastMessage(e.getMessage(), this.ctx);
 			
 			//... e invio richiesta di stop forzato, oltre alla cancellazione delle preferenze
-			handleErrorOrException();
+			handleErrorOrException(e);
 		} catch (MessageWillBeIgnoredException e) {
 			// appunto si ignora il messaggio
 		}
@@ -150,7 +151,7 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements
 			SMSUtility.showShortToastMessage(e.getMessage(), this.ctx);
 			
 			//... e invio richiesta di stop forzato, oltre alla cancellazione delle preferenze
-			handleErrorOrException();
+			handleErrorOrException(e);
 		} catch (MessageWillBeIgnoredException e) {
 			// appunto si ignora il messaggio
 		}
@@ -182,7 +183,7 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements
 			SMSUtility.showShortToastMessage(e.getMessage(), this.ctx);
 			
 			//... e invio richiesta di stop forzato, oltre alla cancellazione delle preferenze
-			handleErrorOrException();
+			handleErrorOrException(e);
 		} catch (MessageWillBeIgnoredException e) {
 			// appunto si ignora il messaggio
 		}
@@ -216,7 +217,7 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements
 			//se gli hash non coincidono il SMP si interrompe
 			if (!this.pka.checkForEquality()) {
 				Log.i("DEBUG_SMP", "CHIAVE NON VALIDATA!!!");
-				handleErrorOrException();
+				handleErrorOrException(null);
 			} else {
 				Log.i("DEBUG_SMP", "CHIAVE VALIDATA!!!");
 				
@@ -243,25 +244,33 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements
 			
 		} catch (NoSuchPreferenceFoundException e) {
 			//notifica ...
-			e.printStackTrace();
 			SMSUtility.showShortToastMessage(e.getMessage(), this.ctx);
 			
 			//... e invio richiesta di stop forzato, oltre alla cancellazione delle preferenze
-			handleErrorOrException();
+			handleErrorOrException(e);
+		} catch (NoSuchProviderException e) {
+			//notifica ...
+			SMSUtility.showShortToastMessage(e.getMessage(), this.ctx);
+			
+			//... e invio richiesta di stop forzato, oltre alla cancellazione delle preferenze
+			handleErrorOrException(e);
 		} catch (NoSuchAlgorithmException e) {
 			//notifica ...
-			e.printStackTrace();
 			SMSUtility.showShortToastMessage(e.getMessage(), this.ctx);
 			
 			//... e invio richiesta di stop forzato, oltre alla cancellazione delle preferenze
-			handleErrorOrException();
+			handleErrorOrException(e);
 		} catch (InvalidKeySpecException e) {
 			//notifica ...
-			e.printStackTrace();
 			SMSUtility.showShortToastMessage(e.getMessage(), this.ctx);
 			
 			//... e invio richiesta di stop forzato, oltre alla cancellazione delle preferenze
-			handleErrorOrException();
+			handleErrorOrException(e);
+		} catch (NullPointerException e) {
+			SMSUtility.showShortToastMessage(e.getMessage(), this.ctx);
+			
+			//... e invio richiesta di stop forzato, oltre alla cancellazione delle preferenze
+			handleErrorOrException(e);
 		} catch (MessageWillBeIgnoredException e) {
 			e.printStackTrace();
 			// appunto si ignora il messaggio
@@ -306,7 +315,7 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements
 			SMSUtility.showShortToastMessage(e.getMessage(), this.ctx);
 			
 			//... e invio richiesta di stop forzato, oltre alla cancellazione delle preferenze
-			handleErrorOrException();
+			handleErrorOrException(e);
 		} catch (MessageWillBeIgnoredException e) {
 			// appunto si ignora il messaggio
 		}
@@ -329,7 +338,7 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements
 			//se ho riferimenti all'altro utente nelle preferenze...
 			if (MyPrefFiles.iHaveSomeReferencesToThisUser(this.other, this.ctx)) {
 				//... li cancello ed esorto l'altro a fare lo stesso
-				handleErrorOrException();
+				handleErrorOrException(null);
 			}
 
 		} catch (MessageWillBeIgnoredException e) {
@@ -344,23 +353,31 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements
 	 * @throws NoSuchPreferenceFoundException
 	 * @throws NoSuchAlgorithmException
 	 * @throws InvalidKeySpecException
+	 * @throws NoSuchProviderException 
 	 */
-	private byte[] generateCommonSecret() throws NoSuchPreferenceFoundException, NoSuchAlgorithmException, InvalidKeySpecException {
+	private byte[] generateCommonSecret() throws NoSuchPreferenceFoundException, NoSuchAlgorithmException, InvalidKeySpecException, NullPointerException, NoSuchProviderException {
 		SharedSecretAgreement ssa = new SharedSecretAgreement();
 		String myPriv = MyPrefFiles.getMyPreference(MyPrefFiles.MY_KEYS, MyPrefFiles.MY_PRIV, this.ctx);
 		String otherPub = MyPrefFiles.getMyPreference(MyPrefFiles.KEYRING, this.other, this.ctx);
-		ssa.setMyPrivateKey(myPriv);
-		ssa.setTokenReceived(otherPub);
-
-		return ssa.getSharedSecret();
+		if(myPriv != null){
+			ssa.setMyPrivateKey(myPriv);
+			if(otherPub!= null){
+				ssa.setTokenReceived(otherPub);
+				return ssa.getSharedSecret();
+			}
+		}
+		throw new NullPointerException("ECDH ANDATO A MALE!!!");
 	}
 
 	/**
 	 * Se qualcosa va storto vengono cancellate tutte le preferenze relative
 	 * all'altro utente e quest'ultimo viene esortato a fare lo stesso.
 	 */
-	private void handleErrorOrException() {
+	private void handleErrorOrException(Exception e) {
 		Log.i("[DEBUG_SMP]", "CAUGHT ERROR OR EXCEPTION");
+		if(e != null){
+			e.printStackTrace();
+		}
 		
 		//cancello i riferimenti all'altro utente...
 		MyPrefFiles.eraseSmpPreferences(this.other, this.ctx);
@@ -393,8 +410,9 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements
 	 * @throws NoSuchAlgorithmException
 	 * @throws InvalidKeySpecException
 	 * @throws NoSuchPreferenceFoundException
+	 * @throws NoSuchProviderException 
 	 */
-	private void doECDH() throws NoSuchAlgorithmException, InvalidKeySpecException, NoSuchPreferenceFoundException {
+	private void doECDH() throws NoSuchAlgorithmException, InvalidKeySpecException, NoSuchPreferenceFoundException, NullPointerException, NoSuchProviderException {
 		byte[] secret = generateCommonSecret();
 		String secretBase64 = Base64.encodeToString(secret, Base64.DEFAULT);
 		MyPrefFiles.setMyPreference(MyPrefFiles.SHARED_SECRETS, this.other, secretBase64, this.ctx);

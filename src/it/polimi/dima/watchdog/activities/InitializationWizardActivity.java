@@ -1,7 +1,5 @@
 package it.polimi.dima.watchdog.activities;
 
-import java.security.InvalidAlgorithmParameterException;
-
 import it.polimi.dima.watchdog.R;
 import it.polimi.dima.watchdog.UTILITIES.MyPrefFiles;
 import it.polimi.dima.watchdog.crypto.ECKeyPairGeneratorWrapper;
@@ -49,12 +47,7 @@ public class InitializationWizardActivity extends ActionBarActivity implements
 		SharedPreferences.Editor editor2 = password.edit();
 		SharedPreferences.Editor editor3 = wizard.edit();
 		ECKeyPairGeneratorWrapper mkeyGen = new ECKeyPairGeneratorWrapper();
-		try {
-			mkeyGen.generateKeyPair();
-		} catch (InvalidAlgorithmParameterException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		mkeyGen.generateKeyPair();
 		
 		byte[] pubKeyBytes = mkeyGen.getPublicKey().getEncoded();
 		byte[] privateKeyBytes = mkeyGen.getPrivateKey().getEncoded();

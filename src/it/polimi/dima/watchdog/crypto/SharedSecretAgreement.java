@@ -4,21 +4,18 @@ import android.annotation.SuppressLint;
 import android.util.Base64;
 import it.polimi.dima.watchdog.UTILITIES.CryptoUtility;
 
-import java.math.BigInteger;
 import java.security.InvalidKeyException;
 import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
-import java.security.PrivateKey;
-import java.security.PublicKey;
+import java.security.NoSuchProviderException;
+import java.security.Security;
 import java.security.spec.InvalidKeySpecException;
+import java.security.spec.X509EncodedKeySpec;
 
 import javax.crypto.KeyAgreement;
 
-import org.spongycastle.jce.ECNamedCurveTable;
-import org.spongycastle.jce.spec.ECParameterSpec;
-import org.spongycastle.jce.spec.ECPrivateKeySpec;
-import org.spongycastle.jce.spec.ECPublicKeySpec;
-
+import org.spongycastle.jce.interfaces.ECPrivateKey;
+import org.spongycastle.jce.interfaces.ECPublicKey;
 
 
 
@@ -32,33 +29,30 @@ import org.spongycastle.jce.spec.ECPublicKeySpec;
  *
  */
 public class SharedSecretAgreement {
-	private PrivateKey myPrivateKey;
-	private PublicKey otherPublicKey;
+	private ECPrivateKey myPrivateKey;
+	private ECPublicKey otherPublicKey;
 	private byte[] sharedSecret;
 	 
 	public SharedSecretAgreement(){}
 	
-	public void setMyPrivateKey(String key) throws NoSuchAlgorithmException, InvalidKeySpecException{
+	public void setMyPrivateKey(String key) throws NoSuchAlgorithmException, InvalidKeySpecException, NoSuchProviderException{
 		setMyPrivateKey(Base64.decode(key, Base64.DEFAULT));
 	}
 	
-	private void setMyPrivateKey(byte[] key) throws NoSuchAlgorithmException, InvalidKeySpecException{
-		KeyFactory kf = KeyFactory.getInstance(CryptoUtility.EC);
-		ECParameterSpec param = ECNamedCurveTable.getParameterSpec("secp256r1");
-		ECPrivateKeySpec ecparam = new ECPrivateKeySpec(new BigInteger(key), param);
-		this.myPrivateKey = kf.generatePrivate(ecparam);
+	private void setMyPrivateKey(byte[] key) throws NoSuchAlgorithmException, InvalidKeySpecException, NoSuchProviderException{
+		Security.addProvider(new org.spongycastle.jce.provider.BouncyCastleProvider());
+		KeyFactory kf = KeyFactory.getInstance(CryptoUtility.EC, "SC");
+		kf.generatePrivate(new X509EncodedKeySpec(key));
 	}
 	
-	public void setTokenReceived(String token) throws InvalidKeySpecException, NoSuchAlgorithmException{
+	public void setTokenReceived(String token) throws InvalidKeySpecException, NoSuchAlgorithmException, NoSuchProviderException{
 		setTokenReceived(Base64.decode(token, Base64.DEFAULT));
 	}
 	
-	private void setTokenReceived(byte[] token) throws InvalidKeySpecException, NoSuchAlgorithmException {
-		KeyFactory kf = KeyFactory.getInstance(CryptoUtility.EC);
-		ECParameterSpec param = ECNamedCurveTable.getParameterSpec("secp256r1");
-		ECPublicKeySpec ecparam = new ECPublicKeySpec(param.getG(), param);
-		this.otherPublicKey = kf.generatePublic(ecparam);
-		
+	private void setTokenReceived(byte[] token) throws InvalidKeySpecException, NoSuchAlgorithmException, NoSuchProviderException {
+		Security.addProvider(new org.spongycastle.jce.provider.BouncyCastleProvider());
+		KeyFactory kf = KeyFactory.getInstance(CryptoUtility.EC, "SC");
+		kf.generatePublic(new X509EncodedKeySpec(token));
 	}
 
 	public byte[] getSharedSecret(){
@@ -74,6 +68,7 @@ public class SharedSecretAgreement {
 	 */
 	@SuppressLint("TrulyRandom")
 	public void generateSharedSecret() throws InvalidKeyException, NoSuchAlgorithmException, InvalidKeySpecException{
+		//Security.addProvider(new org.spongycastle.jce.provider.BouncyCastleProvider());
 		KeyAgreement ka = KeyAgreement.getInstance(CryptoUtility.ECDH);
 		ka.init(this.myPrivateKey);
 		ka.doPhase(this.otherPublicKey, true);
