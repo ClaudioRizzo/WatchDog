@@ -1,4 +1,4 @@
-package it.polimi.dima.watchdog.UTILITIES;
+package it.polimi.dima.watchdog.utilities;
 
 import java.util.ArrayList;
 import java.util.List;

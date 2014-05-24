@@ -1,8 +1,8 @@
 package it.polimi.dima.watchdog.sms.socialistMillionaire;
 
-import it.polimi.dima.watchdog.UTILITIES.MyPrefFiles;
 import it.polimi.dima.watchdog.exceptions.MessageWillBeIgnoredException;
 import it.polimi.dima.watchdog.sms.ParsableSMS;
+import it.polimi.dima.watchdog.utilities.MyPrefFiles;
 import android.content.Context;
 import android.util.Log;
 

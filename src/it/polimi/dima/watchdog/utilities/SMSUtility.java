@@ -1,4 +1,4 @@
-package it.polimi.dima.watchdog.UTILITIES;
+package it.polimi.dima.watchdog.utilities;
 
 import it.polimi.dima.watchdog.exceptions.ArbitraryMessageReceivedException;
 import it.polimi.dima.watchdog.sms.ParsableSMS;

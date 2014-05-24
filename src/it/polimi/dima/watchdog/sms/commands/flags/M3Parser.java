@@ -10,6 +10,7 @@ import it.polimi.dima.watchdog.crypto.AES256GCM;
 import it.polimi.dima.watchdog.crypto.ECDSA_Signature;
 import it.polimi.dima.watchdog.exceptions.ArbitraryMessageReceivedException;
 import it.polimi.dima.watchdog.exceptions.ErrorInSignatureCheckingException;
+import it.polimi.dima.watchdog.exceptions.NotECKeyException;
 
 /**
  * Classe che si occupa di spacchettare il contenuto di un sms, dividendolo in hash della password e testo.
@@ -55,8 +56,9 @@ public class M3Parser {
 	 * @throws ArbitraryMessageReceivedException 
 	 * @throws InvalidCipherTextException 
 	 * @throws IllegalStateException 
+	 * @throws NotECKeyException 
 	 */
-	public void decrypt() throws IllegalStateException, InvalidCipherTextException, ArbitraryMessageReceivedException, ErrorInSignatureCheckingException {
+	public void decrypt() throws IllegalStateException, InvalidCipherTextException, ArbitraryMessageReceivedException, ErrorInSignatureCheckingException, NotECKeyException {
 		AES256GCM dec = new AES256GCM(this.decryptionKey, this.smsEncrypted, this.iv);
 		byte[] decryptedSMS = dec.decrypt(); // messaggio || ' ' || firma
 		int spacePosition = getSpacePosition(decryptedSMS);
@@ -93,8 +95,9 @@ public class M3Parser {
 	 * 
 	 * @throws ArbitraryMessageReceivedException
 	 * @throws ErrorInSignatureCheckingException
+	 * @throws NotECKeyException 
 	 */
-	private void validateSignature() throws ArbitraryMessageReceivedException, ErrorInSignatureCheckingException{
+	private void validateSignature() throws ArbitraryMessageReceivedException, ErrorInSignatureCheckingException, NotECKeyException{
 		ECDSA_Signature ver = new ECDSA_Signature(this.sms, this.oPub, this.signature);
 		if(!ver.verifySignature()){
 			throw new ArbitraryMessageReceivedException("Firma non valida/non corrispondente!!!");

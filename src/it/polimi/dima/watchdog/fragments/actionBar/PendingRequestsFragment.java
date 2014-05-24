@@ -1,7 +1,7 @@
 package it.polimi.dima.watchdog.fragments.actionBar;
 
 import it.polimi.dima.watchdog.R;
-import it.polimi.dima.watchdog.UTILITIES.MyPrefFiles;
+import it.polimi.dima.watchdog.utilities.MyPrefFiles;
 
 import java.util.LinkedList;
 import java.util.List;

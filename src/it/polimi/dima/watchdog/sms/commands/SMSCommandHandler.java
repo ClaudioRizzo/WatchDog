@@ -3,8 +3,6 @@ package it.polimi.dima.watchdog.sms.commands;
 import java.util.HashMap;
 import java.util.Map;
 
-import it.polimi.dima.watchdog.UTILITIES.MyPrefFiles;
-import it.polimi.dima.watchdog.UTILITIES.SMSUtility;
 import it.polimi.dima.watchdog.exceptions.NoSuchPreferenceFoundException;
 import it.polimi.dima.watchdog.sms.ParsableSMS;
 import it.polimi.dima.watchdog.sms.commands.flags.CommandProtocolFlagsReactionInterface;
@@ -13,6 +11,8 @@ import it.polimi.dima.watchdog.sms.commands.flags.StatusM1Sent;
 import it.polimi.dima.watchdog.sms.commands.flags.StatusM2Sent;
 import it.polimi.dima.watchdog.sms.commands.flags.StatusM3Sent;
 import it.polimi.dima.watchdog.sms.timeout.Timeout;
+import it.polimi.dima.watchdog.utilities.MyPrefFiles;
+import it.polimi.dima.watchdog.utilities.SMSUtility;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -38,7 +38,7 @@ public class SMSCommandHandler extends BroadcastReceiver implements SMSCommandVi
 	
 	@Override
 	public void onReceive(Context context, Intent intent) {
-		Log.i("[DEBUG_COMMAND]", "MESSAGGIO RICEVUTO");
+		Log.i("[DEBUG_COMMAND]", "[DEBUG_COMMAND] MESSAGGIO RICEVUTO");
 		final Bundle bundle = intent.getExtras();
 
 		try {
@@ -140,7 +140,7 @@ public class SMSCommandHandler extends BroadcastReceiver implements SMSCommandVi
 	@Override
 	public void visit(LocateCodeMessage locateCodeMessage) {
 		// TODO Auto-generated method stub
-		Log.i("[DEBUG_COMMAND]", "LOCATE RICEVUTO");
+		Log.i("[DEBUG_COMMAND]", "[DEBUG_COMMAND] LOCATE RICEVUTO");
 		
 	}
 	

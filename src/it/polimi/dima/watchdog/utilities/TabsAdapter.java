@@ -1,4 +1,4 @@
-package it.polimi.dima.watchdog.UTILITIES;
+package it.polimi.dima.watchdog.utilities;
 
 import it.polimi.dima.watchdog.factory.FeatureEnum;
 import it.polimi.dima.watchdog.factory.FeatureFactory;

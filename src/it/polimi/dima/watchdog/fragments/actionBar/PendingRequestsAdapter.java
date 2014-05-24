@@ -5,10 +5,10 @@ import java.util.LinkedList;
 import java.util.List;
 
 import it.polimi.dima.watchdog.R;
-import it.polimi.dima.watchdog.UTILITIES.MyPrefFiles;
-import it.polimi.dima.watchdog.UTILITIES.SMSUtility;
 import it.polimi.dima.watchdog.crypto.PublicKeyAutenticator;
 import it.polimi.dima.watchdog.exceptions.NoSuchPreferenceFoundException;
+import it.polimi.dima.watchdog.utilities.MyPrefFiles;
+import it.polimi.dima.watchdog.utilities.SMSUtility;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;

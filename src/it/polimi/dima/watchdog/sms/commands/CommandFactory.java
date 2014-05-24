@@ -1,10 +1,10 @@
 package it.polimi.dima.watchdog.sms.commands;
 
 import android.util.Log;
-import it.polimi.dima.watchdog.UTILITIES.SMSUtility;
 import it.polimi.dima.watchdog.exceptions.ArbitraryMessageReceivedException;
 import it.polimi.dima.watchdog.sms.ParsableSMS;
 import it.polimi.dima.watchdog.sms.ParsebleSMSInterface;
+import it.polimi.dima.watchdog.utilities.SMSUtility;
 
 /**
  * 

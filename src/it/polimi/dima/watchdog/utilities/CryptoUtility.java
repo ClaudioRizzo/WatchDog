@@ -1,4 +1,4 @@
-package it.polimi.dima.watchdog.UTILITIES;
+package it.polimi.dima.watchdog.utilities;
 
 /**
  * Classe che contiene le stringhe che identificano gli algoritmi usati.
@@ -44,8 +44,7 @@ public class CryptoUtility {
 	 */
 	public static final String ECDH = "ECDH";
 	/**
-	 * Regex per le stringhe Base64
+	 * Il PRNG di default
 	 */
-	public static final String BASE64_REGEX = "^([A-Za-z0-9+/]{4})*([A-Za-z0-9+/]{4}|[A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{2}==)$";
-
+	public static final String SUN = "SUN";
 }

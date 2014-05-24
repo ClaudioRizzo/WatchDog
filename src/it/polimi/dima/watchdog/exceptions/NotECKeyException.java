@@ -1,6 +1,6 @@
 package it.polimi.dima.watchdog.exceptions;
 
-public class NoECDSAKeyPairGeneratedException extends Exception {
+public class NotECKeyException extends Exception {
 
 	/**
 	 * 

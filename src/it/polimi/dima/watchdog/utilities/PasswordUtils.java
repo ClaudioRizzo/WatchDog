@@ -1,4 +1,4 @@
-package it.polimi.dima.watchdog.UTILITIES;
+package it.polimi.dima.watchdog.utilities;
 
 import android.annotation.SuppressLint;
 import java.io.UnsupportedEncodingException;

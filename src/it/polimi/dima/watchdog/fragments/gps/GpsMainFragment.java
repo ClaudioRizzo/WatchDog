@@ -1,8 +1,8 @@
 package it.polimi.dima.watchdog.fragments.gps;
 
 import it.polimi.dima.watchdog.R;
-import it.polimi.dima.watchdog.UTILITIES.TabsAdapter;
 import it.polimi.dima.watchdog.factory.FeatureEnum;
+import it.polimi.dima.watchdog.utilities.TabsAdapter;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;

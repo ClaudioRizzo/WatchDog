@@ -1,12 +1,12 @@
 package it.polimi.dima.watchdog.sms.commands;
 
-import it.polimi.dima.watchdog.UTILITIES.CryptoUtility;
-import it.polimi.dima.watchdog.UTILITIES.PasswordUtils;
-import it.polimi.dima.watchdog.UTILITIES.SMSUtility;
 import it.polimi.dima.watchdog.crypto.AES256GCM;
 import it.polimi.dima.watchdog.crypto.ECDSA_Signature;
-import it.polimi.dima.watchdog.exceptions.NoECDSAKeyPairGeneratedException;
+import it.polimi.dima.watchdog.exceptions.NotECKeyException;
 import it.polimi.dima.watchdog.exceptions.NoSignatureDoneException;
+import it.polimi.dima.watchdog.utilities.CryptoUtility;
+import it.polimi.dima.watchdog.utilities.PasswordUtils;
+import it.polimi.dima.watchdog.utilities.SMSUtility;
 
 import java.io.UnsupportedEncodingException;
 import java.security.Key;
@@ -67,12 +67,12 @@ public class CommandSMS {
 	 * 
 	 * @throws NoSuchAlgorithmException
 	 * @throws UnsupportedEncodingException
-	 * @throws NoECDSAKeyPairGeneratedException 
+	 * @throws NotECKeyException 
 	 * @throws NoSignatureDoneException
 	 * @throws IllegalStateException
 	 * @throws InvalidCipherTextException
 	 */
-	public void construct() throws NoSuchAlgorithmException, UnsupportedEncodingException, NoECDSAKeyPairGeneratedException, NoSignatureDoneException, IllegalStateException, InvalidCipherTextException{
+	public void construct() throws NoSuchAlgorithmException, UnsupportedEncodingException, NotECKeyException, NoSignatureDoneException, IllegalStateException, InvalidCipherTextException{
 		if(this.finalMessage == null && this.text != null){
 			MessageDigest digest = MessageDigest.getInstance(CryptoUtility.SHA_256);
 			//l'hash sarà lungo 256 bit
@@ -92,10 +92,10 @@ public class CommandSMS {
 
 	/**
 	 * Genera la firma digitale del messaggio con SHA-256 ed ECDSA.
-	 * @throws NoECDSAKeyPairGeneratedException
+	 * @throws NotECKeyException
 	 * @throws NoSignatureDoneException
 	 */
-	private void sign() throws NoECDSAKeyPairGeneratedException, NoSignatureDoneException {
+	private void sign() throws NotECKeyException, NoSignatureDoneException {
 		ECDSA_Signature sig = new ECDSA_Signature(this.finalMessage, this.myPrivateKey);
 		sig.sign();
 		this.signature = sig.getSignature();

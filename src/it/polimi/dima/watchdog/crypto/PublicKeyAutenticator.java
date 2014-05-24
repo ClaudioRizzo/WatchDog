@@ -1,11 +1,8 @@
 package it.polimi.dima.watchdog.crypto;
 
-import it.polimi.dima.watchdog.UTILITIES.CryptoUtility;
-
+import it.polimi.dima.watchdog.utilities.CryptoUtility;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-//import java.util.regex.Pattern;
-
 import android.util.Base64;
 
 /**
@@ -19,10 +16,10 @@ public class PublicKeyAutenticator {
 	private byte[] myPublicKey;
 	private byte[] receivedPublicKey;
 	private String secretQuestion; //non è in Base64
-	private String secretAnswer;
+	private String secretAnswer; //non è in Base64
 	private String receivedHash; //in Base64
 	private String computedHash; //in Base64
-	private byte[] hashToSend;   //come byte[], senza codifica Base64, comodo per essere inviato
+	private byte[] hashToSend;
 	
 	
 	public String getComputedHash() {
@@ -45,10 +42,6 @@ public class PublicKeyAutenticator {
 		return this.hashToSend;
 	}
 	
-	/*public boolean isOtherKeyValidated(){
-		return this.otherKeyIsValidated;
-	}*/
-	
 	public void setSecretAnswer(String answer){
 		this.secretAnswer = answer;
 	}
@@ -58,14 +51,11 @@ public class PublicKeyAutenticator {
 	}
 	
 	/**
-	 * Riceve la chiave otto forma di stringa Base64.
+	 * Riceve la chiave sotto forma di stringa Base64.
+	 * 
 	 * @param receivedPublicKey
 	 */
 	public void setReceivedPublicKey(String receivedPublicKey){
-		//TODO gestire il problema
-		/*if (!Pattern.matches(CryptoUtility.BASE64_REGEX, receivedPublicKey)) {
-			throw new IllegalArgumentException("La stringa passata come chiave non è in base64");
-		}*/
 		setReceivedPublicKey(Base64.decode(receivedPublicKey, Base64.DEFAULT));
 	}
 	
@@ -79,6 +69,7 @@ public class PublicKeyAutenticator {
 	
 	/**
 	 * Riceve direttamente un array di byte.
+	 * 
 	 * @param key
 	 */
 	public void setMyPublicKey(byte[] key){
@@ -87,32 +78,48 @@ public class PublicKeyAutenticator {
 	
 	/**
 	 * Riceve la chiave sotto forma di stringa Base64.
+	 * 
 	 * @param key
 	 */
 	public void setMyPublicKey(String key){
 		this.myPublicKey = Base64.decode(key, Base64.DEFAULT);		
 	}
-	
-	public PublicKeyAutenticator(byte[] myPublicKey, String secretQuestion, String secretAnswer){
-		this.myPublicKey = myPublicKey;
-		this.secretQuestion = secretQuestion;
-		this.secretAnswer = secretAnswer;
-	}
-	
-	public PublicKeyAutenticator() {}
 
+	/**
+	 * Computa l'hash di chiave pubblica || risposta segreta che sarà poi da inviare all'altro telefono.
+	 * 
+	 * @throws NoSuchAlgorithmException
+	 */
 	public void doHashToSend() throws NoSuchAlgorithmException{
 		this.hashToSend = computeHash(this.myPublicKey, this.secretAnswer.getBytes());
 	}
 	
+	/**
+	 * Computa l'hash di verifica.
+	 * 
+	 * @throws NoSuchAlgorithmException
+	 */
 	public void doHashToCheck() throws NoSuchAlgorithmException{
 		this.computedHash = Base64.encodeToString(computeHash(this.receivedPublicKey, this.secretAnswer.getBytes()), Base64.DEFAULT);
 	}
 	
+	/**
+	 * Controlla se l'hash ricevuto e quello computato sono uguali.
+	 * 
+	 * @return true in caso affermativo, false altrimenti
+	 */
 	public boolean checkForEquality(){
 		return this.receivedHash.equals(this.computedHash);
 	}
 	
+	/**
+	 * Computa un hash della concatenazione di firstHalf e secondHalf con SHA256.
+	 * 
+	 * @param firstHalf : la prima metà del plaintext
+	 * @param secondHalf : la seconda metà del plaintext
+	 * @return il digest SHA256
+	 * @throws NoSuchAlgorithmException
+	 */
 	private byte[] computeHash(byte[] firstHalf, byte[] secondHalf) throws NoSuchAlgorithmException{
 		byte[] input = new byte[firstHalf.length + secondHalf.length];
 		System.arraycopy(firstHalf, 0, input, 0, firstHalf.length);

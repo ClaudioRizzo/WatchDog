@@ -3,9 +3,10 @@ package it.polimi.dima.watchdog.crypto;
 import org.spongycastle.crypto.InvalidCipherTextException;
 
 /**
- * Interfaccia che verrà implementata da tutte le classi che si occupano di algoritmi crittografici.
+ * Interfaccia che verrà implementata dalle classi che si occupano della crittografia simmetrica.
+ * 
  * @author emanuele
- *
+ * 
  */
 public interface Crypto {
 	

@@ -5,9 +5,6 @@ import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.spec.InvalidKeySpecException;
 
-import it.polimi.dima.watchdog.UTILITIES.MyPrefFiles;
-import it.polimi.dima.watchdog.UTILITIES.PasswordUtils;
-import it.polimi.dima.watchdog.UTILITIES.SMSUtility;
 import it.polimi.dima.watchdog.activities.PendingRequestsActivity;
 import it.polimi.dima.watchdog.crypto.PublicKeyAutenticator;
 import it.polimi.dima.watchdog.crypto.SharedSecretAgreement;
@@ -16,6 +13,9 @@ import it.polimi.dima.watchdog.exceptions.NoSuchPreferenceFoundException;
 import it.polimi.dima.watchdog.sms.ParsableSMS;
 import it.polimi.dima.watchdog.sms.commands.flags.StatusFree;
 import it.polimi.dima.watchdog.sms.socialistMillionaire.factory.SocialistMillionaireFactory;
+import it.polimi.dima.watchdog.utilities.MyPrefFiles;
+import it.polimi.dima.watchdog.utilities.PasswordUtils;
+import it.polimi.dima.watchdog.utilities.SMSUtility;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
@@ -362,7 +362,7 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements
 		if(myPriv != null){
 			ssa.setMyPrivateKey(myPriv);
 			if(otherPub!= null){
-				ssa.setTokenReceived(otherPub);
+				ssa.setReceivedOtherPublicKey(otherPub);
 				return ssa.getSharedSecret();
 			}
 		}

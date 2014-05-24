@@ -2,11 +2,12 @@ package it.polimi.dima.watchdog.sms.commands.flags;
 
 import java.security.PublicKey;
 
-import it.polimi.dima.watchdog.UTILITIES.SMSUtility;
 import it.polimi.dima.watchdog.crypto.ECDSA_Signature;
 import it.polimi.dima.watchdog.exceptions.ArbitraryMessageReceivedException;
 import it.polimi.dima.watchdog.exceptions.ErrorInSignatureCheckingException;
+import it.polimi.dima.watchdog.exceptions.NotECKeyException;
 import it.polimi.dima.watchdog.sms.ParsableSMS;
+import it.polimi.dima.watchdog.utilities.SMSUtility;
 
 /**
  * 
@@ -39,7 +40,7 @@ public class M1Parser {
 		return this.salt;
 	}
 	
-	public void parse() throws ArbitraryMessageReceivedException, ErrorInSignatureCheckingException {
+	public void parse() throws ArbitraryMessageReceivedException, ErrorInSignatureCheckingException, NotECKeyException {
 		try{
 			int ivStartPosition = ParsableSMS.HEADER_LENGTH;
 			int saltStartPosition = ivStartPosition + M1Parser.IV_LENGTH;
@@ -71,7 +72,7 @@ public class M1Parser {
 		}
 	}
 
-	private void verifySignature(int messageWithoutSignatureLength) throws ArbitraryMessageReceivedException, ErrorInSignatureCheckingException {
+	private void verifySignature(int messageWithoutSignatureLength) throws ArbitraryMessageReceivedException, ErrorInSignatureCheckingException, NotECKeyException {
 		byte[] messageWithoutSignature = new byte[messageWithoutSignatureLength];
 		System.arraycopy(this.rawMessage, 0, messageWithoutSignature, 0, messageWithoutSignatureLength);
 		

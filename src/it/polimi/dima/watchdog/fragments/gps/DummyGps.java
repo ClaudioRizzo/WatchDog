@@ -1,7 +1,7 @@
 package it.polimi.dima.watchdog.fragments.gps;
 
 import it.polimi.dima.watchdog.R;
-import it.polimi.dima.watchdog.UTILITIES.SMSUtility;
+import it.polimi.dima.watchdog.utilities.SMSUtility;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.telephony.SmsManager;

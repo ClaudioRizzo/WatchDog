@@ -1,10 +1,11 @@
 package it.polimi.dima.watchdog.sms.commands.flags;
 
-import it.polimi.dima.watchdog.UTILITIES.SMSUtility;
 import it.polimi.dima.watchdog.crypto.ECDSA_Signature;
 import it.polimi.dima.watchdog.exceptions.ArbitraryMessageReceivedException;
 import it.polimi.dima.watchdog.exceptions.ErrorInSignatureCheckingException;
+import it.polimi.dima.watchdog.exceptions.NotECKeyException;
 import it.polimi.dima.watchdog.sms.ParsableSMS;
+import it.polimi.dima.watchdog.utilities.SMSUtility;
 
 import java.security.PublicKey;
 
@@ -21,7 +22,7 @@ public class M2Parser {
 		this.header = new byte[ParsableSMS.HEADER_LENGTH];
 	}
 	
-	public void parse() throws ArbitraryMessageReceivedException, ErrorInSignatureCheckingException{
+	public void parse() throws ArbitraryMessageReceivedException, ErrorInSignatureCheckingException, NotECKeyException{
 		try{
 			int signatureLength = this.rawMessage.length - this.header.length;
 			int signatureStartPosition = this.header.length;
@@ -47,7 +48,7 @@ public class M2Parser {
 		}
 	}
 
-	private void verifySignature() throws ErrorInSignatureCheckingException, ArbitraryMessageReceivedException {
+	private void verifySignature() throws ErrorInSignatureCheckingException, ArbitraryMessageReceivedException, NotECKeyException {
 		ECDSA_Signature verifier = new ECDSA_Signature(this.header, this.oPub, this.signature);
 		if(!verifier.verifySignature()){
 			throw new ArbitraryMessageReceivedException("Firma non valida/non corrispondente!!!");

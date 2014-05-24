@@ -1,10 +1,10 @@
 package it.polimi.dima.watchdog.sms.timeout;
 
-import it.polimi.dima.watchdog.UTILITIES.MyPrefFiles;
 import it.polimi.dima.watchdog.exceptions.AlreadyExistentTimeoutException;
 import it.polimi.dima.watchdog.exceptions.MyTimeoutException;
 import it.polimi.dima.watchdog.exceptions.NonExistentTimeoutException;
 import it.polimi.dima.watchdog.sms.commands.flags.StatusFree;
+import it.polimi.dima.watchdog.utilities.MyPrefFiles;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -1,32 +1,29 @@
 package it.polimi.dima.watchdog.crypto;
 
-import it.polimi.dima.watchdog.UTILITIES.CryptoUtility;
+import it.polimi.dima.watchdog.utilities.CryptoUtility;
 
-import java.security.InvalidKeyException;
 import java.security.Key;
-import java.security.NoSuchAlgorithmException;
 
-import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
+import org.spongycastle.crypto.digests.SHA256Digest;
+import org.spongycastle.crypto.generators.PKCS5S2ParametersGenerator;
+import org.spongycastle.crypto.params.KeyParameter;
+
 /**
- * In questa classe verrà generata di volta in volta una chiave per l'AES a partire da un "segreto condiviso";
+ * In questa classe viene generata di volta in volta una chiave per l'AES a partire da un "segreto condiviso";
  * l'algoritmo usato è PBKDF2 con HmacSHA256. Il segreto condiviso si suppone essere stato già concordato con
  * l'altro utente mediante ECDH.
- * 
- * JAVADOC WILL COME (TODO)
  *  
  * @author emanuele
  *
  */
 public class AESKeyGenerator {
 	
-	private String secret;
-	private byte[] sec;
-	private String salt;
-	private byte[] slt;
-	private final int dkLen = 32; //inteso in byte --> 256 bit
-	private int counter = 0x1000;
+	private byte[] secret;
+	private byte[] salt;
+	//private final int dkLen = 32; //inteso in byte --> 256 bit
+	//private int counter = 0;
 	private byte[] keyValue;
 	private Key key;
 	
@@ -39,22 +36,16 @@ public class AESKeyGenerator {
 	}
 	
 	public AESKeyGenerator(String secret, String salt){
-		this.secret = secret;
-		this.sec = this.secret.getBytes();
-		this.salt = salt;
-		this.slt = this.salt.getBytes();
-		this.counter = 0;
+		this.secret = secret.getBytes();
+		this.salt = salt.getBytes();
 	}
 	
 	public AESKeyGenerator(byte[] secret, byte[] salt){
-		this.sec = secret;
-		this.secret = new String(this.sec);
-		this.slt = salt;
-		this.salt = new String(this.slt);
-		this.counter = 0;
+		this.secret = secret;
+		this.salt = salt;
 	}
 	
-	public Key generateKey() throws NoSuchAlgorithmException, InvalidKeyException{
+	/*public Key generateKey() throws NoSuchAlgorithmException, InvalidKeyException{
 		
 		SecretKeySpec keyspec = new SecretKeySpec(this.sec, CryptoUtility.HMAC_SHA_256);
         Mac prf = Mac.getInstance(CryptoUtility.HMAC_SHA_256);
@@ -110,7 +101,20 @@ public class AESKeyGenerator {
         dest[offset + 1] = (byte) (i / (256 * 256));
         dest[offset + 2] = (byte) (i / (256));
         dest[offset + 3] = (byte) (i);
-    } 
+    }*/
 	
-
+    /**
+     * Genera e ritorna una chiave per AES-256-GCM a partire da secret e salt con "PBKDF2 con HmacSHA256".
+     * 
+     * @return chiave valida per AES-256-GCM
+     */
+    public Key generateKey(){
+    	PKCS5S2ParametersGenerator gen = new PKCS5S2ParametersGenerator(new SHA256Digest());
+    	gen.init(this.secret, this.salt, 4096);
+    	this.keyValue = ((KeyParameter) gen.generateDerivedParameters(256)).getKey();
+    	this.key = new SecretKeySpec(this.keyValue, CryptoUtility.AES_256);
+    	return this.key;
+    }
+    
+    
 }

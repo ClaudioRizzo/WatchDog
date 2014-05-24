@@ -2,23 +2,42 @@ package it.polimi.dima.watchdog.crypto;
 
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.SecureRandom;
 import java.security.Security;
+import java.util.Random;
 
 import org.spongycastle.jce.ECNamedCurveTable;
 import org.spongycastle.jce.spec.ECParameterSpec;
 
 import android.annotation.SuppressLint;
 import android.util.Log;
-import it.polimi.dima.watchdog.UTILITIES.CryptoUtility;
+import it.polimi.dima.watchdog.utilities.CryptoUtility;
 
-
+/**
+ * Classe che genera una coppia di chiavi pubblica/privata a partire dalla curva ellittica secp256r1 e da un
+ * numero casuale generato con SHA1PRNG.
+ * 
+ * @author emanuele
+ *
+ */
 public class ECKeyPairGeneratorWrapper {
 		
 	private PublicKey pub;
 	private PrivateKey priv;
+	private SecureRandom secureRandom;
+	
+	//TODO si può fare qualcosa?
+	@SuppressLint("TrulyRandom")
+	public ECKeyPairGeneratorWrapper() throws NoSuchAlgorithmException, NoSuchProviderException{
+		Security.addProvider(new org.spongycastle.jce.provider.BouncyCastleProvider());
+		this.secureRandom = SecureRandom.getInstance(CryptoUtility.SHA1_PRNG, CryptoUtility.SUN);
+		this.secureRandom.setSeed(new Random().nextInt());
+		this.secureRandom.nextBytes(new byte[9999]);
+	}
 	
 	public PublicKey getPublicKey() {
 		return this.pub;
@@ -37,19 +56,17 @@ public class ECKeyPairGeneratorWrapper {
 	}
 	
 	/**
-	 * Genera una coppia di chiavi pubblica/privata tramite le curve ellittiche.
+	 * Genera una coppia di chiavi pubblica/privata a partire dalla curva ellittica secp256r1 e da un numero
+	 * casuale generato con SHA1PRNG.
+	 * 
 	 * @throws InvalidAlgorithmParameterException 
 	 */
-	//TODO leggere il warning per android <= 4.3 e agire di conseguenza
-	@SuppressLint("TrulyRandom")
 	public void generateKeyPair() {
 		try{
-			Security.addProvider(new org.spongycastle.jce.provider.BouncyCastleProvider());
 			ECParameterSpec ellipticCurvesParameterSpecifiers = ECNamedCurveTable.getParameterSpec("secp256r1");
 			KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance(CryptoUtility.EC, CryptoUtility.SC);
-			SecureRandom secureRandom = SecureRandom.getInstance(CryptoUtility.SHA1_PRNG);
 			
-			keyPairGenerator.initialize(ellipticCurvesParameterSpecifiers, secureRandom);
+			keyPairGenerator.initialize(ellipticCurvesParameterSpecifiers, this.secureRandom);
 			KeyPair pair = keyPairGenerator.generateKeyPair();
 			
 			if(pair == null){

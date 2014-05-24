@@ -2,7 +2,6 @@ package it.polimi.dima.watchdog.sms.socialistMillionaire.factory;
 
 
 import android.util.Log;
-import it.polimi.dima.watchdog.UTILITIES.SMSUtility;
 import it.polimi.dima.watchdog.exceptions.ArbitraryMessageReceivedException;
 import it.polimi.dima.watchdog.sms.ParsableSMS;
 import it.polimi.dima.watchdog.sms.ParsebleSMSInterface;
@@ -12,6 +11,7 @@ import it.polimi.dima.watchdog.sms.socialistMillionaire.PublicKeyRequestCodeMess
 import it.polimi.dima.watchdog.sms.socialistMillionaire.PublicKeySentCodeMessage;
 import it.polimi.dima.watchdog.sms.socialistMillionaire.SecretAnswerAndPublicKeyHashSentCodeMessage;
 import it.polimi.dima.watchdog.sms.socialistMillionaire.SecretQuestionSentCodeMessage;
+import it.polimi.dima.watchdog.utilities.SMSUtility;
 
 public class SocialistMillionaireFactory implements ParsebleSMSInterface {
 

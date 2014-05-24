@@ -1,10 +1,13 @@
 package it.polimi.dima.watchdog.activities;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
+
 import it.polimi.dima.watchdog.R;
-import it.polimi.dima.watchdog.UTILITIES.MyPrefFiles;
 import it.polimi.dima.watchdog.crypto.ECKeyPairGeneratorWrapper;
 import it.polimi.dima.watchdog.fragments.wizard.InitializeWizardFragment;
 import it.polimi.dima.watchdog.fragments.wizard.InitializeWizardFragment.OnPasswordInizializedListener;
+import it.polimi.dima.watchdog.utilities.MyPrefFiles;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -13,8 +16,12 @@ import android.support.v7.app.ActionBarActivity;
 import android.util.Base64;
 
 //TODO: verificare che la password inserita rispetti i nostri standard di sicurezza
-//da verificare
-
+/**
+ * Classe che rappresenta l'attività del wizard iniziale dell'applicazione.
+ * 
+ * @author claudio, emanuele
+ *
+ */
 public class InitializationWizardActivity extends ActionBarActivity implements
 		OnPasswordInizializedListener {
 
@@ -39,7 +46,7 @@ public class InitializationWizardActivity extends ActionBarActivity implements
 
 
 	@Override
-	public void getWizardChanges(boolean wizardDone, String hashToSave, String salt) {
+	public void getWizardChanges(boolean wizardDone, String hashToSave, String salt) throws NoSuchAlgorithmException, NoSuchProviderException {
 		SharedPreferences keys = getSharedPreferences(MyPrefFiles.MY_KEYS, Context.MODE_PRIVATE);
 		SharedPreferences password = getSharedPreferences(MyPrefFiles.PASSWORD_AND_SALT, Context.MODE_PRIVATE);
 		SharedPreferences wizard = getSharedPreferences(MyPrefFiles.PREF_INIT, Context.MODE_PRIVATE);

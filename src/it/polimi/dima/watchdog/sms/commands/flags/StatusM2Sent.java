@@ -3,7 +3,9 @@ package it.polimi.dima.watchdog.sms.commands.flags;
 import java.security.Key;
 import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
 import java.security.PublicKey;
+import java.security.Security;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.X509EncodedKeySpec;
 
@@ -14,16 +16,17 @@ import org.spongycastle.crypto.InvalidCipherTextException;
 import android.content.Context;
 import android.telephony.SmsMessage;
 import android.util.Base64;
-import it.polimi.dima.watchdog.UTILITIES.CryptoUtility;
-import it.polimi.dima.watchdog.UTILITIES.MyPrefFiles;
-import it.polimi.dima.watchdog.UTILITIES.SMSUtility;
 import it.polimi.dima.watchdog.exceptions.ArbitraryMessageReceivedException;
 import it.polimi.dima.watchdog.exceptions.ErrorInSignatureCheckingException;
 import it.polimi.dima.watchdog.exceptions.NoSuchPreferenceFoundException;
 import it.polimi.dima.watchdog.exceptions.NonExistentTimeoutException;
+import it.polimi.dima.watchdog.exceptions.NotECKeyException;
 import it.polimi.dima.watchdog.sms.ParsableSMS;
 import it.polimi.dima.watchdog.sms.commands.CommandFactory;
 import it.polimi.dima.watchdog.sms.timeout.Timeout;
+import it.polimi.dima.watchdog.utilities.CryptoUtility;
+import it.polimi.dima.watchdog.utilities.MyPrefFiles;
+import it.polimi.dima.watchdog.utilities.SMSUtility;
 
 /**
  * 
@@ -35,29 +38,32 @@ public class StatusM2Sent implements CommandProtocolFlagsReactionInterface {
 
 	
 	private ParsableSMS recMsg;
-	private CommandFactory comFac;
+	private CommandFactory commandFactory;
 	private M3Parser parser;
 	public static String CURRENT_STATUS = "m2_sent";
 	private static String STATUS_RECEIVED = "m3_received";
 	public static String NEXT_SENT_STATUS = StatusFree.CURRENT_STATUS;
 
+	
 	public StatusM2Sent(){
-		this.comFac = new CommandFactory();
+		Security.addProvider(new org.spongycastle.jce.provider.BouncyCastleProvider());
+		this.commandFactory = new CommandFactory();
 	}
 	
+	
 	@Override
-	public ParsableSMS parse(Context context, SmsMessage message, String other) throws IllegalStateException, InvalidCipherTextException, ArbitraryMessageReceivedException, ErrorInSignatureCheckingException, NoSuchAlgorithmException, InvalidKeySpecException, NoSuchPreferenceFoundException, NonExistentTimeoutException {
+	public ParsableSMS parse(Context context, SmsMessage message, String other) throws IllegalStateException, InvalidCipherTextException, ArbitraryMessageReceivedException, ErrorInSignatureCheckingException, NoSuchAlgorithmException, InvalidKeySpecException, NoSuchPreferenceFoundException, NonExistentTimeoutException, NotECKeyException, NoSuchProviderException {
 		Timeout.getInstance(context).removeTimeout(MyPrefFiles.getMyPreference(MyPrefFiles.MY_NUMBER_FILE, MyPrefFiles.MY_PHONE_NUMBER, context) /*TODO inizializzarlo nel wizard*/, other);
 		MyPrefFiles.replacePreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + other, StatusM2Sent.STATUS_RECEIVED, context);
 					
 		this.parser = popolateParser(message, context, other);
 		this.parser.decrypt(); //decritta, verifica firma e password e mette in "plaintext" il codice
-		this.recMsg = this.comFac.getMessage(SMSUtility.bytesToHex(this.parser.getPlaintext()));
+		this.recMsg = this.commandFactory.getMessage(SMSUtility.bytesToHex(this.parser.getPlaintext()));
 			
 		return this.recMsg;	
 	}
 	
-	private M3Parser popolateParser(SmsMessage sms, Context ctx, String other) throws NoSuchPreferenceFoundException, NoSuchAlgorithmException, InvalidKeySpecException {
+	private M3Parser popolateParser(SmsMessage sms, Context ctx, String other) throws NoSuchPreferenceFoundException, NoSuchAlgorithmException, InvalidKeySpecException, NoSuchProviderException {
 		byte[] encryptedMessage = sms.getUserData();
 		
 		String decKey = MyPrefFiles.getMyPreference(MyPrefFiles.COMMAND_SESSION, other, ctx);
@@ -66,8 +72,8 @@ public class StatusM2Sent implements CommandProtocolFlagsReactionInterface {
 		
 		String otherPub = MyPrefFiles.getMyPreference(MyPrefFiles.KEYRING, other, ctx);
 		byte[] otherPubValue = Base64.decode(otherPub, Base64.DEFAULT);
-		KeyFactory kf = KeyFactory.getInstance(CryptoUtility.EC);
-		PublicKey oPub = kf.generatePublic(new X509EncodedKeySpec(otherPubValue));
+		KeyFactory keyFactory = KeyFactory.getInstance(CryptoUtility.EC, CryptoUtility.SC);
+		PublicKey oPub = keyFactory.generatePublic(new X509EncodedKeySpec(otherPubValue));
 		
 		String storedHash = MyPrefFiles.getMyPreference(MyPrefFiles.PASSWORD_AND_SALT, MyPrefFiles.MY_PASSWORD_HASH, ctx);
 		byte[] storedPasswordHash = Base64.decode(storedHash, Base64.DEFAULT);

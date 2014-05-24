@@ -3,24 +3,27 @@ package it.polimi.dima.watchdog.sms.commands.flags;
 import java.security.InvalidKeyException;
 import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
+import java.security.Security;
 import java.security.spec.InvalidKeySpecException;
+import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 
 import android.content.Context;
 import android.telephony.SmsMessage;
 import android.util.Base64;
-import it.polimi.dima.watchdog.UTILITIES.CryptoUtility;
-import it.polimi.dima.watchdog.UTILITIES.MyPrefFiles;
-import it.polimi.dima.watchdog.UTILITIES.SMSUtility;
 import it.polimi.dima.watchdog.crypto.AESKeyGenerator;
 import it.polimi.dima.watchdog.crypto.ECDSA_Signature;
-import it.polimi.dima.watchdog.exceptions.NoECDSAKeyPairGeneratedException;
+import it.polimi.dima.watchdog.exceptions.NotECKeyException;
 import it.polimi.dima.watchdog.exceptions.NoSignatureDoneException;
 import it.polimi.dima.watchdog.exceptions.NoSuchPreferenceFoundException;
 import it.polimi.dima.watchdog.sms.ParsableSMS;
 import it.polimi.dima.watchdog.sms.timeout.Timeout;
+import it.polimi.dima.watchdog.utilities.CryptoUtility;
+import it.polimi.dima.watchdog.utilities.MyPrefFiles;
+import it.polimi.dima.watchdog.utilities.SMSUtility;
 
 /**
  * 
@@ -35,14 +38,20 @@ public class StatusFree implements CommandProtocolFlagsReactionInterface{
 	private static String STATUS_RECEIVED = "m1_received";
 	public static String NEXT_SENT_STATUS = StatusM2Sent.CURRENT_STATUS;//TODO da correggere
 	
+	
+	public StatusFree(){
+		Security.addProvider(new org.spongycastle.jce.provider.BouncyCastleProvider());
+	}
+	
+	
 	@Override
 	public ParsableSMS parse(Context context, SmsMessage message, String other) throws Exception {//voglio poterle catchare tutte
 		Timeout.getInstance(context).removeTimeout(MyPrefFiles.getMyPreference(MyPrefFiles.MY_NUMBER_FILE, MyPrefFiles.MY_PHONE_NUMBER, context) /*TODO inizializzarlo nel wizard*/, other);
 		MyPrefFiles.replacePreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + other, StatusFree.STATUS_RECEIVED, context);
 		
 		byte[] publicKey = Base64.decode(MyPrefFiles.getMyPreference(MyPrefFiles.KEYRING, other, context),Base64.DEFAULT);
-		KeyFactory kf = KeyFactory.getInstance(CryptoUtility.EC);
-		PublicKey oPub = kf.generatePublic(new X509EncodedKeySpec(publicKey));
+		KeyFactory keyFactory = KeyFactory.getInstance(CryptoUtility.EC, CryptoUtility.SC);
+		PublicKey oPub = keyFactory.generatePublic(new X509EncodedKeySpec(publicKey));
 		
 		this.parser = new M1Parser(message.getUserData(), oPub);
 		this.parser.parse();
@@ -77,11 +86,11 @@ public class StatusFree implements CommandProtocolFlagsReactionInterface{
 		MyPrefFiles.setMyPreference(MyPrefFiles.COMMAND_SESSION, identifier, ivBase64, ctx);
 	}
 	
-	private void generateAndSendM2(String phoneNumber, Context ctx) throws NoSuchPreferenceFoundException, NoSuchAlgorithmException, InvalidKeySpecException, NoECDSAKeyPairGeneratedException, NoSignatureDoneException{
+	private void generateAndSendM2(String phoneNumber, Context ctx) throws NoSuchPreferenceFoundException, NoSuchAlgorithmException, InvalidKeySpecException, NotECKeyException, NoSignatureDoneException, NoSuchProviderException{
 		byte[] header = SMSUtility.M2_HEADER.getBytes();
 		byte[] myPrivateKey = Base64.decode(MyPrefFiles.getMyPreference(MyPrefFiles.MY_KEYS, MyPrefFiles.MY_PRIV, ctx), Base64.DEFAULT);
-		KeyFactory kf = KeyFactory.getInstance(CryptoUtility.EC);
-		PrivateKey mPriv = kf.generatePrivate(new X509EncodedKeySpec(myPrivateKey));
+		KeyFactory keyFactory = KeyFactory.getInstance(CryptoUtility.EC, CryptoUtility.SC);
+		PrivateKey mPriv = keyFactory.generatePrivate(new PKCS8EncodedKeySpec(myPrivateKey));
 		ECDSA_Signature signer = new ECDSA_Signature(header, mPriv);
 		signer.sign();
 		byte[] body = signer.getSignature();

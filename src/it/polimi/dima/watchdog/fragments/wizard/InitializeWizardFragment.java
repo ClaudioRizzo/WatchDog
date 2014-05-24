@@ -1,12 +1,15 @@
 package it.polimi.dima.watchdog.fragments.wizard;
 
 import it.polimi.dima.watchdog.R;
-import it.polimi.dima.watchdog.UTILITIES.PasswordUtils;
+import it.polimi.dima.watchdog.utilities.PasswordUtils;
 
 import java.security.NoSuchAlgorithmException;
 //TODO scommentare alla fine
 //import java.util.regex.Pattern;
 
+
+
+import java.security.NoSuchProviderException;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -26,7 +29,7 @@ public class InitializeWizardFragment extends Fragment implements
 	private final String salt = Base64.encodeToString(PasswordUtils.nextSalt(), Base64.DEFAULT);
 
 	public interface OnPasswordInizializedListener {
-		public void getWizardChanges(boolean wizardDone, String hashToSave, String salt);
+		public void getWizardChanges(boolean wizardDone, String hashToSave, String salt) throws NoSuchAlgorithmException, NoSuchProviderException;
 	}
 
 	@Override
@@ -46,20 +49,35 @@ public class InitializeWizardFragment extends Fragment implements
 
 	@Override
 	public void onClick(View v) {
-		View fragView = getView();
-		TextView mTextView = (TextView) fragView
-				.findViewById(R.id.user_password);
-		String cleanPassword = mTextView.getText().toString();
+		try{
+			View fragView = getView();
+			TextView mTextView = (TextView) fragView
+					.findViewById(R.id.user_password);
+			String cleanPassword = mTextView.getText().toString();
+			
+			//TODO scommentare alla fine
+			/*while(!Pattern.matches(PasswordUtils.PASSWORD_REGEX, cleanPassword)){
+				//TODO notificare che la password può essere composta solo da lettere maiuscole e minuscole e numeri
+				//e che deve contenere almeno un numero e almeno una lettera (maiuscola o minuscola non ha importanza)
+				//e che deve essere lunga almeno 8 caratteri e non più di 20. Quindi chiedere di immetterla di nuovo
+				//e salvarla di nuovo in cleanPassword
+			}*/
+			String hashToSave = this.getHash(cleanPassword);
+			this.mCallBack.getWizardChanges(true, hashToSave, this.salt);
+		}
+		catch (NoSuchAlgorithmException e)
+		{
+			e.printStackTrace();
+			//TODO notificare l'errore
+			System.exit(-1);
+		}
+		catch (NoSuchProviderException e)
+		{
+			e.printStackTrace();
+			//TODO notificare l'errore
+			System.exit(-1);
+		}
 		
-		//TODO scommentare alla fine
-		/*while(!Pattern.matches(PasswordUtils.PASSWORD_REGEX, cleanPassword)){
-			//TODO notificare che la password può essere composta solo da lettere maiuscole e minuscole e numeri
-			//e che deve contenere almeno un numero e almeno una lettera (maiuscola o minuscola non ha importanza)
-			//e che deve essere lunga almeno 8 caratteri e non più di 20. Quindi chiedere di immetterla di nuovo
-			//e salvarla di nuovo in cleanPassword
-		}*/
-		String hashToSave = this.getHash(cleanPassword);
-		mCallBack.getWizardChanges(true, hashToSave, this.salt);
 
 	}
 
@@ -69,18 +87,18 @@ public class InitializeWizardFragment extends Fragment implements
 
 		try {
 			this.mCallBack = (OnPasswordInizializedListener) activity;
-		} catch (ClassCastException e) {
-			throw new ClassCastException(activity.toString()
-					+ "must implement OnPasswordInizializedListener");
+		} 
+		catch (ClassCastException e) 
+		{
+			throw new ClassCastException(activity.toString() + "must implement OnPasswordInizializedListener");
 		}
 	}
 
 	/**
-	 * prende la password la sala e ne fa l'hash, ritorna la stringa
-	 * rappresentant el'hash
+	 * Prende la password, la sala e ne fa l'hash.
 	 * 
-	 * @param pswd
-	 * @return
+	 * @param pswd : la password
+	 * @return l'hash salato della password
 	 */
 	private String getHash(String pswd) {
 		String saltedPswd = pswd + this.salt;
@@ -89,7 +107,9 @@ public class InitializeWizardFragment extends Fragment implements
 		try {
 			byte[] hash = PasswordUtils.getByteHash(saltedPswd, "SHA-256");
 			hashString = Base64.encodeToString(hash, Base64.DEFAULT);
-		} catch (NoSuchAlgorithmException e) {
+		} 
+		catch (NoSuchAlgorithmException e) 
+		{
 			e.printStackTrace();
 		}
 
