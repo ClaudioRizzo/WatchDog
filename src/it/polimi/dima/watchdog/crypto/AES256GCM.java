@@ -1,6 +1,10 @@
 package it.polimi.dima.watchdog.crypto;
 
+import it.polimi.dima.watchdog.utilities.CryptoUtility;
+
 import java.security.Key;
+
+import javax.crypto.spec.SecretKeySpec;
 
 import org.spongycastle.crypto.InvalidCipherTextException;
 import org.spongycastle.crypto.engines.AESFastEngine;
@@ -23,7 +27,6 @@ public class AES256GCM implements Crypto{
 	private static final int TAG_LENGTH = 128;
 	private byte[] plaintext;
 	private Key key;
-	private byte[] keyBytes;
 	private byte[] iv;
 	private byte[] ciphertext;
 	
@@ -37,7 +40,6 @@ public class AES256GCM implements Crypto{
 	 */
 	public AES256GCM(Key key, String plaintext, byte[] iv){
 		this.key = key;
-		this.keyBytes = null;
 		this.plaintext = plaintext.getBytes();
 		this.iv = iv;
 	}
@@ -51,8 +53,7 @@ public class AES256GCM implements Crypto{
 	 * @param iv : il vettore di inizializzazione
 	 */
 	public AES256GCM(byte[] key, String plaintext, byte[] iv) {
-		this.keyBytes = key;
-		this.key = null;
+		this.key = new SecretKeySpec(key, CryptoUtility.AES_256);
 		this.plaintext = plaintext.getBytes();
 		this.iv = iv;
 	}
@@ -67,7 +68,6 @@ public class AES256GCM implements Crypto{
 	 */
 	public AES256GCM(Key key, byte[] ciphertext, byte[] iv){
 		this.key = key;
-		this.keyBytes = null;
 		this.ciphertext = ciphertext;
 		this.iv = iv;
 	}
@@ -81,8 +81,7 @@ public class AES256GCM implements Crypto{
 	 * @param iv : il vettore di inizializzazione
 	 */
 	public AES256GCM(byte[] key, byte[] ciphertext, byte[] iv) {
-		this.keyBytes = key;
-		this.key = null;
+		this.key = new SecretKeySpec(key, CryptoUtility.AES_256);
 		this.ciphertext = ciphertext;
 		this.iv = iv;
 	}
@@ -100,15 +99,7 @@ public class AES256GCM implements Crypto{
 	 * sua versione byte[] all'attributo ciphertext.
 	 */
 	public String encrypt() throws IllegalStateException, InvalidCipherTextException {
-		KeyParameter key;
-		
-		if(this.keyBytes == null){
-			key = new KeyParameter(this.key.getEncoded());
-		}
-		else{
-			key = new KeyParameter(this.keyBytes);
-		}
-		
+		KeyParameter key = new KeyParameter(this.key.getEncoded());
 		AEADParameters parameters = new AEADParameters(key, AES256GCM.TAG_LENGTH, this.iv);
 		GCMBlockCipher cipher = new GCMBlockCipher(new AESFastEngine());
 		cipher.init(AES256GCM.ENCRYPT, parameters);
@@ -125,15 +116,7 @@ public class AES256GCM implements Crypto{
 	 * all'attributo plaintext.
 	 */
 	public byte[] decrypt() throws IllegalStateException, InvalidCipherTextException {
-		KeyParameter key;
-		
-		if(this.keyBytes == null){
-			key = new KeyParameter(this.key.getEncoded());
-		}
-		else{
-			key = new KeyParameter(this.keyBytes);
-		}
-		
+		KeyParameter key = new KeyParameter(this.key.getEncoded());
 		AEADParameters parameters = new AEADParameters(key, AES256GCM.TAG_LENGTH, this.iv);
 		GCMBlockCipher cipher = new GCMBlockCipher(new AESFastEngine());
 		cipher.init(AES256GCM.DECRYPT, parameters);

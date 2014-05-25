@@ -63,6 +63,7 @@ public class ECKeyPairGeneratorWrapper {
 	 */
 	public void generateKeyPair() {
 		try{
+			//521 bit di lunghezza per le chiavi
 			ECParameterSpec ellipticCurvesParameterSpecifiers = ECNamedCurveTable.getParameterSpec("secp256r1");
 			KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance(CryptoUtility.EC, CryptoUtility.SC);
 			
