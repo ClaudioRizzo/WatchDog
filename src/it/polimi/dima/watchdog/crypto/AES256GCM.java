@@ -24,7 +24,7 @@ public class AES256GCM implements Crypto{
 	
 	private static final boolean ENCRYPT = true;
 	private static final boolean DECRYPT = false;
-	private static final int TAG_LENGTH = 128;
+	private static final int TAG_LENGTH = 128; //in bit
 	private byte[] plaintext;
 	private Key key;
 	private byte[] iv;

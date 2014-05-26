@@ -34,9 +34,7 @@ public class ECKeyPairGeneratorWrapper {
 	@SuppressLint("TrulyRandom")
 	public ECKeyPairGeneratorWrapper() throws NoSuchAlgorithmException, NoSuchProviderException{
 		Security.addProvider(new org.spongycastle.jce.provider.BouncyCastleProvider());
-		this.secureRandom = SecureRandom.getInstance(CryptoUtility.SHA1_PRNG, CryptoUtility.SUN);
-		this.secureRandom.setSeed(new Random().nextInt());
-		this.secureRandom.nextBytes(new byte[9999]);
+		this.secureRandom = SecureRandom.getInstance(CryptoUtility.SHA1_PRNG);
 	}
 	
 	public PublicKey getPublicKey() {
