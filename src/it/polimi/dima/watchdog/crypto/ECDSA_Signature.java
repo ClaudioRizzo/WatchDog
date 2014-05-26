@@ -1,5 +1,6 @@
 package it.polimi.dima.watchdog.crypto;
 
+
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
@@ -95,7 +96,7 @@ public class ECDSA_Signature {
 		this.oPub = pub;
 		this.signatureToVerify = signature;
 		
-		if(!this.mPriv.getAlgorithm().toString().equals(CryptoUtility.EC)){
+		if(!this.oPub.getAlgorithm().toString().equals(CryptoUtility.EC)){
 			throw new NotECKeyException();
 		}
 	}
@@ -115,7 +116,7 @@ public class ECDSA_Signature {
 		this.oPub = pub;
 		this.signatureToVerify = Base64.decode(signature, Base64.DEFAULT);
 		
-		if(!this.mPriv.getAlgorithm().toString().equals(CryptoUtility.EC)){
+		if(!this.oPub.getAlgorithm().toString().equals(CryptoUtility.EC)){
 			throw new NotECKeyException();
 		}
 	}
