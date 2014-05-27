@@ -1,6 +1,7 @@
 package it.polimi.dima.watchdog.sms.socialistMillionaire;
 
 import java.io.UnsupportedEncodingException;
+import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.spec.InvalidKeySpecException;
@@ -354,8 +355,9 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements
 	 * @throws NoSuchAlgorithmException
 	 * @throws InvalidKeySpecException
 	 * @throws NoSuchProviderException 
+	 * @throws InvalidKeyException 
 	 */
-	private byte[] generateCommonSecret() throws NoSuchPreferenceFoundException, NoSuchAlgorithmException, InvalidKeySpecException, NullPointerException, NoSuchProviderException {
+	private byte[] generateCommonSecret() throws NoSuchPreferenceFoundException, NoSuchAlgorithmException, InvalidKeySpecException, NullPointerException, NoSuchProviderException, InvalidKeyException {
 		SharedSecretAgreement ssa = new SharedSecretAgreement();
 		String myPriv = MyPrefFiles.getMyPreference(MyPrefFiles.MY_KEYS, MyPrefFiles.MY_PRIV, this.ctx);
 		String otherPub = MyPrefFiles.getMyPreference(MyPrefFiles.KEYRING, this.other, this.ctx);
@@ -363,6 +365,7 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements
 			ssa.setMyPrivateKey(myPriv);
 			if(otherPub!= null){
 				ssa.setReceivedOtherPublicKey(otherPub);
+				ssa.generateSharedSecret();
 				return ssa.getSharedSecret();
 			}
 		}
