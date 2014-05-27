@@ -192,9 +192,10 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements
 
 	/**
 	 * Gestisco la ricezione di un messaggio che contiene un hash
+	 * @throws InvalidKeyException 
 	 */
 	@Override
-	public void visit(SecretAnswerAndPublicKeyHashSentCodeMessage secAnswMsg) {
+	public void visit(SecretAnswerAndPublicKeyHashSentCodeMessage secAnswMsg){
 		Log.i("[DEBUG_SMP]", "[DEBUG_SMP] CODE_4 RECEIVED");
 		try {
 			//vedo se accettare il messaggio
@@ -268,6 +269,11 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements
 			//... e invio richiesta di stop forzato, oltre alla cancellazione delle preferenze
 			handleErrorOrException(e);
 		} catch (NullPointerException e) {
+			SMSUtility.showShortToastMessage(e.getMessage(), this.ctx);
+			
+			//... e invio richiesta di stop forzato, oltre alla cancellazione delle preferenze
+			handleErrorOrException(e);
+		} catch (InvalidKeyException e){
 			SMSUtility.showShortToastMessage(e.getMessage(), this.ctx);
 			
 			//... e invio richiesta di stop forzato, oltre alla cancellazione delle preferenze
@@ -414,8 +420,9 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements
 	 * @throws InvalidKeySpecException
 	 * @throws NoSuchPreferenceFoundException
 	 * @throws NoSuchProviderException 
+	 * @throws InvalidKeyException 
 	 */
-	private void doECDH() throws NoSuchAlgorithmException, InvalidKeySpecException, NoSuchPreferenceFoundException, NullPointerException, NoSuchProviderException {
+	private void doECDH() throws NoSuchAlgorithmException, InvalidKeySpecException, NoSuchPreferenceFoundException, NullPointerException, NoSuchProviderException, InvalidKeyException {
 		byte[] secret = generateCommonSecret();
 		String secretBase64 = Base64.encodeToString(secret, Base64.DEFAULT);
 		MyPrefFiles.setMyPreference(MyPrefFiles.SHARED_SECRETS, this.other, secretBase64, this.ctx);
