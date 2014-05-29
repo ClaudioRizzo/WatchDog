@@ -4,7 +4,6 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.spec.InvalidKeySpecException;
-
 import it.polimi.dima.watchdog.activities.PendingRequestsActivity;
 import it.polimi.dima.watchdog.crypto.PublicKeyAutenticator;
 import it.polimi.dima.watchdog.crypto.SharedSecretAgreement;
@@ -29,14 +28,12 @@ import android.util.Base64;
 import android.util.Log;
 
 /**
- * This class handles the messages by using the visitor patter which is upon
- * the messages. Should extend BroadCastReceiver
+ * Classe che si occupa della gestione degli sms ricevuti che fanno parte del Socialist Millionaire Protocol.
  * 
  * @author claudio, emanuele
  * 
  */
-public class SMSPublicKeyHandler extends BroadcastReceiver implements
-		SMSPublicKeyVisitorInterface {
+public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicKeyVisitorInterface {
 
 	private ParsableSMS recMsg; // RICORDARSI che il body è SEMPRE in Base64 !!!
 	private String other; // a turno sarà sender o receiver
@@ -302,17 +299,13 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements
 	 */
 	private void notifyUser() {
 		NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this.ctx).setSmallIcon(android.R.drawable.stat_notify_chat).setContentTitle("prova").setContentText("hello world").setAutoCancel(true);
-
 		Intent resultIntent = new Intent(this.ctx, PendingRequestsActivity.class);
 		TaskStackBuilder stackBuilder = TaskStackBuilder.create(this.ctx);
-
 		stackBuilder.addParentStack(PendingRequestsActivity.class);
-		// Adds the Intent that starts the Activity to the top of the stack
 		stackBuilder.addNextIntent(resultIntent);
 		PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
 		mBuilder.setContentIntent(resultPendingIntent);
 		NotificationManager mNotificationManager = (NotificationManager) this.ctx.getSystemService(Context.NOTIFICATION_SERVICE);
-		// mId allows you to update the notification later on.
 		mNotificationManager.notify(0, mBuilder.build());
 	}
 

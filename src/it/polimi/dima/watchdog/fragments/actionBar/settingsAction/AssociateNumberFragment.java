@@ -19,38 +19,42 @@ public class AssociateNumberFragment extends Fragment implements OnClickListener
 	private String otherNumber;
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-
-		View v = inflater.inflate(R.layout.fragment_associate_number,
-				container, false);
-
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		View v = inflater.inflate(R.layout.fragment_associate_number, container, false);
 		Button mButton = (Button) v.findViewById(R.id.button_associate);
 		mButton.setOnClickListener(this);
-
 		return v;
-
 	}
 
 	@Override
 	public void onClick(View v) {
-
-		Log.i("[DEBUG]", "Ho cliccato per inviare");
-		
-		//salvo in this.otherNumber il numero dell'altro
-		this.getNumber();
-		
-		// TODO: Effettuare validazione degli input !
-		// prendo la domanda digitata e la salva nelle preferenze
-		this.getAndSaveQuestion();
-		try {
-			MyPrefFiles.getMyPreference(MyPrefFiles.SECRET_Q_A, this.otherNumber + MyPrefFiles.SECRET_QUESTION, getActivity().getApplicationContext());
-		} catch (NoSuchPreferenceFoundException e) {
-			e.printStackTrace();
-			return;
+		try{
+			Log.i("[DEBUG]", "Ho cliccato per inviare");
+			
+			//salvo in this.otherNumber il numero dell'altro
+			this.getNumber();
+			
+			// TODO: Effettuare validazione degli input !
+			// prendo la domanda digitata e la salva nelle preferenze
+			this.getAndSaveQuestion();
+			try {
+				MyPrefFiles.getMyPreference(MyPrefFiles.SECRET_Q_A, this.otherNumber + MyPrefFiles.SECRET_QUESTION, getActivity().getApplicationContext());
+			} catch (NoSuchPreferenceFoundException e) {
+				e.printStackTrace();
+				return;
+			}
+			this.getAndSaveAnswer();
+			this.startSMP();
 		}
-		this.getAndSaveAnswer();
-		this.startSMP();
+		catch (Exception e){
+			if(this.otherNumber != null){
+				SMSUtility.handleErrorOrException(e, this.otherNumber, getActivity().getApplicationContext());
+			}
+			else{
+				//TODO notificare
+				System.exit(-1);
+			}
+		}
 	}
 
 	/**
