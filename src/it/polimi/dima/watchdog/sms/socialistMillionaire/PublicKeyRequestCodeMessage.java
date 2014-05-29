@@ -29,8 +29,8 @@ public class PublicKeyRequestCodeMessage extends ParsableSMS implements Socialis
 	@Override
 	public void validate(String otherNumber, Context ctx) throws MessageWillBeIgnoredException {
 		//la richiesta va accettata solo se in smp_status non è segnato che ne ho già ricevuta una
-		String key = otherNumber + MyPrefFiles.PUB_KEY_REQUEST_RECEIVED;
-		if(MyPrefFiles.existsPreference(MyPrefFiles.SMP_STATUS, key, ctx)){
+		String publicKeyRequestReceivedKey = otherNumber + MyPrefFiles.PUB_KEY_REQUEST_RECEIVED;
+		if(MyPrefFiles.existsPreference(MyPrefFiles.SMP_STATUS, publicKeyRequestReceivedKey, ctx)){
 			Log.i("[DEBUG_SMP]", "[DEBUG_SMP] CODE_1 REJECTED");
 			throw new MessageWillBeIgnoredException();
 		}

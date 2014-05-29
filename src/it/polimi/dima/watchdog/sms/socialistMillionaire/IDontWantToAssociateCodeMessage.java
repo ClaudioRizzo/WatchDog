@@ -11,7 +11,7 @@ import android.util.Log;
  * @author emanuele
  *
  */
-public class IDontWantToAssociateCodeMessage extends ParsableSMS {
+public class IDontWantToAssociateCodeMessage extends ParsableSMS implements SocialistMillionaireMessageInterface{
 
 	public IDontWantToAssociateCodeMessage(String header, String body) {
 		super(header, body);

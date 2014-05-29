@@ -97,7 +97,5 @@ public class StatusFree implements CommandProtocolFlagsReactionInterface{
 		signer.sign();
 		byte[] body = signer.getSignature();
 		SMSUtility.sendMessage(phoneNumber, SMSUtility.COMMAND_PORT, header, body);
-	}
-	
-	
+	}	
 }

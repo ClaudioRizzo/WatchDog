@@ -46,7 +46,6 @@ public class M3Parser {
 		this.iv = iv;
 	}
 	
-	
 	/**
 	 * Decritta il messaggio eseguendo tutti i round dell'AES al contrario
 	 * 
@@ -133,5 +132,4 @@ public class M3Parser {
 		String stored = Base64.encodeToString(this.storedPasswordHash, Base64.DEFAULT);
 		return received.equals(stored);
 	}
-
 }

@@ -468,4 +468,24 @@ public class MyPrefFiles {
 		}
 	}
 	
+	/**
+	 * Cancella chiave dell'aes, iv, comando e password inserita (non servono più dopo che m3 è stato inviato).
+	 * 
+	 * @param other : il numero di telefono dell'altro
+	 * @param ctx : il contesto corrente
+	 */
+	public static void deleteUselessCommandSessionPreferences(String other, Context ctx){
+		if(MyPrefFiles.existsPreference(MyPrefFiles.COMMAND_SESSION, other + MyPrefFiles.SESSION_KEY, ctx)){
+			MyPrefFiles.deleteMyPreference(MyPrefFiles.COMMAND_SESSION, other + MyPrefFiles.SESSION_KEY, ctx);
+		}
+		if(MyPrefFiles.existsPreference(MyPrefFiles.COMMAND_SESSION, other + MyPrefFiles.IV, ctx)){
+			MyPrefFiles.deleteMyPreference(MyPrefFiles.COMMAND_SESSION, other + MyPrefFiles.IV, ctx);
+		}
+		if(MyPrefFiles.existsPreference(MyPrefFiles.COMMAND_SESSION, other + MyPrefFiles.TEMP_COMMAND, ctx)){
+			MyPrefFiles.deleteMyPreference(MyPrefFiles.COMMAND_SESSION, other + MyPrefFiles.TEMP_COMMAND, ctx);
+		}
+		if(MyPrefFiles.existsPreference(MyPrefFiles.COMMAND_SESSION, other + MyPrefFiles.OTHER_PASSWORD, ctx)){
+			MyPrefFiles.deleteMyPreference(MyPrefFiles.COMMAND_SESSION, other + MyPrefFiles.OTHER_PASSWORD, ctx);
+		}
+	}
 }

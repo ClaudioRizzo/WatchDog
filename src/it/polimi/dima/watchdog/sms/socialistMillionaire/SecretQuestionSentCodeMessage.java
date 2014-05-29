@@ -11,7 +11,7 @@ import android.util.Log;
  * @author emanuele
  *
  */
-public class SecretQuestionSentCodeMessage extends ParsableSMS {
+public class SecretQuestionSentCodeMessage extends ParsableSMS implements SocialistMillionaireMessageInterface{
 
 	public SecretQuestionSentCodeMessage(String header, String body) {
 		super(header, body);
@@ -29,9 +29,9 @@ public class SecretQuestionSentCodeMessage extends ParsableSMS {
 	public void validate(String otherNumber, Context ctx) throws MessageWillBeIgnoredException {
 		// la richiesta va accettata solo se in smp_status non è segnato che ne ho già ricevuta una
 		// e se è segnato che ho inviato la mia chiave pubblica all'altro
-		String key = otherNumber + MyPrefFiles.SECRET_QUESTION_RECEIVED;
-		String key2 = otherNumber + MyPrefFiles.PUB_KEY_FORWARDED;
-		if (MyPrefFiles.existsPreference(MyPrefFiles.SMP_STATUS, key, ctx) || !MyPrefFiles.existsPreference(MyPrefFiles.SMP_STATUS, key2, ctx)) {
+		String secretQuestionReceivedKey = otherNumber + MyPrefFiles.SECRET_QUESTION_RECEIVED;
+		String publicKeyForwardedKey = otherNumber + MyPrefFiles.PUB_KEY_FORWARDED;
+		if (MyPrefFiles.existsPreference(MyPrefFiles.SMP_STATUS, secretQuestionReceivedKey, ctx) || !MyPrefFiles.existsPreference(MyPrefFiles.SMP_STATUS, publicKeyForwardedKey, ctx)) {
 			Log.i("[DEBUG_SMP]", "[DEBUG_SMP] CODE_3 REJECTED");
 			throw new MessageWillBeIgnoredException();
 		}
