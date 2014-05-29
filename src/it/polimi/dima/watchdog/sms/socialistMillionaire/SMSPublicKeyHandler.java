@@ -220,7 +220,7 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 			//... e lo salvo nell'HASHRING
 			MyPrefFiles.setMyPreference(MyPrefFiles.HASHRING, this.other, salt, this.ctx);
 			
-			Log.i("[DEBUG_SMP]", "[DEBUG_SMP] HALF_SMP_SUCCESSFULL");
+			Log.i("[DEBUG_SMP]", "[DEBUG_SMP] HALF_SMP_SUCCESSFUL");
 			
 			//se non ho già validato la chiave dell'altro faccio partire SMP in modo simmetrico
 			if (!MyPrefFiles.existsPreference(MyPrefFiles.KEYRING, this.other, this.ctx)) {
@@ -234,7 +234,8 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 				MyPrefFiles.setMyPreference(MyPrefFiles.SMP_STATUS, preferenceKey, this.other, this.ctx);
 			}
 			else{
-				Log.i("[DEBUG_SMP]", "[DEBUG_SMP] FULL_SMP_SUCCESSFULL");
+				Log.i("[DEBUG_SMP]", "[DEBUG_SMP] FULL_SMP_SUCCESSFUL");
+				//TODO notificare il fragment
 			}
 		} catch (Exception e){
 			//notifico e invio richiesta di stop forzato, oltre alla cancellazione delle preferenze
