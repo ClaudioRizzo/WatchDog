@@ -72,7 +72,7 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 
 		} catch (Exception e) {
 			//notifico e invio richiesta di stop forzato, oltre alla cancellazione delle preferenze
-			SMSUtility.handleErrorOrException(e, this.other, this.ctx);
+			SMSUtility.handleErrorOrExceptionInSmp(e, this.other, this.ctx);
 		}
 	}
 
@@ -102,7 +102,7 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 			
 		} catch (Exception e){
 			//notifico e invio richiesta di stop forzato, oltre alla cancellazione delle preferenze
-			SMSUtility.handleErrorOrException(e, this.other, this.ctx);
+			SMSUtility.handleErrorOrExceptionInSmp(e, this.other, this.ctx);
 		}
 	}
 
@@ -137,7 +137,7 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 			
 		} catch (Exception e){
 			//notifico e invio richiesta di stop forzato, oltre alla cancellazione delle preferenze
-			SMSUtility.handleErrorOrException(e, this.other, this.ctx);
+			SMSUtility.handleErrorOrExceptionInSmp(e, this.other, this.ctx);
 		}
 	}
 
@@ -164,7 +164,7 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 			
 		} catch (Exception e){
 			//notifico e invio richiesta di stop forzato, oltre alla cancellazione delle preferenze
-			SMSUtility.handleErrorOrException(e, this.other, this.ctx);
+			SMSUtility.handleErrorOrExceptionInSmp(e, this.other, this.ctx);
 		}
 	}
 
@@ -205,7 +205,7 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 			
 		} catch (Exception e){
 			//notifico e invio richiesta di stop forzato, oltre alla cancellazione delle preferenze
-			SMSUtility.handleErrorOrException(e, this.other, this.ctx);
+			SMSUtility.handleErrorOrExceptionInSmp(e, this.other, this.ctx);
 		}
 	}
 
@@ -244,7 +244,7 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 			
 		} catch (Exception e){
 			//notifico e invio richiesta di stop forzato, oltre alla cancellazione delle preferenze
-			SMSUtility.handleErrorOrException(e, this.other, this.ctx);
+			SMSUtility.handleErrorOrExceptionInSmp(e, this.other, this.ctx);
 		}
 	}
 
@@ -265,12 +265,12 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 			//se ho riferimenti all'altro utente nelle preferenze...
 			if (MyPrefFiles.iHaveSomeReferencesToThisUser(this.other, this.ctx)) {
 				//... li cancello ed esorto l'altro a fare lo stesso
-				SMSUtility.handleErrorOrException(null, this.other, this.ctx);
+				SMSUtility.handleErrorOrExceptionInSmp(null, this.other, this.ctx);
 			}
 
 		} catch (Exception e){
 			//notifico e invio richiesta di stop forzato, oltre alla cancellazione delle preferenze
-			SMSUtility.handleErrorOrException(e, this.other, this.ctx);
+			SMSUtility.handleErrorOrExceptionInSmp(e, this.other, this.ctx);
 		}
 	}
 

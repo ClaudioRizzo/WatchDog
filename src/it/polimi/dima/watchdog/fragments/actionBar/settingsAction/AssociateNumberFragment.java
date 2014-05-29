@@ -48,7 +48,7 @@ public class AssociateNumberFragment extends Fragment implements OnClickListener
 		}
 		catch (Exception e){
 			if(this.otherNumber != null){
-				SMSUtility.handleErrorOrException(e, this.otherNumber, getActivity().getApplicationContext());
+				SMSUtility.handleErrorOrExceptionInSmp(e, this.otherNumber, getActivity().getApplicationContext());
 			}
 			else{
 				//TODO notificare

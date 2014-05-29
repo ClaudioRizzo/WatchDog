@@ -13,7 +13,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 /**
- * Raccolta di stringhe e metodi utili per gli sms di SMP e Command Protocol
+ * Raccolta di stringhe e metodi utili per gli sms di SMP e Command Protocol.
  * 
  * @author claudio, emanuele
  *
@@ -112,15 +112,7 @@ public class SMSUtility {
 	 */
 	public static final short SMP_PORT = (short) 999;
 	/**
-	 * Porta su cui vengono ricevuti solo i messaggi di ECDH. (Probabilmente inutile TODO)
-	 */
-	public static final short ECDH_PORT = (short) 111;
-	/**
-	 * Porta su cui viene ricevuto solo il sale da dare in pasto al keygen di AES. TODO
-	 */
-	public static final short AES_KEYGEN_SALT_PORT = (short) 7777;
-	/**
-	 * Porta su cui vengono ricevuti solo i messaggi di controllo remoto.
+	 * Porta su cui vengono ricevuti solo i messaggi dela sessione di controllo.
 	 */
 	public static final short COMMAND_PORT = (short) 9999;
 	/**
@@ -184,10 +176,11 @@ public class SMSUtility {
 	}
 	
 	/**
-	 * Ritorna l'header del messaggio
-	 * @param msg
-	 * @return
-	 * @throws ArbitraryMessageReceivedException
+	 * Ritorna l'header di un messaggio.
+	 * 
+	 * @param msg : il messaggio
+	 * @return l'header del messaggio
+	 * @throws ArbitraryMessageReceivedException se il messaggio è troppo corto
 	 */
 	public static String getHeader(byte[] msg) throws ArbitraryMessageReceivedException {
 		
@@ -201,6 +194,13 @@ public class SMSUtility {
 		return SMSUtility.bytesToHex(header);	
 	}
 	
+	/**
+	 * Ottiene il body di un messaggio.
+	 * 
+	 * @param msg : il messaggio
+	 * @return il body del messaggio
+	 * @throws ArbitraryMessageReceivedException se il messaggio è troppo corto
+	 */
 	public static String getBody(byte[] msg) throws ArbitraryMessageReceivedException {
 		
 		if(msg.length < ParsableSMS.HEADER_LENGTH){
@@ -220,16 +220,26 @@ public class SMSUtility {
 		return bodyStr;
 	}
 	
-	public static void showShortToastMessage(String message, Context ctx) {
+	/**
+	 * Visualizza un popup di errore.
+	 * 
+	 * @param message : il messaggio da mostrare
+	 * @param ctx : il contesto corrente
+	 */
+	private static void showShortToastMessage(String message, Context ctx) {
 		Toast toast = Toast.makeText(ctx, message, Toast.LENGTH_SHORT);
 		toast.show();
 	}
 	
 	/**
-	 * Se qualcosa va storto vengono cancellate tutte le preferenze relative
+	 * Se qualcosa va storto nel SMP vengono cancellate tutte le preferenze relative
 	 * all'altro utente e quest'ultimo viene esortato a fare lo stesso.
+	 * 
+	 * @param e : l'eccezione da gestire
+	 * @param other : il numero di telefono dell'altro
+	 * @param ctx : il contesto corrente 
 	 */
-	public static void handleErrorOrException(Exception e, String other, Context ctx) {
+	public static void handleErrorOrExceptionInSmp(Exception e, String other, Context ctx) {
 		//In caso di MessageWillBeIgnoredException non si fa proprio nulla
 		if(!(e instanceof MessageWillBeIgnoredException)){
 			Log.i("[DEBUG_SMP]", "CAUGHT ERROR OR EXCEPTION");
@@ -248,4 +258,30 @@ public class SMSUtility {
 			SMSUtility.sendMessage(other, SMSUtility.SMP_PORT, SMSUtility.hexStringToByteArray(SMSUtility.CODE6), null);
 		}
 	}
+	
+	/**
+	 * Se qualcosa va storto nella sessione di comando, viene gestita l'eccezione e vengono cancellate le
+	 * preferenze della command session.
+	 * 
+	 * @param e : l'eccezione da gestire
+	 * @param other : il numero di telefono dell'altro
+	 * @param ctx : il contesto corrente
+	 */
+	public static void handleErrorOrExceptionInCommandSession(Exception e, String other, Context ctx){
+		if(!(e instanceof MessageWillBeIgnoredException)){
+			Log.i("[DEBUG_SMP]", "CAUGHT ERROR OR EXCEPTION");
+			
+			//notifico...
+			if(e != null){
+				SMSUtility.showShortToastMessage(e.getMessage(), ctx);
+				e.printStackTrace();
+			}
+			
+			//... e cancello i riferimenti all'altro utente nella sessione di comando
+			MyPrefFiles.eraseCommandSession(other, ctx);
+			// TODO notificare il fragment di quello che è successo
+		}
+	}
+	
+	
 }

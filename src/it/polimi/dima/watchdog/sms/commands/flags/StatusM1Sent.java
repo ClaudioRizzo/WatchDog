@@ -27,6 +27,7 @@ import it.polimi.dima.watchdog.utilities.MyPrefFiles;
 import android.content.Context;
 import android.telephony.SmsMessage;
 import android.util.Base64;
+import android.util.Log;
 
 //ho mandato m1, mi aspetto m2, lo parso, invio m3 e passo a m3_sent
 public class StatusM1Sent implements CommandProtocolFlagsReactionInterface {
@@ -53,7 +54,9 @@ public class StatusM1Sent implements CommandProtocolFlagsReactionInterface {
 		
 		this.parser = new M2Parser(message.getUserData(), oPub);
 		this.parser.parse();
+		Log.i("[DEBUG_COMMAND]", "[DEBUG_COMMAND] m2 received and parsed");
 		generateAndSendM3(other, context);
+		Log.i("[DEBUG_COMMAND]", "[DEBUG_COMMAND] m3 sent");
 		return null;
 	}
 

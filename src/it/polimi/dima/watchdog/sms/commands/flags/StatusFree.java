@@ -14,6 +14,7 @@ import java.security.spec.X509EncodedKeySpec;
 import android.content.Context;
 import android.telephony.SmsMessage;
 import android.util.Base64;
+import android.util.Log;
 import it.polimi.dima.watchdog.crypto.AESKeyGenerator;
 import it.polimi.dima.watchdog.crypto.ECDSA_Signature;
 import it.polimi.dima.watchdog.exceptions.NotECKeyException;
@@ -57,7 +58,9 @@ public class StatusFree implements CommandProtocolFlagsReactionInterface{
 		this.parser.parse();
 		generateAndSaveAESKey(other, context);
 		saveIV(other, context);
+		Log.i("[DEBUG_COMMAND]", "[DEBUG_COMMAND] m1 received and parsed");
 		generateAndSendM2(other, context);
+		Log.i("[DEBUG_COMMAND]", "[DEBUG_COMMAND] m2 sent");
 		return null;
 	}
 

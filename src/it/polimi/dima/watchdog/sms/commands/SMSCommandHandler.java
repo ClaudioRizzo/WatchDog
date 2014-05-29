@@ -104,37 +104,37 @@ public class SMSCommandHandler extends BroadcastReceiver implements SMSCommandVi
 	@Override
 	public void visit(SirenOnCodeMessage sirenOnCodeMessage) {
 		// TODO Auto-generated method stub
-		
+		Log.i("[DEBUG_COMMAND]", "[DEBUG_COMMAND] SIREN ON RECEIVED");
 	}
 
 	@Override
 	public void visit(SirenOffCodeMessage sirenOffCodeMessage) {
 		// TODO Auto-generated method stub
-		
+		Log.i("[DEBUG_COMMAND]", "[DEBUG_COMMAND] SIREN OFF RECEIVED");
 	}
 
 	@Override
 	public void visit(MarkLostCodeMessage markLostCodeMessage) {
 		// TODO Auto-generated method stub
-		
+		Log.i("[DEBUG_COMMAND]", "[DEBUG_COMMAND] MARK LOST RECEIVED");
 	}
 
 	@Override
 	public void visit(MarkStolenCodeMessage markStolenCodeMessage) {
 		// TODO Auto-generated method stub
-		
+		Log.i("[DEBUG_COMMAND]", "[DEBUG_COMMAND] MARK STOLEN RECEIVED");
 	}
 
 	@Override
 	public void visit(MarkLostOrStolenCodeMessage markLostOrStolenCodeMessage) {
 		// TODO Auto-generated method stub
-		
+		Log.i("[DEBUG_COMMAND]", "[DEBUG_COMMAND] MARK LOST OR STOLEN RECEIVED");
 	}
 
 	@Override
 	public void visit(MarkFoundCodeMessage markFoundCodeMessage) {
 		// TODO Auto-generated method stub
-		
+		Log.i("[DEBUG_COMMAND]", "[DEBUG_COMMAND] MARK FOUND RICEVUTO");
 	}
 
 	@Override
