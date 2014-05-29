@@ -1,0 +1,147 @@
+\documentclass[a4paper,12pt]{article}
+%\documentclass[a4paper,10pt]{scrartcl}
+
+\usepackage{scrextend}
+\changefontsizes[16pt]{16pt}
+
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[utf8x]{inputenc}
+\usepackage{graphicx}
+\usepackage{tabularx}
+\usepackage{multirow}
+\usepackage{booktabs}
+\usepackage{colortbl}
+\usepackage[italian]{babel}
+\usepackage[margin=2.5cm]{geometry}
+
+\usepackage{titlesec} 
+\titleformat{\section} {\color{black}\normalfont\sffamily\Large\bfseries} {\color{black}\thesection}{1em}{} 
+\usepackage{titlesec}
+\titleformat{\subsection} {\color{black}\normalfont\sffamily\large\bfseries} {\color{black}\thesubsection}{1em}{} 
+
+\renewcommand{\familydefault}{\sfdefault}
+
+\pdfinfo{%
+  /Title    (Watchdog: a remote control app for Android devices)
+  /Author   (Claudio Rizzo /and Emanuele Uliana)
+  /Creator  (Claudio Rizzo /and Emanuele Uliana)
+  /Producer (Claudio Rizzo /and Emanuele Uliana)
+  /Subject  (Watchdog: a remote control app for Android devices)
+  /Keywords ()
+}
+
+\newcommand{\teacher}{
+{
+\large
+\begin{flushleft}
+\centerline{Teacher: Prof. Luciano Baresi}
+\end{flushleft}}
+}
+
+
+\newcommand{\newmaketitle}{
+  \maketitle
+}
+
+\title{{\includegraphics[scale=0.3]{images/polimi} \linebreak \vfill \Huge \textcolor{blue}{DIMA PROJECT OFFICIAL DOCUMENTATION} \linebreak \vfill \textcolor{green}{``Watchdog''}}}
+\author{Claudio Rizzo \\ 800471 \and Emanuele Uliana \\ 799256} %COMPLETATE 
+
+\date{4/7/2014}
+
+\begin{document}
+\newmaketitle
+\teacher
+\vfill
+{\large 
+\begin{flushleft}
+Version 1.0
+\end{flushleft}}
+\clearpage
+
+	    \vspace*{\fill}
+	\tableofcontents
+	    \vspace*{\fill}
+
+\clearpage
+
+\noindent
+\Huge{\chapter{Chapter A: Project context and purpose}}
+	\section{Context}
+	\section{Purpose}
+\clearpage
+
+\noindent
+\Huge{\chapter{Chapter B: Project planning}}
+	\section{Time schedule}
+\clearpage
+
+\noindent
+\Huge{\chapter{Chapter C: Requirements analysis}}
+	\section{Actors}
+	\section{Functional requirements}
+		\subsection{Mobile phones association}
+		\subsection{Mobile phone remote localization}
+		\subsection{Mobile phone remote mark}
+		\subsection{Mobile phone remote alarm triggering}
+	\section{Non-functional requirements}
+		\subsection{Privacy and security: problems and solutions}
+			\subsubsection{Sender authentication} %password salted hash
+			\subsubsection{Message integrity/authentication/non forgeability} %ecdsa
+			\subsubsection{Message confidentiality} %aes256gcm
+			\subsubsection{Asymmetric keys management} %ec
+			\subsubsection{Symmetric key management} %ecdh, command protocol (salt, iv, key generation9
+			\subsubsection{Public keys mutual authentication} %smp + password hash sending
+			\subsubsection{Final recap}
+		\subsection{Human friendly interface and transparency}
+		\subsection{Performance}
+	\section{Use cases}
+		\subsection{Initialization wizard}
+		\subsection{Mobile phones association}
+		\subsection{Remote control: localization}
+		\subsection{Remote control: mark stolen/lost/both/found}
+		\subsection{Remote control: alarm triggering/untriggering}
+\clearpage
+
+\noindent	
+\Huge{\chapter{Chapter D: Design}}
+	\section{Application Architecture}
+	\section{Design Patterns}
+	\section{Crypto protocols and alogrithms}
+		\subsection{Elliptic Curves key pair generation}
+		\subsection{Socialist Millionaire Protocol}
+			\subsubsection{Public key request}
+			\subsubsection{Public key sending}
+			\subsubsection{Question sending}
+			\subsubsection{Hash sending}
+			\subsubsection{Ack and password salt sending}
+			\subsubsection{Second half}
+			\subsubsection{Error management}
+		\subsection{Elliptic Curves Diffie Hellman key exchange}
+		\subsection{Command Protocol}
+			\subsubsection{First message}
+			\subsubsection{Second message}
+			\subsubsection{Third message}
+			\subsubsection{Fourth message}
+			\subsubsection{Error management}
+			\subsubsection{Timeout management}
+		\subsection{Elliptic Curves Digital Signature Algorithm}
+		\subsection{AES256GCM}
+\clearpage
+
+\noindent
+\Huge{\chapter{Chapter E: Testing}}
+	\section{Crypto testing}
+	\section{Protocol testing}
+\clearpage
+
+\noindent
+\Huge{\chapter{Chapter F: Installation and usage manual}}
+	\section{Installation}
+	\section{Usage}
+		\subsection{Initialization wizard}
+		\subsection{Change application settings}
+		\subsection{Send a command message}
+\clearpage
+
+\end{document}

@@ -1,6 +1,7 @@
 package it.polimi.dima.watchdog.utilities;
 
 import it.polimi.dima.watchdog.exceptions.ArbitraryMessageReceivedException;
+import it.polimi.dima.watchdog.exceptions.MessageWillBeIgnoredException;
 import it.polimi.dima.watchdog.sms.ParsableSMS;
 
 import java.util.regex.Pattern;
@@ -8,9 +9,11 @@ import java.util.regex.Pattern;
 import android.content.Context;
 import android.telephony.SmsManager;
 import android.util.Base64;
+import android.util.Log;
 import android.widget.Toast;
 
 /**
+ * Raccolta di stringhe e metodi utili per gli sms di SMP e Command Protocol
  * 
  * @author claudio, emanuele
  *
@@ -21,7 +24,6 @@ public class SMSUtility {
 	 * Durata del timeout: 120 secondi
 	 */
 	public static final int TIMEOUT_LENGTH = 120;
-	
 	/**
 	 * Da usare nel metodo onReceive delle classi che ricevono sms.
 	 */
@@ -95,14 +97,14 @@ public class SMSUtility {
 	 */
 	public static String MARK_FOUND = "C0DE06FF";
 	
-	public static String M1_HEADER = "C0DE001F";
-	public static String M2_HEADER = "C0DE002F";
-	public static String M4_HEADER = "C0DE004F";
-	
 	/**
 	 * LocateCode (for commands only)
 	 */
 	public static String LOCATE = "C0DE01FF";
+	
+	public static String M1_HEADER = "C0DE001F";
+	public static String M2_HEADER = "C0DE002F";
+	public static String M4_HEADER = "C0DE004F";
 	
 	private static final char[] hexArray = "0123456789ABCDEF".toCharArray();
 	/**
@@ -221,5 +223,29 @@ public class SMSUtility {
 	public static void showShortToastMessage(String message, Context ctx) {
 		Toast toast = Toast.makeText(ctx, message, Toast.LENGTH_SHORT);
 		toast.show();
+	}
+	
+	/**
+	 * Se qualcosa va storto vengono cancellate tutte le preferenze relative
+	 * all'altro utente e quest'ultimo viene esortato a fare lo stesso.
+	 */
+	public static void handleErrorOrException(Exception e, String other, Context ctx) {
+		//In caso di MessageWillBeIgnoredException non si fa proprio nulla
+		if(!(e instanceof MessageWillBeIgnoredException)){
+			Log.i("[DEBUG_SMP]", "CAUGHT ERROR OR EXCEPTION");
+			
+			//notifico...
+			if(e != null){
+				SMSUtility.showShortToastMessage(e.getMessage(), ctx);
+				e.printStackTrace();
+			}
+			
+			//... e cancello i riferimenti all'altro utente...
+			MyPrefFiles.eraseSmpPreferences(other, ctx);
+			// TODO notificare il fragment di quello che è successo
+			
+			//... e lo notifico, esortandolo a fare lo stesso
+			SMSUtility.sendMessage(other, SMSUtility.SMP_PORT, SMSUtility.hexStringToByteArray(SMSUtility.CODE6), null);
+		}
 	}
 }
