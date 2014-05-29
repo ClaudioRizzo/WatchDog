@@ -1,9 +1,8 @@
 package it.polimi.dima.watchdog.sms.socialistMillionaire;
 
-import java.security.InvalidKeyException;
-
 /**
- * Visitors Interface for the message exchanging in the SMP
+ * Visitors Interface for the message exchanging in the SMP.
+ * 
  * @author claudio
  *
  */
