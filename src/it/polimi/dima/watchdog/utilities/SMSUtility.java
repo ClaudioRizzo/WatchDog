@@ -3,9 +3,8 @@ package it.polimi.dima.watchdog.utilities;
 import it.polimi.dima.watchdog.exceptions.ArbitraryMessageReceivedException;
 import it.polimi.dima.watchdog.exceptions.MessageWillBeIgnoredException;
 import it.polimi.dima.watchdog.sms.ParsableSMS;
-
+import it.polimi.dima.watchdog.sms.commands.flags.StatusFree;
 import java.util.regex.Pattern;
-
 import android.content.Context;
 import android.telephony.SmsManager;
 import android.util.Base64;
@@ -19,7 +18,6 @@ import android.widget.Toast;
  *
  */
 public class SMSUtility {
-
 	/**
 	 * Durata del timeout: 120 secondi
 	 */
@@ -102,8 +100,17 @@ public class SMSUtility {
 	 */
 	public static String LOCATE = "C0DE01FF";
 	
+	/**
+	 * Header del primo messaggio della sessione di comando.
+	 */
 	public static String M1_HEADER = "C0DE001F";
+	/**
+	 * Header del secondo messaggio della sessione di comando.
+	 */
 	public static String M2_HEADER = "C0DE002F";
+	/**
+	 * Header del quarto messaggio della sessione di comando.
+	 */
 	public static String M4_HEADER = "C0DE004F";
 	
 	private static final char[] hexArray = "0123456789ABCDEF".toCharArray();
@@ -150,8 +157,7 @@ public class SMSUtility {
 	    int len = s.length();
 	    byte[] data = new byte[len / 2];
 	    for (int i = 0; i < len; i += 2) {
-	        data[i / 2] = (byte) ((Character.digit(s.charAt(i), 16) << 4)
-	                             + Character.digit(s.charAt(i+1), 16));
+	        data[i / 2] = (byte) ((Character.digit(s.charAt(i), 16) << 4) + Character.digit(s.charAt(i+1), 16));
 	    }
 	    return data;
 	}
@@ -277,8 +283,11 @@ public class SMSUtility {
 				e.printStackTrace();
 			}
 			
-			//... e cancello i riferimenti all'altro utente nella sessione di comando
+			//... cancello i riferimenti all'altro utente nella sessione di comando...
 			MyPrefFiles.eraseCommandSession(other, ctx);
+			
+			//... e torno in status free.
+			MyPrefFiles.setMyPreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + other, StatusFree.CURRENT_STATUS, ctx);
 			// TODO notificare il fragment di quello che è successo
 		}
 	}

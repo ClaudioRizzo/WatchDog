@@ -1,7 +1,7 @@
 package it.polimi.dima.watchdog.fragments.actionBar;
 
 public class SocialistRequestWrapper {
-
+	
 	private String number;
 	private String question;
 	
@@ -17,5 +17,4 @@ public class SocialistRequestWrapper {
 	public String getNumber() {
 		return number;
 	}
-
 }

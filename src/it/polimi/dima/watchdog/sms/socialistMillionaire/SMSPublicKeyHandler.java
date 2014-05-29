@@ -69,7 +69,6 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 				this.recMsg.setBody(SMSUtility.getBody(message.getUserData()));
 				this.recMsg.handle(this);
 			}
-
 		} catch (Exception e) {
 			//notifico e invio richiesta di stop forzato, oltre alla cancellazione delle preferenze
 			SMSUtility.handleErrorOrExceptionInSmp(e, this.other, this.ctx);
@@ -99,7 +98,6 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 			//... e infine segno in SMP_STATUS che l'ho inviata
 			String preferenceKey = this.other + MyPrefFiles.PUB_KEY_FORWARDED;
 			MyPrefFiles.setMyPreference(MyPrefFiles.SMP_STATUS, preferenceKey, this.other, this.ctx);
-			
 		} catch (Exception e){
 			//notifico e invio richiesta di stop forzato, oltre alla cancellazione delle preferenze
 			SMSUtility.handleErrorOrExceptionInSmp(e, this.other, this.ctx);
@@ -134,7 +132,6 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 			MyPrefFiles.setMyPreference(MyPrefFiles.SMP_STATUS, preferenceKey, this.other, this.ctx);
 			
 			Log.i("[DEBUG_SMP_AFTER_SEND]", "[DEBUG_SMP_AFTER_TRY] CODE_2 RECEIVED");
-			
 		} catch (Exception e){
 			//notifico e invio richiesta di stop forzato, oltre alla cancellazione delle preferenze
 			SMSUtility.handleErrorOrExceptionInSmp(e, this.other, this.ctx);
@@ -161,7 +158,6 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 
 			//... e notifico a me stesso di ciò
 			this.notifyUser();
-			
 		} catch (Exception e){
 			//notifico e invio richiesta di stop forzato, oltre alla cancellazione delle preferenze
 			SMSUtility.handleErrorOrExceptionInSmp(e, this.other, this.ctx);
@@ -202,7 +198,6 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 			else {
 				manageKeyValidated();
 			}
-			
 		} catch (Exception e){
 			//notifico e invio richiesta di stop forzato, oltre alla cancellazione delle preferenze
 			SMSUtility.handleErrorOrExceptionInSmp(e, this.other, this.ctx);
@@ -241,7 +236,6 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 			else{
 				Log.i("[DEBUG_SMP]", "[DEBUG_SMP] FULL_SMP_SUCCESSFULL");
 			}
-			
 		} catch (Exception e){
 			//notifico e invio richiesta di stop forzato, oltre alla cancellazione delle preferenze
 			SMSUtility.handleErrorOrExceptionInSmp(e, this.other, this.ctx);
@@ -267,7 +261,6 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 				//... li cancello ed esorto l'altro a fare lo stesso
 				SMSUtility.handleErrorOrExceptionInSmp(null, this.other, this.ctx);
 			}
-
 		} catch (Exception e){
 			//notifico e invio richiesta di stop forzato, oltre alla cancellazione delle preferenze
 			SMSUtility.handleErrorOrExceptionInSmp(e, this.other, this.ctx);

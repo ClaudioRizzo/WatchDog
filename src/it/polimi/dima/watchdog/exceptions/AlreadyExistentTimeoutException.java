@@ -1,10 +1,12 @@
 package it.polimi.dima.watchdog.exceptions;
 
+/**
+ * 
+ * @author emanuele
+ *
+ */
 public class AlreadyExistentTimeoutException extends Exception {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 4750942614762992651L;
 	private String message;
 	
@@ -17,5 +19,4 @@ public class AlreadyExistentTimeoutException extends Exception {
 	public String getMessage(){
 		return this.message;
 	}
-
 }

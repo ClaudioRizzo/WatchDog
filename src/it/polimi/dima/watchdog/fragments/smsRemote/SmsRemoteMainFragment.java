@@ -12,27 +12,24 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+/**
+ * 
+ * @author claudio
+ *
+ */
 public class SmsRemoteMainFragment extends Fragment {
 
 	public static final String TAG = "Sms Remote";
-	
 	private ActionBarActivity myContext;
 	private ViewPager mViewPager;
 	private TabsAdapter mAdapter;
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-
-		View v = (View) inflater.inflate(R.layout.fragment_sms_remote_main, container,
-				false);
-
-		this.mAdapter = new TabsAdapter(getChildFragmentManager(), 2,
-				FeatureEnum.REMOTE);
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		View v = (View) inflater.inflate(R.layout.fragment_sms_remote_main, container, false);
+		this.mAdapter = new TabsAdapter(getChildFragmentManager(), 2, FeatureEnum.REMOTE);
 		this.mViewPager = (ViewPager) v.findViewById(R.id.sms_remote_pager);
-
 		this.mViewPager.setAdapter(this.mAdapter);
-		// Inflate the layout for this fragment
 		return v;
 	}
 

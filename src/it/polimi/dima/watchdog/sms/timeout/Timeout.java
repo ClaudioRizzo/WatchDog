@@ -3,27 +3,28 @@ package it.polimi.dima.watchdog.sms.timeout;
 import it.polimi.dima.watchdog.exceptions.AlreadyExistentTimeoutException;
 import it.polimi.dima.watchdog.exceptions.MyTimeoutException;
 import it.polimi.dima.watchdog.exceptions.NonExistentTimeoutException;
-import it.polimi.dima.watchdog.sms.commands.flags.StatusFree;
-import it.polimi.dima.watchdog.utilities.MyPrefFiles;
-
+import it.polimi.dima.watchdog.utilities.SMSUtility;
 import java.util.HashMap;
 import java.util.Map;
-
 import android.app.Activity;
 import android.content.Context;
 import android.database.Observable;
 
+/**
+ * Classe che gestisce i timeout del command protocol.
+ * 
+ * @author emanuele
+ *
+ */
 public class Timeout extends Observable<Activity> {
 	
 	private static Timeout timeout;
 	private Context ctx;
 	private Map<String, Integer> timeouts;
-	//private Map<String, Boolean> timeoutSide;
 	
 	private Timeout(Context ctx){
 		this.ctx = ctx;
 		this.timeouts = new HashMap<String, Integer>();
-		//this.timeoutSide = new HashMap<String, Boolean>();
 	}
 	
 	public static Timeout getInstance(Context context){
@@ -33,14 +34,22 @@ public class Timeout extends Observable<Activity> {
 		return timeout;
 	}
 	
-	
+	/**
+	 * Setta il timeout.
+	 * 
+	 * @param waiting : il numero di telefono di colui che aspetta un messaggio.
+	 * @param other : il numero di telefono di colui di cui si aspetta un messaggio.
+	 * @param time : la durata del timeout
+	 * @throws AlreadyExistentTimeoutException se esiste già un timeout dello stesso tipo di quello che si vuole creare
+	 * @throws InterruptedException se viene chiamato un interrupt mentre il thread è in sleep
+	 * @throws NonExistentTimeoutException se non esiste il timeout cercato
+	 */
 	public void addTimeout(String waiting, String other, int time) throws AlreadyExistentTimeoutException, InterruptedException, NonExistentTimeoutException {
 		if(this.timeouts.containsKey(waiting + other)){
 			throw new AlreadyExistentTimeoutException("Timeout già esistente!!!");
 		}
 		else{
 			this.timeouts.put(waiting + other, Integer.valueOf(time));
-			//this.timeoutSide.put(waiting + other, Boolean.valueOf(sideA));
 		}
 		while(true){
 			try{
@@ -48,25 +57,36 @@ public class Timeout extends Observable<Activity> {
 				decreaseTimeout(waiting, other);
 			}
 			catch (MyTimeoutException e){
-				manageTimeout(waiting, other);
+				SMSUtility.handleErrorOrExceptionInCommandSession(e, other, this.ctx);
 				break;
-			}
-			
+			}	
 		}
 	}
 	
-	
+	/**
+	 * Rimuove il timeout.
+	 * 
+	 * @param waiting : il numero di telefono di colui che aspetta un messaggio.
+	 * @param other : il numero di telefono di colui di cui si aspetta un messaggio.
+	 * @throws NonExistentTimeoutException se non esiste il timeout cercato
+	 */
 	public void removeTimeout(String waiting, String other) throws NonExistentTimeoutException{
 		if(!this.timeouts.containsKey(waiting + other)){
 			throw new NonExistentTimeoutException("Non esiste tale timeout!!!");
 		}
 		else{
 			this.timeouts.remove(waiting + other);
-			//this.timeoutSide.remove(waiting + other);
 		}
 	}
 	
-	
+	/**
+	 * Diminuisce il timeout di un secondo.
+	 * 
+	 * @param waiting : il numero di telefono di colui che aspetta un messaggio.
+	 * @param other : il numero di telefono di colui di cui si aspetta un messaggio.
+	 * @throws NonExistentTimeoutException se non esiste il timeout cercato
+	 * @throws MyTimeoutException se il timeout scade
+	 */
 	private void decreaseTimeout(String waiting, String other) throws NonExistentTimeoutException, MyTimeoutException{
 		if(!timeouts.containsKey(waiting + other)){
 			throw new NonExistentTimeoutException("Non esiste tale timeout!!!");
@@ -80,14 +100,6 @@ public class Timeout extends Observable<Activity> {
 			else{
 				this.timeouts.put(waiting + other, newValue);
 			}
-			
-			
 		}
 	}
-	
-	private void manageTimeout(String waiting, String other){
-		MyPrefFiles.eraseCommandSession(other, this.ctx);
-		MyPrefFiles.setMyPreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + other, StatusFree.CURRENT_STATUS, this.ctx);
-	}
-
 }

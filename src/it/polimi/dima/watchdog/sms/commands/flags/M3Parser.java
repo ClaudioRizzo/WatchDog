@@ -2,9 +2,7 @@ package it.polimi.dima.watchdog.sms.commands.flags;
 
 import java.security.Key;
 import java.security.PublicKey;
-
 import org.spongycastle.crypto.InvalidCipherTextException;
-
 import android.util.Base64;
 import it.polimi.dima.watchdog.crypto.AES256GCM;
 import it.polimi.dima.watchdog.crypto.ECDSA_Signature;

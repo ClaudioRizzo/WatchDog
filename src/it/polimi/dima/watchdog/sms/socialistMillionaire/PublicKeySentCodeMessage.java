@@ -6,17 +6,20 @@ import it.polimi.dima.watchdog.utilities.MyPrefFiles;
 import android.content.Context;
 import android.util.Log;
 
+/**
+ * 
+ * @author emanuele
+ *
+ */
 public class PublicKeySentCodeMessage extends ParsableSMS {
 
 	public PublicKeySentCodeMessage(String header, String body) {
 		super(header, body);
-
 	}
 
 	@Override
 	public void handle(SMSPublicKeyVisitorInterface visitor) {
 		visitor.visit(this);
-
 	}
 
 	/**
@@ -35,5 +38,4 @@ public class PublicKeySentCodeMessage extends ParsableSMS {
 		}
 		Log.i("[DEBUG_SMP]", "[DEBUG_SMP] CODE_2 ACCEPTED");
 	}
-
 }

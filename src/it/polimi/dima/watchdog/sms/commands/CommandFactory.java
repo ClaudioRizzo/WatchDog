@@ -39,5 +39,4 @@ public class CommandFactory implements ParsebleSMSInterface {
 		}
 		else throw new ArbitraryMessageReceivedException("Messaggio con un header sconosciuto!!!");
 	}
-
 }

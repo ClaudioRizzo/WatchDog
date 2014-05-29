@@ -14,8 +14,12 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
+/**
+ * 
+ * @author claudio, emanuele
+ *
+ */
 public class AssociateNumberFragment extends Fragment implements OnClickListener {
-	
 	private String otherNumber;
 
 	@Override

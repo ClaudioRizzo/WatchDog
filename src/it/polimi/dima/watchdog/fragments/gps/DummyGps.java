@@ -13,18 +13,16 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 /**
- * Un Dummy Fragment che serve solo per prova
+ * Un Dummy Fragment che serve solo per prova.
+ * 
  * @author claudio
  *
  */
 public class DummyGps extends Fragment implements OnClickListener {
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		View v = inflater.inflate(R.layout.fragment_dummy_test, container,
-				false);
-		
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		View v = inflater.inflate(R.layout.fragment_dummy_test, container, false);
 		Button mButton = (Button) v.findViewById(R.id.button_sent_tryal);
 		mButton.setOnClickListener(this);
 		return v;
@@ -35,8 +33,6 @@ public class DummyGps extends Fragment implements OnClickListener {
 		Log.i("[DEBUG]", "Ho cliccato la prova");
 		SmsManager man = SmsManager.getDefault();
 		byte[] message = SMSUtility.hexStringToByteArray(SMSUtility.CODE2); //provo solo l'header
-		man.sendDataMessage("+393466342499", null, SMSUtility.SMP_PORT,
-				message, null, null);
-		
+		man.sendDataMessage("+393466342499", null, SMSUtility.SMP_PORT, message, null, null);
 	}
 }

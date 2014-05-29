@@ -6,17 +6,20 @@ import it.polimi.dima.watchdog.utilities.MyPrefFiles;
 import android.content.Context;
 import android.util.Log;
 
+/**
+ * 
+ * @author emanuele
+ *
+ */
 public class SecretQuestionSentCodeMessage extends ParsableSMS {
 
 	public SecretQuestionSentCodeMessage(String header, String body) {
 		super(header, body);
-
 	}
 
 	@Override
 	public void handle(SMSPublicKeyVisitorInterface visitor) {
 		visitor.visit(this);
-
 	}
 
 	/**

@@ -7,7 +7,6 @@ package it.polimi.dima.watchdog.sms.socialistMillionaire;
  *
  */
 public interface SMSPublicKeyVisitorInterface {
-
 	public void visit(PublicKeyRequestCodeMessage pubKeyReqMsg);
 	public void visit(PublicKeySentCodeMessage pubKeySentMsg);
 	public void visit(SecretAnswerAndPublicKeyHashSentCodeMessage secAnswMsg);

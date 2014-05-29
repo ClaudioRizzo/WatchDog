@@ -12,27 +12,24 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+/**
+ * 
+ * @author claudio
+ *
+ */
 public class GpsMainFragment extends Fragment {
 
 	public static final String TAG = "Gps";
-	
 	private ActionBarActivity myContext;
 	private ViewPager mViewPager;
 	private TabsAdapter mAdapter;
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-
-		View v = (View) inflater.inflate(R.layout.fragment_gps_main, container,
-				false);
-
-		this.mAdapter = new TabsAdapter(getChildFragmentManager(), 3,
-				FeatureEnum.GPS);
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		View v = (View) inflater.inflate(R.layout.fragment_gps_main, container, false);
+		this.mAdapter = new TabsAdapter(getChildFragmentManager(), 3, FeatureEnum.GPS);
 		this.mViewPager = (ViewPager) v.findViewById(R.id.gps_pager);
-
 		this.mViewPager.setAdapter(this.mAdapter);
-		// Inflate the layout for this fragment
 		return v;
 	}
 
@@ -57,5 +54,4 @@ public class GpsMainFragment extends Fragment {
 	public void setMyContext(ActionBarActivity myContext) {
 		this.myContext = myContext;
 	}
-
 }

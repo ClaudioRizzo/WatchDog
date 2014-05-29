@@ -6,6 +6,11 @@ import it.polimi.dima.watchdog.utilities.MyPrefFiles;
 import android.content.Context;
 import android.util.Log;
 
+/**
+ * 
+ * @author emanuele
+ *
+ */
 public class IDontWantToAssociateCodeMessage extends ParsableSMS {
 
 	public IDontWantToAssociateCodeMessage(String header, String body) {
@@ -30,5 +35,4 @@ public class IDontWantToAssociateCodeMessage extends ParsableSMS {
 		}
 		Log.i("[DEBUG_SMP]", "[DEBUG_SMP] CODE_6 ACCEPTED");
 	}
-
 }

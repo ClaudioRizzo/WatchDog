@@ -7,7 +7,6 @@ import java.security.PrivateKey;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.util.Random;
-
 import it.polimi.dima.watchdog.R;
 import it.polimi.dima.watchdog.crypto.AESKeyGenerator;
 import it.polimi.dima.watchdog.crypto.ECDSA_Signature;
@@ -27,9 +26,12 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-//TODO scommentare alla fine
-//import android.widget.TextView;
 
+/**
+ * 
+ * @author claudio, emanuele
+ *
+ */
 public class LocalizationFragment extends Fragment implements OnClickListener {
 	
 	private String otherNumber;
@@ -39,10 +41,8 @@ public class LocalizationFragment extends Fragment implements OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		this.ctx = getActivity().getApplicationContext();
         View v = inflater.inflate(R.layout.fragment_localization, container, false);
-        
         Button mButton = (Button) v.findViewById(R.id.button_localization);
         mButton.setOnClickListener(this);
-        
         return v;
     }
 

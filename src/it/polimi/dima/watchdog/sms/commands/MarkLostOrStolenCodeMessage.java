@@ -16,7 +16,5 @@ public class MarkLostOrStolenCodeMessage extends ParsableSMS {
 	@Override
 	public void handle(SMSCommandVisitorInterface visitor) {
 		visitor.visit(this);
-
 	}
-
 }

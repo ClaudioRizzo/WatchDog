@@ -10,7 +10,6 @@ import java.security.Security;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
-
 import android.content.Context;
 import android.telephony.SmsMessage;
 import android.util.Base64;

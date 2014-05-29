@@ -1,7 +1,6 @@
 package it.polimi.dima.watchdog.sms.commands.flags;
 
 import java.security.PublicKey;
-
 import it.polimi.dima.watchdog.crypto.ECDSA_Signature;
 import it.polimi.dima.watchdog.exceptions.ArbitraryMessageReceivedException;
 import it.polimi.dima.watchdog.exceptions.ErrorInSignatureCheckingException;
@@ -41,26 +40,18 @@ public class M1Parser {
 	}
 	
 	public void parse() throws ArbitraryMessageReceivedException, ErrorInSignatureCheckingException, NotECKeyException {
-		try{
-			int ivStartPosition = ParsableSMS.HEADER_LENGTH;
-			int saltStartPosition = ivStartPosition + M1Parser.IV_LENGTH;
-			int signatureStartPosition = saltStartPosition + M1Parser.SALT_LENGTH;
+		int ivStartPosition = ParsableSMS.HEADER_LENGTH;
+		int saltStartPosition = ivStartPosition + M1Parser.IV_LENGTH;
+		int signatureStartPosition = saltStartPosition + M1Parser.SALT_LENGTH;
+		int messageWithoutSignatureLength = ParsableSMS.HEADER_LENGTH + M1Parser.IV_LENGTH + M1Parser.SALT_LENGTH;
+		int signatureLength = this.rawMessage.length - messageWithoutSignatureLength;
 			
-			int messageWithoutSignatureLength = ParsableSMS.HEADER_LENGTH + M1Parser.IV_LENGTH + M1Parser.SALT_LENGTH;
-			int signatureLength = this.rawMessage.length - messageWithoutSignatureLength;
-			
-			if(signatureLength < 1){
-				throw new ArbitraryMessageReceivedException();
-			}
-			
-			separateMessageParts(ivStartPosition, saltStartPosition, signatureStartPosition, signatureLength);
-			verifySignature(messageWithoutSignatureLength);
-			verifyHeader(SMSUtility.M1_HEADER.getBytes());
-					}
-		catch (ArrayIndexOutOfBoundsException e)
-		{
+		if(signatureLength < 1){
 			throw new ArbitraryMessageReceivedException();
 		}
+		separateMessageParts(ivStartPosition, saltStartPosition, signatureStartPosition, signatureLength);
+		verifySignature(messageWithoutSignatureLength);
+		verifyHeader(SMSUtility.M1_HEADER.getBytes());		
 	}
 
 	private void verifyHeader(byte[] header) throws ArbitraryMessageReceivedException {
@@ -75,7 +66,6 @@ public class M1Parser {
 	private void verifySignature(int messageWithoutSignatureLength) throws ArbitraryMessageReceivedException, ErrorInSignatureCheckingException, NotECKeyException {
 		byte[] messageWithoutSignature = new byte[messageWithoutSignatureLength];
 		System.arraycopy(this.rawMessage, 0, messageWithoutSignature, 0, messageWithoutSignatureLength);
-		
 		ECDSA_Signature verifier = new ECDSA_Signature(messageWithoutSignature, this.oPub, this.signature);
 		if(!verifier.verifySignature()){
 			throw new ArbitraryMessageReceivedException("Firma non valida/non corrispondente!!!");

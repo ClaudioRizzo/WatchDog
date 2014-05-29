@@ -6,9 +6,13 @@ import it.polimi.dima.watchdog.exceptions.ErrorInSignatureCheckingException;
 import it.polimi.dima.watchdog.exceptions.NotECKeyException;
 import it.polimi.dima.watchdog.sms.ParsableSMS;
 import it.polimi.dima.watchdog.utilities.SMSUtility;
-
 import java.security.PublicKey;
 
+/**
+ * 
+ * @author emanuele
+ *
+ */
 public class M2Parser {
 
 	private byte[] rawMessage;
@@ -23,23 +27,15 @@ public class M2Parser {
 	}
 	
 	public void parse() throws ArbitraryMessageReceivedException, ErrorInSignatureCheckingException, NotECKeyException{
-		try{
-			int signatureLength = this.rawMessage.length - this.header.length;
-			int signatureStartPosition = this.header.length;
+		int signatureLength = this.rawMessage.length - this.header.length;
+		int signatureStartPosition = this.header.length;
 			
-			if(signatureLength < 1){
-				throw new ArbitraryMessageReceivedException();
-			}
-			
-			separateMessageParts(signatureStartPosition, signatureLength);
-			verifySignature();
-			verifyHeader(SMSUtility.M2_HEADER.getBytes());
-		}
-		catch (ArrayIndexOutOfBoundsException e)
-		{
+		if(signatureLength < 1){
 			throw new ArbitraryMessageReceivedException();
 		}
-		
+		separateMessageParts(signatureStartPosition, signatureLength);
+		verifySignature();
+		verifyHeader(SMSUtility.M2_HEADER.getBytes());
 	}
 
 	private void verifyHeader(byte[] header) throws ArbitraryMessageReceivedException {

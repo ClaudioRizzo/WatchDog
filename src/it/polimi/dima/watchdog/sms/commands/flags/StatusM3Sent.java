@@ -4,7 +4,6 @@ import java.security.KeyFactory;
 import java.security.PublicKey;
 import java.security.Security;
 import java.security.spec.X509EncodedKeySpec;
-
 import it.polimi.dima.watchdog.sms.ParsableSMS;
 import it.polimi.dima.watchdog.sms.timeout.Timeout;
 import it.polimi.dima.watchdog.utilities.CryptoUtility;

@@ -3,13 +3,13 @@ package it.polimi.dima.watchdog.utilities;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
 import it.polimi.dima.watchdog.exceptions.NoSuchPreferenceFoundException;
 import android.content.Context;
 import android.content.SharedPreferences;
 
 /**
- * Classe che raccoglie tutte le preferenze che si usano in questa applicazione
+ * Classe che raccoglie tutte le preferenze che si usano in questa applicazione.
+ * 
  * @author claudio, emanuele
  *
  */
@@ -242,7 +242,7 @@ public class MyPrefFiles {
 	 * 
 	 * @param fileName : il file in cui prendere la preferenza
 	 * @param key : la chiave che punta alla preferenza
-	 * @param ctx : il contesto
+	 * @param ctx : il contesto corrente
 	 * @return la preferenza trovata
 	 * @throws NoSuchPreferenceFoundException se la preferenza non esiste
 	 */
@@ -262,7 +262,7 @@ public class MyPrefFiles {
 	 * @param fileName : il file in cui inserire la preferenza
 	 * @param key : la chiave della preferenza
 	 * @param value : il valore della preferenza
-	 * @param ctx : il contesto
+	 * @param ctx : il contesto corrente
 	 */
 	//se value è una chiave deve essere Base64
 	public static void setMyPreference(String fileName, String key, String value, Context ctx) {
@@ -277,7 +277,7 @@ public class MyPrefFiles {
 	 * 
 	 * @param fileName : il file da cui cancellare la preferenza
 	 * @param key : la chiave per individuare la preferenza da cancellare
-	 * @param ctx : il contesto
+	 * @param ctx : il contesto corrente
 	 */
 	public static void deleteMyPreference(String fileName, String key, Context ctx) {
 		SharedPreferences sp = ctx.getSharedPreferences(fileName, Context.MODE_PRIVATE);
@@ -291,7 +291,7 @@ public class MyPrefFiles {
 	 * 
 	 * @param fileName : il file in cui cercare la preferenza
 	 * @param key : la chiave per cercare la preferenza
-	 * @param ctx : il contesto
+	 * @param ctx : il contesto corrente
 	 * @return true se la preferenza esiste, false altrimenti
 	 */
 	public static boolean existsPreference(String fileName, String key, Context ctx) {
@@ -303,6 +303,14 @@ public class MyPrefFiles {
 		return true;
 	}
 	
+	/**
+	 * Sostituisce una vecchia preferenza con una nuova.
+	 * 
+	 * @param fileName: il file in cui sostituire la preferenza
+	 * @param key : la chiave per cercare la preferenza
+	 * @param newValue : il nuovo valore per la preferenza
+	 * @param ctx : il contesto corrente
+	 */
 	public static void replacePreference(String fileName, String key, String newValue, Context ctx){
 		MyPrefFiles.deleteMyPreference(fileName, key, ctx);
 		MyPrefFiles.setMyPreference(fileName, key, newValue, ctx);
@@ -310,6 +318,9 @@ public class MyPrefFiles {
 	
 	/**
 	 * Se qualcosa va storto nel SMP tutte le preferenze relative all'altro utente vanno cancellate.
+	 * 
+	 * @param phoneNumber : il numero di telefono dell'altro
+	 * @param ctx : il contesto corrente
 	 */
 	public static void eraseSmpPreferences(String phoneNumber, Context ctx){
 		//cancellazione della chiave già validata dell'altro utente, se esiste
@@ -350,7 +361,7 @@ public class MyPrefFiles {
 	/**
 	 * Metodo che cerca nelle preferenze se esistono riferimenti ad un determinato numero di telefono.
 	 * @param phoneNumber : il numero di telefono dell'altro
-	 * @param ctx : il contesto
+	 * @param ctx : il contesto corrente
 	 * @return true se esiste almeno un riferimento, false altrimenti
 	 */
 	public static boolean iHaveSomeReferencesToThisUser(String phoneNumber, Context ctx){
@@ -385,7 +396,7 @@ public class MyPrefFiles {
 	 * Stabilisce se entrambe le parti hanno terminato con successo il SMP.
 	 * 
 	 * @param phoneNumber : il numero di telefono dell'altro
-	 * @param ctx : il contesto
+	 * @param ctx : il contesto corrente
 	 * @return true se entrambe le parti hanno terminato con successo il SMP, false altrimenti
 	 */
 	public static boolean isSmpSuccessfullyFinishedByBoth(String phoneNumber, Context ctx){
@@ -402,8 +413,9 @@ public class MyPrefFiles {
 	
 	/**
 	 * Ritorna tutti i valori delle preferenze contenuti in fileName.
+	 * 
 	 * @param fileName : il nome del file di cui si vogliono tutte le preferenze
-	 * @param ctx : il contesto
+	 * @param ctx : il contesto corrente
 	 * @return tutti i valori delle preferenze contenuti in fileName
 	 */
 	public static Map<String, ?> getPrefMap(String fileName, Context ctx) {
@@ -432,7 +444,12 @@ public class MyPrefFiles {
 		return keys;
 	}
 	
-	
+	/**
+	 * Cancella l'intera sessione di comando
+	 * 
+	 * @param other : il numero di telefono dell'altro
+	 * @param ctx : il contesto corrente
+	 */
 	public static void eraseCommandSession(String other, Context ctx){
 		if(MyPrefFiles.existsPreference(MyPrefFiles.COMMAND_SESSION, other + MyPrefFiles.SESSION_KEY, ctx)){
 			MyPrefFiles.deleteMyPreference(MyPrefFiles.COMMAND_SESSION, other + MyPrefFiles.SESSION_KEY, ctx);

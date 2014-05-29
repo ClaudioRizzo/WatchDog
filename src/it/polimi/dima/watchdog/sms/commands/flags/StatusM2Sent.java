@@ -8,11 +8,8 @@ import java.security.PublicKey;
 import java.security.Security;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.X509EncodedKeySpec;
-
 import javax.crypto.spec.SecretKeySpec;
-
 import org.spongycastle.crypto.InvalidCipherTextException;
-
 import android.content.Context;
 import android.telephony.SmsMessage;
 import android.util.Base64;

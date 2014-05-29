@@ -5,6 +5,11 @@ import it.polimi.dima.watchdog.fragments.gps.LocalizationFragment;
 import it.polimi.dima.watchdog.fragments.gps.PerimeterFragment;
 import android.support.v4.app.Fragment;
 
+/**
+ * 
+ * @author claudio
+ *
+ */
 public class GpsFactory extends FeatureFactory {
 
 	@Override
@@ -19,5 +24,4 @@ public class GpsFactory extends FeatureFactory {
 		}
 		throw new IllegalStateException("Per il GPS questa posizione non esiste!");
 	}
-
 }

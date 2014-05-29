@@ -12,5 +12,4 @@ public interface Crypto {
 	
 	public String encrypt() throws IllegalStateException, InvalidCipherTextException;
 	public byte[] decrypt() throws IllegalStateException, InvalidCipherTextException;
-
 }

@@ -7,15 +7,12 @@ import it.polimi.dima.watchdog.exceptions.NoSignatureDoneException;
 import it.polimi.dima.watchdog.utilities.CryptoUtility;
 import it.polimi.dima.watchdog.utilities.PasswordUtils;
 import it.polimi.dima.watchdog.utilities.SMSUtility;
-
 import java.io.UnsupportedEncodingException;
 import java.security.Key;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
-
 import org.spongycastle.crypto.InvalidCipherTextException;
-
 import android.telephony.SmsManager;
 
 /**
@@ -38,7 +35,6 @@ public class CommandSMS {
 	private byte[] finalSignedAndEncryptedMessage; //messaggio firmato e crittografato
 	private String dest; //serve per memorizzare il destinatario
 	private byte[] iv;
-	
 	
 	
 	public byte[] getSignature(){
@@ -123,7 +119,4 @@ public class CommandSMS {
 		SmsManager smsManager = SmsManager.getDefault();
 		smsManager.sendDataMessage(this.dest, null, SMSUtility.COMMAND_PORT, this.finalSignedAndEncryptedMessage, null, null);
 	}
-	
-	
-	
 }

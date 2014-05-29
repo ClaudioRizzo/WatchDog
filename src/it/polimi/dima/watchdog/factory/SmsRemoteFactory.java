@@ -4,6 +4,11 @@ import it.polimi.dima.watchdog.fragments.smsRemote.SirenOffFragment;
 import it.polimi.dima.watchdog.fragments.smsRemote.SirenOnFragment;
 import android.support.v4.app.Fragment;
 
+/**
+ * 
+ * @author claudio
+ *
+ */
 public class SmsRemoteFactory extends FeatureFactory {
 
 	@Override
@@ -13,10 +18,7 @@ public class SmsRemoteFactory extends FeatureFactory {
 			return new SirenOnFragment();
 		case 1: 
 			return new SirenOffFragment();
-		
 		}
 		throw new IllegalStateException("Per il Remote Control questa posizione non esiste!");
 	}
-
-	
 }
