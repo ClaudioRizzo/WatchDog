@@ -7,8 +7,21 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
+/**
+ * Classe che wrappa la gestione di un timeout.
+ * 
+ * @author emanuele
+ *
+ */
 public class TimeoutManagement extends BroadcastReceiver {
 
+	/**
+	 * Cancella nella sessione di comando i riferimenti a un numero di telefono contenuto in intent e setta
+	 * il proprio stato come status free.
+	 * 
+	 * @param context : il contesto corrente
+	 * @param intent : l'Intent che contiene il riferimento al numero di telefono dell'altro
+	 */
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		//... cancello i riferimenti all'altro utente nella sessione di comando...
