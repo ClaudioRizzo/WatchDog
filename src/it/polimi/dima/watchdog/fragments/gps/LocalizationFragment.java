@@ -23,6 +23,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -57,6 +58,8 @@ public class LocalizationFragment extends Fragment implements OnClickListener {
 			String insertedPassword = getPassword(mFragView);
 			String command = SMSUtility.LOCATE; //TODO in realtà il tipo di comando va preso dal tipo di bottone cliccato
 			this.otherNumber = getPhoneNumber(mFragView);
+			
+			Log.i("[DEBUG]", "[DEBUG] Questa è la chiave: "+MyPrefFiles.getMyPreference(MyPrefFiles.KEYRING, this.otherNumber, this.ctx));
 			
 			if(!MyPrefFiles.existsPreference(MyPrefFiles.KEYRING, this.otherNumber, this.ctx)){
 				throw new NoSuchPreferenceFoundException("Non si può iniziare una sessione di comando con un utente con cui non è stato fatto SMP!!!");
