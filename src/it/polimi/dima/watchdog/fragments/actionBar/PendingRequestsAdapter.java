@@ -21,7 +21,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-//TODO: il secret rimane null 
+//TODO: Richiedere la domanda segreta da settare 
 public class PendingRequestsAdapter extends BaseAdapter {
 
 	private Context ctx;
