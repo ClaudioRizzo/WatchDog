@@ -1,9 +1,7 @@
 package it.polimi.dima.watchdog.crypto;
 
-import android.annotation.SuppressLint;
 import android.util.Base64;
 import it.polimi.dima.watchdog.utilities.CryptoUtility;
-
 import java.security.InvalidKeyException;
 import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
@@ -14,10 +12,7 @@ import java.security.Security;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
-
 import javax.crypto.KeyAgreement;
-
-
 
 /**
  * Questa classe crea un segreto condiviso tra due utenti, a partire dalle chiavi EC di entrambi, senza che il 
@@ -107,12 +102,10 @@ public class SharedSecretAgreement {
 	 * @throws InvalidKeySpecException 
 	 * @throws NoSuchProviderException 
 	 */
-	@SuppressLint("TrulyRandom")
 	public void generateSharedSecret() throws InvalidKeyException, NoSuchAlgorithmException, InvalidKeySpecException, NoSuchProviderException{
 		KeyAgreement keyAgreement = KeyAgreement.getInstance(CryptoUtility.ECDH, CryptoUtility.SC);
 		keyAgreement.init(this.myPrivateKey);
 		keyAgreement.doPhase(this.otherPublicKey, true);
 		this.sharedSecret = keyAgreement.generateSecret();
 	}
-
 }

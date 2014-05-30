@@ -10,9 +10,7 @@ import android.telephony.SmsMessage;
  *
  */
 public interface CommandProtocolFlagsReactionInterface {
-	
 	public abstract String getCurrentStatus();
 	public abstract String getNextSentStatus();
 	public ParsableSMS parse(Context context, SmsMessage message, String other) throws Exception;
-
 }

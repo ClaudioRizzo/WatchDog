@@ -6,7 +6,6 @@ package it.polimi.dima.watchdog.sms.commands;
  *
  */
 public interface SMSCommandVisitorInterface {
-
 	public void visit(SirenOnCodeMessage sirenOnCodeMessage);
 	public void visit(SirenOffCodeMessage sirenOffCodeMessage);
 	public void visit(MarkLostCodeMessage markLostCodeMessage);
@@ -14,5 +13,4 @@ public interface SMSCommandVisitorInterface {
 	public void visit(MarkLostOrStolenCodeMessage markLostOrStolenCodeMessage);
 	public void visit(MarkFoundCodeMessage markFoundCodeMessage);
 	public void visit(LocateCodeMessage locateCodeMessage);
-
 }

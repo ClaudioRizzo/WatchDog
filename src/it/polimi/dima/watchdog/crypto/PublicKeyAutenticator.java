@@ -128,5 +128,4 @@ public class PublicKeyAutenticator {
 		MessageDigest digest = MessageDigest.getInstance(CryptoUtility.SHA_256);
 		return digest.digest(input);
 	}
-
 }

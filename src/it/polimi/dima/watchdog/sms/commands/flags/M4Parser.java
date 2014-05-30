@@ -1,9 +1,13 @@
 package it.polimi.dima.watchdog.sms.commands.flags;
 
 import it.polimi.dima.watchdog.sms.ParsableSMS;
-
 import java.security.PublicKey;
 
+/**
+ * 
+ * @author emanuele
+ *
+ */
 public class M4Parser {
 	private byte[] rawMessage;
 	private byte[] header;

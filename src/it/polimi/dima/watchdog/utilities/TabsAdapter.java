@@ -7,7 +7,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 /**
- * classe usata per gestire le tabs nei fragment che ne hanno bisogno
+ * Classe usata per gestire le tabs nei fragment che ne hanno bisogno.
+ * 
  * @author claudio
  *
  */
@@ -43,6 +44,4 @@ public class TabsAdapter extends FragmentPagerAdapter {
 	public int getTABS_NUM() {
 		return tabsNum;
 	}
-
-
 }

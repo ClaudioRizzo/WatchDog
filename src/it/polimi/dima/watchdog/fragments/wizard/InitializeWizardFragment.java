@@ -2,15 +2,8 @@ package it.polimi.dima.watchdog.fragments.wizard;
 
 import it.polimi.dima.watchdog.R;
 import it.polimi.dima.watchdog.utilities.PasswordUtils;
-
 import java.security.NoSuchAlgorithmException;
-//TODO scommentare alla fine
-//import java.util.regex.Pattern;
-
-
-
 import java.security.NoSuchProviderException;
-
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -22,8 +15,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class InitializeWizardFragment extends Fragment implements
-		OnClickListener {
+public class InitializeWizardFragment extends Fragment implements OnClickListener {
 
 	private OnPasswordInizializedListener mCallBack;
 	private final String salt = Base64.encodeToString(PasswordUtils.nextSalt(), Base64.DEFAULT);
@@ -33,26 +25,18 @@ public class InitializeWizardFragment extends Fragment implements
 	}
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-
-		View v = (View) inflater.inflate(R.layout.fragment_initialize_wizard,
-				container, false);
-
-		Button mButton = (Button) v
-				.findViewById(R.id.button_initialize_password);
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		View v = (View) inflater.inflate(R.layout.fragment_initialize_wizard, container, false);
+		Button mButton = (Button) v.findViewById(R.id.button_initialize_password);
 		mButton.setOnClickListener(this);
-
 		return v;
-
 	}
 
 	@Override
 	public void onClick(View v) {
 		try{
 			View fragView = getView();
-			TextView mTextView = (TextView) fragView
-					.findViewById(R.id.user_password);
+			TextView mTextView = (TextView) fragView.findViewById(R.id.user_password);
 			String cleanPassword = mTextView.getText().toString();
 			
 			//TODO scommentare alla fine
@@ -77,8 +61,6 @@ public class InitializeWizardFragment extends Fragment implements
 			//TODO notificare l'errore
 			System.exit(-1);
 		}
-		
-
 	}
 
 	@Override
@@ -95,7 +77,7 @@ public class InitializeWizardFragment extends Fragment implements
 	}
 
 	/**
-	 * Prende la password, la sala e ne fa l'hash.
+	 * Prende la password, la sala, ne fa l'hashe ritorna quest'ultimo.
 	 * 
 	 * @param pswd : la password
 	 * @return l'hash salato della password
@@ -112,9 +94,6 @@ public class InitializeWizardFragment extends Fragment implements
 		{
 			e.printStackTrace();
 		}
-
 		return hashString;
-
 	}
-
 }

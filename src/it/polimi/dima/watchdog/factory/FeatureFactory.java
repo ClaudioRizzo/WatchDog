@@ -2,6 +2,11 @@ package it.polimi.dima.watchdog.factory;
 
 import android.support.v4.app.Fragment;
 
+/**
+ * 
+ * @author claudio
+ *
+ */
 public abstract class FeatureFactory {
 
 	public static FeatureFactory getFactory(FeatureEnum e) {
@@ -13,11 +18,13 @@ public abstract class FeatureFactory {
 		}
 		return null;
 	}
+	
 	/**
-	 * In base alla posizione nel tab genera il fragment corrispondente:
-	 * Ad esepio se in Tab0 abbiamo un fragment locazione, questo verrà generato
+	 * In base alla posizione nel tab genera il fragment corrispondente: ad esepio se in Tab0 abbiamo un
+	 * fragment locazione, questo verrà generato.
+	 * 
 	 * @param pos
-	 * @return
+	 * @return il fragment corrispondente
 	 */
 	public abstract Fragment getFragment(int pos);
 }

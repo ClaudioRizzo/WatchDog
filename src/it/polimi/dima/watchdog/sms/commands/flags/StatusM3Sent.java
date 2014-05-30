@@ -4,7 +4,6 @@ import java.security.KeyFactory;
 import java.security.PublicKey;
 import java.security.Security;
 import java.security.spec.X509EncodedKeySpec;
-
 import it.polimi.dima.watchdog.sms.ParsableSMS;
 import it.polimi.dima.watchdog.sms.timeout.Timeout;
 import it.polimi.dima.watchdog.utilities.CryptoUtility;
@@ -12,6 +11,7 @@ import it.polimi.dima.watchdog.utilities.MyPrefFiles;
 import android.content.Context;
 import android.telephony.SmsMessage;
 import android.util.Base64;
+import android.util.Log;
 
 /**
  * 
@@ -44,6 +44,7 @@ public class StatusM3Sent implements CommandProtocolFlagsReactionInterface {
 		this.parser = new M4Parser(message.getUserData(), oPub);
 		this.parser.parse();
 		//TODO fare qualcosa con il body del messaggio
+		Log.i("[DEBUG_COMMAND]", "[DEBUG_COMMAND] m4 received and parsed");
 		return null;
 	}
 

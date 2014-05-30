@@ -8,11 +8,8 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.SecureRandom;
 import java.security.Security;
-import java.util.Random;
-
 import org.spongycastle.jce.ECNamedCurveTable;
 import org.spongycastle.jce.spec.ECParameterSpec;
-
 import android.annotation.SuppressLint;
 import android.util.Log;
 import it.polimi.dima.watchdog.utilities.CryptoUtility;
@@ -64,7 +61,6 @@ public class ECKeyPairGeneratorWrapper {
 			//521 bit di lunghezza per le chiavi
 			ECParameterSpec ellipticCurvesParameterSpecifiers = ECNamedCurveTable.getParameterSpec("secp256r1");
 			KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance(CryptoUtility.EC, CryptoUtility.SC);
-			
 			keyPairGenerator.initialize(ellipticCurvesParameterSpecifiers, this.secureRandom);
 			KeyPair pair = keyPairGenerator.generateKeyPair();
 			
@@ -85,6 +81,5 @@ public class ECKeyPairGeneratorWrapper {
 		catch(Exception e){
 			e.printStackTrace();
 		}
-		
 	}
 }

@@ -46,7 +46,6 @@ public class ECDSA_Signature {
 		return this.oPub;
 	}
 	
-	
 	/**
 	 * Costruttore in sign-mode che prevede il passaggio anche di una chiave privata; lancia un'eccezione se
 	 * non è una chiave ECDSA.
@@ -171,9 +170,6 @@ public class ECDSA_Signature {
 		}
 		catch(NoSuchAlgorithmException e){
 			throw new ErrorInSignatureCheckingException();
-		}
-		
+		}	
 	}
-
-	
 }

@@ -2,7 +2,6 @@ package it.polimi.dima.watchdog.sms.commands;
 
 import java.util.HashMap;
 import java.util.Map;
-
 import it.polimi.dima.watchdog.exceptions.NoSuchPreferenceFoundException;
 import it.polimi.dima.watchdog.sms.ParsableSMS;
 import it.polimi.dima.watchdog.sms.commands.flags.CommandProtocolFlagsReactionInterface;
@@ -26,11 +25,11 @@ import android.util.Log;
  *
  */
 public class SMSCommandHandler extends BroadcastReceiver implements SMSCommandVisitorInterface{
-
+	
 	private ParsableSMS recMsg;
 	private String other;
 	private Map<String,CommandProtocolFlagsReactionInterface> statusMap = new HashMap<String,CommandProtocolFlagsReactionInterface>();
-	
+	private Context ctx;
 	
 	public SMSCommandHandler(){
 		initStatusMap();
@@ -39,60 +38,39 @@ public class SMSCommandHandler extends BroadcastReceiver implements SMSCommandVi
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		Log.i("[DEBUG_COMMAND]", "[DEBUG_COMMAND] MESSAGGIO RICEVUTO");
+		this.ctx = context;
 		final Bundle bundle = intent.getExtras();
-
 		try {
-			if (bundle != null) {
-				final Object[] pdusObj = (Object[]) bundle.get(SMSUtility.SMS_EXTRA_NAME);
-				SmsMessage message = null;
-				
-				for (int i = 0; i < pdusObj.length; i++) {
-					message = SmsMessage.createFromPdu((byte[]) pdusObj[i]);
-				}
-				this.other = message.getDisplayOriginatingAddress();
-				String myContext = getMyContext(context);
-				
-				try{
-					if(this.statusMap.containsKey(this.statusMap.get(myContext))){
-						this.recMsg = this.statusMap.get(myContext).parse(context, message, this.other);
-						if(this.recMsg != null){//accade solo se devo parsare il comando di m3
-							this.recMsg.handle(this);
-						}
-						//dopo aver inviato il messaggio setto come status il fatto che ho appena inviato quel messaggio (o free)
-						MyPrefFiles.replacePreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + this.other, this.statusMap.get(myContext).getNextSentStatus(), context);
-						
-						//se non sono in status free (e lo sono solo se ho ricevuto m3 o m4) faccio partire il timeout
-						if(!MyPrefFiles.getMyPreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + this.other, context).equals(StatusFree.CURRENT_STATUS)){
-							Timeout.getInstance(context).addTimeout(MyPrefFiles.getMyPreference(MyPrefFiles.MY_NUMBER_FILE, MyPrefFiles.MY_PHONE_NUMBER, context), myContext, SMSUtility.TIMEOUT_LENGTH);
-						}
-					}
-					else{
-						//si ignora il messaggio
-					}
-					
-				}
-				catch(Exception e)
-				{
-					MyPrefFiles.eraseCommandSession(this.other, context);
-					MyPrefFiles.setMyPreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + this.other, StatusFree.CURRENT_STATUS, context);
-				}			
+			final Object[] pdusObj = (Object[]) bundle.get(SMSUtility.SMS_EXTRA_NAME);
+			SmsMessage message = null;	
+			
+			for (int i = 0; i < pdusObj.length; i++) {
+				message = SmsMessage.createFromPdu((byte[]) pdusObj[i]);
 			}
+			this.other = message.getDisplayOriginatingAddress();
+			String myContext = getMyContext(this.ctx);
 			
-			
+			if(this.statusMap.containsKey(this.statusMap.get(myContext))){
+				this.recMsg = this.statusMap.get(myContext).parse(this.ctx, message, this.other);
+				if(this.recMsg != null){//accade solo se devo parsare il comando di m3
+					this.recMsg.handle(this);
+				}
+				//dopo aver inviato il messaggio setto come status il fatto che ho appena inviato quel messaggio (o free)
+				MyPrefFiles.replacePreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + this.other, this.statusMap.get(myContext).getNextSentStatus(), this.ctx);
+					
+				//se non sono in status free (e lo sono solo se ho ricevuto m3 o m4) faccio partire il timeout
+				if(!MyPrefFiles.getMyPreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + this.other, this.ctx).equals(StatusFree.CURRENT_STATUS)){
+					Timeout.getInstance(this.ctx).addTimeout(MyPrefFiles.getMyPreference(MyPrefFiles.MY_NUMBER_FILE, MyPrefFiles.MY_PHONE_NUMBER, this.ctx), myContext, SMSUtility.TIMEOUT_LENGTH);						
+				}
+			}
+			//altrimenti si ignora il messaggio		
 		} 
-		catch (NoSuchPreferenceFoundException e)
-		{
-			//TODO ignorare il messaggio (ovvero fare in modo che non venga "visitato")
-		}
 		catch (Exception e) 
 		{
-			//TODO ignorare il messaggio (ovvero fare in modo che non venga "visitato")
-			e.printStackTrace();
+			SMSUtility.handleErrorOrExceptionInCommandSession(e, this.other, this.ctx);
 		}
 		
 	}
-	
-	
 	
 	private String getMyContext(Context context) throws NoSuchPreferenceFoundException{
 		if(MyPrefFiles.existsPreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + this.other, context)){
@@ -104,37 +82,37 @@ public class SMSCommandHandler extends BroadcastReceiver implements SMSCommandVi
 	@Override
 	public void visit(SirenOnCodeMessage sirenOnCodeMessage) {
 		// TODO Auto-generated method stub
-		
+		Log.i("[DEBUG_COMMAND]", "[DEBUG_COMMAND] SIREN ON RECEIVED");
 	}
 
 	@Override
 	public void visit(SirenOffCodeMessage sirenOffCodeMessage) {
 		// TODO Auto-generated method stub
-		
+		Log.i("[DEBUG_COMMAND]", "[DEBUG_COMMAND] SIREN OFF RECEIVED");
 	}
 
 	@Override
 	public void visit(MarkLostCodeMessage markLostCodeMessage) {
 		// TODO Auto-generated method stub
-		
+		Log.i("[DEBUG_COMMAND]", "[DEBUG_COMMAND] MARK LOST RECEIVED");
 	}
 
 	@Override
 	public void visit(MarkStolenCodeMessage markStolenCodeMessage) {
 		// TODO Auto-generated method stub
-		
+		Log.i("[DEBUG_COMMAND]", "[DEBUG_COMMAND] MARK STOLEN RECEIVED");
 	}
 
 	@Override
 	public void visit(MarkLostOrStolenCodeMessage markLostOrStolenCodeMessage) {
 		// TODO Auto-generated method stub
-		
+		Log.i("[DEBUG_COMMAND]", "[DEBUG_COMMAND] MARK LOST OR STOLEN RECEIVED");
 	}
 
 	@Override
 	public void visit(MarkFoundCodeMessage markFoundCodeMessage) {
 		// TODO Auto-generated method stub
-		
+		Log.i("[DEBUG_COMMAND]", "[DEBUG_COMMAND] MARK FOUND RICEVUTO");
 	}
 
 	@Override
@@ -150,5 +128,4 @@ public class SMSCommandHandler extends BroadcastReceiver implements SMSCommandVi
 		this.statusMap.put(StatusM2Sent.CURRENT_STATUS, new StatusM2Sent());
 		this.statusMap.put(StatusM3Sent.CURRENT_STATUS, new StatusM3Sent());
 	}
-
 }

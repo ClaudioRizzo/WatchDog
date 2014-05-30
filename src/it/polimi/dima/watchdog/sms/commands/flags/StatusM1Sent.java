@@ -11,11 +11,8 @@ import java.security.Security;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
-
 import javax.crypto.spec.SecretKeySpec;
-
 import org.spongycastle.crypto.InvalidCipherTextException;
-
 import it.polimi.dima.watchdog.exceptions.NotECKeyException;
 import it.polimi.dima.watchdog.exceptions.NoSignatureDoneException;
 import it.polimi.dima.watchdog.exceptions.NoSuchPreferenceFoundException;
@@ -27,7 +24,13 @@ import it.polimi.dima.watchdog.utilities.MyPrefFiles;
 import android.content.Context;
 import android.telephony.SmsMessage;
 import android.util.Base64;
+import android.util.Log;
 
+/**
+ * 
+ * @author emanuele
+ *
+ */
 //ho mandato m1, mi aspetto m2, lo parso, invio m3 e passo a m3_sent
 public class StatusM1Sent implements CommandProtocolFlagsReactionInterface {
 
@@ -53,21 +56,23 @@ public class StatusM1Sent implements CommandProtocolFlagsReactionInterface {
 		
 		this.parser = new M2Parser(message.getUserData(), oPub);
 		this.parser.parse();
+		Log.i("[DEBUG_COMMAND]", "[DEBUG_COMMAND] m2 received and parsed");
 		generateAndSendM3(other, context);
+		Log.i("[DEBUG_COMMAND]", "[DEBUG_COMMAND] m3 sent");
 		return null;
 	}
 
 	private void generateAndSendM3(String phoneNumber, Context ctx) throws NoSuchPreferenceFoundException, NoSuchAlgorithmException, InvalidKeySpecException, UnsupportedEncodingException, IllegalStateException, InvalidCipherTextException, NotECKeyException, NoSignatureDoneException, NoSuchProviderException {
-		String key = phoneNumber + MyPrefFiles.TEMP_COMMAND;
-		String key2 = phoneNumber + MyPrefFiles.OTHER_PASSWORD;
-		String key3 = phoneNumber + MyPrefFiles.SESSION_KEY;
-		String key4 = phoneNumber + MyPrefFiles.IV;
+		String commandKey = phoneNumber + MyPrefFiles.TEMP_COMMAND;
+		String passwordKey = phoneNumber + MyPrefFiles.OTHER_PASSWORD;
+		String sessionKeyKey = phoneNumber + MyPrefFiles.SESSION_KEY;
+		String ivKey = phoneNumber + MyPrefFiles.IV;
 		
-		String command = MyPrefFiles.getMyPreference(MyPrefFiles.COMMAND_SESSION, key, ctx);
-		String password = MyPrefFiles.getMyPreference(MyPrefFiles.COMMAND_SESSION, key2, ctx);
-		byte[] aesKey = Base64.decode(MyPrefFiles.getMyPreference(MyPrefFiles.COMMAND_SESSION, key3, ctx), Base64.DEFAULT);
+		String command = MyPrefFiles.getMyPreference(MyPrefFiles.COMMAND_SESSION, commandKey, ctx);
+		String password = MyPrefFiles.getMyPreference(MyPrefFiles.COMMAND_SESSION, passwordKey, ctx);
+		byte[] aesKey = Base64.decode(MyPrefFiles.getMyPreference(MyPrefFiles.COMMAND_SESSION, sessionKeyKey, ctx), Base64.DEFAULT);
 		Key encryptionKey = new SecretKeySpec(aesKey, CryptoUtility.AES_256);
-		byte[] iv = Base64.decode(MyPrefFiles.getMyPreference(MyPrefFiles.COMMAND_SESSION, key4, ctx), Base64.DEFAULT);
+		byte[] iv = Base64.decode(MyPrefFiles.getMyPreference(MyPrefFiles.COMMAND_SESSION, ivKey, ctx), Base64.DEFAULT);
 		
 		byte[] myPriv = Base64.decode(MyPrefFiles.getMyPreference(MyPrefFiles.MY_KEYS, MyPrefFiles.MY_PRIV, ctx), Base64.DEFAULT);
 		KeyFactory keyFactory = KeyFactory.getInstance(CryptoUtility.EC, CryptoUtility.SC);
@@ -75,6 +80,8 @@ public class StatusM1Sent implements CommandProtocolFlagsReactionInterface {
 		
 		CommandSMS sms = new CommandSMS(command.getBytes(), password, mPriv, encryptionKey, phoneNumber, iv);
 		sms.construct();
+		//cancello le preferenze ormai inutili
+		MyPrefFiles.deleteUselessCommandSessionPreferences(phoneNumber, ctx);
 		sms.send();
 	}
 

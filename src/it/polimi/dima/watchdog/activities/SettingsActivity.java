@@ -10,7 +10,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.MenuItem;
 
 /**
- * Setting activity
+ * Settings activity.
  * 
  * @author claudio
  * 
@@ -20,7 +20,6 @@ public class SettingsActivity extends ActionBarActivity implements MyOnListItemC
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		getSupportActionBar().setTitle(R.string.settings_title);
 		setContentView(R.layout.activity_settings_layout);
@@ -29,19 +28,14 @@ public class SettingsActivity extends ActionBarActivity implements MyOnListItemC
 			if (savedInstanceState != null) {
 				return;
 			}
-
 			SettingsFragment mSettingsFrag = new SettingsFragment();
-
-			getSupportFragmentManager().beginTransaction()
-					.add(R.id.settings_container, mSettingsFrag).commit();
+			getSupportFragmentManager().beginTransaction().add(R.id.settings_container, mSettingsFrag).commit();
 		}
-
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-		// Respond to the action bar's Up/Home button
 		case android.R.id.home:
 			NavUtils.navigateUpFromSameTask(this);
 			return true;
@@ -53,7 +47,5 @@ public class SettingsActivity extends ActionBarActivity implements MyOnListItemC
 	public void getClickOnAsscociateNumber() {
 		Intent intent = new Intent(this, AssociateNumberActivity.class);
 		startActivity(intent);
-		
 	}
-
 }

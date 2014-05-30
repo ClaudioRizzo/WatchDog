@@ -7,7 +7,8 @@ import it.polimi.dima.watchdog.sms.socialistMillionaire.SMSPublicKeyVisitorInter
 import it.polimi.dima.watchdog.sms.socialistMillionaire.SocialistMillionaireMessageInterface;
 
 /**
- * A protocol message should extends this class
+ * A protocol message should extends this class.
+ * 
  * @author claudio, emanuele
  *
  */

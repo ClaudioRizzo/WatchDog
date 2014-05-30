@@ -6,7 +6,12 @@ import it.polimi.dima.watchdog.utilities.MyPrefFiles;
 import android.content.Context;
 import android.util.Log;
 
-public class IDontWantToAssociateCodeMessage extends ParsableSMS {
+/**
+ * 
+ * @author emanuele
+ *
+ */
+public class IDontWantToAssociateCodeMessage extends ParsableSMS implements SocialistMillionaireMessageInterface{
 
 	public IDontWantToAssociateCodeMessage(String header, String body) {
 		super(header, body);
@@ -30,5 +35,4 @@ public class IDontWantToAssociateCodeMessage extends ParsableSMS {
 		}
 		Log.i("[DEBUG_SMP]", "[DEBUG_SMP] CODE_6 ACCEPTED");
 	}
-
 }

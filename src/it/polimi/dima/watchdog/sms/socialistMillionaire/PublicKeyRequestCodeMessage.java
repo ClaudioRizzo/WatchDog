@@ -7,14 +7,12 @@ import android.content.Context;
 import android.util.Log;
 
 /**
- * One of the message of the SMP. This message is sent/received when a p_key
- * exchange is attempted
+ * One of the message of the SMP. This message is sent/received when a p_key exchange is attempted.
  * 
- * @author claudio
+ * @author claudio, emanuele
  * 
  */
-public class PublicKeyRequestCodeMessage extends ParsableSMS implements
-		SocialistMillionaireMessageInterface {
+public class PublicKeyRequestCodeMessage extends ParsableSMS implements SocialistMillionaireMessageInterface {
 
 	public PublicKeyRequestCodeMessage(String header, String body) {
 		super(header, body);
@@ -31,12 +29,11 @@ public class PublicKeyRequestCodeMessage extends ParsableSMS implements
 	@Override
 	public void validate(String otherNumber, Context ctx) throws MessageWillBeIgnoredException {
 		//la richiesta va accettata solo se in smp_status non è segnato che ne ho già ricevuta una
-		String key = otherNumber + MyPrefFiles.PUB_KEY_REQUEST_RECEIVED;
-		if(MyPrefFiles.existsPreference(MyPrefFiles.SMP_STATUS, key, ctx)){
+		String publicKeyRequestReceivedKey = otherNumber + MyPrefFiles.PUB_KEY_REQUEST_RECEIVED;
+		if(MyPrefFiles.existsPreference(MyPrefFiles.SMP_STATUS, publicKeyRequestReceivedKey, ctx)){
 			Log.i("[DEBUG_SMP]", "[DEBUG_SMP] CODE_1 REJECTED");
 			throw new MessageWillBeIgnoredException();
 		}
 		Log.i("[DEBUG_SMP]", "[DEBUG_SMP] CODE_1 ACCEPTED");
 	}
-
 }

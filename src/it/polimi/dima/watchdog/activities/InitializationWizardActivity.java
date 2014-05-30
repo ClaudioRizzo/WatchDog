@@ -2,7 +2,6 @@ package it.polimi.dima.watchdog.activities;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
-
 import it.polimi.dima.watchdog.R;
 import it.polimi.dima.watchdog.crypto.ECKeyPairGeneratorWrapper;
 import it.polimi.dima.watchdog.fragments.wizard.InitializeWizardFragment;
@@ -22,9 +21,7 @@ import android.util.Base64;
  * @author claudio, emanuele
  *
  */
-public class InitializationWizardActivity extends ActionBarActivity implements
-		OnPasswordInizializedListener {
-
+public class InitializationWizardActivity extends ActionBarActivity implements OnPasswordInizializedListener {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -32,18 +29,13 @@ public class InitializationWizardActivity extends ActionBarActivity implements
 		setContentView(R.layout.activity_initialize_wizard);
 
 		if (findViewById(R.id.initialize_wizard_container) != null) {
-
 			if (savedInstanceState != null) {
 				return;
 			}
 		}
-
 		InitializeWizardFragment mIniWizFrag = new InitializeWizardFragment();
-		getSupportFragmentManager().beginTransaction()
-				.add(R.id.initialize_wizard_container, mIniWizFrag).commit();
-
+		getSupportFragmentManager().beginTransaction().add(R.id.initialize_wizard_container, mIniWizFrag).commit();
 	}
-
 
 	@Override
 	public void getWizardChanges(boolean wizardDone, String hashToSave, String salt) throws NoSuchAlgorithmException, NoSuchProviderException {
@@ -55,7 +47,6 @@ public class InitializationWizardActivity extends ActionBarActivity implements
 		SharedPreferences.Editor editor3 = wizard.edit();
 		ECKeyPairGeneratorWrapper mkeyGen = new ECKeyPairGeneratorWrapper();
 		mkeyGen.generateKeyPair();
-		
 		byte[] pubKeyBytes = mkeyGen.getPublicKey().getEncoded();
 		byte[] privateKeyBytes = mkeyGen.getPrivateKey().getEncoded();
 		String pubKey = Base64.encodeToString(pubKeyBytes, Base64.DEFAULT);
@@ -67,7 +58,6 @@ public class InitializationWizardActivity extends ActionBarActivity implements
 		editor2.putString(MyPrefFiles.MY_PASSWORD_HASH, hashToSave);
 		editor2.putString(MyPrefFiles.MY_PASSWORD_SALT, salt);
 		editor3.putBoolean(MyPrefFiles.WIZARD_DONE, wizardDone);
-		
 		editor1.commit();
 		editor2.commit();
 		editor3.commit();
@@ -76,7 +66,5 @@ public class InitializationWizardActivity extends ActionBarActivity implements
 		Intent intent = new Intent(this, MainActivity.class);
 		startActivity(intent);
 		finish();
-	}
-	
-	
+	}	
 }

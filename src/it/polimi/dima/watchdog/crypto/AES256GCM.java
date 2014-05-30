@@ -1,17 +1,13 @@
 package it.polimi.dima.watchdog.crypto;
 
 import it.polimi.dima.watchdog.utilities.CryptoUtility;
-
 import java.security.Key;
-
 import javax.crypto.spec.SecretKeySpec;
-
 import org.spongycastle.crypto.InvalidCipherTextException;
 import org.spongycastle.crypto.engines.AESFastEngine;
 import org.spongycastle.crypto.modes.GCMBlockCipher;
 import org.spongycastle.crypto.params.AEADParameters;
 import org.spongycastle.crypto.params.KeyParameter;
-
 import android.util.Base64;
 
 /**
@@ -107,7 +103,6 @@ public class AES256GCM implements Crypto{
 		int ciphertextLength = cipher.processBytes(this.plaintext, 0, this.plaintext.length, ciphertext, 0);
 		ciphertextLength += cipher.doFinal(ciphertext, ciphertextLength);
 		this.ciphertext = ciphertext;
-		
 		return Base64.encodeToString(this.ciphertext, Base64.DEFAULT);
 	}
 	
@@ -124,8 +119,6 @@ public class AES256GCM implements Crypto{
         int plaintextLength = cipher.processBytes(this.ciphertext, 0, this.ciphertext.length, plaintext, 0);
         plaintextLength += cipher.doFinal(plaintext, plaintextLength);
         this.plaintext = plaintext;
-        
         return this.plaintext;
 	}
-
 }

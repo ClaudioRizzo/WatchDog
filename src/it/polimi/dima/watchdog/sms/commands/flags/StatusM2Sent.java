@@ -8,14 +8,12 @@ import java.security.PublicKey;
 import java.security.Security;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.X509EncodedKeySpec;
-
 import javax.crypto.spec.SecretKeySpec;
-
 import org.spongycastle.crypto.InvalidCipherTextException;
-
 import android.content.Context;
 import android.telephony.SmsMessage;
 import android.util.Base64;
+import android.util.Log;
 import it.polimi.dima.watchdog.exceptions.ArbitraryMessageReceivedException;
 import it.polimi.dima.watchdog.exceptions.ErrorInSignatureCheckingException;
 import it.polimi.dima.watchdog.exceptions.NoSuchPreferenceFoundException;
@@ -59,7 +57,7 @@ public class StatusM2Sent implements CommandProtocolFlagsReactionInterface {
 		this.parser = popolateParser(message, context, other);
 		this.parser.decrypt(); //decritta, verifica firma e password e mette in "plaintext" il codice
 		this.recMsg = this.commandFactory.getMessage(SMSUtility.bytesToHex(this.parser.getPlaintext()));
-			
+		Log.i("[DEBUG_COMMAND]", "[DEBUG_COMMAND] m3 received and parsed");	
 		return this.recMsg;	
 	}
 	

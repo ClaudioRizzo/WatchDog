@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/linear_layout_pending_list"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/text_view_pending1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center|right" />
+
+    <EditText
+        android:id="@+id/edit_text_secret_answer"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:hint="Secret Answer" />
+
+    <EditText
+        android:id="@+id/edit_text_my_secret_question"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:hint="Your Secret Question" />
+
+    <EditText
+        android:id="@+id/edit_text_my_secret_answer"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:hint="Your Secret Answer" />
+
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/linear_layout_pending_list"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/button_accept_smp"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="accept" />
+
+        <Button
+            android:id="@+id/button_refuse_smp"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="refuse" />
+    </LinearLayout>
+
+</LinearLayout>

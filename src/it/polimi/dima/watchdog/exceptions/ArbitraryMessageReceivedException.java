@@ -1,10 +1,12 @@
 package it.polimi.dima.watchdog.exceptions;
 
+/**
+ * 
+ * @author emanuele
+ *
+ */
 public class ArbitraryMessageReceivedException extends Exception {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -1124578953332366528L;
 	private String message;
 	
@@ -13,8 +15,8 @@ public class ArbitraryMessageReceivedException extends Exception {
 	}
 	
 	public ArbitraryMessageReceivedException(){}
+	
 	public ArbitraryMessageReceivedException(String message){
 		this.message = message;
 	}
-
 }

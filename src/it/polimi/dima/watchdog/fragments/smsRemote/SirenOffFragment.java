@@ -7,6 +7,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+/**
+ * 
+ * @author claudio
+ *
+ */
 public class SirenOffFragment extends Fragment {
 
 	@Override

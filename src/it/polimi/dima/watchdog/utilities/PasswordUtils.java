@@ -12,7 +12,6 @@ import java.security.SecureRandom;
  *
  */
 public class PasswordUtils {
-
 	/**
 	 * Codifica Utf-8
 	 */
@@ -60,7 +59,8 @@ public class PasswordUtils {
 	}
 
 	/**
-	 * Compara due stringhe
+	 * Compara due stringhe.
+	 * 
 	 * @param p1 : la prima stringa
 	 * @param p2 : la seconda stringa
 	 * @return true se le stringhe sono uguali, false altrimenti
@@ -71,7 +71,5 @@ public class PasswordUtils {
 		} else {
 			return false;
 		}
-
 	}
-
 }
