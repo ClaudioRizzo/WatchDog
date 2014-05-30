@@ -2,9 +2,13 @@ package it.polimi.dima.watchdog.utilities;
 
 import it.polimi.dima.watchdog.exceptions.ArbitraryMessageReceivedException;
 import it.polimi.dima.watchdog.exceptions.MessageWillBeIgnoredException;
+import it.polimi.dima.watchdog.exceptions.NonExistentTimeoutException;
 import it.polimi.dima.watchdog.sms.ParsableSMS;
 import it.polimi.dima.watchdog.sms.commands.flags.StatusFree;
+import it.polimi.dima.watchdog.sms.timeout.Timeout;
+
 import java.util.regex.Pattern;
+
 import android.content.Context;
 import android.telephony.SmsManager;
 import android.util.Base64;
@@ -126,7 +130,10 @@ public class SMSUtility {
 	 * Porta usata esclusivamente per i test (TODO aggiungere al manifest le classi che testano)
 	 */
 	public static final short TEST_PORT = (short) 777;
-	
+	/**
+	 * Indicatore del mio telefono per il timeout
+	 */
+	public static final String MY_PHONE = "my_phone";
 	
 	/**
 	 * Converte un array byte[] nella corrispondente stringa esadecimale.
@@ -274,6 +281,12 @@ public class SMSUtility {
 	 * @param ctx : il contesto corrente
 	 */
 	public static void handleErrorOrExceptionInCommandSession(Exception e, String other, Context ctx){
+		try{
+			Timeout.getInstance(ctx).removeTimeout(SMSUtility.MY_PHONE, other);
+		}
+		catch(NonExistentTimeoutException exc){
+			//non serve fare niente
+		}
 		if(!(e instanceof MessageWillBeIgnoredException)){
 			Log.i("[DEBUG_SMP]", "CAUGHT ERROR OR EXCEPTION");
 			

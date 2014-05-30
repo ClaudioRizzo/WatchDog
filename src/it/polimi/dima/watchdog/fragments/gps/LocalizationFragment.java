@@ -7,12 +7,14 @@ import java.security.PrivateKey;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.util.Random;
+
 import it.polimi.dima.watchdog.R;
 import it.polimi.dima.watchdog.crypto.AESKeyGenerator;
 import it.polimi.dima.watchdog.crypto.ECDSA_Signature;
 import it.polimi.dima.watchdog.exceptions.NoSignatureDoneException;
 import it.polimi.dima.watchdog.exceptions.NoSuchPreferenceFoundException;
 import it.polimi.dima.watchdog.exceptions.NotECKeyException;
+import it.polimi.dima.watchdog.sms.timeout.Timeout;
 import it.polimi.dima.watchdog.utilities.CryptoUtility;
 import it.polimi.dima.watchdog.utilities.MyPrefFiles;
 import it.polimi.dima.watchdog.utilities.SMSUtility;
@@ -61,6 +63,7 @@ public class LocalizationFragment extends Fragment implements OnClickListener {
 			storeDataToReuseInM3(insertedPassword, command);
 			byte[] body = getBody();
 			SMSUtility.sendMessage(this.otherNumber, SMSUtility.COMMAND_PORT, SMSUtility.M1_HEADER.getBytes(), body);
+			Timeout.getInstance(this.ctx).addTimeout(SMSUtility.MY_PHONE, this.otherNumber, SMSUtility.TIMEOUT_LENGTH);
 		}
 		catch (Exception e){
 			SMSUtility.handleErrorOrExceptionInCommandSession(e, this.otherNumber, this.ctx);

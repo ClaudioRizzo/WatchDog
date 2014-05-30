@@ -14,6 +14,7 @@ import it.polimi.dima.watchdog.sms.ParsableSMS;
 import it.polimi.dima.watchdog.sms.timeout.Timeout;
 import it.polimi.dima.watchdog.utilities.CryptoUtility;
 import it.polimi.dima.watchdog.utilities.MyPrefFiles;
+import it.polimi.dima.watchdog.utilities.SMSUtility;
 import android.content.Context;
 import android.telephony.SmsMessage;
 import android.util.Base64;
@@ -40,7 +41,7 @@ public class StatusM3Sent implements CommandProtocolFlagsReactionInterface {
 	
 	@Override
 	public ParsableSMS parse(Context context, SmsMessage message, String other) throws NonExistentTimeoutException, NoSuchPreferenceFoundException, NoSuchAlgorithmException, NoSuchProviderException, InvalidKeySpecException  {
-		Timeout.getInstance(context).removeTimeout(MyPrefFiles.getMyPreference(MyPrefFiles.MY_NUMBER_FILE, MyPrefFiles.MY_PHONE_NUMBER, context) /*TODO inizializzarlo nel wizard*/, other);
+		Timeout.getInstance(context).removeTimeout(SMSUtility.MY_PHONE, other);
 		MyPrefFiles.replacePreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + other, StatusM3Sent.STATUS_RECEIVED, context);
 		
 		byte[] publicKey = Base64.decode(MyPrefFiles.getMyPreference(MyPrefFiles.KEYRING, other, context),Base64.DEFAULT);

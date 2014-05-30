@@ -51,7 +51,7 @@ public class StatusM2Sent implements CommandProtocolFlagsReactionInterface {
 	
 	@Override
 	public ParsableSMS parse(Context context, SmsMessage message, String other) throws IllegalStateException, InvalidCipherTextException, ArbitraryMessageReceivedException, ErrorInSignatureCheckingException, NoSuchAlgorithmException, InvalidKeySpecException, NoSuchPreferenceFoundException, NonExistentTimeoutException, NotECKeyException, NoSuchProviderException {
-		Timeout.getInstance(context).removeTimeout(MyPrefFiles.getMyPreference(MyPrefFiles.MY_NUMBER_FILE, MyPrefFiles.MY_PHONE_NUMBER, context) /*TODO inizializzarlo nel wizard*/, other);
+		Timeout.getInstance(context).removeTimeout(SMSUtility.MY_PHONE, other);
 		MyPrefFiles.replacePreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + other, StatusM2Sent.STATUS_RECEIVED, context);
 					
 		this.parser = popolateParser(message, context, other);

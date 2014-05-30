@@ -60,7 +60,7 @@ public class SMSCommandHandler extends BroadcastReceiver implements SMSCommandVi
 					
 				//se non sono in status free (e lo sono solo se ho ricevuto m3 o m4) faccio partire il timeout
 				if(!MyPrefFiles.getMyPreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + this.other, this.ctx).equals(StatusFree.CURRENT_STATUS)){
-					Timeout.getInstance(this.ctx).addTimeout(MyPrefFiles.getMyPreference(MyPrefFiles.MY_NUMBER_FILE, MyPrefFiles.MY_PHONE_NUMBER, this.ctx), myContext, SMSUtility.TIMEOUT_LENGTH);						
+					Timeout.getInstance(this.ctx).addTimeout(SMSUtility.MY_PHONE, this.other, SMSUtility.TIMEOUT_LENGTH);						
 				}
 			}
 			//altrimenti si ignora il messaggio		
