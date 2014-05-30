@@ -85,6 +85,10 @@ public class MyPrefFiles {
 	 */
 	public static final String SMP_STATUS = "smp_status";
 	
+	/**
+	 * File in cui vengono salvati i riferimenti ai timeout attivi.
+	 */
+	public static final String TIMEOUTS_IDS = "timeouts_ids";
 	
 	
 	
@@ -133,6 +137,12 @@ public class MyPrefFiles {
 	 * valore chiave parziale per la domanda segreta a cui sarà premesso il numero dell'altro.  
 	 */
 	public static final String SECRET_QUESTION = "secret_question";
+	
+	/**
+	 * valore chiave parziale per un timeout (verranno messi in coda a questa chiave i numeri di aspettante
+	 * e aspettato.
+	 */
+	public static final String TIMEOUT_ID = "timeout_id";
 	
 	
 	

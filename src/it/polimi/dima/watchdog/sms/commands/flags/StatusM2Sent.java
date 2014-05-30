@@ -17,11 +17,10 @@ import android.util.Log;
 import it.polimi.dima.watchdog.exceptions.ArbitraryMessageReceivedException;
 import it.polimi.dima.watchdog.exceptions.ErrorInSignatureCheckingException;
 import it.polimi.dima.watchdog.exceptions.NoSuchPreferenceFoundException;
-import it.polimi.dima.watchdog.exceptions.NonExistentTimeoutException;
 import it.polimi.dima.watchdog.exceptions.NotECKeyException;
 import it.polimi.dima.watchdog.sms.ParsableSMS;
 import it.polimi.dima.watchdog.sms.commands.CommandFactory;
-import it.polimi.dima.watchdog.sms.timeout.Timeout;
+import it.polimi.dima.watchdog.sms.timeout.TimeoutWrapper;
 import it.polimi.dima.watchdog.utilities.CryptoUtility;
 import it.polimi.dima.watchdog.utilities.MyPrefFiles;
 import it.polimi.dima.watchdog.utilities.SMSUtility;
@@ -50,8 +49,8 @@ public class StatusM2Sent implements CommandProtocolFlagsReactionInterface {
 	
 	
 	@Override
-	public ParsableSMS parse(Context context, SmsMessage message, String other) throws IllegalStateException, InvalidCipherTextException, ArbitraryMessageReceivedException, ErrorInSignatureCheckingException, NoSuchAlgorithmException, InvalidKeySpecException, NoSuchPreferenceFoundException, NonExistentTimeoutException, NotECKeyException, NoSuchProviderException {
-		Timeout.getInstance(context).removeTimeout(SMSUtility.MY_PHONE, other);
+	public ParsableSMS parse(Context context, SmsMessage message, String other) throws IllegalStateException, InvalidCipherTextException, ArbitraryMessageReceivedException, ErrorInSignatureCheckingException, NoSuchAlgorithmException, InvalidKeySpecException, NoSuchPreferenceFoundException, NotECKeyException, NoSuchProviderException {
+		TimeoutWrapper.removeTimeout(SMSUtility.MY_PHONE, other, context);
 		MyPrefFiles.replacePreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + other, StatusM2Sent.STATUS_RECEIVED, context);
 					
 		this.parser = popolateParser(message, context, other);

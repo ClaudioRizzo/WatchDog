@@ -10,7 +10,6 @@ import java.security.Security;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
-
 import android.content.Context;
 import android.telephony.SmsMessage;
 import android.util.Base64;
@@ -19,12 +18,11 @@ import it.polimi.dima.watchdog.crypto.AESKeyGenerator;
 import it.polimi.dima.watchdog.crypto.ECDSA_Signature;
 import it.polimi.dima.watchdog.exceptions.ArbitraryMessageReceivedException;
 import it.polimi.dima.watchdog.exceptions.ErrorInSignatureCheckingException;
-import it.polimi.dima.watchdog.exceptions.NonExistentTimeoutException;
 import it.polimi.dima.watchdog.exceptions.NotECKeyException;
 import it.polimi.dima.watchdog.exceptions.NoSignatureDoneException;
 import it.polimi.dima.watchdog.exceptions.NoSuchPreferenceFoundException;
 import it.polimi.dima.watchdog.sms.ParsableSMS;
-import it.polimi.dima.watchdog.sms.timeout.Timeout;
+import it.polimi.dima.watchdog.sms.timeout.TimeoutWrapper;
 import it.polimi.dima.watchdog.utilities.CryptoUtility;
 import it.polimi.dima.watchdog.utilities.MyPrefFiles;
 import it.polimi.dima.watchdog.utilities.SMSUtility;
@@ -49,8 +47,8 @@ public class StatusFree implements CommandProtocolFlagsReactionInterface{
 	
 	
 	@Override
-	public ParsableSMS parse(Context context, SmsMessage message, String other) throws NonExistentTimeoutException, NoSuchPreferenceFoundException, InvalidKeySpecException, NoSuchAlgorithmException, NoSuchProviderException, ArbitraryMessageReceivedException, ErrorInSignatureCheckingException, NotECKeyException, InvalidKeyException, NoSignatureDoneException  {//voglio poterle catchare tutte
-		Timeout.getInstance(context).removeTimeout(MyPrefFiles.getMyPreference(MyPrefFiles.MY_NUMBER_FILE, MyPrefFiles.MY_PHONE_NUMBER, context) /*TODO inizializzarlo nel wizard*/, other);
+	public ParsableSMS parse(Context context, SmsMessage message, String other) throws NoSuchPreferenceFoundException, InvalidKeySpecException, NoSuchAlgorithmException, NoSuchProviderException, ArbitraryMessageReceivedException, ErrorInSignatureCheckingException, NotECKeyException, InvalidKeyException, NoSignatureDoneException  {//voglio poterle catchare tutte
+		TimeoutWrapper.removeTimeout(SMSUtility.MY_PHONE, other, context);
 		MyPrefFiles.replacePreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + other, StatusFree.STATUS_RECEIVED, context);
 		
 		byte[] publicKey = Base64.decode(MyPrefFiles.getMyPreference(MyPrefFiles.KEYRING, other, context),Base64.DEFAULT);

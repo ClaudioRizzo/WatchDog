@@ -234,7 +234,7 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 				MyPrefFiles.setMyPreference(MyPrefFiles.SMP_STATUS, preferenceKey, this.other, this.ctx);
 			}
 			else{
-				Log.i("[DEBUG_SMP]", "[DEBUG_SMP] FULL_SMP_SUCCESSFUL "+MyPrefFiles.getMyPreference(MyPrefFiles.KEYRING, this.other, ctx));
+				Log.i("[DEBUG_SMP]", "[DEBUG_SMP] FULL_SMP_SUCCESSFUL " + MyPrefFiles.getMyPreference(MyPrefFiles.KEYRING, this.other, this.ctx));
 			
 				//TODO notificare il fragment
 			}

@@ -11,20 +11,16 @@ import java.security.Security;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
-
 import javax.crypto.spec.SecretKeySpec;
-
 import org.spongycastle.crypto.InvalidCipherTextException;
-
 import it.polimi.dima.watchdog.exceptions.ArbitraryMessageReceivedException;
 import it.polimi.dima.watchdog.exceptions.ErrorInSignatureCheckingException;
-import it.polimi.dima.watchdog.exceptions.NonExistentTimeoutException;
 import it.polimi.dima.watchdog.exceptions.NotECKeyException;
 import it.polimi.dima.watchdog.exceptions.NoSignatureDoneException;
 import it.polimi.dima.watchdog.exceptions.NoSuchPreferenceFoundException;
 import it.polimi.dima.watchdog.sms.ParsableSMS;
 import it.polimi.dima.watchdog.sms.commands.CommandSMS;
-import it.polimi.dima.watchdog.sms.timeout.Timeout;
+import it.polimi.dima.watchdog.sms.timeout.TimeoutWrapper;
 import it.polimi.dima.watchdog.utilities.CryptoUtility;
 import it.polimi.dima.watchdog.utilities.MyPrefFiles;
 import it.polimi.dima.watchdog.utilities.SMSUtility;
@@ -53,8 +49,8 @@ public class StatusM1Sent implements CommandProtocolFlagsReactionInterface {
 	
 	
 	@Override
-	public ParsableSMS parse(Context context, SmsMessage message, String other) throws NonExistentTimeoutException, NoSuchPreferenceFoundException, NoSuchAlgorithmException, NoSuchProviderException, InvalidKeySpecException, ArbitraryMessageReceivedException, ErrorInSignatureCheckingException, NotECKeyException, UnsupportedEncodingException, IllegalStateException, InvalidCipherTextException, NoSignatureDoneException  {
-		Timeout.getInstance(context).removeTimeout(SMSUtility.MY_PHONE, other);
+	public ParsableSMS parse(Context context, SmsMessage message, String other) throws NoSuchPreferenceFoundException, NoSuchAlgorithmException, NoSuchProviderException, InvalidKeySpecException, ArbitraryMessageReceivedException, ErrorInSignatureCheckingException, NotECKeyException, UnsupportedEncodingException, IllegalStateException, InvalidCipherTextException, NoSignatureDoneException  {
+		TimeoutWrapper.removeTimeout(SMSUtility.MY_PHONE, other, context);
 		MyPrefFiles.replacePreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + other, StatusM1Sent.STATUS_RECEIVED, context);
 		
 		byte[] publicKey = Base64.decode(MyPrefFiles.getMyPreference(MyPrefFiles.KEYRING, other, context),Base64.DEFAULT);

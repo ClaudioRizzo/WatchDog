@@ -2,6 +2,7 @@ package it.polimi.dima.watchdog.sms.commands;
 
 import java.util.HashMap;
 import java.util.Map;
+
 import it.polimi.dima.watchdog.exceptions.NoSuchPreferenceFoundException;
 import it.polimi.dima.watchdog.sms.ParsableSMS;
 import it.polimi.dima.watchdog.sms.commands.flags.CommandProtocolFlagsReactionInterface;
@@ -9,7 +10,7 @@ import it.polimi.dima.watchdog.sms.commands.flags.StatusFree;
 import it.polimi.dima.watchdog.sms.commands.flags.StatusM1Sent;
 import it.polimi.dima.watchdog.sms.commands.flags.StatusM2Sent;
 import it.polimi.dima.watchdog.sms.commands.flags.StatusM3Sent;
-import it.polimi.dima.watchdog.sms.timeout.Timeout;
+import it.polimi.dima.watchdog.sms.timeout.TimeoutWrapper;
 import it.polimi.dima.watchdog.utilities.MyPrefFiles;
 import it.polimi.dima.watchdog.utilities.SMSUtility;
 import android.content.BroadcastReceiver;
@@ -60,7 +61,7 @@ public class SMSCommandHandler extends BroadcastReceiver implements SMSCommandVi
 					
 				//se non sono in status free (e lo sono solo se ho ricevuto m3 o m4) faccio partire il timeout
 				if(!MyPrefFiles.getMyPreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + this.other, this.ctx).equals(StatusFree.CURRENT_STATUS)){
-					Timeout.getInstance(this.ctx).addTimeout(SMSUtility.MY_PHONE, this.other, SMSUtility.TIMEOUT_LENGTH);						
+					TimeoutWrapper.addTimeout(SMSUtility.MY_PHONE, this.other, this.ctx);						
 				}
 			}
 			//altrimenti si ignora il messaggio		
