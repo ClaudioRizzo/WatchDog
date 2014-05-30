@@ -20,15 +20,6 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-<<<<<<< HEAD
-//TODO: Richiedere la domanda segreta da settare 
-=======
-/**
- * 
- * @author claudio, emanuele
- *
- */
->>>>>>> fa3b01f8674c2aaa0eab656454d5ed2b998dbdc3
 public class PendingRequestsAdapter extends BaseAdapter {
 
 	private Context ctx;
