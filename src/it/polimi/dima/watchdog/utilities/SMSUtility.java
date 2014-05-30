@@ -290,6 +290,9 @@ public class SMSUtility {
 			MyPrefFiles.setMyPreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + other, StatusFree.CURRENT_STATUS, ctx);
 			// TODO notificare il fragment di quello che è successo
 		}
+		else{
+			Log.i("[DEBUG_COMMAND]", "[DEBUG_COMMAND] messaggio ignorato!!!");
+		}
 	}
 	
 	
