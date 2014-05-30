@@ -4,6 +4,7 @@ import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.PrivateKey;
+import java.security.Security;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.util.Random;
@@ -41,6 +42,7 @@ public class LocalizationFragment extends Fragment implements OnClickListener {
 	
 	@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		Security.addProvider(new org.spongycastle.jce.provider.BouncyCastleProvider());
 		this.ctx = getActivity().getApplicationContext();
         View v = inflater.inflate(R.layout.fragment_localization, container, false);
         Button mButton = (Button) v.findViewById(R.id.button_localization);
