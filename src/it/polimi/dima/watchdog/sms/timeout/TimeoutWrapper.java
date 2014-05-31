@@ -19,6 +19,8 @@ import android.content.Intent;
  */
 public class TimeoutWrapper {
 	
+	private static int PENDING_INTENT_ID;
+	
 	/**
 	 * Aggiunge un timeout in cui waiting aspetta un messaggio da parte di waited.
 	 * 
@@ -28,15 +30,10 @@ public class TimeoutWrapper {
 	 * @throws NoSuchAlgorithmException
 	 */
 	public static void addTimeout(String waiting, String waited, Context ctx) throws NoSuchAlgorithmException{
-		Intent intent = new Intent(ctx, TimeoutManagement.class);
-		intent.putExtra(SMSUtility.OTHER_PHONE, waited);
-		SecureRandom secureRandom = SecureRandom.getInstance(CryptoUtility.SHA1_PRNG);
-		int pendingIntentId = secureRandom.nextInt(Integer.MAX_VALUE);
-		PendingIntent pendingIntent = PendingIntent.getBroadcast(ctx, pendingIntentId, intent, PendingIntent.FLAG_CANCEL_CURRENT);
-		AlarmManager alarmManager = (AlarmManager) ctx.getSystemService(Context.ALARM_SERVICE);
-		alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, (long) 120000, pendingIntent);
-		String timeoutKey = MyPrefFiles.TIMEOUT_ID + waiting + waited;
-		MyPrefFiles.setMyPreference(MyPrefFiles.TIMEOUTS_IDS, timeoutKey, String.valueOf(pendingIntentId), ctx);
+		Intent intent = TimeoutWrapper.createAndFillIntent(waited, ctx);
+		PendingIntent pendingIntent = TimeoutWrapper.createPendingIntent(ctx, intent);
+		TimeoutWrapper.createTimeout(ctx, pendingIntent);
+		TimeoutWrapper.storeTimeoutId(waiting, waited, ctx, TimeoutWrapper.PENDING_INTENT_ID);
 	}
 	
 	/**
@@ -50,9 +47,38 @@ public class TimeoutWrapper {
 	 */
 	public static void removeTimeout(String waiting, String waited, Context ctx) throws NumberFormatException, NoSuchPreferenceFoundException {
 		Intent intent = new Intent(ctx, TimeoutManagement.class);
+		PendingIntent pendingIntent = TimeoutWrapper.createPendingIntentForTimeoutDeletion(waiting, waited, ctx, intent);
+		TimeoutWrapper.cancelTimeout(ctx, pendingIntent);
+	}
+	
+	private static Intent createAndFillIntent(String waited, Context ctx){
+		Intent intent = new Intent(ctx, TimeoutManagement.class);
+		intent.putExtra(SMSUtility.OTHER_PHONE, waited);
+		return intent;
+	}
+	
+	private static PendingIntent createPendingIntent(Context ctx, Intent intent) throws NoSuchAlgorithmException{
+		TimeoutWrapper.PENDING_INTENT_ID = SecureRandom.getInstance(CryptoUtility.SHA1_PRNG).nextInt(Integer.MAX_VALUE);
+		return PendingIntent.getBroadcast(ctx, TimeoutWrapper.PENDING_INTENT_ID, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+	}
+	
+	private static void createTimeout(Context ctx, PendingIntent pendingIntent){
+		AlarmManager alarmManager = (AlarmManager) ctx.getSystemService(Context.ALARM_SERVICE);
+		alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, (long) 120000, pendingIntent);
+	}
+	
+	private static void storeTimeoutId(String waiting, String waited, Context ctx, int pendingIntentId){
 		String timeoutKey = MyPrefFiles.TIMEOUT_ID + waiting + waited;
-		int pendingIntentId = Integer.valueOf(MyPrefFiles.getMyPreference(MyPrefFiles.TIMEOUTS_IDS, timeoutKey, ctx)).intValue();
-		PendingIntent pendingIntent = PendingIntent.getBroadcast(ctx, pendingIntentId, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+		MyPrefFiles.setMyPreference(MyPrefFiles.TIMEOUTS_IDS, timeoutKey, String.valueOf(pendingIntentId), ctx);
+	}
+	
+	private static PendingIntent createPendingIntentForTimeoutDeletion(String waiting, String waited, Context ctx, Intent intent) throws NumberFormatException, NoSuchPreferenceFoundException{
+		String timeoutKey = MyPrefFiles.TIMEOUT_ID + waiting + waited;
+		TimeoutWrapper.PENDING_INTENT_ID = Integer.valueOf(MyPrefFiles.getMyPreference(MyPrefFiles.TIMEOUTS_IDS, timeoutKey, ctx)).intValue();
+		return PendingIntent.getBroadcast(ctx, TimeoutWrapper.PENDING_INTENT_ID, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+	}
+	
+	private static void cancelTimeout(Context ctx, PendingIntent pendingIntent){
 		AlarmManager alarmManager = (AlarmManager) ctx.getSystemService(Context.ALARM_SERVICE);
 		alarmManager.cancel(pendingIntent);
 	}
