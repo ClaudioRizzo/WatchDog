@@ -98,7 +98,7 @@ public class SMSUtility {
 	/**
 	 * LocateCode (for commands only)
 	 */
-	public static String LOCATE = "C0DE01FF";
+	public static String LOCATE = "C0DE07FF";
 	
 	/**
 	 * Header del primo messaggio della sessione di comando.
