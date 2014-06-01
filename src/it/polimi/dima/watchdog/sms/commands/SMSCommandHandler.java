@@ -51,6 +51,7 @@ public class SMSCommandHandler extends BroadcastReceiver implements SMSCommandVi
 			this.other = message.getDisplayOriginatingAddress();
 			String myContext = getMyContext(this.ctx);
 			
+			
 			if(this.statusMap.containsKey(this.statusMap.get(myContext))){
 				this.recMsg = this.statusMap.get(myContext).parse(this.ctx, message, this.other);
 				if(this.recMsg != null){//accade solo se devo parsare il comando di m3
