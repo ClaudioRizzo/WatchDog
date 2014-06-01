@@ -5,7 +5,6 @@ import it.polimi.dima.watchdog.crypto.ECDSA_Signature;
 import it.polimi.dima.watchdog.exceptions.NotECKeyException;
 import it.polimi.dima.watchdog.exceptions.NoSignatureDoneException;
 import it.polimi.dima.watchdog.utilities.CryptoUtility;
-import it.polimi.dima.watchdog.utilities.PasswordUtils;
 import it.polimi.dima.watchdog.utilities.SMSUtility;
 
 import java.io.UnsupportedEncodingException;
@@ -32,7 +31,7 @@ public class CommandSMS {
 	private PrivateKey myPrivateKey; //chiave per la firma digitale
 	private Key encryptionKey; //chiave dell'AES
 	private byte[] text;
-	private String password;
+	private byte[] password; //già con sale
 	private byte[] passwordHash; //hash(password)
 	private byte[] finalMessage; // hash(password) || text
 	private byte[] signature; //firma digitale
@@ -52,7 +51,7 @@ public class CommandSMS {
 	/**
 	 * Costruttore con testo e password alla fine del quale il messaggio sarà pronto per essere spedito.
 	 */
-	public CommandSMS(byte[] text, String password, PrivateKey mPriv, Key key, String dest, byte[] iv){
+	public CommandSMS(byte[] text, byte[] password, PrivateKey mPriv, Key key, String dest, byte[] iv){
 		this.text = text;
 		this.password = password;
 		this.myPrivateKey = mPriv;
@@ -76,7 +75,7 @@ public class CommandSMS {
 		if(this.finalMessage == null && this.text != null){
 			MessageDigest digest = MessageDigest.getInstance(CryptoUtility.SHA_256);
 			//l'hash sarà lungo 256 bit
-			this.passwordHash = digest.digest(this.password.getBytes(PasswordUtils.UTF_8));
+			this.passwordHash = digest.digest(this.password);
 			
 			//in pratica si crea una struttura hash(password) || text
 			//Sapendo che l'hash è lungo 256 bit, è comodo alla ricezione separare le due parti se l'hash...

@@ -76,7 +76,12 @@ public class StatusM1Sent implements CommandProtocolFlagsReactionInterface {
 		String ivKey = phoneNumber + MyPrefFiles.IV;
 		
 		byte[] command = Base64.decode(MyPrefFiles.getMyPreference(MyPrefFiles.COMMAND_SESSION, commandKey, ctx), Base64.DEFAULT);
-		String password = MyPrefFiles.getMyPreference(MyPrefFiles.COMMAND_SESSION, passwordKey, ctx);
+		byte[] password = MyPrefFiles.getMyPreference(MyPrefFiles.COMMAND_SESSION, passwordKey, ctx).getBytes();
+		byte[] passwordSalt = Base64.decode(MyPrefFiles.getMyPreference(MyPrefFiles.HASHRING, phoneNumber, ctx), Base64.DEFAULT);
+		byte[] saltedPassword = new byte[password.length + passwordSalt.length];
+		System.arraycopy(password, 0, saltedPassword, 0, password.length);
+		System.arraycopy(passwordSalt, 0, saltedPassword, password.length, passwordSalt.length);
+		
 		byte[] aesKey = Base64.decode(MyPrefFiles.getMyPreference(MyPrefFiles.COMMAND_SESSION, sessionKeyKey, ctx), Base64.DEFAULT);
 		Key encryptionKey = new SecretKeySpec(aesKey, CryptoUtility.AES_256);
 		byte[] iv = Base64.decode(MyPrefFiles.getMyPreference(MyPrefFiles.COMMAND_SESSION, ivKey, ctx), Base64.DEFAULT);
@@ -85,7 +90,7 @@ public class StatusM1Sent implements CommandProtocolFlagsReactionInterface {
 		KeyFactory keyFactory = KeyFactory.getInstance(CryptoUtility.EC, CryptoUtility.SC);
 		PrivateKey mPriv = keyFactory.generatePrivate(new PKCS8EncodedKeySpec(myPriv));
 		
-		CommandSMS sms = new CommandSMS(command, password, mPriv, encryptionKey, phoneNumber, iv);
+		CommandSMS sms = new CommandSMS(command, saltedPassword, mPriv, encryptionKey, phoneNumber, iv);
 		sms.construct();
 		//cancello le preferenze ormai inutili
 		MyPrefFiles.deleteUselessCommandSessionPreferences(phoneNumber, ctx);
