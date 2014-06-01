@@ -11,8 +11,11 @@ import java.security.Security;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
+
 import javax.crypto.spec.SecretKeySpec;
+
 import org.spongycastle.crypto.InvalidCipherTextException;
+
 import it.polimi.dima.watchdog.exceptions.ArbitraryMessageReceivedException;
 import it.polimi.dima.watchdog.exceptions.ErrorInSignatureCheckingException;
 import it.polimi.dima.watchdog.exceptions.NotECKeyException;
@@ -62,6 +65,7 @@ public class StatusM1Sent implements CommandProtocolFlagsReactionInterface {
 		Log.i("[DEBUG_COMMAND]", "[DEBUG_COMMAND] m2 received and parsed");
 		generateAndSendM3(other, context);
 		Log.i("[DEBUG_COMMAND]", "[DEBUG_COMMAND] m3 sent");
+		MyPrefFiles.replacePreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + other, StatusM1Sent.NEXT_SENT_STATUS, context);
 		return null;
 	}
 

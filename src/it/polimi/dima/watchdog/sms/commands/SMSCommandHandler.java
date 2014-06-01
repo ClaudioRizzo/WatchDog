@@ -56,10 +56,7 @@ public class SMSCommandHandler extends BroadcastReceiver implements SMSCommandVi
 				this.recMsg = this.statusMap.get(myContext).parse(this.ctx, message, this.other);
 				if(this.recMsg != null){//accade solo se devo parsare il comando di m3
 					this.recMsg.handle(this);
-				}
-				//dopo aver inviato il messaggio setto come status il fatto che ho appena inviato quel messaggio (o free)
-				MyPrefFiles.replacePreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + this.other, this.statusMap.get(myContext).getNextSentStatus(), this.ctx);
-					
+				}	
 				//se non sono in status free (e lo sono solo se ho ricevuto m3 o m4) faccio partire il timeout
 				if(!MyPrefFiles.getMyPreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + this.other, this.ctx).equals(StatusFree.CURRENT_STATUS)){
 					TimeoutWrapper.addTimeout(SMSUtility.MY_PHONE, this.other, this.ctx);						

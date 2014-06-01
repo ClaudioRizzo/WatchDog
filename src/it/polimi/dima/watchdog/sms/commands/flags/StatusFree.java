@@ -10,6 +10,7 @@ import java.security.Security;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
+
 import android.content.Context;
 import android.telephony.SmsMessage;
 import android.util.Base64;
@@ -69,6 +70,7 @@ public class StatusFree implements CommandProtocolFlagsReactionInterface{
 		Log.i("[DEBUG_COMMAND]", "[DEBUG_COMMAND] m1 received and parsed");
 		generateAndSendM2(other, context);
 		Log.i("[DEBUG_COMMAND]", "[DEBUG_COMMAND] m2 sent");
+		MyPrefFiles.replacePreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + other, StatusFree.NEXT_SENT_STATUS, context);
 		return null;
 	}
 
