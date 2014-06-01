@@ -79,7 +79,7 @@ public class M3Parser {
 		/*if(string.length <= 257){
 			throw new ArbitraryMessageReceivedException();
 		}*/
-		for(int i=256; i < string.length; i++){
+		for(int i=32; i < string.length; i++){
 			if(string[i] == ' '){
 				return i;
 			}
