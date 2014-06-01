@@ -186,6 +186,7 @@ public class SMSUtility {
 			System.arraycopy(body, 0, message, header.length, body.length);
 		}
 		Log.i("[DEBUG_COMMAND]", "[DEBUG_COMMAND] lunghezza del messaggio da inviare appena prima di inviarlo: " + message.length);
+		Log.i("[DEBUG_COMMAND]", "[DEBUG_COMMAND] messaggio da inviare appena prima di inviarlo: " + Base64.encodeToString(mess, Base64.DEFAULT));
 		man.sendDataMessage(number, null, port, message, null, null);
 	}
 	
