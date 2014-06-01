@@ -74,11 +74,12 @@ public class LocalizationFragment extends Fragment implements OnClickListener {
 			byte[] message = packHeaderAndBody(header, body);
 			Log.i("[DEBUG]", "[DEBUG] messaggio senza firma: " + Base64.encodeToString(message, Base64.DEFAULT));
 			byte[] signature = generateSignature(message);
+			Log.i("[DEBUG]", "[DEBUG] lunghezza della firma: " + signature.length);
 			Log.i("[DEBUG]", "[DEBUG] firma: " + Base64.encodeToString(signature, Base64.DEFAULT));
 			byte[] finalMessage = packMessage(message, signature);
 			
 			TimeoutWrapper.addTimeout(SMSUtility.MY_PHONE, this.otherNumber, this.ctx);
-			SMSUtility.sendCommandMessage(otherNumber, SMSUtility.COMMAND_PORT, finalMessage);
+			SMSUtility.sendCommandMessage(this.otherNumber, SMSUtility.COMMAND_PORT, finalMessage);
 		}
 		catch (Exception e){
 			SMSUtility.handleErrorOrExceptionInCommandSession(e, this.otherNumber, this.ctx);

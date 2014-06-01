@@ -75,6 +75,7 @@ public class M1Parser {
 		byte[] messageWithoutSignature = new byte[messageWithoutSignatureLength];
 		System.arraycopy(this.rawMessage, 0, messageWithoutSignature, 0, messageWithoutSignatureLength);
 		Log.i("[DEBUG]", "[DEBUG] messaggio senza firma: " + Base64.encodeToString(messageWithoutSignature, Base64.DEFAULT));
+		Log.i("[DEBUG]", "[DEBUG] lunghezza della firma: " + this.signature.length);
 		Log.i("[DEBUG]", "[DEBUG] firma: " + Base64.encodeToString(this.signature, Base64.DEFAULT));
 		ECDSA_Signature verifier = new ECDSA_Signature(messageWithoutSignature, this.oPub, this.signature);
 		if(!verifier.verifySignature()){
