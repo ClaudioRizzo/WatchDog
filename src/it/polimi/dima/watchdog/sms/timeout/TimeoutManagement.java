@@ -6,6 +6,7 @@ import it.polimi.dima.watchdog.utilities.SMSUtility;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 /**
  * Classe che wrappa la gestione di un timeout.
@@ -24,6 +25,8 @@ public class TimeoutManagement extends BroadcastReceiver {
 	 */
 	@Override
 	public void onReceive(Context context, Intent intent) {
+		Log.i("[DEBUG]", "[DEBUG] timeout scattato");
+		
 		//... cancello i riferimenti all'altro utente nella sessione di comando...
 		MyPrefFiles.eraseCommandSession(intent.getStringExtra(SMSUtility.OTHER_PHONE), context);
 		
