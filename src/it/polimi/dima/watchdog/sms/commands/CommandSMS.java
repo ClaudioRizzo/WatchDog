@@ -7,13 +7,17 @@ import it.polimi.dima.watchdog.exceptions.NoSignatureDoneException;
 import it.polimi.dima.watchdog.utilities.CryptoUtility;
 import it.polimi.dima.watchdog.utilities.PasswordUtils;
 import it.polimi.dima.watchdog.utilities.SMSUtility;
+
 import java.io.UnsupportedEncodingException;
 import java.security.Key;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
+
 import org.spongycastle.crypto.InvalidCipherTextException;
+
 import android.telephony.SmsManager;
+import android.util.Log;
 
 /**
  * Classe che gestisce la costruzione degli SMS. IMPORTANTE: per gli sms di configurazione (scambio chiavi, ecc.)
@@ -110,6 +114,7 @@ public class CommandSMS {
 		signaturePlusMessage[this.finalMessage.length] = ' ';
 		System.arraycopy(this.signature, 0, signaturePlusMessage, this.finalMessage.length + 1, this.signature.length);
 		//AES_256_GCM_Crypto enc = new AES_256_GCM_Crypto(signaturePlusMessage, this.encryptionKey);
+		Log.i("[DEBUG]", "[DEBUG - pre costruttore aes] "+signaturePlusMessage);
 		AES256GCM enc = new AES256GCM(this.encryptionKey, signaturePlusMessage, this.iv);
 		enc.encrypt();
 		this.finalSignedAndEncryptedMessage = enc.getCiphertext();

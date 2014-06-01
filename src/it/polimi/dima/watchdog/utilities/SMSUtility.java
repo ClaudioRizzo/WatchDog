@@ -298,7 +298,7 @@ public class SMSUtility {
 	 */
 	public static void handleErrorOrExceptionInCommandSession(Exception e, String other, Context ctx){
 		if(!(e instanceof MessageWillBeIgnoredException)){
-			Log.i("[DEBUG_SMP]", "CAUGHT ERROR OR EXCEPTION");
+			Log.i("[DEBUG_COMMAND]", "[DEBUG_COMMAND] CAUGHT ERROR OR EXCEPTION");
 			
 			//notifico...
 			if(e != null){
