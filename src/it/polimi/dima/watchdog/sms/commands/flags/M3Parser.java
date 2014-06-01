@@ -60,8 +60,10 @@ public class M3Parser {
 		byte[] decryptedSMS = dec.decrypt(); // messaggio || ' ' || firma
 		int spacePosition = getSpacePosition(decryptedSMS);
 		//copia la firma
+		this.signature = new byte[decryptedSMS.length - spacePosition - 1];
 		System.arraycopy(decryptedSMS, spacePosition + 1, this.signature, 0, decryptedSMS.length - spacePosition - 1);
 		//copia il messaggio
+		this.sms = new byte[spacePosition];
 		System.arraycopy(decryptedSMS, 0, this.sms, 0, spacePosition);
 		validateSignature();
 		parse();
@@ -117,6 +119,7 @@ public class M3Parser {
 	 * Scompone l'sms ricevuto (già decrittato e scoprorato dalla firma) in hash della password e testo in chiaro.
 	 */
 	private void decompose() {
+		this.passwordHash = new byte[32]; //TODO magic number!!!
 		System.arraycopy(this.sms, 0, this.passwordHash, 0, 32);
 		byte[] plaintext = new byte[this.sms.length-32];
 		System.arraycopy(this.sms, 32, plaintext, 0, this.sms.length-32);
