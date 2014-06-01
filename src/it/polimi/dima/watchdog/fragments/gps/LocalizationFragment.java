@@ -113,6 +113,8 @@ public class LocalizationFragment extends Fragment implements OnClickListener {
 
 	private byte[] generateSignature(byte[] message) throws NoSuchAlgorithmException, NoSuchProviderException, InvalidKeySpecException, NoSuchPreferenceFoundException, NoSignatureDoneException, NotECKeyException {
 		PrivateKey mPriv = retrieveMyPrivateKey();
+		String mPub = MyPrefFiles.getMyPreference(MyPrefFiles.MY_KEYS, MyPrefFiles.MY_PUB, this.ctx);
+		Log.i("[DEBUG]", "[DEBUG] la mia chiave pubblica: " + mPub);
 		ECDSA_Signature sigMaker = new ECDSA_Signature(message, mPriv);
 		sigMaker.sign();
 		return sigMaker.getSignature();
