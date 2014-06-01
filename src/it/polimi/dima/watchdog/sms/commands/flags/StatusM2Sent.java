@@ -63,7 +63,7 @@ public class StatusM2Sent implements CommandProtocolFlagsReactionInterface {
 	private M3Parser popolateParser(SmsMessage sms, Context ctx, String other) throws NoSuchPreferenceFoundException, NoSuchAlgorithmException, InvalidKeySpecException, NoSuchProviderException {
 		byte[] encryptedMessage = sms.getUserData();
 		
-		String decKey = MyPrefFiles.getMyPreference(MyPrefFiles.COMMAND_SESSION, other, ctx);
+		String decKey = MyPrefFiles.getMyPreference(MyPrefFiles.COMMAND_SESSION, other + MyPrefFiles.SESSION_KEY, ctx);
 		byte[] decKeyValue = Base64.decode(decKey, Base64.DEFAULT);
 		Key decryptionKey = new SecretKeySpec(decKeyValue, CryptoUtility.AES_256);
 		
