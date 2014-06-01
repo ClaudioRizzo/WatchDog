@@ -38,7 +38,7 @@ public class InitializationWizardActivity extends ActionBarActivity implements O
 	}
 
 	@Override
-	public void getWizardChanges(boolean wizardDone, String hashToSave, String salt) throws NoSuchAlgorithmException, NoSuchProviderException {
+	public void getWizardChanges(boolean wizardDone, byte[] hashToSave, byte[] salt) throws NoSuchAlgorithmException, NoSuchProviderException {
 		SharedPreferences keys = getSharedPreferences(MyPrefFiles.MY_KEYS, Context.MODE_PRIVATE);
 		SharedPreferences password = getSharedPreferences(MyPrefFiles.PASSWORD_AND_SALT, Context.MODE_PRIVATE);
 		SharedPreferences wizard = getSharedPreferences(MyPrefFiles.PREF_INIT, Context.MODE_PRIVATE);
@@ -55,8 +55,8 @@ public class InitializationWizardActivity extends ActionBarActivity implements O
 		//saving preferences
 		editor1.putString(MyPrefFiles.MY_PUB, pubKey);
 		editor1.putString(MyPrefFiles.MY_PRIV, privateKey);
-		editor2.putString(MyPrefFiles.MY_PASSWORD_HASH, hashToSave);
-		editor2.putString(MyPrefFiles.MY_PASSWORD_SALT, salt);
+		editor2.putString(MyPrefFiles.MY_PASSWORD_HASH, Base64.encodeToString(hashToSave, Base64.DEFAULT));
+		editor2.putString(MyPrefFiles.MY_PASSWORD_SALT, Base64.encodeToString(salt, Base64.DEFAULT));
 		editor3.putBoolean(MyPrefFiles.WIZARD_DONE, wizardDone);
 		editor1.commit();
 		editor2.commit();

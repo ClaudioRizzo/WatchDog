@@ -1,7 +1,6 @@
 package it.polimi.dima.watchdog.utilities;
 
 import android.annotation.SuppressLint;
-import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
@@ -46,16 +45,9 @@ public class PasswordUtils {
 	 * @return l'hash di text con algorithm
 	 * @throws NoSuchAlgorithmException se algorithm non è un algoritmo di hash valido
 	 */
-	public static byte[] getByteHash(String text, String algorithm)
-			throws NoSuchAlgorithmException {
+	public static byte[] getByteHash(byte[] ptx, String algorithm) throws NoSuchAlgorithmException {
 		MessageDigest digest = MessageDigest.getInstance(algorithm);
-		try {
-			byte[] hash = digest.digest(text.getBytes(PasswordUtils.UTF_8));
-			return hash;
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-			return null;
-		}
+		return digest.digest(ptx);
 	}
 
 	/**

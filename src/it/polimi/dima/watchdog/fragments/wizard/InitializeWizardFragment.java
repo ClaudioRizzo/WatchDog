@@ -1,13 +1,15 @@
 package it.polimi.dima.watchdog.fragments.wizard;
 
 import it.polimi.dima.watchdog.R;
+import it.polimi.dima.watchdog.utilities.CryptoUtility;
 import it.polimi.dima.watchdog.utilities.PasswordUtils;
+
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
+
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -18,10 +20,10 @@ import android.widget.TextView;
 public class InitializeWizardFragment extends Fragment implements OnClickListener {
 
 	private OnPasswordInizializedListener mCallBack;
-	private final String salt = Base64.encodeToString(PasswordUtils.nextSalt(), Base64.DEFAULT);
+	private final byte[] salt = PasswordUtils.nextSalt();
 
 	public interface OnPasswordInizializedListener {
-		public void getWizardChanges(boolean wizardDone, String hashToSave, String salt) throws NoSuchAlgorithmException, NoSuchProviderException;
+		public void getWizardChanges(boolean wizardDone, byte[] hashToSave, byte[] salt) throws NoSuchAlgorithmException, NoSuchProviderException;
 	}
 
 	@Override
@@ -46,7 +48,7 @@ public class InitializeWizardFragment extends Fragment implements OnClickListene
 				//e che deve essere lunga almeno 8 caratteri e non più di 20. Quindi chiedere di immetterla di nuovo
 				//e salvarla di nuovo in cleanPassword
 			}*/
-			String hashToSave = this.getHash(cleanPassword);
+			byte[] hashToSave = this.getHash(cleanPassword.getBytes());
 			this.mCallBack.getWizardChanges(true, hashToSave, this.salt);
 		}
 		catch (NoSuchAlgorithmException e)
@@ -81,19 +83,12 @@ public class InitializeWizardFragment extends Fragment implements OnClickListene
 	 * 
 	 * @param pswd : la password
 	 * @return l'hash salato della password
+	 * @throws NoSuchAlgorithmException 
 	 */
-	private String getHash(String pswd) {
-		String saltedPswd = pswd + this.salt;
-		String hashString = null;
-
-		try {
-			byte[] hash = PasswordUtils.getByteHash(saltedPswd, "SHA-256");
-			hashString = Base64.encodeToString(hash, Base64.DEFAULT);
-		} 
-		catch (NoSuchAlgorithmException e) 
-		{
-			e.printStackTrace();
-		}
-		return hashString;
+	private byte[] getHash(byte[] pswd) throws NoSuchAlgorithmException {
+		byte[] saltedPswd = new byte[pswd.length + this.salt.length];
+		System.arraycopy(pswd, 0, saltedPswd, 0, pswd.length);
+		System.arraycopy(this.salt, 0, saltedPswd, pswd.length, this.salt.length);
+		return PasswordUtils.getByteHash(saltedPswd, CryptoUtility.SHA_256);
 	}
 }
