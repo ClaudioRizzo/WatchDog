@@ -133,5 +133,9 @@ public class SMSCommandHandler extends BroadcastReceiver implements SMSCommandVi
 		this.statusMap.put(StatusM1Sent.CURRENT_STATUS, new StatusM1Sent());
 		this.statusMap.put(StatusM2Sent.CURRENT_STATUS, new StatusM2Sent());
 		this.statusMap.put(StatusM3Sent.CURRENT_STATUS, new StatusM3Sent());
+		Log.i("[DEBUG_COMMAND]", "[DEBUG_COMMAND]" + StatusFree.CURRENT_STATUS);
+		Log.i("[DEBUG_COMMAND]", "[DEBUG_COMMAND]" + StatusM1Sent.CURRENT_STATUS);
+		Log.i("[DEBUG_COMMAND]", "[DEBUG_COMMAND]" + StatusM2Sent.CURRENT_STATUS);
+		Log.i("[DEBUG_COMMAND]", "[DEBUG_COMMAND]" + StatusM3Sent.CURRENT_STATUS);
 	}
 }
