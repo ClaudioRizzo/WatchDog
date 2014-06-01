@@ -85,8 +85,10 @@ public class SMSCommandHandler extends BroadcastReceiver implements SMSCommandVi
 
 	@Override
 	public void visit(SirenOnCodeMessage sirenOnCodeMessage) {
-		// TODO Auto-generated method stub
+		// TODO fare quello che serve e creare m4 cosi' fatto:
+		// header(SMSUtility._HEADER) + body(fissa lunghezza) + firma 
 		Log.i("[DEBUG_COMMAND]", "[DEBUG_COMMAND] SIREN ON RECEIVED");
+		
 	}
 
 	@Override
