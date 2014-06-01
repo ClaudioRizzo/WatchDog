@@ -71,7 +71,7 @@ public class StatusM1Sent implements CommandProtocolFlagsReactionInterface {
 		String sessionKeyKey = phoneNumber + MyPrefFiles.SESSION_KEY;
 		String ivKey = phoneNumber + MyPrefFiles.IV;
 		
-		String command = MyPrefFiles.getMyPreference(MyPrefFiles.COMMAND_SESSION, commandKey, ctx);
+		byte[] command = Base64.decode(MyPrefFiles.getMyPreference(MyPrefFiles.COMMAND_SESSION, commandKey, ctx), Base64.DEFAULT);
 		String password = MyPrefFiles.getMyPreference(MyPrefFiles.COMMAND_SESSION, passwordKey, ctx);
 		byte[] aesKey = Base64.decode(MyPrefFiles.getMyPreference(MyPrefFiles.COMMAND_SESSION, sessionKeyKey, ctx), Base64.DEFAULT);
 		Key encryptionKey = new SecretKeySpec(aesKey, CryptoUtility.AES_256);
@@ -81,7 +81,7 @@ public class StatusM1Sent implements CommandProtocolFlagsReactionInterface {
 		KeyFactory keyFactory = KeyFactory.getInstance(CryptoUtility.EC, CryptoUtility.SC);
 		PrivateKey mPriv = keyFactory.generatePrivate(new PKCS8EncodedKeySpec(myPriv));
 		
-		CommandSMS sms = new CommandSMS(command.getBytes(), password, mPriv, encryptionKey, phoneNumber, iv);
+		CommandSMS sms = new CommandSMS(command, password, mPriv, encryptionKey, phoneNumber, iv);
 		sms.construct();
 		//cancello le preferenze ormai inutili
 		MyPrefFiles.deleteUselessCommandSessionPreferences(phoneNumber, ctx);

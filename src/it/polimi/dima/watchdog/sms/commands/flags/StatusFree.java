@@ -98,7 +98,7 @@ public class StatusFree implements CommandProtocolFlagsReactionInterface{
 	}
 	
 	private void generateAndSendM2(String phoneNumber, Context ctx) throws NoSuchPreferenceFoundException, NoSuchAlgorithmException, InvalidKeySpecException, NotECKeyException, NoSignatureDoneException, NoSuchProviderException{
-		byte[] header = SMSUtility.M2_HEADER.getBytes();
+		byte[] header = SMSUtility.hexStringToByteArray(SMSUtility.M2_HEADER);
 		byte[] myPrivateKey = Base64.decode(MyPrefFiles.getMyPreference(MyPrefFiles.MY_KEYS, MyPrefFiles.MY_PRIV, ctx), Base64.DEFAULT);
 		KeyFactory keyFactory = KeyFactory.getInstance(CryptoUtility.EC, CryptoUtility.SC);
 		PrivateKey mPriv = keyFactory.generatePrivate(new PKCS8EncodedKeySpec(myPrivateKey));

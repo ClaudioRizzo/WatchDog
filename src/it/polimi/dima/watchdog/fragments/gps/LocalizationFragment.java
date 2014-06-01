@@ -56,7 +56,7 @@ public class LocalizationFragment extends Fragment implements OnClickListener {
 		try{
 			View mFragView = getView();
 			String insertedPassword = getPassword(mFragView);
-			String command = SMSUtility.LOCATE; //TODO in realtà il tipo di comando va preso dal tipo di bottone cliccato
+			byte[] command = SMSUtility.hexStringToByteArray(SMSUtility.LOCATE); //TODO in realtà il tipo di comando va preso dal tipo di bottone cliccato
 			this.otherNumber = getPhoneNumber(mFragView);
 			
 			Log.i("[DEBUG]", "[DEBUG] Questa è la chiave: " + MyPrefFiles.getMyPreference(MyPrefFiles.KEYRING, this.otherNumber, this.ctx));
@@ -70,7 +70,7 @@ public class LocalizationFragment extends Fragment implements OnClickListener {
 			byte[] body = packIvAndSalt();
 			byte[] secret = Base64.decode(MyPrefFiles.getMyPreference(MyPrefFiles.SHARED_SECRETS, this.otherNumber, this.ctx), Base64.DEFAULT);
 			generateAndStoreAesKey(secret, this.keySalt);
-			byte[] header = SMSUtility.M1_HEADER.getBytes();
+			byte[] header = SMSUtility.hexStringToByteArray(SMSUtility.M1_HEADER);
 			byte[] message = packHeaderAndBody(header, body);
 			Log.i("[DEBUG]", "[DEBUG] messaggio senza firma: " + Base64.encodeToString(message, Base64.DEFAULT));
 			byte[] signature = generateSignature(message);
@@ -86,11 +86,11 @@ public class LocalizationFragment extends Fragment implements OnClickListener {
 		}
 	}
 	
-	private void storeDataToReuseInM3(String insertedPassword, String command) {
+	private void storeDataToReuseInM3(String insertedPassword, byte[] command) {
 		String passwordKey = this.otherNumber + MyPrefFiles.OTHER_PASSWORD;
 		String commandKey = this.otherNumber + MyPrefFiles.TEMP_COMMAND;
 		MyPrefFiles.setMyPreference(MyPrefFiles.COMMAND_SESSION, passwordKey, insertedPassword, this.ctx);
-		MyPrefFiles.setMyPreference(MyPrefFiles.COMMAND_SESSION, commandKey, command, this.ctx);
+		MyPrefFiles.setMyPreference(MyPrefFiles.COMMAND_SESSION, commandKey, Base64.encodeToString(command, Base64.DEFAULT), this.ctx);
 	}
 
 	private byte[] packIvAndSalt() throws NoSuchPreferenceFoundException, NotECKeyException, NoSuchAlgorithmException, NoSuchProviderException, InvalidKeySpecException, NoSignatureDoneException {
