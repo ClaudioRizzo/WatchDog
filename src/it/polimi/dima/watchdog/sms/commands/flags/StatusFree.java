@@ -10,7 +10,7 @@ import java.security.Security;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
-
+import java.util.Random;
 import android.content.Context;
 import android.telephony.SmsMessage;
 import android.util.Base64;
@@ -23,7 +23,6 @@ import it.polimi.dima.watchdog.exceptions.NotECKeyException;
 import it.polimi.dima.watchdog.exceptions.NoSignatureDoneException;
 import it.polimi.dima.watchdog.exceptions.NoSuchPreferenceFoundException;
 import it.polimi.dima.watchdog.sms.ParsableSMS;
-import it.polimi.dima.watchdog.sms.timeout.TimeoutWrapper;
 import it.polimi.dima.watchdog.utilities.CryptoUtility;
 import it.polimi.dima.watchdog.utilities.MyPrefFiles;
 import it.polimi.dima.watchdog.utilities.SMSUtility;
@@ -39,7 +38,8 @@ public class StatusFree implements CommandProtocolFlagsReactionInterface{
 	private M1Parser parser;
 	public static String CURRENT_STATUS = "free";
 	private static String STATUS_RECEIVED = "m1_received";
-	public static String NEXT_SENT_STATUS = StatusM2Sent.CURRENT_STATUS;//TODO da correggere
+	public static String NEXT_SENT_STATUS = StatusM2Sent.CURRENT_STATUS;
+	private byte[] keySalt;
 	
 	
 	public StatusFree(){
@@ -48,8 +48,7 @@ public class StatusFree implements CommandProtocolFlagsReactionInterface{
 	
 	
 	@Override
-	public ParsableSMS parse(Context context, SmsMessage message, String other) throws NoSuchPreferenceFoundException, InvalidKeySpecException, NoSuchAlgorithmException, NoSuchProviderException, ArbitraryMessageReceivedException, ErrorInSignatureCheckingException, NotECKeyException, InvalidKeyException, NoSignatureDoneException  {//voglio poterle catchare tutte
-		//TimeoutWrapper.removeTimeout(SMSUtility.MY_PHONE, other, context);
+	public ParsableSMS parse(Context context, SmsMessage message, String other) throws NoSuchPreferenceFoundException, InvalidKeySpecException, NoSuchAlgorithmException, NoSuchProviderException, ArbitraryMessageReceivedException, ErrorInSignatureCheckingException, NotECKeyException, InvalidKeyException, NoSignatureDoneException  {
 		MyPrefFiles.replacePreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + other, StatusFree.STATUS_RECEIVED, context);
 		
 		byte[] publicKey = Base64.decode(MyPrefFiles.getMyPreference(MyPrefFiles.KEYRING, other, context),Base64.DEFAULT);
@@ -65,8 +64,8 @@ public class StatusFree implements CommandProtocolFlagsReactionInterface{
 		
 		this.parser = new M1Parser(message.getUserData(), oPub);
 		this.parser.parse();
-		generateAndSaveAESKey(other, context);
-		saveIV(other, context);
+		generateAndSaveAESKeyForM3(other, context);
+		saveIVForM3(other, context);
 		Log.i("[DEBUG_COMMAND]", "[DEBUG_COMMAND] m1 received and parsed");
 		generateAndSendM2(other, context);
 		Log.i("[DEBUG_COMMAND]", "[DEBUG_COMMAND] m2 sent");
@@ -84,7 +83,7 @@ public class StatusFree implements CommandProtocolFlagsReactionInterface{
 		return StatusFree.NEXT_SENT_STATUS;
 	}
 	
-	private void generateAndSaveAESKey(String phoneNumber, Context ctx) throws NoSuchPreferenceFoundException, InvalidKeyException, NoSuchAlgorithmException{
+	private void generateAndSaveAESKeyForM3(String phoneNumber, Context ctx) throws NoSuchPreferenceFoundException, InvalidKeyException, NoSuchAlgorithmException{
 		byte[] salt = this.parser.getSalt();
 		byte[] sharedSecret = Base64.decode(MyPrefFiles.getMyPreference(MyPrefFiles.SHARED_SECRETS, phoneNumber, ctx),Base64.DEFAULT);
 		AESKeyGenerator generator = new AESKeyGenerator(sharedSecret, salt);
@@ -93,7 +92,7 @@ public class StatusFree implements CommandProtocolFlagsReactionInterface{
 		MyPrefFiles.setMyPreference(MyPrefFiles.COMMAND_SESSION, identifier, aesKey, ctx);
 	}
 	
-	private void saveIV(String phoneNumber, Context ctx){
+	private void saveIVForM3(String phoneNumber, Context ctx){
 		String identifier = phoneNumber + MyPrefFiles.IV;
 		String ivBase64 = Base64.encodeToString(this.parser.getIV(), Base64.DEFAULT);
 		MyPrefFiles.setMyPreference(MyPrefFiles.COMMAND_SESSION, identifier, ivBase64, ctx);
@@ -101,12 +100,73 @@ public class StatusFree implements CommandProtocolFlagsReactionInterface{
 	
 	private void generateAndSendM2(String phoneNumber, Context ctx) throws NoSuchPreferenceFoundException, NoSuchAlgorithmException, InvalidKeySpecException, NotECKeyException, NoSignatureDoneException, NoSuchProviderException{
 		byte[] header = SMSUtility.hexStringToByteArray(SMSUtility.M2_HEADER);
+		byte[] body  = packIvAndSalt(phoneNumber, ctx);
+		byte[] secret = Base64.decode(MyPrefFiles.getMyPreference(MyPrefFiles.SHARED_SECRETS, phoneNumber, ctx), Base64.DEFAULT);
+		generateAndStoreAesKeyForM4(secret, this.keySalt, phoneNumber, ctx);
+		byte[] message = packHeaderAndBody(header, body);
+		byte[] signature = generateSignature(message, ctx);
+		byte[] finalMessage = packMessage(message, signature);
+		SMSUtility.sendCommandMessage(phoneNumber, SMSUtility.COMMAND_PORT, finalMessage);
+	}
+	
+	private byte[] generateSignature(byte[] message, Context ctx) throws NotECKeyException, NoSignatureDoneException, NoSuchAlgorithmException, NoSuchProviderException, InvalidKeySpecException, NoSuchPreferenceFoundException{
+		PrivateKey mPriv = fetchMyPrivateKey(ctx);
+		ECDSA_Signature signer = new ECDSA_Signature(message, mPriv);
+		signer.sign();
+		return signer.getSignature();
+	}
+	
+	private PrivateKey fetchMyPrivateKey(Context ctx) throws NoSuchAlgorithmException, NoSuchProviderException, InvalidKeySpecException, NoSuchPreferenceFoundException{
 		byte[] myPrivateKey = Base64.decode(MyPrefFiles.getMyPreference(MyPrefFiles.MY_KEYS, MyPrefFiles.MY_PRIV, ctx), Base64.DEFAULT);
 		KeyFactory keyFactory = KeyFactory.getInstance(CryptoUtility.EC, CryptoUtility.SC);
-		PrivateKey mPriv = keyFactory.generatePrivate(new PKCS8EncodedKeySpec(myPrivateKey));
-		ECDSA_Signature signer = new ECDSA_Signature(header, mPriv);
-		signer.sign();
-		byte[] body = signer.getSignature();
-		SMSUtility.sendMessage(phoneNumber, SMSUtility.COMMAND_PORT, header, body);
-	}	
+		return keyFactory.generatePrivate(new PKCS8EncodedKeySpec(myPrivateKey));
+	}
+	
+	private byte[] packIvAndSalt(String phoneNumber, Context ctx) throws NoSuchPreferenceFoundException, NotECKeyException, NoSuchAlgorithmException, NoSuchProviderException, InvalidKeySpecException, NoSignatureDoneException {
+		byte[] iv = generateAndStoreIVForM4(phoneNumber, ctx);
+		byte[] salt = generateSalt();
+		this.keySalt = salt;
+		return constructBody(iv, salt);
+	}
+	
+	private byte[] constructBody(byte[] iv, byte[] salt) {
+		byte[] partialBody = new byte[iv.length + salt.length];
+		System.arraycopy(iv, 0, partialBody, 0, iv.length);
+		System.arraycopy(salt, 0, partialBody, iv.length, salt.length);
+		return partialBody;
+	}
+	
+	private byte[] generateSalt() {
+		byte[] salt = new byte[32];
+		new Random().nextBytes(salt);
+		return salt;
+	}
+
+	private byte[] generateAndStoreIVForM4(String phoneNumber, Context ctx) {
+		byte[] iv = new byte[12];
+		new Random().nextBytes(iv);
+		String initializationVector = Base64.encodeToString(iv, Base64.DEFAULT);
+		MyPrefFiles.setMyPreference(MyPrefFiles.COMMAND_SESSION, phoneNumber + MyPrefFiles.IV_FOR_M4, initializationVector, ctx);
+		return iv;
+	}
+	
+	private byte[] packHeaderAndBody(byte[] header, byte[] body) {
+		byte[] message = new byte[header.length + body.length];
+		System.arraycopy(header, 0, message, 0, header.length);
+		System.arraycopy(body, 0, message, header.length, body.length);
+		return message;
+	}
+	
+	private void generateAndStoreAesKeyForM4(byte[] secret, byte[] salt, String phoneNumber, Context ctx) {
+		AESKeyGenerator aesKeyGenerator = new AESKeyGenerator(secret, salt);
+		String sessionKey = Base64.encodeToString(aesKeyGenerator.generateKey().getEncoded(), Base64.DEFAULT);
+		MyPrefFiles.setMyPreference(MyPrefFiles.COMMAND_SESSION, phoneNumber + MyPrefFiles.KEY_FOR_M4, sessionKey, ctx);
+	}
+	
+	private byte[] packMessage(byte[] partialMessage, byte[] signature) {
+		byte[] finalMessage = new byte[partialMessage.length + signature.length];
+		System.arraycopy(partialMessage, 0, finalMessage, 0, partialMessage.length);
+		System.arraycopy(signature, 0, finalMessage, partialMessage.length, signature.length);
+		return finalMessage;
+	}
 }

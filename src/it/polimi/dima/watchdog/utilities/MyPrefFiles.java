@@ -208,14 +208,13 @@ public class MyPrefFiles {
 	
 	/**
 	 * Chiave paziale a cui verrà preposto il numero di telefono dell'altro utente; indica la chiave
-	 * di crittazione/decrittazione del prossimo messaggio in codifica Base64
+	 * di crittazione/decrittazione di m3 in codifica Base64
 	 */
 	public static final String SESSION_KEY = "session_key"; //il valore sarà Base64
 	
 	/**
 	 * Chiave paziale a cui verrà preposto il numero di telefono dell'altro utente; indica il vettore
-	 * di inizializzazione che verrà usato nella crittazione/decrittazione del prossimo messaggio in codifica
-	 * Base64.
+	 * di inizializzazione che verrà usato nella crittazione/decrittazione di m3 in codifica Base64.
 	 */
 	public static final String IV = "iv"; //il valore sarà Base64
 	
@@ -231,14 +230,25 @@ public class MyPrefFiles {
 	 * Chiave parziale a cui verrà preposto il numero di telefono dell'altro utente; indica il comando che
 	 * si vuole mandare nella sessione. Tale comando deve essere contenuto in SMSUtility e NON è in Base64.
 	 */
-	public static final String TEMP_COMMAND = "temp_command";//TODO ricordarsi di inizializzare
+	public static final String TEMP_COMMAND = "temp_command";
 	
 	/**
 	 * Chiave parziale a cui verrà preposto il numero di telefono dell'altro utente; indica la password che
 	 * si vuole allegare al messaggio da mandare. NON è in Base64.
 	 */
-	public static final String OTHER_PASSWORD = "other_password";//TODO ricordarsi di inizializzare
+	public static final String OTHER_PASSWORD = "other_password";
 	
+	/**
+	 * Chiave paziale a cui verrà preposto il numero di telefono dell'altro utente; indica il vettore
+	 * di inizializzazione che verrà usato nella crittazione/decrittazione di m4 in codifica Base64. 
+	 */
+	public static final String IV_FOR_M4 = "m4_iv";
+	
+	/**
+	 * Chiave paziale a cui verrà preposto il numero di telefono dell'altro utente; indica la chiave
+	 * di crittazione/decrittazione di m4 in codifica Base64
+	 */
+	public static final String KEY_FOR_M4 = "m4_key";
 	
 	
 	
