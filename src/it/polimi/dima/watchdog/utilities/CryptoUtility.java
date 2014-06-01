@@ -47,4 +47,8 @@ public class CryptoUtility {
 	 * Il PRNG di default
 	 */
 	public static final String SUN = "SUN";
+	/**
+	 * Encryption flag per AES
+	 */
+	public static final int ENC = 1;
 }

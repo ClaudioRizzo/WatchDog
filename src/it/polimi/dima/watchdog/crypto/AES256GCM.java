@@ -39,9 +39,9 @@ public class AES256GCM implements Crypto{
 	 * @param plaintext : il messaggio da crittografare
 	 * @param iv : il vettore di inizializzazione
 	 */
-	public AES256GCM(Key key, String plaintext, byte[] iv){
+	public AES256GCM(Key key, byte[] plaintext, byte[] iv, int encryptionFlag){
 		this.key = key;
-		this.plaintext = plaintext.getBytes();
+		this.plaintext = plaintext;
 		this.iv = iv;
 	}
 	
@@ -53,9 +53,9 @@ public class AES256GCM implements Crypto{
 	 * @param plaintext : il messaggio da crittografare
 	 * @param iv : il vettore di inizializzazione
 	 */
-	public AES256GCM(byte[] key, String plaintext, byte[] iv) {
+	public AES256GCM(byte[] key, byte[] plaintext, byte[] iv, int encryptionFlag) {
 		this.key = new SecretKeySpec(key, CryptoUtility.AES_256);
-		this.plaintext = plaintext.getBytes();
+		this.plaintext = plaintext;
 		this.iv = iv;
 	}
 	

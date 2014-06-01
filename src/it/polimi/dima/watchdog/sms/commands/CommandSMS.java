@@ -113,9 +113,8 @@ public class CommandSMS {
 		System.arraycopy(this.finalMessage, 0, signaturePlusMessage, 0, this.finalMessage.length);
 		signaturePlusMessage[this.finalMessage.length] = ' ';
 		System.arraycopy(this.signature, 0, signaturePlusMessage, this.finalMessage.length + 1, this.signature.length);
-		//AES_256_GCM_Crypto enc = new AES_256_GCM_Crypto(signaturePlusMessage, this.encryptionKey);
 		Log.i("[DEBUG]", "[DEBUG - pre costruttore aes] "+signaturePlusMessage);
-		AES256GCM enc = new AES256GCM(this.encryptionKey, signaturePlusMessage, this.iv);
+		AES256GCM enc = new AES256GCM(this.encryptionKey, signaturePlusMessage, this.iv, CryptoUtility.ENC);
 		enc.encrypt();
 		this.finalSignedAndEncryptedMessage = enc.getCiphertext();
 	}
