@@ -8,14 +8,12 @@ import java.security.Security;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.util.Random;
-
 import it.polimi.dima.watchdog.R;
 import it.polimi.dima.watchdog.crypto.AESKeyGenerator;
 import it.polimi.dima.watchdog.crypto.ECDSA_Signature;
 import it.polimi.dima.watchdog.exceptions.NoSignatureDoneException;
 import it.polimi.dima.watchdog.exceptions.NoSuchPreferenceFoundException;
 import it.polimi.dima.watchdog.exceptions.NotECKeyException;
-import it.polimi.dima.watchdog.sms.ParsableSMS;
 import it.polimi.dima.watchdog.sms.timeout.TimeoutWrapper;
 import it.polimi.dima.watchdog.utilities.CryptoUtility;
 import it.polimi.dima.watchdog.utilities.MyPrefFiles;
@@ -41,6 +39,7 @@ public class LocalizationFragment extends Fragment implements OnClickListener {
 	
 	private String otherNumber;
 	private Context ctx;
+	private byte[] keySalt;
 	
 	@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -67,17 +66,17 @@ public class LocalizationFragment extends Fragment implements OnClickListener {
 			}
 			
 			storeDataToReuseInM3(insertedPassword, command);
-			byte[] body = getBody();
-			//Cancellare dopo che funziona
-			byte[] mess = new byte[ParsableSMS.HEADER_LENGTH + body.length];
-			System.arraycopy(SMSUtility.M1_HEADER.getBytes(), 0, mess, 0, ParsableSMS.HEADER_LENGTH);
-			System.arraycopy(body, 0, mess, ParsableSMS.HEADER_LENGTH, body.length);
-			Log.i("[DEBUG_COMMAND]", "[DEBUG_COMMAND] lunghezza del messaggio da inviare: " + mess.length);
-			Log.i("[DEBUG_COMMAND]", "[DEBUG_COMMAND] messaggio da inviare: " + Base64.encodeToString(mess, Base64.DEFAULT));
-			//fina roba da cancellare
 			
-			SMSUtility.sendMessage(this.otherNumber, SMSUtility.COMMAND_PORT, SMSUtility.M1_HEADER.getBytes(), body);
+			byte[] body = packIvAndSalt();
+			byte[] secret = Base64.decode(MyPrefFiles.getMyPreference(MyPrefFiles.SHARED_SECRETS, this.otherNumber, this.ctx), Base64.DEFAULT);
+			generateAndStoreAesKey(secret, this.keySalt);
+			byte[] header = SMSUtility.M1_HEADER.getBytes();
+			byte[] message = packHeaderAndBody(header, body);
+			byte[] signature = generateSignature(message);
+			byte[] finalMessage = packMessage(message, signature);
+			
 			TimeoutWrapper.addTimeout(SMSUtility.MY_PHONE, this.otherNumber, this.ctx);
+			SMSUtility.sendCommandMessage(otherNumber, SMSUtility.COMMAND_PORT, finalMessage);
 		}
 		catch (Exception e){
 			SMSUtility.handleErrorOrExceptionInCommandSession(e, this.otherNumber, this.ctx);
@@ -91,26 +90,30 @@ public class LocalizationFragment extends Fragment implements OnClickListener {
 		MyPrefFiles.setMyPreference(MyPrefFiles.COMMAND_SESSION, commandKey, command, this.ctx);
 	}
 
-	private byte[] getBody() throws NoSuchPreferenceFoundException, NotECKeyException, NoSuchAlgorithmException, NoSuchProviderException, InvalidKeySpecException, NoSignatureDoneException {
+	private byte[] packIvAndSalt() throws NoSuchPreferenceFoundException, NotECKeyException, NoSuchAlgorithmException, NoSuchProviderException, InvalidKeySpecException, NoSignatureDoneException {
 		byte[] iv = generateAndStoreIV();
 		byte[] salt = generateSalt();
-		byte[] secret = Base64.decode(MyPrefFiles.getMyPreference(MyPrefFiles.SHARED_SECRETS, this.otherNumber, this.ctx), Base64.DEFAULT);
-		generateAndStoreAesKey(secret, salt);
-		byte[] partialBody = constructPartialBody(iv, salt);
-		byte[] signature = generateSignature(partialBody);
-		return packBody(partialBody, signature);
+		this.keySalt = salt;
+		return constructBody(iv, salt);
 	}
 
-	private byte[] packBody(byte[] partialBody, byte[] signature) {
-		byte[] body = new byte[partialBody.length + signature.length];
-		System.arraycopy(partialBody, 0, body, 0, partialBody.length);
-		System.arraycopy(signature, 0, body, partialBody.length, signature.length);
-		return body;
+	private byte[] packHeaderAndBody(byte[] header, byte[] body) {
+		byte[] message = new byte[header.length + body.length];
+		System.arraycopy(header, 0, message, 0, header.length);
+		System.arraycopy(body, 0, message, header.length, body.length);
+		return message;
+	}
+	
+	private byte[] packMessage(byte[] partialMessage, byte[] signature) {
+		byte[] finalMessage = new byte[partialMessage.length + signature.length];
+		System.arraycopy(partialMessage, 0, finalMessage, 0, partialMessage.length);
+		System.arraycopy(signature, 0, finalMessage, partialMessage.length, signature.length);
+		return finalMessage;
 	}
 
-	private byte[] generateSignature(byte[] partialBody) throws NoSuchAlgorithmException, NoSuchProviderException, InvalidKeySpecException, NoSuchPreferenceFoundException, NoSignatureDoneException, NotECKeyException {
+	private byte[] generateSignature(byte[] message) throws NoSuchAlgorithmException, NoSuchProviderException, InvalidKeySpecException, NoSuchPreferenceFoundException, NoSignatureDoneException, NotECKeyException {
 		PrivateKey mPriv = retrieveMyPrivateKey();
-		ECDSA_Signature sigMaker = new ECDSA_Signature(partialBody, mPriv);
+		ECDSA_Signature sigMaker = new ECDSA_Signature(message, mPriv);
 		sigMaker.sign();
 		return sigMaker.getSignature();
 	}
@@ -121,7 +124,7 @@ public class LocalizationFragment extends Fragment implements OnClickListener {
 		return keyFactory.generatePrivate(new PKCS8EncodedKeySpec(myPriv));
 	}
 
-	private byte[] constructPartialBody(byte[] iv, byte[] salt) {
+	private byte[] constructBody(byte[] iv, byte[] salt) {
 		byte[] partialBody = new byte[iv.length + salt.length];
 		System.arraycopy(iv, 0, partialBody, 0, iv.length);
 		System.arraycopy(salt, 0, partialBody, iv.length, salt.length);

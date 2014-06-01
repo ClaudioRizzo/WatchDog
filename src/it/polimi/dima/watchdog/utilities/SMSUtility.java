@@ -191,6 +191,20 @@ public class SMSUtility {
 	}
 	
 	/**
+	 * Manda il messaggio.
+	 * 
+	 * @param number : il destinatario
+	 * @param port : la porta
+	 * @param message : il messaggio
+	 */
+	public static void sendCommandMessage(String number, short port, byte[] message){
+		SmsManager man = SmsManager.getDefault();
+		Log.i("[DEBUG_COMMAND]", "[DEBUG_COMMAND] lunghezza del messaggio da inviare appena prima di inviarlo: " + message.length);
+		Log.i("[DEBUG_COMMAND]", "[DEBUG_COMMAND] messaggio da inviare appena prima di inviarlo: " + Base64.encodeToString(message, Base64.DEFAULT));
+		man.sendDataMessage(number, null, port, message, null, null);
+	}
+	
+	/**
 	 * Ritorna l'header di un messaggio.
 	 * 
 	 * @param msg : il messaggio
