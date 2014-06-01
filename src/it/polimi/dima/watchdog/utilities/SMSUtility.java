@@ -185,6 +185,7 @@ public class SMSUtility {
 		if(body != null) {
 			System.arraycopy(body, 0, message, header.length, body.length);
 		}
+		Log.i("[DEBUG_COMMAND]", "[DEBUG_COMMAND] lunghezza del messaggio da inviare appena prima di inviarlo: " + message.length);
 		man.sendDataMessage(number, null, port, message, null, null);
 	}
 	
