@@ -1,6 +1,8 @@
 package it.polimi.dima.watchdog.sms.commands.flags;
 
 import java.security.PublicKey;
+
+import android.util.Log;
 import it.polimi.dima.watchdog.crypto.ECDSA_Signature;
 import it.polimi.dima.watchdog.exceptions.ArbitraryMessageReceivedException;
 import it.polimi.dima.watchdog.exceptions.ErrorInSignatureCheckingException;
@@ -41,10 +43,15 @@ public class M1Parser {
 	
 	public void parse() throws ArbitraryMessageReceivedException, ErrorInSignatureCheckingException, NotECKeyException {
 		int ivStartPosition = ParsableSMS.HEADER_LENGTH;
+		Log.i("[DEBUG]", "[DEBUG] iv start position = " + ivStartPosition);
 		int saltStartPosition = ivStartPosition + M1Parser.IV_LENGTH;
+		Log.i("[DEBUG]", "[DEBUG] salt start position = " + saltStartPosition);
 		int signatureStartPosition = saltStartPosition + M1Parser.SALT_LENGTH;
+		Log.i("[DEBUG]", "[DEBUG] signature start position = " + signatureStartPosition);
 		int messageWithoutSignatureLength = ParsableSMS.HEADER_LENGTH + M1Parser.IV_LENGTH + M1Parser.SALT_LENGTH;
+		Log.i("[DEBUG]", "message without signature length = " + messageWithoutSignatureLength);
 		int signatureLength = this.rawMessage.length - messageWithoutSignatureLength;
+		Log.i("[DEBUG]", "[DEBUG] signature length = " + signatureLength);
 			
 		if(signatureLength < 1){
 			throw new ArbitraryMessageReceivedException();
