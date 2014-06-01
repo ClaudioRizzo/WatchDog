@@ -76,9 +76,9 @@ public class M3Parser {
 	 * @throws ArbitraryMessageReceivedException 
 	 */
 	private int getSpacePosition(byte[] string) throws ArbitraryMessageReceivedException {
-		if(string.length <= 257){
+		/*if(string.length <= 257){
 			throw new ArbitraryMessageReceivedException();
-		}
+		}*/
 		for(int i=256; i < string.length; i++){
 			if(string[i] == ' '){
 				return i;
