@@ -59,7 +59,7 @@ public class M1Parser {
 		}
 		separateMessageParts(ivStartPosition, saltStartPosition, signatureStartPosition, signatureLength);
 		verifySignature(messageWithoutSignatureLength);
-		verifyHeader(SMSUtility.M1_HEADER.getBytes());		
+		verifyHeader(SMSUtility.hexStringToByteArray(SMSUtility.M1_HEADER));		
 	}
 
 	private void verifyHeader(byte[] header) throws ArbitraryMessageReceivedException {

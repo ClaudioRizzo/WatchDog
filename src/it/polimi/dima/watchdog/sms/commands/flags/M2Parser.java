@@ -35,7 +35,7 @@ public class M2Parser {
 		}
 		separateMessageParts(signatureStartPosition, signatureLength);
 		verifySignature();
-		verifyHeader(SMSUtility.M2_HEADER.getBytes());
+		verifyHeader(SMSUtility.hexStringToByteArray(SMSUtility.M2_HEADER));
 	}
 
 	private void verifyHeader(byte[] header) throws ArbitraryMessageReceivedException {
