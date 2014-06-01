@@ -72,8 +72,10 @@ public class LocalizationFragment extends Fragment implements OnClickListener {
 			byte[] mess = new byte[ParsableSMS.HEADER_LENGTH + body.length];
 			System.arraycopy(SMSUtility.M1_HEADER.getBytes(), 0, mess, 0, ParsableSMS.HEADER_LENGTH);
 			System.arraycopy(body, 0, mess, ParsableSMS.HEADER_LENGTH, body.length);
-			//fina roba da cancellare
+			Log.i("[DEBUG_COMMAND]", "[DEBUG_COMMAND] lunghezza del messaggio da inviare: " + mess.length);
 			Log.i("[DEBUG_COMMAND]", "[DEBUG_COMMAND] messaggio da inviare: " + Base64.encodeToString(mess, Base64.DEFAULT));
+			//fina roba da cancellare
+			
 			SMSUtility.sendMessage(this.otherNumber, SMSUtility.COMMAND_PORT, SMSUtility.M1_HEADER.getBytes(), body);
 			TimeoutWrapper.addTimeout(SMSUtility.MY_PHONE, this.otherNumber, this.ctx);
 		}
