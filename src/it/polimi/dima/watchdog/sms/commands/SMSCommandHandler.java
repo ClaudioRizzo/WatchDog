@@ -63,6 +63,8 @@ public class SMSCommandHandler extends BroadcastReceiver implements SMSCommandVi
 				if(!MyPrefFiles.getMyPreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + this.other, this.ctx).equals(StatusFree.CURRENT_STATUS)){
 					TimeoutWrapper.addTimeout(SMSUtility.MY_PHONE, this.other, this.ctx);						
 				}
+			} else {
+				Log.i("[DEBUG]", "[DEBUG-onReceive command] non succede niente: mappa a puttane");
 			}
 			//altrimenti si ignora il messaggio		
 		} 
@@ -75,7 +77,9 @@ public class SMSCommandHandler extends BroadcastReceiver implements SMSCommandVi
 	
 	private String getMyContext(Context context) throws NoSuchPreferenceFoundException{
 		if(MyPrefFiles.existsPreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + this.other, context)){
-			return MyPrefFiles.getMyPreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + this.other, context);
+			String myContext = MyPrefFiles.getMyPreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + this.other, context);
+			Log.i("[DEBUG]", "[DEBUG-GetMyContext] "+myContext);
+			return myContext;
 		}
 		return null;
 	}
