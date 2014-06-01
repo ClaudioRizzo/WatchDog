@@ -6,7 +6,9 @@ import it.polimi.dima.watchdog.exceptions.ErrorInSignatureCheckingException;
 import it.polimi.dima.watchdog.exceptions.NotECKeyException;
 import it.polimi.dima.watchdog.sms.ParsableSMS;
 import it.polimi.dima.watchdog.utilities.SMSUtility;
+
 import java.security.PublicKey;
+import java.util.Arrays;
 
 /**
  * 
@@ -39,7 +41,7 @@ public class M2Parser {
 	}
 
 	private void verifyHeader(byte[] header) throws ArbitraryMessageReceivedException {
-		if(!this.header.equals(header)){
+		if(!Arrays.equals(this.header, header)){
 			throw new ArbitraryMessageReceivedException();
 		}
 	}

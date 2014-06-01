@@ -1,6 +1,7 @@
 package it.polimi.dima.watchdog.sms.commands.flags;
 
 import java.security.PublicKey;
+import java.util.Arrays;
 
 import android.util.Base64;
 import android.util.Log;
@@ -66,7 +67,7 @@ public class M1Parser {
 		//se è scattato un timeout, lo status è tornato free, quindi il primo messaggio dopo il timeout viene
 		//trattato come un m1. Se non lo è si lancia un'eccezione che propagata causerà la cancellazione
 		//di tutte le preferenze della sessione di comando.
-		if(!this.header.equals(header)){
+		if(!Arrays.equals(this.header, header)){
 			throw new ArbitraryMessageReceivedException();
 		}
 	}
