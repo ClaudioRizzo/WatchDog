@@ -72,7 +72,9 @@ public class LocalizationFragment extends Fragment implements OnClickListener {
 			generateAndStoreAesKey(secret, this.keySalt);
 			byte[] header = SMSUtility.M1_HEADER.getBytes();
 			byte[] message = packHeaderAndBody(header, body);
+			Log.i("[DEBUG]", "messaggio senza firma: " + Base64.encodeToString(message, Base64.DEFAULT));
 			byte[] signature = generateSignature(message);
+			Log.i("[DEBUG]", "firma: " + Base64.encodeToString(signature, Base64.DEFAULT));
 			byte[] finalMessage = packMessage(message, signature);
 			
 			TimeoutWrapper.addTimeout(SMSUtility.MY_PHONE, this.otherNumber, this.ctx);
