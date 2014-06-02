@@ -112,6 +112,11 @@ public class SMSUtility {
 	 * Header del quarto messaggio della sessione di comando.
 	 */
 	public static String M4_HEADER = "C0DE004F";
+	/**
+	 * Lunghezza fissata del body di m4 (il primo byte indica la lunghezza reale, poi ci sono i dati
+	 * effettivi e infine un padding di zeri)
+	 */
+	public static int M4_BODY_LENGTH = 40; //TODO calibrare a seconda delle necessità
 	
 	private static final char[] hexArray = "0123456789ABCDEF".toCharArray();
 	/**
@@ -185,8 +190,6 @@ public class SMSUtility {
 		if(body != null) {
 			System.arraycopy(body, 0, message, header.length, body.length);
 		}
-		Log.i("[DEBUG_COMMAND]", "[DEBUG_COMMAND] lunghezza del messaggio da inviare appena prima di inviarlo: " + message.length);
-		Log.i("[DEBUG_COMMAND]", "[DEBUG_COMMAND] messaggio da inviare appena prima di inviarlo: " + Base64.encodeToString(message, Base64.DEFAULT));
 		man.sendDataMessage(number, null, port, message, null, null);
 	}
 	
@@ -199,8 +202,6 @@ public class SMSUtility {
 	 */
 	public static void sendCommandMessage(String number, short port, byte[] message){
 		SmsManager man = SmsManager.getDefault();
-		Log.i("[DEBUG_COMMAND]", "[DEBUG_COMMAND] lunghezza del messaggio da inviare appena prima di inviarlo: " + message.length);
-		Log.i("[DEBUG_COMMAND]", "[DEBUG_COMMAND] messaggio da inviare appena prima di inviarlo: " + Base64.encodeToString(message, Base64.DEFAULT));
 		man.sendDataMessage(number, null, port, message, null, null);
 	}
 	

@@ -55,13 +55,6 @@ public class StatusFree implements CommandProtocolFlagsReactionInterface{
 		KeyFactory keyFactory = KeyFactory.getInstance(CryptoUtility.EC, CryptoUtility.SC);
 		PublicKey oPub = keyFactory.generatePublic(new X509EncodedKeySpec(publicKey));
 		
-		//cancellare dopo che funziona
-		byte[] mess = message.getUserData();
-		Log.i("[DEBUG]", "[DEBUG] la chiave pubblica dell'altro: " + MyPrefFiles.getMyPreference(MyPrefFiles.KEYRING, other, context));
-		Log.i("[DEBUG_COMMAND]", "[DEBUG_COMMAND] lunghezza del messaggio ricevuto: " + mess.length);
-		Log.i("[DEBUG_COMMAND]", "[DEBUG_COMMAND] messaggio ricevuto: " + Base64.encodeToString(mess, Base64.DEFAULT));
-		//fine roba da cancellare
-		
 		this.parser = new M1Parser(message.getUserData(), oPub);
 		this.parser.parse();
 		generateAndSaveAESKeyForM3(other, context);

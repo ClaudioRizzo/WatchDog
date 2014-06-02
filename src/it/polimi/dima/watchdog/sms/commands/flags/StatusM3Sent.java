@@ -1,5 +1,6 @@
 package it.polimi.dima.watchdog.sms.commands.flags;
 
+import java.security.Key;
 import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
@@ -7,7 +8,12 @@ import java.security.PublicKey;
 import java.security.Security;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.X509EncodedKeySpec;
+import javax.crypto.spec.SecretKeySpec;
+import org.spongycastle.crypto.InvalidCipherTextException;
+import it.polimi.dima.watchdog.exceptions.ArbitraryMessageReceivedException;
+import it.polimi.dima.watchdog.exceptions.ErrorInSignatureCheckingException;
 import it.polimi.dima.watchdog.exceptions.NoSuchPreferenceFoundException;
+import it.polimi.dima.watchdog.exceptions.NotECKeyException;
 import it.polimi.dima.watchdog.sms.ParsableSMS;
 import it.polimi.dima.watchdog.sms.timeout.TimeoutWrapper;
 import it.polimi.dima.watchdog.utilities.CryptoUtility;
@@ -38,19 +44,45 @@ public class StatusM3Sent implements CommandProtocolFlagsReactionInterface {
 	
 	
 	@Override
-	public ParsableSMS parse(Context context, SmsMessage message, String other) throws NoSuchPreferenceFoundException, NoSuchAlgorithmException, NoSuchProviderException, InvalidKeySpecException  {
+	public ParsableSMS parse(Context context, SmsMessage message, String other) throws NoSuchPreferenceFoundException, NoSuchAlgorithmException, NoSuchProviderException, InvalidKeySpecException, IllegalArgumentException, IllegalStateException, InvalidCipherTextException, ArbitraryMessageReceivedException, NotECKeyException, ErrorInSignatureCheckingException  {
 		TimeoutWrapper.removeTimeout(SMSUtility.MY_PHONE, other, context);
 		MyPrefFiles.replacePreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + other, StatusM3Sent.STATUS_RECEIVED, context);
 		
-		byte[] publicKey = Base64.decode(MyPrefFiles.getMyPreference(MyPrefFiles.KEYRING, other, context),Base64.DEFAULT);
-		KeyFactory keyFactory = KeyFactory.getInstance(CryptoUtility.EC, CryptoUtility.SC);
-		PublicKey oPub = keyFactory.generatePublic(new X509EncodedKeySpec(publicKey));
+		PublicKey oPub = fetchOtherPublicKey(other, context);
+		Key decryptionKey = fetchDecryptionKey(other, context);
+		byte[] iv = fetchIv(other, context);
 		
-		this.parser = new M4Parser(message.getUserData(), oPub);
+		this.parser = new M4Parser(message.getUserData(), oPub, decryptionKey, iv);
 		this.parser.parse();
-		//TODO fare qualcosa con il body del messaggio
+		byte[] content = this.parser.getBody();
 		Log.i("[DEBUG_COMMAND]", "[DEBUG_COMMAND] m4 received and parsed");
+		handleReturnedData(content);
+		MyPrefFiles.replacePreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + other, StatusM3Sent.NEXT_SENT_STATUS, context);
 		return null;
+	}
+	
+	private void handleReturnedData(byte[] content) {
+		// TODO fare qualcosa coi dati che sono tornati indietro.
+	}
+
+
+	private byte[] fetchIv(String other, Context ctx) throws NoSuchPreferenceFoundException {
+		String iv = MyPrefFiles.getMyPreference(MyPrefFiles.COMMAND_SESSION, other + MyPrefFiles.IV_FOR_M4, ctx);
+		return Base64.decode(iv, Base64.DEFAULT);
+	}
+
+
+	private Key fetchDecryptionKey(String other, Context ctx) throws NoSuchPreferenceFoundException {
+		String decKey = MyPrefFiles.getMyPreference(MyPrefFiles.COMMAND_SESSION, other + MyPrefFiles.KEY_FOR_M4, ctx);
+		byte[] decKeyValue = Base64.decode(decKey, Base64.DEFAULT);
+		return new SecretKeySpec(decKeyValue, CryptoUtility.AES_256);
+	}
+
+
+	private PublicKey fetchOtherPublicKey(String other, Context ctx) throws InvalidKeySpecException, NoSuchAlgorithmException, NoSuchProviderException, NoSuchPreferenceFoundException{
+		byte[] publicKey = Base64.decode(MyPrefFiles.getMyPreference(MyPrefFiles.KEYRING, other, ctx),Base64.DEFAULT);
+		KeyFactory keyFactory = KeyFactory.getInstance(CryptoUtility.EC, CryptoUtility.SC);
+		return keyFactory.generatePublic(new X509EncodedKeySpec(publicKey));
 	}
 
 	@Override

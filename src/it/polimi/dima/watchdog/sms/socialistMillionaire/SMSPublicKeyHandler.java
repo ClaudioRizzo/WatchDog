@@ -109,7 +109,7 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 	 */
 	@Override
 	public void visit(PublicKeySentCodeMessage pubKeySentMsg) {
-		Log.i("[DEBUG_SMP_BEFORE_TRY]", "[DEBUG_SMP_BEFORE_TRY] CODE_2 RECEIVED");
+		Log.i("[DEBUG_SMP]", "[DEBUG] CODE_2 RECEIVED");
 		try {
 			//vedo se accettare il messaggio
 			pubKeySentMsg.validate(this.other, this.ctx);
@@ -130,8 +130,6 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 			//... e segno in SMP_STATUS di avergliela mandata
 			String preferenceKey = this.other + MyPrefFiles.SECRET_QUESTION_FORWARDED;
 			MyPrefFiles.setMyPreference(MyPrefFiles.SMP_STATUS, preferenceKey, this.other, this.ctx);
-			
-			Log.i("[DEBUG_SMP_AFTER_SEND]", "[DEBUG_SMP_AFTER_TRY] CODE_2 RECEIVED");
 		} catch (Exception e){
 			//notifico e invio richiesta di stop forzato, oltre alla cancellazione delle preferenze
 			SMSUtility.handleErrorOrExceptionInSmp(e, this.other, this.ctx);

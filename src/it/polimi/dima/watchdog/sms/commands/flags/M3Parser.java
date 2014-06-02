@@ -2,11 +2,8 @@ package it.polimi.dima.watchdog.sms.commands.flags;
 
 import java.security.Key;
 import java.security.PublicKey;
-
 import org.spongycastle.crypto.InvalidCipherTextException;
-
 import android.util.Base64;
-import android.util.Log;
 import it.polimi.dima.watchdog.crypto.AES256GCM;
 import it.polimi.dima.watchdog.crypto.ECDSA_Signature;
 import it.polimi.dima.watchdog.exceptions.ArbitraryMessageReceivedException;
@@ -136,8 +133,6 @@ public class M3Parser {
 	private boolean validate() {
 		String received = Base64.encodeToString(this.passwordHash, Base64.DEFAULT);
 		String stored = Base64.encodeToString(this.storedPasswordHash, Base64.DEFAULT);
-		Log.i("[DEBUG]", "[DEBUG] stored hash: " + stored);
-		Log.i("[DEBUG]", "[DEBUG] received hash: " + received);
 		return received.equals(stored);
 	}
 }

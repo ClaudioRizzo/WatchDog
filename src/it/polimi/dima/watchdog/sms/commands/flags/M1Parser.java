@@ -2,9 +2,6 @@ package it.polimi.dima.watchdog.sms.commands.flags;
 
 import java.security.PublicKey;
 import java.util.Arrays;
-
-import android.util.Base64;
-import android.util.Log;
 import it.polimi.dima.watchdog.crypto.ECDSA_Signature;
 import it.polimi.dima.watchdog.exceptions.ArbitraryMessageReceivedException;
 import it.polimi.dima.watchdog.exceptions.ErrorInSignatureCheckingException;
@@ -45,15 +42,10 @@ public class M1Parser {
 	
 	public void parse() throws ArbitraryMessageReceivedException, ErrorInSignatureCheckingException, NotECKeyException {
 		int ivStartPosition = ParsableSMS.HEADER_LENGTH;
-		Log.i("[DEBUG]", "[DEBUG] iv start position = " + ivStartPosition);
 		int saltStartPosition = ivStartPosition + M1Parser.IV_LENGTH;
-		Log.i("[DEBUG]", "[DEBUG] salt start position = " + saltStartPosition);
 		int signatureStartPosition = saltStartPosition + M1Parser.SALT_LENGTH;
-		Log.i("[DEBUG]", "[DEBUG] signature start position = " + signatureStartPosition);
 		int messageWithoutSignatureLength = ParsableSMS.HEADER_LENGTH + M1Parser.IV_LENGTH + M1Parser.SALT_LENGTH;
-		Log.i("[DEBUG]", "message without signature length = " + messageWithoutSignatureLength);
 		int signatureLength = this.rawMessage.length - messageWithoutSignatureLength;
-		Log.i("[DEBUG]", "[DEBUG] signature length = " + signatureLength);
 			
 		if(signatureLength < 1){
 			throw new ArbitraryMessageReceivedException();
@@ -75,9 +67,6 @@ public class M1Parser {
 	private void verifySignature(int messageWithoutSignatureLength) throws ArbitraryMessageReceivedException, ErrorInSignatureCheckingException, NotECKeyException {
 		byte[] messageWithoutSignature = new byte[messageWithoutSignatureLength];
 		System.arraycopy(this.rawMessage, 0, messageWithoutSignature, 0, messageWithoutSignatureLength);
-		Log.i("[DEBUG]", "[DEBUG] messaggio senza firma: " + Base64.encodeToString(messageWithoutSignature, Base64.DEFAULT));
-		Log.i("[DEBUG]", "[DEBUG] lunghezza della firma: " + this.signature.length);
-		Log.i("[DEBUG]", "[DEBUG] firma: " + Base64.encodeToString(this.signature, Base64.DEFAULT));
 		ECDSA_Signature verifier = new ECDSA_Signature(messageWithoutSignature, this.oPub, this.signature);
 		if(!verifier.verifySignature()){
 			throw new ArbitraryMessageReceivedException("Firma non valida/non corrispondente!!!");

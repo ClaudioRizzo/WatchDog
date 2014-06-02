@@ -8,7 +8,6 @@ import java.security.Security;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.util.Random;
-
 import it.polimi.dima.watchdog.R;
 import it.polimi.dima.watchdog.crypto.AESKeyGenerator;
 import it.polimi.dima.watchdog.crypto.ECDSA_Signature;
@@ -61,8 +60,6 @@ public class LocalizationFragment extends Fragment implements OnClickListener {
 			byte[] command = SMSUtility.hexStringToByteArray(SMSUtility.LOCATE); //TODO in realtà il tipo di comando va preso dal tipo di bottone cliccato
 			this.otherNumber = getPhoneNumber(mFragView);
 			
-			Log.i("[DEBUG]", "[DEBUG] Questa è la chiave: " + MyPrefFiles.getMyPreference(MyPrefFiles.KEYRING, this.otherNumber, this.ctx));
-			
 			if(!MyPrefFiles.existsPreference(MyPrefFiles.KEYRING, this.otherNumber, this.ctx)){
 				throw new NoSuchPreferenceFoundException("Non si può iniziare una sessione di comando con un utente con cui non è stato fatto SMP!!!");
 			}
@@ -74,10 +71,7 @@ public class LocalizationFragment extends Fragment implements OnClickListener {
 			generateAndStoreAesKey(secret, this.keySalt);
 			byte[] header = SMSUtility.hexStringToByteArray(SMSUtility.M1_HEADER);
 			byte[] message = packHeaderAndBody(header, body);
-			Log.i("[DEBUG]", "[DEBUG] messaggio senza firma: " + Base64.encodeToString(message, Base64.DEFAULT));
 			byte[] signature = generateSignature(message);
-			Log.i("[DEBUG]", "[DEBUG] lunghezza della firma: " + signature.length);
-			Log.i("[DEBUG]", "[DEBUG] firma: " + Base64.encodeToString(signature, Base64.DEFAULT));
 			byte[] finalMessage = packMessage(message, signature);
 			
 			TimeoutWrapper.addTimeout(SMSUtility.MY_PHONE, this.otherNumber, this.ctx);
