@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2014.5.24)  28 MAY 2014 23:26
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2014.5.24)  2 JUN 2014 18:26
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -206,28 +206,18 @@ Package color Info: Driver file: pdftex.def on input line 130.
 (/usr/share/texlive/texmf-dist/tex/generic/babel/babel.sty
 Package: babel 2014/03/24 3.9k The Babel package
 
-(/usr/share/texlive/texmf-dist/tex/generic/babel-italian/italian.ldf
-Language: italian 2014/03/29 v1.3k Italian support from the babel system
+(/usr/share/texlive/texmf-dist/tex/generic/babel-english/english.ldf
+Language: english 2012/08/20 v3.3p English support from the babel system
 
 (/usr/share/texlive/texmf-dist/tex/generic/babel/babel.def
 File: babel.def 2014/03/24 3.9k Babel common definitions
 \babel@savecnt=\count94
 \U@D=\dimen126
 )
-\it@lettering=\count95
-\it@doublequoteactive=\count96
-\it@ISOcompliance=\count97
-\Virgola=\count98
+\l@canadian = a dialect from \language\l@american 
+\l@australian = a dialect from \language\l@british 
+\l@newzealand = a dialect from \language\l@british 
 ))
-(/usr/share/texlive/texmf-dist/tex/latex/etoolbox/etoolbox.sty
-Package: etoolbox 2011/01/03 v2.1 e-TeX tools for LaTeX
-
-(/usr/share/texlive/texmf-dist/tex/latex/etex-pkg/etex.sty
-Package: etex 1998/03/26 v2.0 eTeX basic definition package (PEB)
-\et@xins=\count99
-)
-\etb@tempcnta=\count100
-)
 (/usr/share/texlive/texmf-dist/tex/latex/geometry/geometry.sty
 Package: geometry 2010/09/12 v5.6 Page Geometry
 
@@ -242,9 +232,9 @@ Package ifvtex Info: VTeX not detected.
 (/usr/share/texlive/texmf-dist/tex/generic/ifxetex/ifxetex.sty
 Package: ifxetex 2010/09/12 v0.6 Provides ifxetex conditional
 )
-\Gm@cnth=\count101
-\Gm@cntv=\count102
-\c@Gm@tempcnt=\count103
+\Gm@cnth=\count95
+\Gm@cntv=\count96
+\c@Gm@tempcnt=\count97
 \Gm@bindingoffset=\dimen127
 \Gm@wd@mp=\dimen128
 \Gm@odd@mp=\dimen129
@@ -269,19 +259,19 @@ Package: titlesec 2011/12/15 v2.10.0 Sectioning titles
 ) (./doc.aux)
 \openout1 = `doc.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 52.
-LaTeX Font Info:    ... okay on input line 52.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 52.
-LaTeX Font Info:    ... okay on input line 52.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 52.
-LaTeX Font Info:    ... okay on input line 52.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 52.
-LaTeX Font Info:    ... okay on input line 52.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 52.
-LaTeX Font Info:    ... okay on input line 52.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 52.
-LaTeX Font Info:    ... okay on input line 52.
-LaTeX Font Info:    Try loading font information for T1+lmss on input line 52.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 53.
+LaTeX Font Info:    ... okay on input line 53.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 53.
+LaTeX Font Info:    ... okay on input line 53.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 53.
+LaTeX Font Info:    ... okay on input line 53.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 53.
+LaTeX Font Info:    ... okay on input line 53.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 53.
+LaTeX Font Info:    ... okay on input line 53.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 53.
+LaTeX Font Info:    ... okay on input line 53.
+LaTeX Font Info:    Try loading font information for T1+lmss on input line 53.
 
 (/usr/share/texmf/tex/latex/lm/t1lmss.fd
 File: t1lmss.fd 2009/10/30 v1.6 Font defs for Latin Modern
@@ -291,16 +281,16 @@ File: ucsencs.def 2011/01/21 Fixes to fontencodings LGR, T3
 )
 (/usr/share/texlive/texmf-dist/tex/context/base/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count104
+\scratchcounter=\count98
 \scratchdimen=\dimen140
 \scratchbox=\box27
-\nofMPsegments=\count105
-\nofMParguments=\count106
+\nofMPsegments=\count99
+\nofMParguments=\count100
 \everyMPshowfont=\toks25
-\MPscratchCnt=\count107
+\MPscratchCnt=\count101
 \MPscratchDim=\dimen141
-\MPnumerator=\count108
-\makeMPintoPDFobject=\count109
+\MPnumerator=\count102
+\makeMPintoPDFobject=\count103
 \everyMPtoPDFconversion=\toks26
 ) (/usr/share/texlive/texmf-dist/tex/generic/oberdiek/pdftexcmds.sty
 Package: pdftexcmds 2011/11/29 v0.20 Utility functions of pdfTeX for LuaTeX (HO
@@ -346,9 +336,6 @@ G,.JBIG2,.JB2,.eps]
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
 e
 ))
-LaTeX Info: Redefining \it@ocap on input line 52.
-LaTeX Info: Redefining \it@ccap on input line 52.
-
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
 *geometry* verbose mode - [ preamble ] result:
@@ -386,81 +373,75 @@ LaTeX Info: Redefining \it@ccap on input line 52.
 <images/polimi.png, id=1, 722.7pt x 722.7pt>
 File: images/polimi.png Graphic file (type png)
  <use images/polimi.png>
-Package pdftex.def Info: images/polimi.png used on input line 53.
+Package pdftex.def Info: images/polimi.png used on input line 54.
 (pdftex.def)             Requested size: 216.81166pt x 216.81166pt.
-LaTeX Font Info:    Calculating math sizes for size <19.19995> on input line 53
+LaTeX Font Info:    Calculating math sizes for size <19.19995> on input line 54
 .
-LaTeX Font Info:    Try loading font information for OT1+lmr on input line 53.
+LaTeX Font Info:    Try loading font information for OT1+lmr on input line 54.
 
 (/usr/share/texmf/tex/latex/lm/ot1lmr.fd
 File: ot1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
-LaTeX Font Info:    Try loading font information for OML+lmm on input line 53.
+LaTeX Font Info:    Try loading font information for OML+lmm on input line 54.
 
 (/usr/share/texmf/tex/latex/lm/omllmm.fd
 File: omllmm.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
-LaTeX Font Info:    Try loading font information for OMS+lmsy on input line 53.
+LaTeX Font Info:    Try loading font information for OMS+lmsy on input line 54.
 
 
 (/usr/share/texmf/tex/latex/lm/omslmsy.fd
 File: omslmsy.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
-LaTeX Font Info:    Try loading font information for OMX+lmex on input line 53.
+LaTeX Font Info:    Try loading font information for OMX+lmex on input line 54.
 
 
 (/usr/share/texmf/tex/latex/lm/omxlmex.fd
 File: omxlmex.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <19.19995> on input line 53.
+(Font)              <19.19995> on input line 54.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <13.4399> on input line 53.
+(Font)              <13.4399> on input line 54.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <9.59998> on input line 53.
+(Font)              <9.59998> on input line 54.
  [1
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map} <./images/polimi.png>] (./d
 oc.toc
-LaTeX Font Info:    Calculating math sizes for size <16> on input line 8.
+LaTeX Font Info:    Calculating math sizes for size <16> on input line 3.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <16> on input line 8.
+(Font)              <16> on input line 3.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <11.19995> on input line 8.
+(Font)              <11.19995> on input line 3.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <8> on input line 8.
- [2
+(Font)              <8> on input line 3.
+
+Overfull \hbox (26.35312pt too wide) in paragraph at lines 17--17
+ [][] \T1/lmss/m/n/16 Mes-sage in-tegrity/authentication/non forge-abil-ity/non
+ 
+ []
+
+[2
 
 ])
 \tf@toc=\write3
 \openout3 = `doc.toc'.
 
- [3]
-Overfull \hbox (20.5609pt too wide) in paragraph at lines 68--70
-\T1/lmss/m/n/39.8081 Chapter A: Pro-ject con-text and
- []
-
-[4
+ [3] [4
 
 ] [5
 
 ]
-Overfull \hbox (5.94072pt too wide) in paragraph at lines 79--81
-\T1/lmss/m/n/39.8081 Chapter C: Re-qui-re-men-ts ana-
- []
+LaTeX Font Info:    Font shape `T1/lmss/bx/it' in size <16> not available
+(Font)              Font shape `T1/lmss/bx/sl' tried instead on input line 97.
+ [6
 
-[6
+] [7] [8] [9
 
-] [7] [8
+] [10] [11
 
-] [9] [10
-
-]
-Overfull \hbox (24.94417pt too wide) in paragraph at lines 138--140
-\T1/lmss/m/n/39.8081 Chapter F: In-stal-la-tion and usa-
- []
-
-[11
+] [12
 
 ] (./doc.aux)
 
@@ -469,19 +450,21 @@ LaTeX Font Warning: Size substitutions with differences
 
  ) 
 Here is how much of TeX's memory you used:
- 4611 strings out of 493304
- 67055 string characters out of 6139871
- 168377 words of memory out of 5000000
- 7960 multiletter control sequences out of 15000+600000
- 49150 words of font info for 44 fonts, out of 8000000 for 9000
+ 4201 strings out of 493304
+ 62335 string characters out of 6139871
+ 160102 words of memory out of 5000000
+ 7556 multiletter control sequences out of 15000+600000
+ 54736 words of font info for 46 fonts, out of 8000000 for 9000
  957 hyphenation exceptions out of 8191
- 47i,7n,37p,803b,236s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 47i,7n,37p,1075b,234s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texmf/fonts/enc/dvips/lm/lm-ec.enc}</usr/share/texmf/fonts/type1/
-public/lm/lmss17.pfb></usr/share/texmf/fonts/type1/public/lm/lmssbx10.pfb>
-Output written on doc.pdf (11 pages, 153513 bytes).
+public/lm/lmss12.pfb></usr/share/texmf/fonts/type1/public/lm/lmss17.pfb></usr/s
+hare/texmf/fonts/type1/public/lm/lmssbo10.pfb></usr/share/texmf/fonts/type1/pub
+lic/lm/lmssbx10.pfb>
+Output written on doc.pdf (12 pages, 208145 bytes).
 PDF statistics:
- 52 PDF objects out of 1000 (max. 8388607)
- 34 compressed objects within 1 object stream
+ 63 PDF objects out of 1000 (max. 8388607)
+ 42 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  6 words of extra memory for PDF output out of 10000 (max. 10000000)
 
