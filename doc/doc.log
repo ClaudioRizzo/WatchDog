@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2014.5.24)  3 JUN 2014 00:36
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2014.5.24)  3 JUN 2014 16:13
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -440,79 +440,47 @@ LaTeX Font Info:    Font shape `T1/lmss/bx/it' in size <16> not available
 ] [7] [8] [9
 
 ]
-Underfull \hbox (badness 10000) in paragraph at lines 153--154
+Underfull \hbox (badness 10000) in paragraph at lines 144--145
 
  []
 
-[10] <images/aesgcmenc.png, id=41, 791.95876pt x 504.88625pt>
+<images/ecdh.png, id=38, 624.3325pt x 394.47375pt>
+File: images/ecdh.png Graphic file (type png)
+ <use images/ecdh.png>
+Package pdftex.def Info: images/ecdh.png used on input line 148.
+(pdftex.def)             Requested size: 437.02977pt x 276.12973pt.
+
+[10 <./images/ecdh.png>]
+Underfull \hbox (badness 10000) in paragraph at lines 163--164
+
+ []
+
+[11
+
+] <images/aesgcmenc.png, id=46, 791.95876pt x 504.88625pt>
 File: images/aesgcmenc.png Graphic file (type png)
 
 <use images/aesgcmenc.png>
-Package pdftex.def Info: images/aesgcmenc.png used on input line 156.
+Package pdftex.def Info: images/aesgcmenc.png used on input line 167.
 (pdftex.def)             Requested size: 395.97841pt x 252.44249pt.
- [11 <./images/aesgcmenc.png>]
-<images/aesgcmdec.png, id=45, 605.26125pt x 465.74pt>
+ [12 <./images/aesgcmenc.png>]
+<images/aesgcmdec.png, id=50, 605.26125pt x 465.74pt>
 File: images/aesgcmdec.png Graphic file (type png)
 
 <use images/aesgcmdec.png>
-Package pdftex.def Info: images/aesgcmdec.png used on input line 161.
+Package pdftex.def Info: images/aesgcmdec.png used on input line 172.
 (pdftex.def)             Requested size: 363.15953pt x 279.44615pt.
- <images/aes.png, id=46, 922.44624pt x 839.135pt>
+ <images/aes.png, id=51, 922.44624pt x 839.135pt>
 File: images/aes.png Graphic file (type png)
 
 <use images/aes.png>
-Package pdftex.def Info: images/aes.png used on input line 167.
+Package pdftex.def Info: images/aes.png used on input line 178.
 (pdftex.def)             Requested size: 276.73601pt x 251.74243pt.
- [12
+ [13
 
- <./images/aesgcmdec.png> <./images/aes.png (PNG copy)>]
-Underfull \hbox (badness 10000) in paragraph at lines 174--174
- |[]\T1/lmss/bx/n/23.04004 Testing|
- []
+ <./images/aesgcmdec.png> <./images/aes.png (PNG copy)>] [14
 
-
-Underfull \hbox (badness 10000) in paragraph at lines 175--175
- |[]\T1/lmss/bx/n/19.19995 Cryptography|
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 176--176
- |[]\T1/lmss/bx/n/19.19995 Protocols|
- []
-
-[13
-
-]
-Underfull \hbox (badness 10000) in paragraph at lines 180--180
- |[]\T1/lmss/bx/n/23.04004 Installation and us-age man-ual|
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 181--181
- |[]\T1/lmss/bx/n/19.19995 Installation|
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 182--182
- |[]\T1/lmss/bx/n/19.19995 Usage|
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 183--183
- |[]\T1/lmss/bx/n/16 Initialization wiz-ard|
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 184--184
- |[]\T1/lmss/bx/n/16 Change ap-pli-ca-tion set-tings|
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 185--185
- |[]\T1/lmss/bx/n/16 Send a com-mand mes-sage|
- []
-
-[14
+] [15
 
 ] (./doc.aux)
 
@@ -521,21 +489,21 @@ LaTeX Font Warning: Size substitutions with differences
 
  ) 
 Here is how much of TeX's memory you used:
- 4216 strings out of 493304
- 62641 string characters out of 6139871
+ 4221 strings out of 493304
+ 62728 string characters out of 6139871
  160102 words of memory out of 5000000
- 7568 multiletter control sequences out of 15000+600000
+ 7572 multiletter control sequences out of 15000+600000
  54736 words of font info for 46 fonts, out of 8000000 for 9000
  957 hyphenation exceptions out of 8191
- 47i,7n,37p,2071b,234s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 47i,7n,37p,2131b,234s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texmf/fonts/enc/dvips/lm/lm-ec.enc}</usr/share/texmf/fonts/type1/
 public/lm/lmss12.pfb></usr/share/texmf/fonts/type1/public/lm/lmss17.pfb></usr/s
 hare/texmf/fonts/type1/public/lm/lmssbo10.pfb></usr/share/texmf/fonts/type1/pub
 lic/lm/lmssbx10.pfb>
-Output written on doc.pdf (14 pages, 328709 bytes).
+Output written on doc.pdf (15 pages, 349641 bytes).
 PDF statistics:
- 73 PDF objects out of 1000 (max. 8388607)
- 47 compressed objects within 1 object stream
+ 78 PDF objects out of 1000 (max. 8388607)
+ 49 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
- 21 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 26 words of extra memory for PDF output out of 10000 (max. 10000000)
 
