@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2014.5.24)  3 JUN 2014 23:25
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2014.5.24)  4 JUN 2014 15:45
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -428,75 +428,104 @@ Overfull \hbox (26.35312pt too wide) in paragraph at lines 17--17
 \tf@toc=\write3
 \openout3 = `doc.toc'.
 
- [3] [4
+ [3] (./src/context_and_purpose/context_purpose.tex)
+(./src/context_and_purpose/context.tex) (./src/context_and_purpose/purpose.tex)
+[4
 
-] [5
+] (./src/planning/planning.tex) (./src/planning/timeline.tex) [5
 
 ]
+(./src/rasd/rasd.tex) (./src/rasd/actors.tex) (./src/rasd/functional.tex)
+(./src/rasd/functional/association.tex) (./src/rasd/functional/localization.tex
+) (./src/rasd/functional/mark.tex) (./src/rasd/functional/alarms.tex)
+(./src/rasd/nonfunctional.tex)
+(./src/rasd/nonfunctional/privacy_and_security/privacy_security.tex)
+(./src/rasd/nonfunctional/privacy_and_security/password.tex)
+(./src/rasd/nonfunctional/privacy_and_security/integrity_authentication_non-for
+geability_non-repudiation.tex)
+(./src/rasd/nonfunctional/privacy_and_security/ianfnr/integrity.tex
 LaTeX Font Info:    Font shape `T1/lmss/bx/it' in size <16> not available
-(Font)              Font shape `T1/lmss/bx/sl' tried instead on input line 97.
- [6
+(Font)              Font shape `T1/lmss/bx/sl' tried instead on input line 1.
+)
+(./src/rasd/nonfunctional/privacy_and_security/ianfnr/authentication.tex)
+(./src/rasd/nonfunctional/privacy_and_security/ianfnr/non-forgeability.tex
+[6
 
-] [7] [8]
-Underfull \hbox (badness 10000) in paragraph at lines 134--135
+]) (./src/rasd/nonfunctional/privacy_and_security/ianfnr/non-repudiation.tex) (
+./src/rasd/nonfunctional/privacy_and_security/privacy_security_footer.tex)
+(./src/rasd/nonfunctional/privacy_and_security/confidentiality.tex)
+(./src/rasd/nonfunctional/privacy_and_security/asymmetric_keys.tex)
+(./src/rasd/nonfunctional/privacy_and_security/symmetric_keys.tex)
+(./src/rasd/nonfunctional/privacy_and_security/public_keys_authentication.tex)
+(./src/rasd/nonfunctional/human_computer_interaction.tex [7])
+(./src/rasd/nonfunctional/performances.tex) (./src/rasd/use_cases/use_cases.tex
+) (./src/rasd/use_cases/wizard.tex) (./src/rasd/use_cases/association.tex)
+(./src/rasd/use_cases/localization.tex) (./src/rasd/use_cases/mark.tex)
+(./src/rasd/use_cases/alarms.tex) [8] (./src/design/design.tex)
+(./src/design/architecture.tex) (./src/design/design_patterns.tex)
+(./src/design/crypto/crypto.tex)
+(./src/design/crypto/protocols_algorithms/EC.tex
+Underfull \hbox (badness 10000) in paragraph at lines 2--3
 
  []
 
 <images/ec.png, id=35, 621.32124pt x 349.305pt>
 File: images/ec.png Graphic file (type png)
  <use images/ec.png>
-Package pdftex.def Info: images/ec.png used on input line 138.
+Package pdftex.def Info: images/ec.png used on input line 6.
 (pdftex.def)             Requested size: 434.9219pt x 244.51183pt.
  [9
 
-]
-Underfull \hbox (badness 10000) in paragraph at lines 146--147
+])
+(./src/design/crypto/protocols_algorithms/ECDH.tex
+Underfull \hbox (badness 10000) in paragraph at lines 2--3
 
  []
 
 <images/ecdh.png, id=39, 624.3325pt x 394.47375pt>
 File: images/ecdh.png Graphic file (type png)
  <use images/ecdh.png>
-Package pdftex.def Info: images/ecdh.png used on input line 150.
+Package pdftex.def Info: images/ecdh.png used on input line 6.
 (pdftex.def)             Requested size: 437.02977pt x 276.12973pt.
 
-[10 <./images/ec.png>] [11 <./images/ecdh.png>]
-Underfull \hbox (badness 10000) in paragraph at lines 160--162
+[10 <./images/ec.png>]) [11 <./images/ecdh.png>]
+(./src/design/crypto/protocols_algorithms/ECDSA.tex
+Underfull \hbox (badness 10000) in paragraph at lines 2--4
 
  []
 
-LaTeX Font Info:    Calculating math sizes for size <14.6001> on input line 163
-.
+LaTeX Font Info:    Calculating math sizes for size <14.6001> on input line 5.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <14.6001> on input line 163.
+(Font)              <14.6001> on input line 5.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <10.22002> on input line 163.
+(Font)              <10.22002> on input line 5.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <7.30005> on input line 163.
+(Font)              <7.30005> on input line 5.
 
-Underfull \hbox (badness 1616) in paragraph at lines 168--170
+Underfull \hbox (badness 1616) in paragraph at lines 10--12
 []\T1/lmss/m/n/14.6001 If $\OML/lmm/m/it/14.6001 z \OT1/lmr/m/n/14.6001 = 0$ \T
 1/lmss/m/n/14.6001 goto step 1, else the sig-na-ture is made by $\OT1/lmr/m/n/1
 4.6001 (\OML/lmm/m/it/14.6001 k; z\OT1/lmr/m/n/14.6001 )$
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 168--170
+Underfull \hbox (badness 10000) in paragraph at lines 10--12
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 171--173
+Underfull \hbox (badness 10000) in paragraph at lines 13--15
 \T1/lmss/m/n/14.6001 Verification:
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 171--173
+Underfull \hbox (badness 10000) in paragraph at lines 13--15
 
  []
 
-
-Underfull \hbox (badness 10000) in paragraph at lines 183--184
+) (./src/design/crypto/protocols_algorithms/PBKDF2_HMAC-SHA-256.tex)
+(./src/design/crypto/protocols_algorithms/AES-256-GCM.tex
+Underfull \hbox (badness 10000) in paragraph at lines 2--3
 
  []
 
@@ -506,26 +535,48 @@ Underfull \hbox (badness 10000) in paragraph at lines 183--184
 File: images/aesgcmenc.png Graphic file (type png)
 
 <use images/aesgcmenc.png>
-Package pdftex.def Info: images/aesgcmenc.png used on input line 187.
+Package pdftex.def Info: images/aesgcmenc.png used on input line 6.
 (pdftex.def)             Requested size: 395.97841pt x 252.44249pt.
  [13] [14 <./images/aesgcmenc.png>]
 <images/aesgcmdec.png, id=63, 605.26125pt x 465.74pt>
 File: images/aesgcmdec.png Graphic file (type png)
 
 <use images/aesgcmdec.png>
-Package pdftex.def Info: images/aesgcmdec.png used on input line 192.
+Package pdftex.def Info: images/aesgcmdec.png used on input line 11.
 (pdftex.def)             Requested size: 363.15953pt x 279.44615pt.
  <images/aes.png, id=64, 922.44624pt x 839.135pt>
 File: images/aes.png Graphic file (type png)
 
 <use images/aes.png>
-Package pdftex.def Info: images/aes.png used on input line 198.
+Package pdftex.def Info: images/aes.png used on input line 17.
 (pdftex.def)             Requested size: 276.73601pt x 251.74243pt.
- [15
+) [15
 
- <./images/aesgcmdec.png> <./images/aes.png (PNG copy)>] [16
+ <./images/aesgcmdec.png> <./images/aes.png (PNG copy)>] (./src/design/crypto/p
+rotocols_algorithms/smp.tex)
+(./src/design/crypto/protocols_algorithms/smp/pkreq.tex)
+(./src/design/crypto/protocols_algorithms/smp/pksending.tex)
+(./src/design/crypto/protocols_algorithms/smp/question_sending.tex)
+(./src/design/crypto/protocols_algorithms/smp/hash_sending.tex)
+(./src/design/crypto/protocols_algorithms/smp/ack_and_salt_sending.tex)
+(./src/design/crypto/protocols_algorithms/smp/second_half.tex)
+(./src/design/crypto/protocols_algorithms/smp/errors.tex)
+(./src/design/crypto/protocols_algorithms/command_protocol.tex)
+(./src/design/crypto/protocols_algorithms/commands/first_message.tex)
+(./src/design/crypto/protocols_algorithms/commands/second_message.tex)
+(./src/design/crypto/protocols_algorithms/commands/third_message.tex)
+(./src/design/crypto/protocols_algorithms/commands/fourth_message.tex)
+(./src/design/crypto/protocols_algorithms/commands/errors.tex)
+(./src/design/crypto/protocols_algorithms/commands/timeout.tex) [16
 
-] [17
+]
+(./src/testing/testing.tex) (./src/testing/crypto.tex)
+(./src/testing/protocols.tex) [17
+
+] (./src/manuals/installation_usage.tex)
+(./src/manuals/installation.tex) (./src/manuals/usage.tex)
+(./src/manuals/usage/wizard.tex) (./src/manuals/usage/settings.tex)
+(./src/manuals/usage/commands.tex) [18
 
 ] (./doc.aux)
 
@@ -534,13 +585,13 @@ LaTeX Font Warning: Size substitutions with differences
 
  ) 
 Here is how much of TeX's memory you used:
- 4243 strings out of 493304
- 63087 string characters out of 6139871
+ 4647 strings out of 493304
+ 80679 string characters out of 6139871
  162102 words of memory out of 5000000
- 7590 multiletter control sequences out of 15000+600000
+ 7788 multiletter control sequences out of 15000+600000
  65550 words of font info for 55 fonts, out of 8000000 for 9000
  957 hyphenation exceptions out of 8191
- 47i,7n,37p,2131b,234s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 47i,7n,37p,2194b,234s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texmf/fonts/enc/dvips/lm/lm-rm.enc}{/usr/share/texmf/fonts/enc/dv
 ips/lm/lm-mathsy.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-mathit.enc}{/usr/s
 hare/texmf/fonts/enc/dvips/lm/lm-ec.enc}</usr/share/texmf/fonts/type1/public/lm
@@ -549,10 +600,10 @@ hare/texmf/fonts/enc/dvips/lm/lm-ec.enc}</usr/share/texmf/fonts/type1/public/lm
 .pfb></usr/share/texmf/fonts/type1/public/lm/lmss17.pfb></usr/share/texmf/fonts
 /type1/public/lm/lmssbo10.pfb></usr/share/texmf/fonts/type1/public/lm/lmssbx10.
 pfb></usr/share/texmf/fonts/type1/public/lm/lmsy10.pfb>
-Output written on doc.pdf (17 pages, 418741 bytes).
+Output written on doc.pdf (18 pages, 419338 bytes).
 PDF statistics:
- 105 PDF objects out of 1000 (max. 8388607)
- 68 compressed objects within 1 object stream
+ 108 PDF objects out of 1000 (max. 8388607)
+ 70 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  31 words of extra memory for PDF output out of 10000 (max. 10000000)
 

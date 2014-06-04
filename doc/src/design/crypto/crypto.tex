@@ -1,0 +1,2 @@
+\subsection{Crypto protocols and alogrithms}
+\small{The application makes a heavy use of cryptography, so we needed a good crypto provider for java, which we believed to have found in Bouncycastle; however its libraries are not convertible into the Dalvik format, so we had to rely on Spongycastle, an unofficial Bouncycastle porting for Android. Unluckily some algorithms/protocols we had intention to use (namely FHMQV/ECMQV and the native SMP) are not supported (no java implementation for them found), so we ended up using ECDH and a homemade version of SMP instead.}

@@ -55,12 +55,12 @@
 \contentsline {paragraph}{Fourth message}{16}
 \contentsline {paragraph}{Error management}{16}
 \contentsline {paragraph}{Timeout management}{16}
-\contentsline {section}{\numberline {5}Testing}{16}
-\contentsline {subsection}{\numberline {5.1}Cryptography}{16}
-\contentsline {subsection}{\numberline {5.2}Protocols}{16}
-\contentsline {section}{\numberline {6}Installation and usage manual}{17}
-\contentsline {subsection}{\numberline {6.1}Installation}{17}
-\contentsline {subsection}{\numberline {6.2}Usage}{17}
-\contentsline {subsubsection}{\numberline {6.2.1}Initialization wizard}{17}
-\contentsline {subsubsection}{\numberline {6.2.2}Change application settings}{17}
-\contentsline {subsubsection}{\numberline {6.2.3}Send a command message}{17}
+\contentsline {section}{\numberline {5}Testing}{17}
+\contentsline {subsection}{\numberline {5.1}Cryptography}{17}
+\contentsline {subsection}{\numberline {5.2}Protocols}{17}
+\contentsline {section}{\numberline {6}Installation and usage manual}{18}
+\contentsline {subsection}{\numberline {6.1}Installation}{18}
+\contentsline {subsection}{\numberline {6.2}Usage}{18}
+\contentsline {subsubsection}{\numberline {6.2.1}Initialization wizard}{18}
+\contentsline {subsubsection}{\numberline {6.2.2}Change application settings}{18}
+\contentsline {subsubsection}{\numberline {6.2.3}Send a command message}{18}
