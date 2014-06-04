@@ -1,7 +1,9 @@
 package it.polimi.dima.watchdog.fragments.gps;
 
 import it.polimi.dima.watchdog.R;
+
 import java.security.Security;
+
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -19,7 +21,7 @@ import android.widget.EditText;
 public class LocalizationFragment extends Fragment {
 	
 
-	
+	public static String TAG = "LOCALIZATION_FRAGMENT";
 	
 	@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

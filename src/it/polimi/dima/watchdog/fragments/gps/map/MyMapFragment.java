@@ -12,6 +12,8 @@ import android.view.ViewGroup;
 
 public class MyMapFragment extends Fragment {
 
+	public static String TAG = "MAP_FRAGMENT";
+	
 	@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		
