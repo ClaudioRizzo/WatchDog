@@ -1,1 +1,3 @@
-\paragraph{Second half}
+\paragraph{Second half} \hspace{0pt} \\
+After validating the ack message and saving the salt, the  system checks whether exists in the keysquare an entry for the other mobile public key. If yes the SMP is successfully over, otherwise a public key request message is sent and the log is updated, starting this way the second half of the SMP.
+At the end of the SMP both logs are filled, both public keys are validated, and both systems computed the same 32 bytes common secret.

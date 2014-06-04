@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2014.5.24)  4 JUN 2014 15:45
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2014.5.24)  4 JUN 2014 22:24
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -559,24 +559,24 @@ rotocols_algorithms/smp.tex)
 (./src/design/crypto/protocols_algorithms/smp/question_sending.tex)
 (./src/design/crypto/protocols_algorithms/smp/hash_sending.tex)
 (./src/design/crypto/protocols_algorithms/smp/ack_and_salt_sending.tex)
-(./src/design/crypto/protocols_algorithms/smp/second_half.tex)
+(./src/design/crypto/protocols_algorithms/smp/second_half.tex [16
+
+])
 (./src/design/crypto/protocols_algorithms/smp/errors.tex)
 (./src/design/crypto/protocols_algorithms/command_protocol.tex)
 (./src/design/crypto/protocols_algorithms/commands/first_message.tex)
 (./src/design/crypto/protocols_algorithms/commands/second_message.tex)
 (./src/design/crypto/protocols_algorithms/commands/third_message.tex)
 (./src/design/crypto/protocols_algorithms/commands/fourth_message.tex)
-(./src/design/crypto/protocols_algorithms/commands/errors.tex)
-(./src/design/crypto/protocols_algorithms/commands/timeout.tex) [16
-
-]
+(./src/design/crypto/protocols_algorithms/commands/errors.tex [17])
+(./src/design/crypto/protocols_algorithms/commands/timeout.tex) [18]
 (./src/testing/testing.tex) (./src/testing/crypto.tex)
-(./src/testing/protocols.tex) [17
+(./src/testing/protocols.tex) [19
 
 ] (./src/manuals/installation_usage.tex)
 (./src/manuals/installation.tex) (./src/manuals/usage.tex)
 (./src/manuals/usage/wizard.tex) (./src/manuals/usage/settings.tex)
-(./src/manuals/usage/commands.tex) [18
+(./src/manuals/usage/commands.tex) [20
 
 ] (./doc.aux)
 
@@ -600,10 +600,10 @@ hare/texmf/fonts/enc/dvips/lm/lm-ec.enc}</usr/share/texmf/fonts/type1/public/lm
 .pfb></usr/share/texmf/fonts/type1/public/lm/lmss17.pfb></usr/share/texmf/fonts
 /type1/public/lm/lmssbo10.pfb></usr/share/texmf/fonts/type1/public/lm/lmssbx10.
 pfb></usr/share/texmf/fonts/type1/public/lm/lmsy10.pfb>
-Output written on doc.pdf (18 pages, 419338 bytes).
+Output written on doc.pdf (20 pages, 423458 bytes).
 PDF statistics:
- 108 PDF objects out of 1000 (max. 8388607)
- 70 compressed objects within 1 object stream
+ 115 PDF objects out of 1000 (max. 8388607)
+ 75 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  31 words of extra memory for PDF output out of 10000 (max. 10000000)
 
