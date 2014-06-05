@@ -12,6 +12,7 @@ public class GpsTracker implements LocationListener {
 	
 	private LocationChangeListenerInterface mCallback;
 	private LocationManager mLocationManager;
+
 	
 	public GpsTracker(Context ctx, LocationManager mLocationManager) throws LocationException {
 		
@@ -23,10 +24,7 @@ public class GpsTracker implements LocationListener {
 		if(!isGpsEnabled && !isNetworkEnabled) {
 			throw new LocationDisabledExeption("Gps e rete dati disattivi");
 		}
-		
-		Criteria criteria = new Criteria();
-	    String provider = mLocationManager.getBestProvider(criteria, false);
-	    mLocationManager.requestLocationUpdates(provider, 400, 1, this);	
+			
 		
 	}
 	
@@ -38,8 +36,6 @@ public class GpsTracker implements LocationListener {
 	public void onLocationChanged(Location location) {
 		Log.i("[NOTIFICA]", "[NOTIFICA] ho notificato");
 		mCallback.onlocationChange(location);
-		//TODO: potrebbe servire piu' precisione
-		mLocationManager.removeUpdates(this);
 		
 	}
 
@@ -64,5 +60,22 @@ public class GpsTracker implements LocationListener {
 	public Location getLastKnownLocation() {
 		return mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 	}
+	
+	/**
+	 * register the gpsTracker to get location updates
+	 */
+	public void getLocationUpdates() {
+		Criteria criteria = new Criteria();
+	    String provider = mLocationManager.getBestProvider(criteria, false);
+		mLocationManager.requestLocationUpdates(provider, 400, 1, this);
+	}
+	
+	/**
+	 * remove the gpsTracker from listening to location cahnges
+	 */
+	public void removeLocationUpdates() {
+		mLocationManager.removeUpdates(this);
+	}
+	
 
 }

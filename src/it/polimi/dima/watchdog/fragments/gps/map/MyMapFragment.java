@@ -21,7 +21,7 @@ import android.view.ViewGroup;
 
 
 
-public class MyMapFragment extends Fragment implements LocationChangeListenerInterface  {
+public class MyMapFragment extends Fragment {
 
 	public static String TAG = "MAP_FRAGMENT";
 	private GoogleMap mMap;
@@ -46,7 +46,7 @@ public class MyMapFragment extends Fragment implements LocationChangeListenerInt
     			
     			Context ctx = getActivity().getApplicationContext();
     			gps = new GpsTracker(ctx, (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE));
-    			gps.addListener(this);
+    			
     			Location lastLoc = gps.getLastKnownLocation();
     			
     			Log.i("DEBUG", "DEBUG last position: "+lastLoc);
@@ -71,10 +71,7 @@ public class MyMapFragment extends Fragment implements LocationChangeListenerInt
         
         return v;
     }
+	
 
-	@Override
-	public void onlocationChange(Location location) {
-		// TODO Auto-generated method stub
-		
-	}
+
 }
