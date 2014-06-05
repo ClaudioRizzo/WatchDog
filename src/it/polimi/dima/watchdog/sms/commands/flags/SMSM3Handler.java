@@ -123,10 +123,7 @@ public class SMSM3Handler implements SMSCommandVisitorInterface {
 		System.arraycopy(specificHeader, 0, messageWithoutSignature, header.length, specificHeader.length);
 		System.arraycopy(body, 0, messageWithoutSignature, header.length + specificHeader.length, body.length);
 		
-		String mPrivBase64 = MyPrefFiles.getMyPreference(MyPrefFiles.MY_KEYS, MyPrefFiles.MY_PRIV, this.ctx);
-		byte[] mPrivEncoded = Base64.decode(mPrivBase64, Base64.DEFAULT);
-		KeyFactory keyFactory = KeyFactory.getInstance(CryptoUtility.EC);
-		PrivateKey mPriv = keyFactory.generatePrivate(new PKCS8EncodedKeySpec(mPrivEncoded));
+		PrivateKey mPriv = MyPrefFiles.getMyPrivateKey(this.ctx);
 		
 		ECDSA_Signature signer = new ECDSA_Signature(messageWithoutSignature, mPriv);
 		signer.sign();

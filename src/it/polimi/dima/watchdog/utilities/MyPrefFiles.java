@@ -1,11 +1,20 @@
 package it.polimi.dima.watchdog.utilities;
 
+import java.security.KeyFactory;
+import java.security.NoSuchAlgorithmException;
+import java.security.PrivateKey;
+import java.security.PublicKey;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.PKCS8EncodedKeySpec;
+import java.security.spec.X509EncodedKeySpec;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
 import it.polimi.dima.watchdog.exceptions.NoSuchPreferenceFoundException;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Base64;
 
 /**
  * Classe che raccoglie tutte le preferenze che si usano in questa applicazione.
@@ -507,5 +516,19 @@ public class MyPrefFiles {
 		if(MyPrefFiles.existsPreference(MyPrefFiles.COMMAND_SESSION, other + MyPrefFiles.OTHER_PASSWORD, ctx)){
 			MyPrefFiles.deleteMyPreference(MyPrefFiles.COMMAND_SESSION, other + MyPrefFiles.OTHER_PASSWORD, ctx);
 		}
+	}
+	
+	public static PrivateKey getMyPrivateKey(Context context) throws NoSuchPreferenceFoundException, NoSuchAlgorithmException, InvalidKeySpecException{
+		String mPrivBase64 = MyPrefFiles.getMyPreference(MyPrefFiles.MY_KEYS, MyPrefFiles.MY_PRIV, context);
+		byte[] mPrivEncoded = Base64.decode(mPrivBase64, Base64.DEFAULT);
+		KeyFactory keyFactory = KeyFactory.getInstance(CryptoUtility.EC);
+		return keyFactory.generatePrivate(new PKCS8EncodedKeySpec(mPrivEncoded));
+	}
+	
+	public static PublicKey getMyPublicKey(Context context) throws NoSuchPreferenceFoundException, NoSuchAlgorithmException, InvalidKeySpecException{
+		String mPubBase64 = MyPrefFiles.getMyPreference(MyPrefFiles.MY_KEYS, MyPrefFiles.MY_PUB, context);
+		byte[] mPubEncoded = Base64.decode(mPubBase64, Base64.DEFAULT);
+		KeyFactory keyFactory = KeyFactory.getInstance(CryptoUtility.EC);
+		return keyFactory.generatePublic(new X509EncodedKeySpec(mPubEncoded));
 	}
 }
