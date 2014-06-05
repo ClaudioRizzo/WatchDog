@@ -127,8 +127,10 @@ public class SMSM3Handler implements SMSCommandVisitorInterface, LocationChangeL
 		byte[] iv = fetchIv();
 		AES256GCM encryptor = new AES256GCM(encKey, message, iv, CryptoUtility.ENC);
 		encryptor.encrypt();
-		SMSUtility.sendCommandMessage(this.other, SMSUtility.COMMAND_PORT, "ciao".getBytes());
-		//SMSUtility.sendCommandMessage(this.other, SMSUtility.COMMAND_PORT, encryptor.getCiphertext());
+		//SMSUtility.sendCommandMessage(this.other, SMSUtility.COMMAND_PORT, "ciao".getBytes());
+		Log.i("[DEBUG_COMMAND]", "[DEBUG_COMMAND] ciphertext = " + Base64.encodeToString(encryptor.getCiphertext(), Base64.DEFAULT));
+		Log.i("[DEBUG_COMMAND]", "[DEBUG_COMMAND] ciphertext length = " + encryptor.getCiphertext().length);
+		SMSUtility.sendCommandMessage(this.other, SMSUtility.COMMAND_PORT, encryptor.getCiphertext());
 		Log.i("gps","gps m4 inviato");
 		MyPrefFiles.deleteUselessCommandSessionPreferencesAfterM4IsSent(this.other, this.ctx);
 	}
@@ -182,6 +184,8 @@ public class SMSM3Handler implements SMSCommandVisitorInterface, LocationChangeL
 		double lon = location.getLongitude();
 		
 		this.locationString = "lat="+lat+"lon="+lon+"end";
+		System.out.println(this.locationString);
+		System.out.println(this.locationString.length());
 		gps.removeLocationUpdates();
 		Log.i("[GPS]", "[GPS] posizione acquisita");
 		Log.i("[GPS]", "[GPS] lat: "+lat+" lon: "+lon);
