@@ -115,6 +115,8 @@ public class SMSM3Handler implements SMSCommandVisitorInterface, LocationChangeL
 		PrivateKey mPriv = MyPrefFiles.getMyPrivateKey(this.ctx);
 		byte[] signature = CryptoUtility.doSignature(messageWithoutSignature, mPriv);
 		byte[] message = packMessage(messageWithoutSignature, signature);
+		SMSUtility.sendCommandMessage(this.other, SMSUtility.COMMAND_PORT, message);
+		Log.i("gps","gps m4 inviato");
 	}
 	
 	private byte[] packMessage(byte[] messageWithoutSignature, byte[] signature) {
