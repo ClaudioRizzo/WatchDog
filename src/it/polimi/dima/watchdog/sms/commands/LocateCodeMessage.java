@@ -42,7 +42,7 @@ public class LocateCodeMessage extends ParsableSMS {
 	
 	private List<Double> convertSubBody(byte[] subBody) {
 		String body = new String(subBody);
-		if(!body.matches(".+" + "$" + ".+" + "#")){
+		if(!body.matches(".+" + "@" + ".+" + "#")){
 			throw new IllegalArgumentException("Il body non è ciò che mi aspetto!!!");
 		}
 		String temp = body;
@@ -61,7 +61,7 @@ public class LocateCodeMessage extends ParsableSMS {
 		int dollarIndex = -1;
 		int sharpIndex = -1;
 		for(int i=dollarIndex+1; i<tempArray.length; i++){
-			if(tempArray[i]=='$'){
+			if(tempArray[i]=='@'){
 				dollarIndex = i;
 			}
 			else if(tempArray[i] == '#'){
@@ -78,7 +78,7 @@ public class LocateCodeMessage extends ParsableSMS {
 	private Double getLatitude(char[] tempArray, String temp) {
 		int dollarIndex = -1;
 		for(int i=0; i<tempArray.length; i++){
-			if(tempArray[i]=='$'){
+			if(tempArray[i]=='@'){
 				dollarIndex = i;
 			}
 		}
