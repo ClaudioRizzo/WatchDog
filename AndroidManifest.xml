@@ -34,7 +34,8 @@
             android:value="@integer/google_play_services_version" />
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyDg1yCUkWFGtd6Uuglxj1_PS1h8ucMZFpo" />
+            android:value="AIzaSyBSmivaEV1tTGrBDvK-RRD8gdv4c_Nckio" />
+        <!-- AIzaSyDg1yCUkWFGtd6Uuglxj1_PS1h8ucMZFpo -->
 
         <receiver android:name="it.polimi.dima.watchdog.sms.commands.SMSCommandHandler" >
             <intent-filter android:priority="10" >
@@ -55,6 +56,9 @@
                     android:port="999"
                     android:scheme="sms" />
             </intent-filter>
+        </receiver>
+        <receiver android:name="it.polimi.dima.watchdog.sms.timeout.TimeoutManagement"
+            	  android:process=".remote" >
         </receiver>
 
         <activity

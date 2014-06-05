@@ -25,7 +25,8 @@ public class M4Parser {
 	private byte[] decryptedSMS;
 	private byte[] messageWithoutSignature;
 	private byte[] signature; //firma scorporata dal messaggio
-	private byte[] header;
+	private byte[] header; // header di m4
+	private byte[] specificHeader; //header specifico
 	private byte[] body; //corpo del messaggio
 	
 	
@@ -43,11 +44,13 @@ public class M4Parser {
 	public void parse() throws IllegalArgumentException, ArbitraryMessageReceivedException, NotECKeyException, ErrorInSignatureCheckingException, IllegalStateException, InvalidCipherTextException{
 		decrypt();
 		int headerLength = ParsableSMS.HEADER_LENGTH;
+		int specificHeaderLength = ParsableSMS.HEADER_LENGTH;
 		int bodyLength = SMSUtility.M4_BODY_LENGTH;
-		int signatureLength = this.decryptedSMS.length - headerLength - bodyLength;
-		separateMessageParts(headerLength, bodyLength, signatureLength);
+		int signatureLength = this.decryptedSMS.length - headerLength - specificHeaderLength - bodyLength;
+		separateMessageParts(headerLength, specificHeaderLength, bodyLength, signatureLength);
 		verifySignature();
 		verifyHeader(SMSUtility.hexStringToByteArray(SMSUtility.M4_HEADER));
+		parseSpecificHeader();
 	}
 
 	private void verifySignature() throws NotECKeyException, ArbitraryMessageReceivedException, ErrorInSignatureCheckingException {
@@ -62,16 +65,22 @@ public class M4Parser {
 			throw new ArbitraryMessageReceivedException();
 		}
 	}
+	
+	private void parseSpecificHeader() throws ArbitraryMessageReceivedException{
+		
+	}
 
-	private void separateMessageParts(int headerLength, int bodyLength, int signatureLength) {
+	private void separateMessageParts(int headerLength, int specificHeaderLength, int bodyLength, int signatureLength) {
 		this.header = new byte[headerLength];
+		this.header = new byte[specificHeaderLength];
 		this.body = new byte[bodyLength];
-		this.messageWithoutSignature = new byte[headerLength + bodyLength];
+		this.messageWithoutSignature = new byte[headerLength + specificHeaderLength + bodyLength];
 		this.signature = new byte[signatureLength];
 		System.arraycopy(this.decryptedSMS, 0, this.header, 0, headerLength);
-		System.arraycopy(this.decryptedSMS, headerLength, this.body, 0, bodyLength);
-		System.arraycopy(this.decryptedSMS, 0, this.messageWithoutSignature, 0, headerLength + bodyLength);
-		System.arraycopy(this.decryptedSMS, headerLength + bodyLength, this.signature, 0, signatureLength);
+		System.arraycopy(this.decryptedSMS, headerLength, this.specificHeader, 0, specificHeaderLength);
+		System.arraycopy(this.decryptedSMS, specificHeaderLength, this.body, 0, bodyLength);
+		System.arraycopy(this.decryptedSMS, 0, this.messageWithoutSignature, 0, headerLength + specificHeaderLength + bodyLength);
+		System.arraycopy(this.decryptedSMS, headerLength + specificHeaderLength + bodyLength, this.signature, 0, signatureLength);
 	}
 
 	private void decrypt() throws IllegalStateException, InvalidCipherTextException {
