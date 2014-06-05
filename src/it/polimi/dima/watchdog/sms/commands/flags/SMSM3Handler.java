@@ -111,7 +111,7 @@ public class SMSM3Handler implements SMSCommandVisitorInterface, LocationChangeL
 	private void constructResponse(byte[] specificHeader, String location) throws TooLongResponseException, NoSuchPreferenceFoundException, NoSuchAlgorithmException, InvalidKeySpecException, NoSignatureDoneException, NotECKeyException, IllegalStateException, InvalidCipherTextException{
 		byte[] header = SMSUtility.hexStringToByteArray(SMSUtility.M4_HEADER);
 		byte[] subBody = location.getBytes();
-		
+		//byte[] subBody = "ciao".getBytes();
 		int subBodyLength = subBody.length;
 		int paddingLength = SMSUtility.getM4BodyPaddingLength(SMSUtility.M4_BODY_LENGTH, SMSUtility.M4_LENGTH_BYTES_SIZE, subBodyLength);
 		
@@ -183,7 +183,7 @@ public class SMSM3Handler implements SMSCommandVisitorInterface, LocationChangeL
 		double lat = location.getLatitude();
 		double lon = location.getLongitude();
 		
-		this.locationString = lat+"@"+lon+"#";
+		this.locationString = lat+"i"+lon+"e";
 		System.out.println(this.locationString);
 		System.out.println(this.locationString.length());
 		gps.removeLocationUpdates();
