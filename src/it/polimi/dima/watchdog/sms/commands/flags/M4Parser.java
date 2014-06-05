@@ -27,7 +27,7 @@ public class M4Parser {
 	private byte[] signature; //firma scorporata dal messaggio
 	private byte[] header; // header di m4
 	private byte[] specificHeader; //header specifico
-	private byte[] body; //corpo del messaggio
+	private byte[] body; //corpo del messaggio = length || real body || padding
 	
 	public byte[] getSpecificHeader(){
 		return this.specificHeader;

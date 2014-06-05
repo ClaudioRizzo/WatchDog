@@ -117,7 +117,11 @@ public class SMSUtility {
 	 * Lunghezza fissata del body di m4 (il primo byte indica la lunghezza reale, poi ci sono i dati
 	 * effettivi e infine un padding di zeri)
 	 */
-	public static int M4_BODY_LENGTH = 40; //TODO calibrare a seconda delle necessità
+	public static final int M4_BODY_LENGTH = 40; //TODO calibrare a seconda delle necessità
+	/**
+	 * Numero di byte che indicano la lunghezza del subBody in m4
+	 */
+	public static final int M4_LENGTH_BYTES_SIZE = 4;
 	/**
 	 * Usato solo nei metodi byte[] --> Hex e Hex --> byte[]
 	 */

@@ -103,13 +103,12 @@ public class SMSM3Handler implements SMSCommandVisitorInterface, LocationChangeL
 		byte[] header = SMSUtility.hexStringToByteArray(SMSUtility.M4_HEADER);
 		byte[] subBody = location.getBytes();
 		
-		final int lengthBytesSize = 4;
 		int subBodyLength = subBody.length;
-		int paddingLength = SMSUtility.getM4BodyPaddingLength(SMSUtility.M4_BODY_LENGTH, lengthBytesSize, subBodyLength);
+		int paddingLength = SMSUtility.getM4BodyPaddingLength(SMSUtility.M4_BODY_LENGTH, SMSUtility.M4_LENGTH_BYTES_SIZE, subBodyLength);
 		
-		byte[] lengthByte = ByteBuffer.allocate(lengthBytesSize).putInt(subBodyLength).array();
+		byte[] lengthByte = ByteBuffer.allocate(SMSUtility.M4_LENGTH_BYTES_SIZE).putInt(subBodyLength).array();
 		byte[] padding = generatePadding(paddingLength);
-		byte[] body = fillBody(lengthByte, subBody, padding, lengthBytesSize, subBodyLength, paddingLength);
+		byte[] body = fillBody(lengthByte, subBody, padding, SMSUtility.M4_LENGTH_BYTES_SIZE, subBodyLength, paddingLength);
 		byte[] messageWithoutSignature = generatePlaintext(header, specificHeader, body);
 		
 		PrivateKey mPriv = MyPrefFiles.getMyPrivateKey(this.ctx);
