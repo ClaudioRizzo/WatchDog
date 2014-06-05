@@ -29,12 +29,12 @@ public class TimeoutWrapper {
 	 * @param ctx : il contesto corrente
 	 * @throws NoSuchAlgorithmException
 	 */
-	public static void addTimeout(String waiting, String waited, Context ctx) throws NoSuchAlgorithmException{
+	/*public static void addTimeout(String waiting, String waited, Context ctx) throws NoSuchAlgorithmException{
 		Intent intent = TimeoutWrapper.createAndFillIntent(waited, ctx);
 		PendingIntent pendingIntent = TimeoutWrapper.createPendingIntent(ctx, intent);
 		TimeoutWrapper.createTimeout(ctx, pendingIntent);
 		TimeoutWrapper.storeTimeoutId(waiting, waited, ctx, TimeoutWrapper.PENDING_INTENT_ID);
-	}
+	}*/
 	
 	/**
 	 * Rimuove il timeout in cui waiting aspetta un messaggio da parte di waited.
@@ -45,11 +45,11 @@ public class TimeoutWrapper {
 	 * @throws NumberFormatException
 	 * @throws NoSuchPreferenceFoundException
 	 */
-	public static void removeTimeout(String waiting, String waited, Context ctx) throws NumberFormatException, NoSuchPreferenceFoundException {
+	/*public static void removeTimeout(String waiting, String waited, Context ctx) throws NumberFormatException, NoSuchPreferenceFoundException {
 		Intent intent = new Intent(ctx, TimeoutManagement.class);
 		PendingIntent pendingIntent = TimeoutWrapper.createPendingIntentForTimeoutDeletion(waiting, waited, ctx, intent);
 		TimeoutWrapper.cancelTimeout(ctx, pendingIntent);
-	}
+	}*/
 	
 	private static Intent createAndFillIntent(String waited, Context ctx){
 		Intent intent = new Intent(ctx, TimeoutManagement.class);

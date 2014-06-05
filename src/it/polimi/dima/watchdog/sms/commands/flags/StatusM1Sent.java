@@ -46,7 +46,7 @@ public class StatusM1Sent implements CommandProtocolFlagsReactionInterface {
 	
 	@Override
 	public void parse(Context context, SmsMessage message, String other) throws NoSuchPreferenceFoundException, NoSuchAlgorithmException, NoSuchProviderException, InvalidKeySpecException, ArbitraryMessageReceivedException, ErrorInSignatureCheckingException, NotECKeyException, UnsupportedEncodingException, IllegalStateException, InvalidCipherTextException, NoSignatureDoneException  {
-		TimeoutWrapper.removeTimeout(SMSUtility.MY_PHONE, other, context);
+		//TimeoutWrapper.removeTimeout(SMSUtility.MY_PHONE, other, context);
 		MyPrefFiles.replacePreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + other, StatusM1Sent.STATUS_RECEIVED, context);
 		
 		PublicKey oPub = MyPrefFiles.getOtherPublicKey(context, other);
@@ -57,7 +57,7 @@ public class StatusM1Sent implements CommandProtocolFlagsReactionInterface {
 		generateAndSendM3(other, context);
 		Log.i("[DEBUG_COMMAND]", "[DEBUG_COMMAND] m3 sent");
 		MyPrefFiles.replacePreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + other, StatusM1Sent.NEXT_SENT_STATUS, context);
-		TimeoutWrapper.addTimeout(SMSUtility.MY_PHONE, other, context);
+		//TimeoutWrapper.addTimeout(SMSUtility.MY_PHONE, other, context);
 	}
 
 	private void generateAndSendM3(String phoneNumber, Context ctx) throws NoSuchPreferenceFoundException, NoSuchAlgorithmException, InvalidKeySpecException, UnsupportedEncodingException, IllegalStateException, InvalidCipherTextException, NotECKeyException, NoSignatureDoneException, NoSuchProviderException {
