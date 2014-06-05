@@ -83,7 +83,7 @@ public class SMSM3Handler implements SMSCommandVisitorInterface, LocationChangeL
 	public void visit(LocateCodeMessage locateCodeMessage) throws IllegalArgumentException, TooLongResponseException, NoSuchPreferenceFoundException, NoSuchAlgorithmException, InvalidKeySpecException, NoSignatureDoneException, NotECKeyException {
 		
 		Log.i("[DEBUG_COMMAND]", "[DEBUG_COMMAND] LOCATE RICEVUTO");
-		if(false) {
+		
 		try {
 			gps = new GpsTracker(ctx, (LocationManager) ctx.getSystemService(Context.LOCATION_SERVICE));
 			gps.addListener(this);
@@ -94,7 +94,7 @@ public class SMSM3Handler implements SMSCommandVisitorInterface, LocationChangeL
 			// TODO gestire errore device spenti
 			e.printStackTrace();
 		}
-		}
+		
 		
 		
 	}
