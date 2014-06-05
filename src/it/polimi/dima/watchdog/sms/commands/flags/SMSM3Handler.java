@@ -28,10 +28,6 @@ import it.polimi.dima.watchdog.utilities.MyPrefFiles;
 import it.polimi.dima.watchdog.utilities.SMSUtility;
 
 public class SMSM3Handler implements SMSCommandVisitorInterface {
-<<<<<<< HEAD
-=======
-
->>>>>>> b742b3ad4ad4c5e13c682dc45dac0286092f2e92
 
 	private String other;
 	private Context ctx;
