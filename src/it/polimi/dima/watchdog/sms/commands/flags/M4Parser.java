@@ -70,7 +70,7 @@ public class M4Parser {
 
 	private void separateMessageParts(int headerLength, int specificHeaderLength, int bodyLength, int signatureLength) {
 		this.header = new byte[headerLength];
-		this.header = new byte[specificHeaderLength];
+		this.specificHeader = new byte[specificHeaderLength];
 		this.body = new byte[bodyLength];
 		this.messageWithoutSignature = new byte[headerLength + specificHeaderLength + bodyLength];
 		this.signature = new byte[signatureLength];

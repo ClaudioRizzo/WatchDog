@@ -60,7 +60,7 @@ public class SMSM4Handler implements SMSCommandVisitorInterface {
 	@Override
 	public void visit(LocateCodeMessage locateCodeMessage) {
 		// TODO Auto-generated method stub
-		Log.i("[DEBUG_COMMAND]", "[DEBUG_COMMAND] LOCATE RICEVUTO");
+		Log.i("[DEBUG_COMMAND]", "[DEBUG_COMMAND] LOCATE RESPONSE RICEVUTO");
 		
 	}
 
