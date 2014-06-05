@@ -4,7 +4,6 @@ import java.nio.ByteBuffer;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.spec.InvalidKeySpecException;
-
 import android.content.Context;
 import android.location.Location;
 import android.location.LocationManager;

@@ -97,18 +97,12 @@ public class GpsLocalizeClickHandler implements OnClickListener {
 	}
 
 	private byte[] generateSignature(byte[] message) throws NoSuchAlgorithmException, NoSuchProviderException, InvalidKeySpecException, NoSuchPreferenceFoundException, NoSignatureDoneException, NotECKeyException {
-		PrivateKey mPriv = retrieveMyPrivateKey();
+		PrivateKey mPriv = MyPrefFiles.getMyPrivateKey(this.ctx);
 		String mPub = MyPrefFiles.getMyPreference(MyPrefFiles.MY_KEYS, MyPrefFiles.MY_PUB, this.ctx);
 		Log.i("[DEBUG]", "[DEBUG] la mia chiave pubblica: " + mPub);
 		ECDSA_Signature sigMaker = new ECDSA_Signature(message, mPriv);
 		sigMaker.sign();
 		return sigMaker.getSignature();
-	}
-
-	private PrivateKey retrieveMyPrivateKey() throws NoSuchPreferenceFoundException, NoSuchAlgorithmException, NoSuchProviderException, InvalidKeySpecException {
-		byte[] myPriv = Base64.decode(MyPrefFiles.getMyPreference(MyPrefFiles.MY_KEYS, MyPrefFiles.MY_PRIV, this.ctx), Base64.DEFAULT);
-		KeyFactory keyFactory = KeyFactory.getInstance(CryptoUtility.EC, CryptoUtility.SC);
-		return keyFactory.generatePrivate(new PKCS8EncodedKeySpec(myPriv));
 	}
 
 	private byte[] constructBody(byte[] iv, byte[] salt) {

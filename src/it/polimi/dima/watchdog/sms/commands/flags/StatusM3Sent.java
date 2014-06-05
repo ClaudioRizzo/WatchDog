@@ -1,18 +1,13 @@
 package it.polimi.dima.watchdog.sms.commands.flags;
 
 import java.security.Key;
-import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.PublicKey;
 import java.security.Security;
 import java.security.spec.InvalidKeySpecException;
-import java.security.spec.X509EncodedKeySpec;
-
 import javax.crypto.spec.SecretKeySpec;
-
 import org.spongycastle.crypto.InvalidCipherTextException;
-
 import it.polimi.dima.watchdog.exceptions.ArbitraryMessageReceivedException;
 import it.polimi.dima.watchdog.exceptions.ErrorInSignatureCheckingException;
 import it.polimi.dima.watchdog.exceptions.NoSignatureDoneException;
@@ -54,7 +49,7 @@ public class StatusM3Sent implements CommandProtocolFlagsReactionInterface {
 		TimeoutWrapper.removeTimeout(SMSUtility.MY_PHONE, other, context);
 		MyPrefFiles.replacePreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + other, StatusM3Sent.STATUS_RECEIVED, context);
 		
-		PublicKey oPub = fetchOtherPublicKey(other, context);
+		PublicKey oPub = MyPrefFiles.getOtherPublicKey(context, other);
 		Key decryptionKey = fetchDecryptionKey(other, context);
 		byte[] iv = fetchIv(other, context);
 		
@@ -87,13 +82,6 @@ public class StatusM3Sent implements CommandProtocolFlagsReactionInterface {
 		String decKey = MyPrefFiles.getMyPreference(MyPrefFiles.COMMAND_SESSION, other + MyPrefFiles.KEY_FOR_M4, ctx);
 		byte[] decKeyValue = Base64.decode(decKey, Base64.DEFAULT);
 		return new SecretKeySpec(decKeyValue, CryptoUtility.AES_256);
-	}
-
-
-	private PublicKey fetchOtherPublicKey(String other, Context ctx) throws InvalidKeySpecException, NoSuchAlgorithmException, NoSuchProviderException, NoSuchPreferenceFoundException{
-		byte[] publicKey = Base64.decode(MyPrefFiles.getMyPreference(MyPrefFiles.KEYRING, other, ctx),Base64.DEFAULT);
-		KeyFactory keyFactory = KeyFactory.getInstance(CryptoUtility.EC, CryptoUtility.SC);
-		return keyFactory.generatePublic(new X509EncodedKeySpec(publicKey));
 	}
 
 	@Override

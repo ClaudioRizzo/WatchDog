@@ -531,4 +531,11 @@ public class MyPrefFiles {
 		KeyFactory keyFactory = KeyFactory.getInstance(CryptoUtility.EC);
 		return keyFactory.generatePublic(new X509EncodedKeySpec(mPubEncoded));
 	}
+	
+	public static PublicKey getOtherPublicKey(Context context, String other) throws NoSuchPreferenceFoundException, NoSuchAlgorithmException, InvalidKeySpecException{
+		String oPubBase64 = MyPrefFiles.getMyPreference(MyPrefFiles.KEYRING, other, context);
+		byte[] oPubEncoded = Base64.decode(oPubBase64, Base64.DEFAULT);
+		KeyFactory keyFactory = KeyFactory.getInstance(CryptoUtility.EC);
+		return keyFactory.generatePublic(new X509EncodedKeySpec(oPubEncoded));
+	}
 }

@@ -1,18 +1,13 @@
 package it.polimi.dima.watchdog.sms.commands.flags;
 
 import java.security.Key;
-import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.PublicKey;
 import java.security.Security;
 import java.security.spec.InvalidKeySpecException;
-import java.security.spec.X509EncodedKeySpec;
-
 import javax.crypto.spec.SecretKeySpec;
-
 import org.spongycastle.crypto.InvalidCipherTextException;
-
 import android.content.Context;
 import android.telephony.SmsMessage;
 import android.util.Base64;
@@ -78,10 +73,7 @@ public class StatusM2Sent implements CommandProtocolFlagsReactionInterface {
 		byte[] decKeyValue = Base64.decode(decKey, Base64.DEFAULT);
 		Key decryptionKey = new SecretKeySpec(decKeyValue, CryptoUtility.AES_256);
 		
-		String otherPub = MyPrefFiles.getMyPreference(MyPrefFiles.KEYRING, other, ctx);
-		byte[] otherPubValue = Base64.decode(otherPub, Base64.DEFAULT);
-		KeyFactory keyFactory = KeyFactory.getInstance(CryptoUtility.EC, CryptoUtility.SC);
-		PublicKey oPub = keyFactory.generatePublic(new X509EncodedKeySpec(otherPubValue));
+		PublicKey oPub = MyPrefFiles.getOtherPublicKey(ctx, other);
 		
 		String storedHash = MyPrefFiles.getMyPreference(MyPrefFiles.PASSWORD_AND_SALT, MyPrefFiles.MY_PASSWORD_HASH, ctx);
 		byte[] storedPasswordHash = Base64.decode(storedHash, Base64.DEFAULT);

@@ -2,15 +2,12 @@ package it.polimi.dima.watchdog.sms.commands.flags;
 
 import java.io.UnsupportedEncodingException;
 import java.security.Key;
-import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.Security;
 import java.security.spec.InvalidKeySpecException;
-import java.security.spec.PKCS8EncodedKeySpec;
-import java.security.spec.X509EncodedKeySpec;
 import javax.crypto.spec.SecretKeySpec;
 import org.spongycastle.crypto.InvalidCipherTextException;
 import it.polimi.dima.watchdog.exceptions.ArbitraryMessageReceivedException;
@@ -52,9 +49,7 @@ public class StatusM1Sent implements CommandProtocolFlagsReactionInterface {
 		TimeoutWrapper.removeTimeout(SMSUtility.MY_PHONE, other, context);
 		MyPrefFiles.replacePreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + other, StatusM1Sent.STATUS_RECEIVED, context);
 		
-		byte[] publicKey = Base64.decode(MyPrefFiles.getMyPreference(MyPrefFiles.KEYRING, other, context),Base64.DEFAULT);
-		KeyFactory keyFactory = KeyFactory.getInstance(CryptoUtility.EC, CryptoUtility.SC);
-		PublicKey oPub = keyFactory.generatePublic(new X509EncodedKeySpec(publicKey));
+		PublicKey oPub = MyPrefFiles.getOtherPublicKey(context, other);
 		
 		this.parser = new M2Parser(message.getUserData(), oPub);
 		this.parser.parse();
@@ -81,10 +76,7 @@ public class StatusM1Sent implements CommandProtocolFlagsReactionInterface {
 		byte[] aesKey = Base64.decode(MyPrefFiles.getMyPreference(MyPrefFiles.COMMAND_SESSION, sessionKeyKey, ctx), Base64.DEFAULT);
 		Key encryptionKey = new SecretKeySpec(aesKey, CryptoUtility.AES_256);
 		byte[] iv = Base64.decode(MyPrefFiles.getMyPreference(MyPrefFiles.COMMAND_SESSION, ivKey, ctx), Base64.DEFAULT);
-		
-		byte[] myPriv = Base64.decode(MyPrefFiles.getMyPreference(MyPrefFiles.MY_KEYS, MyPrefFiles.MY_PRIV, ctx), Base64.DEFAULT);
-		KeyFactory keyFactory = KeyFactory.getInstance(CryptoUtility.EC, CryptoUtility.SC);
-		PrivateKey mPriv = keyFactory.generatePrivate(new PKCS8EncodedKeySpec(myPriv));
+		PrivateKey mPriv = MyPrefFiles.getMyPrivateKey(ctx);
 		
 		CommandSMS sms = new CommandSMS(command, saltedPassword, mPriv, encryptionKey, phoneNumber, iv);
 		sms.construct();

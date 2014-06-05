@@ -1,15 +1,12 @@
 package it.polimi.dima.watchdog.sms.commands.flags;
 
 import java.security.InvalidKeyException;
-import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.Security;
 import java.security.spec.InvalidKeySpecException;
-import java.security.spec.PKCS8EncodedKeySpec;
-import java.security.spec.X509EncodedKeySpec;
 import java.util.Random;
 import android.content.Context;
 import android.telephony.SmsMessage;
@@ -23,7 +20,6 @@ import it.polimi.dima.watchdog.exceptions.NotECKeyException;
 import it.polimi.dima.watchdog.exceptions.NoSignatureDoneException;
 import it.polimi.dima.watchdog.exceptions.NoSuchPreferenceFoundException;
 import it.polimi.dima.watchdog.sms.timeout.TimeoutWrapper;
-import it.polimi.dima.watchdog.utilities.CryptoUtility;
 import it.polimi.dima.watchdog.utilities.MyPrefFiles;
 import it.polimi.dima.watchdog.utilities.SMSUtility;
 
@@ -51,9 +47,7 @@ public class StatusFree implements CommandProtocolFlagsReactionInterface{
 	public void parse(Context context, SmsMessage message, String other) throws NoSuchPreferenceFoundException, InvalidKeySpecException, NoSuchAlgorithmException, NoSuchProviderException, ArbitraryMessageReceivedException, ErrorInSignatureCheckingException, NotECKeyException, InvalidKeyException, NoSignatureDoneException  {
 		MyPrefFiles.replacePreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + other, StatusFree.STATUS_RECEIVED, context);
 		
-		byte[] publicKey = Base64.decode(MyPrefFiles.getMyPreference(MyPrefFiles.KEYRING, other, context),Base64.DEFAULT);
-		KeyFactory keyFactory = KeyFactory.getInstance(CryptoUtility.EC, CryptoUtility.SC);
-		PublicKey oPub = keyFactory.generatePublic(new X509EncodedKeySpec(publicKey));
+		PublicKey oPub = MyPrefFiles.getOtherPublicKey(context, other);
 		
 		this.parser = new M1Parser(message.getUserData(), oPub);
 		this.parser.parse();
@@ -103,16 +97,10 @@ public class StatusFree implements CommandProtocolFlagsReactionInterface{
 	}
 	
 	private byte[] generateSignature(byte[] message, Context ctx) throws NotECKeyException, NoSignatureDoneException, NoSuchAlgorithmException, NoSuchProviderException, InvalidKeySpecException, NoSuchPreferenceFoundException{
-		PrivateKey mPriv = fetchMyPrivateKey(ctx);
+		PrivateKey mPriv = MyPrefFiles.getMyPrivateKey(ctx);
 		ECDSA_Signature signer = new ECDSA_Signature(message, mPriv);
 		signer.sign();
 		return signer.getSignature();
-	}
-	
-	private PrivateKey fetchMyPrivateKey(Context ctx) throws NoSuchAlgorithmException, NoSuchProviderException, InvalidKeySpecException, NoSuchPreferenceFoundException{
-		byte[] myPrivateKey = Base64.decode(MyPrefFiles.getMyPreference(MyPrefFiles.MY_KEYS, MyPrefFiles.MY_PRIV, ctx), Base64.DEFAULT);
-		KeyFactory keyFactory = KeyFactory.getInstance(CryptoUtility.EC, CryptoUtility.SC);
-		return keyFactory.generatePrivate(new PKCS8EncodedKeySpec(myPrivateKey));
 	}
 	
 	private byte[] packIvAndSalt(String phoneNumber, Context ctx) throws NoSuchPreferenceFoundException, NotECKeyException, NoSuchAlgorithmException, NoSuchProviderException, InvalidKeySpecException, NoSignatureDoneException {
