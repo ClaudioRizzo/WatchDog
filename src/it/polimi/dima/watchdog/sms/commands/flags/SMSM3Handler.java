@@ -28,6 +28,8 @@ import it.polimi.dima.watchdog.utilities.MyPrefFiles;
 import it.polimi.dima.watchdog.utilities.SMSUtility;
 
 public class SMSM3Handler implements SMSCommandVisitorInterface {
+<<<<<<< HEAD
+=======
 
 	private String other;
 	private Context ctx;
@@ -36,6 +38,7 @@ public class SMSM3Handler implements SMSCommandVisitorInterface {
 		this.other = other;
 		this.ctx = context;
 	}
+>>>>>>> b1913dc576e07b450d467ef51f81b17b41d05e8c
 	
 	@Override
 	public void visit(SirenOnCodeMessage sirenOnCodeMessage) {
