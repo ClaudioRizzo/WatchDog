@@ -55,13 +55,13 @@ public class StatusM2Sent implements CommandProtocolFlagsReactionInterface {
 		this.parser = popolateParser(message, context, other);
 		this.parser.decrypt(); //decritta, verifica firma e password e mette in "plaintext" il codice
 		Log.i("[DEBUG_COMMAND]", "[DEBUG_COMMAND] m3 received and parsed");
-		handleReturnedData();
+		handleReturnedData(other, context);
 		MyPrefFiles.replacePreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + other, StatusM2Sent.NEXT_SENT_STATUS, context);
 	}
 	
-	private void handleReturnedData() throws ArbitraryMessageReceivedException {
+	private void handleReturnedData(String other, Context context) throws ArbitraryMessageReceivedException {
 		CommandFactory factory = new CommandFactory();
-		SMSM3Handler handler = new SMSM3Handler();
+		SMSM3Handler handler = new SMSM3Handler(other, context);
 		ParsableSMS smsToParse = factory.getMessage(SMSUtility.bytesToHex(this.parser.getPlaintext()), null);
 		smsToParse.handle(handler);
 	}

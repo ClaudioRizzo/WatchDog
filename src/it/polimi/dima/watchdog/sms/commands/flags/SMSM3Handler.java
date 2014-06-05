@@ -1,5 +1,6 @@
 package it.polimi.dima.watchdog.sms.commands.flags;
 
+import android.content.Context;
 import android.util.Log;
 import it.polimi.dima.watchdog.sms.commands.LocateCodeMessage;
 import it.polimi.dima.watchdog.sms.commands.MarkFoundCodeMessage;
@@ -12,6 +13,14 @@ import it.polimi.dima.watchdog.sms.commands.SirenOnCodeMessage;
 
 public class SMSM3Handler implements SMSCommandVisitorInterface {
 
+	private String other;
+	private Context ctx;
+	
+	public SMSM3Handler(String other, Context context){
+		this.other = other;
+		this.ctx = context;
+	}
+	
 	@Override
 	public void visit(SirenOnCodeMessage sirenOnCodeMessage) {
 		// TODO fare quello che serve e creare m4 cosi' fatto:
