@@ -8,6 +8,7 @@ import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.util.Random;
 
+import it.polimi.dima.watchdog.R;
 import it.polimi.dima.watchdog.crypto.AESKeyGenerator;
 import it.polimi.dima.watchdog.crypto.ECDSA_Signature;
 import it.polimi.dima.watchdog.exceptions.NoSignatureDoneException;
@@ -23,6 +24,7 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.EditText;
 
 public class GpsLocalizeClickHandler implements OnClickListener {
 
@@ -30,21 +32,22 @@ public class GpsLocalizeClickHandler implements OnClickListener {
 	private String otherNumber;
 	private byte[] keySalt;
 	private Context ctx;
+	private View fragView;
 	
-	public GpsLocalizeClickHandler(String pswd, String otherNumber, Context ctx) {
-		this.pswd = pswd;
-		this.otherNumber = otherNumber;
+	public GpsLocalizeClickHandler(View fragView, Context ctx) {
+		this.fragView = fragView;
 		this.ctx = ctx;
 	}
 	
 	@Override
 	public void onClick(View v) {
 		try{
-			
+			this.pswd = getPassword();
+			this.otherNumber = getPhoneNumber();
 			
 			byte[] command = SMSUtility.hexStringToByteArray(SMSUtility.LOCATE); //TODO in realtà il tipo di comando va preso dal tipo di bottone cliccato
 			
-			
+			Log.i("[DEBUG]", "DEBUG "+this.otherNumber);
 			if(!MyPrefFiles.existsPreference(MyPrefFiles.KEYRING, this.otherNumber, this.ctx)){
 				throw new NoSuchPreferenceFoundException("Non si può iniziare una sessione di comando con un utente con cui non è stato fatto SMP!!!");
 			}
@@ -130,6 +133,20 @@ public class GpsLocalizeClickHandler implements OnClickListener {
 		String initializationVector = Base64.encodeToString(iv, Base64.DEFAULT);
 		MyPrefFiles.setMyPreference(MyPrefFiles.COMMAND_SESSION, this.otherNumber + MyPrefFiles.IV, initializationVector, this.ctx);
 		return iv;
+	}
+	
+	private String getPhoneNumber() {
+		EditText mEditText = (EditText) fragView.findViewById(R.id.phone_number1);
+		String phoneNum = mEditText.getText().toString();
+		Log.i("[DEBUG]", "DEBUG"+phoneNum);
+		return phoneNum;
+	}
+	
+	private String getPassword() {
+		EditText mEditText = (EditText) fragView.findViewById(R.id.password_localize_1);
+		String cleanPassword = mEditText.getText().toString();
+		Log.i("[DEBUG]", "DEBUG"+cleanPassword);
+		return cleanPassword;
 	}
 
 

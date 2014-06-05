@@ -64,7 +64,7 @@ public class TimeoutWrapper {
 	
 	private static void createTimeout(Context ctx, PendingIntent pendingIntent){
 		AlarmManager alarmManager = (AlarmManager) ctx.getSystemService(Context.ALARM_SERVICE);
-		alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, (long) 10000, pendingIntent);
+		alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, SMSUtility.TIMEOUT_LENGTH, pendingIntent);//qui cambia timer
 	}
 	
 	private static void storeTimeoutId(String waiting, String waited, Context ctx, int pendingIntentId){

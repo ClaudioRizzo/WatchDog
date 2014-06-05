@@ -7,6 +7,7 @@ import java.security.Security;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,22 +32,12 @@ public class LocalizationFragment extends Fragment {
         Button mButton = (Button) v.findViewById(R.id.button_localization);
         Button mSwitchButton = (Button) v.findViewById(R.id.button_switch_map);
         mSwitchButton.setOnClickListener(new GpsSwitchClickHandler(getFragmentManager()));
-        mButton.setOnClickListener(new GpsLocalizeClickHandler(getPassword(v), getPhoneNumber(v), ctx));
+        mButton.setOnClickListener(new GpsLocalizeClickHandler(v, ctx));
         return v;
     }
 	
 	
 	
 	
-	private String getPhoneNumber(View view) {
-		EditText mEditText = (EditText) view.findViewById(R.id.phone_number1);
-		String phoneNum = mEditText.getText().toString();
-		return phoneNum;
-	}
 	
-	private String getPassword(View view) {
-		EditText mEditText = (EditText) view.findViewById(R.id.password_localize_1);
-		String cleanPassword = mEditText.getText().toString();
-		return cleanPassword;
-	}
 }
