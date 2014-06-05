@@ -42,10 +42,10 @@ public class LocateCodeMessage extends ParsableSMS {
 	
 	private List<Double> convertSubBody(byte[] subBody) {
 		String body = new String(subBody);
-		if(!body.matches("lat=" + ".+" + "lon=" + ".+" + "end")){
+		if(!body.matches(".+" + "$" + ".+" + "#")){
 			throw new IllegalArgumentException("Il body non è ciò che mi aspetto!!!");
 		}
-		String temp = body.replace("lat=", "").replace("lon", "$").replace("end", "#");
+		String temp = body;
 		char[] tempArray = temp.toCharArray();
 		
 		Double latitude = getLatitude(tempArray, temp);
