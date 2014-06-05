@@ -61,15 +61,15 @@ public class StatusM3Sent implements CommandProtocolFlagsReactionInterface {
 		byte[] header = this.parser.getSpecificHeader();
 		byte[] body = this.parser.getBody();
 		Log.i("[DEBUG_COMMAND]", "[DEBUG_COMMAND] m4 received and parsed");
-		handleReturnedData(header, body);
+		handleReturnedData(header, body, other, context);
 		MyPrefFiles.replacePreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + other, StatusM3Sent.NEXT_SENT_STATUS, context);
 	}
 	
-	private void handleReturnedData(byte[] header, byte[] body) throws ArbitraryMessageReceivedException {
+	private void handleReturnedData(byte[] header, byte[] body, String other, Context context) throws ArbitraryMessageReceivedException {
 		CommandFactory factory = new CommandFactory();
 		String factoryHeader = SMSUtility.bytesToHex(body);
 		String factorybody = Base64.encodeToString(body, Base64.DEFAULT);
-		SMSM4Handler handler = new SMSM4Handler();
+		SMSM4Handler handler = new SMSM4Handler(other, context);
 		ParsableSMS smsToParse = factory.getMessage(factoryHeader, factorybody);
 		smsToParse.handle(handler);
 	}

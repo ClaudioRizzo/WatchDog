@@ -1,5 +1,6 @@
 package it.polimi.dima.watchdog.sms.commands.flags;
 
+import android.content.Context;
 import android.util.Log;
 import it.polimi.dima.watchdog.sms.commands.LocateCodeMessage;
 import it.polimi.dima.watchdog.sms.commands.MarkFoundCodeMessage;
@@ -11,6 +12,17 @@ import it.polimi.dima.watchdog.sms.commands.SirenOffCodeMessage;
 import it.polimi.dima.watchdog.sms.commands.SirenOnCodeMessage;
 
 public class SMSM3Handler implements SMSCommandVisitorInterface {
+<<<<<<< HEAD
+=======
+
+	private String other;
+	private Context ctx;
+	
+	public SMSM3Handler(String other, Context context){
+		this.other = other;
+		this.ctx = context;
+	}
+>>>>>>> b1913dc576e07b450d467ef51f81b17b41d05e8c
 	
 	@Override
 	public void visit(SirenOnCodeMessage sirenOnCodeMessage) {
