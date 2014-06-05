@@ -25,12 +25,21 @@ public class M2Parser {
 	public static final int IV_LENGTH = 12;
 	private PublicKey oPub;
 	
+	
 	public M2Parser(byte[] rawMessage, PublicKey oPub){
 		this.rawMessage = rawMessage;
 		this.header = new byte[ParsableSMS.HEADER_LENGTH];
 		this.salt = new byte[M1Parser.SALT_LENGTH];
 		this.iv = new byte[M1Parser.IV_LENGTH];
 		this.oPub = oPub;
+	}
+	
+	public byte[] getIv(){
+		return this.iv;
+	}
+	
+	public byte[] getSalt(){
+		return this.salt;
 	}
 	
 	public void parse() throws ArbitraryMessageReceivedException, ErrorInSignatureCheckingException, NotECKeyException{

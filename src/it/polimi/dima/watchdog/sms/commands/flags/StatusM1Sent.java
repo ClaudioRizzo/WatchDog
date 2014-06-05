@@ -8,8 +8,12 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.Security;
 import java.security.spec.InvalidKeySpecException;
+
 import javax.crypto.spec.SecretKeySpec;
+
 import org.spongycastle.crypto.InvalidCipherTextException;
+
+import it.polimi.dima.watchdog.crypto.AESKeyGenerator;
 import it.polimi.dima.watchdog.exceptions.ArbitraryMessageReceivedException;
 import it.polimi.dima.watchdog.exceptions.ErrorInSignatureCheckingException;
 import it.polimi.dima.watchdog.exceptions.NotECKeyException;
@@ -54,11 +58,23 @@ public class StatusM1Sent implements CommandProtocolFlagsReactionInterface {
 		this.parser = new M2Parser(message.getUserData(), oPub);
 		this.parser.parse();
 		Log.i("[DEBUG_COMMAND]", "[DEBUG_COMMAND] m2 received and parsed");
+		storeParametersToParseM4(other, context);
 		generateAndSendM3(other, context);
 		Log.i("[DEBUG_COMMAND]", "[DEBUG_COMMAND] m3 sent");
 		MyPrefFiles.replacePreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + other, StatusM1Sent.NEXT_SENT_STATUS, context);
 		//TimeoutWrapper.addTimeout(SMSUtility.MY_PHONE, other, context);
 	}
+
+	private void storeParametersToParseM4(String other, Context context) throws NoSuchPreferenceFoundException {
+		String iv = Base64.encodeToString(this.parser.getIv(), Base64.DEFAULT);
+		MyPrefFiles.setMyPreference(MyPrefFiles.COMMAND_SESSION, other + MyPrefFiles.IV_FOR_M4, iv, context);
+		byte[] secret = Base64.decode(MyPrefFiles.getMyPreference(MyPrefFiles.SHARED_SECRETS, other, context), Base64.DEFAULT);
+		AESKeyGenerator keygen = new AESKeyGenerator(secret, this.parser.getSalt());
+		Key aesKey = keygen.generateKey();
+		String aesKeyBase64 = Base64.encodeToString(aesKey.getEncoded(), Base64.DEFAULT);
+		MyPrefFiles.setMyPreference(MyPrefFiles.COMMAND_SESSION, other + MyPrefFiles.KEY_FOR_M4, aesKeyBase64, context);
+	}
+
 
 	private void generateAndSendM3(String phoneNumber, Context ctx) throws NoSuchPreferenceFoundException, NoSuchAlgorithmException, InvalidKeySpecException, UnsupportedEncodingException, IllegalStateException, InvalidCipherTextException, NotECKeyException, NoSignatureDoneException, NoSuchProviderException {
 		String commandKey = phoneNumber + MyPrefFiles.TEMP_COMMAND;
