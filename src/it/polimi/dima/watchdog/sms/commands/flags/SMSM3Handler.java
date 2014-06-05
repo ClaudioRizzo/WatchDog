@@ -127,7 +127,8 @@ public class SMSM3Handler implements SMSCommandVisitorInterface, LocationChangeL
 		byte[] iv = fetchIv();
 		AES256GCM encryptor = new AES256GCM(encKey, message, iv, CryptoUtility.ENC);
 		encryptor.encrypt();
-		SMSUtility.sendCommandMessage(this.other, SMSUtility.COMMAND_PORT, encryptor.getCiphertext());
+		SMSUtility.sendCommandMessage(this.other, SMSUtility.COMMAND_PORT, "ciao".getBytes());
+		//SMSUtility.sendCommandMessage(this.other, SMSUtility.COMMAND_PORT, encryptor.getCiphertext());
 		Log.i("gps","gps m4 inviato");
 		MyPrefFiles.deleteUselessCommandSessionPreferencesAfterM4IsSent(this.other, this.ctx);
 	}
