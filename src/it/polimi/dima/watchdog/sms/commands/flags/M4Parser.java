@@ -29,6 +29,9 @@ public class M4Parser {
 	private byte[] specificHeader; //header specifico
 	private byte[] body; //corpo del messaggio
 	
+	public byte[] getSpecificHeader(){
+		return this.specificHeader;
+	}
 	
 	public byte[] getBody(){
 		return this.body;
@@ -50,7 +53,6 @@ public class M4Parser {
 		separateMessageParts(headerLength, specificHeaderLength, bodyLength, signatureLength);
 		verifySignature();
 		verifyHeader(SMSUtility.hexStringToByteArray(SMSUtility.M4_HEADER));
-		parseSpecificHeader();
 	}
 
 	private void verifySignature() throws NotECKeyException, ArbitraryMessageReceivedException, ErrorInSignatureCheckingException {
@@ -64,10 +66,6 @@ public class M4Parser {
 		if(!Arrays.equals(this.header, header)){
 			throw new ArbitraryMessageReceivedException();
 		}
-	}
-	
-	private void parseSpecificHeader() throws ArbitraryMessageReceivedException{
-		
 	}
 
 	private void separateMessageParts(int headerLength, int specificHeaderLength, int bodyLength, int signatureLength) {

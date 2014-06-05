@@ -14,8 +14,8 @@ import it.polimi.dima.watchdog.sms.socialistMillionaire.SocialistMillionaireMess
  */
 public class ParsableSMS implements SocialistMillionaireMessageInterface, CommandMessageInterface {
 
-	private String header; //MUST be base64
-	private String body; //MUST be Base64
+	private String header;
+	private String body;
 	public static int HEADER_LENGTH = 4; //ovvero 4 byte
 	
 	

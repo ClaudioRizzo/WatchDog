@@ -20,24 +20,24 @@ import it.polimi.dima.watchdog.utilities.SMSUtility;
 public class SocialistMillionaireFactory implements ParsebleSMSInterface {
 
 	@Override
-	public ParsableSMS getMessage(String header) throws ArbitraryMessageReceivedException {
+	public ParsableSMS getMessage(String header, String body) throws ArbitraryMessageReceivedException {
 		Log.i("[DEBUG_SMP]", "[DEBUG_SMP] in factory ho ricevuto: " +  header);
 		if (header.equals(SMSUtility.CODE1)) {
-			return new PublicKeyRequestCodeMessage(SMSUtility.CODE1, null);
+			return new PublicKeyRequestCodeMessage(SMSUtility.CODE1, body);
 		} else if (header.equals(SMSUtility.CODE2)) {
-			return new PublicKeySentCodeMessage(SMSUtility.CODE2, null);
+			return new PublicKeySentCodeMessage(SMSUtility.CODE2, body);
 
 		} else if (header.equals(SMSUtility.CODE3)) {
-			return new SecretQuestionSentCodeMessage (SMSUtility.CODE3, null);
+			return new SecretQuestionSentCodeMessage (SMSUtility.CODE3, body);
 
 		} else if (header.equals(SMSUtility.CODE4)) {
-			return new SecretAnswerAndPublicKeyHashSentCodeMessage(SMSUtility.CODE4, null);
+			return new SecretAnswerAndPublicKeyHashSentCodeMessage(SMSUtility.CODE4, body);
 
 		} else if (header.equals(SMSUtility.CODE5)) {
-			return new KeyValidatedCodeMessage(SMSUtility.CODE5, null);
+			return new KeyValidatedCodeMessage(SMSUtility.CODE5, body);
 
 		} else if (header.equals(SMSUtility.CODE6)) {
-			return new IDontWantToAssociateCodeMessage(SMSUtility.CODE6, null);
+			return new IDontWantToAssociateCodeMessage(SMSUtility.CODE6, body);
 		}
 		else {
 			throw new ArbitraryMessageReceivedException("Messaggio con un header sconosciuto!!!");

@@ -8,13 +8,17 @@ import java.security.PublicKey;
 import java.security.Security;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.X509EncodedKeySpec;
+
 import javax.crypto.spec.SecretKeySpec;
+
 import org.spongycastle.crypto.InvalidCipherTextException;
+
 import it.polimi.dima.watchdog.exceptions.ArbitraryMessageReceivedException;
 import it.polimi.dima.watchdog.exceptions.ErrorInSignatureCheckingException;
 import it.polimi.dima.watchdog.exceptions.NoSuchPreferenceFoundException;
 import it.polimi.dima.watchdog.exceptions.NotECKeyException;
 import it.polimi.dima.watchdog.sms.ParsableSMS;
+import it.polimi.dima.watchdog.sms.commands.CommandFactory;
 import it.polimi.dima.watchdog.sms.timeout.TimeoutWrapper;
 import it.polimi.dima.watchdog.utilities.CryptoUtility;
 import it.polimi.dima.watchdog.utilities.MyPrefFiles;
@@ -44,7 +48,7 @@ public class StatusM3Sent implements CommandProtocolFlagsReactionInterface {
 	
 	
 	@Override
-	public ParsableSMS parse(Context context, SmsMessage message, String other) throws NoSuchPreferenceFoundException, NoSuchAlgorithmException, NoSuchProviderException, InvalidKeySpecException, IllegalArgumentException, IllegalStateException, InvalidCipherTextException, ArbitraryMessageReceivedException, NotECKeyException, ErrorInSignatureCheckingException  {
+	public void parse(Context context, SmsMessage message, String other) throws NoSuchPreferenceFoundException, NoSuchAlgorithmException, NoSuchProviderException, InvalidKeySpecException, IllegalArgumentException, IllegalStateException, InvalidCipherTextException, ArbitraryMessageReceivedException, NotECKeyException, ErrorInSignatureCheckingException  {
 		TimeoutWrapper.removeTimeout(SMSUtility.MY_PHONE, other, context);
 		MyPrefFiles.replacePreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + other, StatusM3Sent.STATUS_RECEIVED, context);
 		
@@ -54,15 +58,20 @@ public class StatusM3Sent implements CommandProtocolFlagsReactionInterface {
 		
 		this.parser = new M4Parser(message.getUserData(), oPub, decryptionKey, iv);
 		this.parser.parse();
-		byte[] content = this.parser.getBody();
+		byte[] header = this.parser.getSpecificHeader();
+		byte[] body = this.parser.getBody();
 		Log.i("[DEBUG_COMMAND]", "[DEBUG_COMMAND] m4 received and parsed");
-		handleReturnedData(content);
+		handleReturnedData(header, body);
 		MyPrefFiles.replacePreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + other, StatusM3Sent.NEXT_SENT_STATUS, context);
-		return null;
 	}
 	
-	private void handleReturnedData(byte[] content) {
-		// TODO fare qualcosa coi dati che sono tornati indietro.
+	private void handleReturnedData(byte[] header, byte[] body) throws ArbitraryMessageReceivedException {
+		CommandFactory factory = new CommandFactory();
+		String factoryHeader = SMSUtility.bytesToHex(body);
+		String factorybody = Base64.encodeToString(body, Base64.DEFAULT);
+		SMSM4Handler handler = new SMSM4Handler();
+		ParsableSMS smsToParse = factory.getMessage(factoryHeader, factorybody);
+		smsToParse.handle(handler);
 	}
 
 

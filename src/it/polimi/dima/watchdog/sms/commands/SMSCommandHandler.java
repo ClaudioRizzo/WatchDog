@@ -1,17 +1,15 @@
 package it.polimi.dima.watchdog.sms.commands;
 
-import java.util.HashMap;
-import java.util.Map;
 import it.polimi.dima.watchdog.exceptions.NoSuchPreferenceFoundException;
-import it.polimi.dima.watchdog.sms.ParsableSMS;
 import it.polimi.dima.watchdog.sms.commands.flags.CommandProtocolFlagsReactionInterface;
 import it.polimi.dima.watchdog.sms.commands.flags.StatusFree;
 import it.polimi.dima.watchdog.sms.commands.flags.StatusM1Sent;
 import it.polimi.dima.watchdog.sms.commands.flags.StatusM2Sent;
 import it.polimi.dima.watchdog.sms.commands.flags.StatusM3Sent;
-import it.polimi.dima.watchdog.sms.timeout.TimeoutWrapper;
 import it.polimi.dima.watchdog.utilities.MyPrefFiles;
 import it.polimi.dima.watchdog.utilities.SMSUtility;
+import java.util.HashMap;
+import java.util.Map;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -24,9 +22,8 @@ import android.util.Log;
  * @author emanuele
  *
  */
-public class SMSCommandHandler extends BroadcastReceiver implements SMSCommandVisitorInterface{
+public class SMSCommandHandler extends BroadcastReceiver {
 	
-	private ParsableSMS recMsg;
 	private String other;
 	private Map<String,CommandProtocolFlagsReactionInterface> statusMap = new HashMap<String,CommandProtocolFlagsReactionInterface>();
 	private Context ctx;
@@ -52,14 +49,7 @@ public class SMSCommandHandler extends BroadcastReceiver implements SMSCommandVi
 			
 			
 			if(this.statusMap.containsKey(myContext)) {
-				this.recMsg = this.statusMap.get(myContext).parse(this.ctx, message, this.other);
-				if(this.recMsg != null){//accade solo se devo parsare il comando di m3
-					this.recMsg.handle(this);
-				}	
-				//se non sono in status free (e lo sono solo se ho ricevuto m3 o m4) faccio partire il timeout
-				if(!MyPrefFiles.getMyPreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + this.other, this.ctx).equals(StatusFree.CURRENT_STATUS)){
-					TimeoutWrapper.addTimeout(SMSUtility.MY_PHONE, this.other, this.ctx);						
-				}
+				this.statusMap.get(myContext).parse(this.ctx, message, this.other);
 			}
 			//altrimenti si ignora il messaggio		
 		} 
@@ -78,51 +68,6 @@ public class SMSCommandHandler extends BroadcastReceiver implements SMSCommandVi
 		return null;
 	}
 
-	@Override
-	public void visit(SirenOnCodeMessage sirenOnCodeMessage) {
-		// TODO fare quello che serve e creare m4 cosi' fatto:
-		// header(SMSUtility._HEADER) + body(fissa lunghezza) + firma 
-		Log.i("[DEBUG_COMMAND]", "[DEBUG_COMMAND] SIREN ON RECEIVED");
-		
-	}
-
-	@Override
-	public void visit(SirenOffCodeMessage sirenOffCodeMessage) {
-		// TODO Auto-generated method stub
-		Log.i("[DEBUG_COMMAND]", "[DEBUG_COMMAND] SIREN OFF RECEIVED");
-	}
-
-	@Override
-	public void visit(MarkLostCodeMessage markLostCodeMessage) {
-		// TODO Auto-generated method stub
-		Log.i("[DEBUG_COMMAND]", "[DEBUG_COMMAND] MARK LOST RECEIVED");
-	}
-
-	@Override
-	public void visit(MarkStolenCodeMessage markStolenCodeMessage) {
-		// TODO Auto-generated method stub
-		Log.i("[DEBUG_COMMAND]", "[DEBUG_COMMAND] MARK STOLEN RECEIVED");
-	}
-
-	@Override
-	public void visit(MarkLostOrStolenCodeMessage markLostOrStolenCodeMessage) {
-		// TODO Auto-generated method stub
-		Log.i("[DEBUG_COMMAND]", "[DEBUG_COMMAND] MARK LOST OR STOLEN RECEIVED");
-	}
-
-	@Override
-	public void visit(MarkFoundCodeMessage markFoundCodeMessage) {
-		// TODO Auto-generated method stub
-		Log.i("[DEBUG_COMMAND]", "[DEBUG_COMMAND] MARK FOUND RICEVUTO");
-	}
-
-	@Override
-	public void visit(LocateCodeMessage locateCodeMessage) {
-		// TODO Auto-generated method stub
-		Log.i("[DEBUG_COMMAND]", "[DEBUG_COMMAND] LOCATE RICEVUTO");
-		
-	}
-	
 	private void initStatusMap(){
 		this.statusMap.put(StatusFree.CURRENT_STATUS, new StatusFree());
 		this.statusMap.put(StatusM1Sent.CURRENT_STATUS, new StatusM1Sent());

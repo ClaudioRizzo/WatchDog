@@ -34,8 +34,8 @@ import it.polimi.dima.watchdog.utilities.SMSUtility;
 public class StatusM2Sent implements CommandProtocolFlagsReactionInterface {
 
 	
-	private ParsableSMS recMsg;
-	private CommandFactory commandFactory;
+	//private ParsableSMS recMsg;
+	//private CommandFactory commandFactory;
 	private M3Parser parser;
 	public static String CURRENT_STATUS = "m2_sent";
 	private static String STATUS_RECEIVED = "m3_received";
@@ -44,20 +44,26 @@ public class StatusM2Sent implements CommandProtocolFlagsReactionInterface {
 	
 	public StatusM2Sent(){
 		Security.addProvider(new org.spongycastle.jce.provider.BouncyCastleProvider());
-		this.commandFactory = new CommandFactory();
 	}
 	
 	
 	@Override
-	public ParsableSMS parse(Context context, SmsMessage message, String other) throws IllegalStateException, InvalidCipherTextException, ArbitraryMessageReceivedException, ErrorInSignatureCheckingException, NoSuchAlgorithmException, InvalidKeySpecException, NoSuchPreferenceFoundException, NotECKeyException, NoSuchProviderException {
+	public void parse(Context context, SmsMessage message, String other) throws IllegalStateException, InvalidCipherTextException, ArbitraryMessageReceivedException, ErrorInSignatureCheckingException, NoSuchAlgorithmException, InvalidKeySpecException, NoSuchPreferenceFoundException, NotECKeyException, NoSuchProviderException {
 		TimeoutWrapper.removeTimeout(SMSUtility.MY_PHONE, other, context);
 		MyPrefFiles.replacePreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + other, StatusM2Sent.STATUS_RECEIVED, context);
 					
 		this.parser = popolateParser(message, context, other);
 		this.parser.decrypt(); //decritta, verifica firma e password e mette in "plaintext" il codice
-		this.recMsg = this.commandFactory.getMessage(SMSUtility.bytesToHex(this.parser.getPlaintext()));
-		Log.i("[DEBUG_COMMAND]", "[DEBUG_COMMAND] m3 received and parsed");	
-		return this.recMsg;	
+		Log.i("[DEBUG_COMMAND]", "[DEBUG_COMMAND] m3 received and parsed");
+		handleReturnedData();
+		MyPrefFiles.replacePreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + other, StatusM2Sent.NEXT_SENT_STATUS, context);
+	}
+	
+	private void handleReturnedData() throws ArbitraryMessageReceivedException {
+		CommandFactory factory = new CommandFactory();
+		SMSM3Handler handler = new SMSM3Handler();
+		ParsableSMS smsToParse = factory.getMessage(SMSUtility.bytesToHex(this.parser.getPlaintext()), null);
+		smsToParse.handle(handler);
 	}
 	
 	private M3Parser popolateParser(SmsMessage sms, Context ctx, String other) throws NoSuchPreferenceFoundException, NoSuchAlgorithmException, InvalidKeySpecException, NoSuchProviderException {

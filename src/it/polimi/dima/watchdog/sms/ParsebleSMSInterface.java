@@ -9,5 +9,5 @@ import it.polimi.dima.watchdog.exceptions.ArbitraryMessageReceivedException;
  *
  */
 public interface ParsebleSMSInterface {
-	ParsableSMS getMessage(String header) throws ArbitraryMessageReceivedException;
+	ParsableSMS getMessage(String header, String body) throws ArbitraryMessageReceivedException;
 }

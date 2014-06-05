@@ -62,7 +62,7 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 				}
 
 				this.other = message.getDisplayOriginatingAddress();
-				this.recMsg = this.mSocMilFactory.getMessage(SMSUtility.getHeader(message.getUserData()));
+				this.recMsg = this.mSocMilFactory.getMessage(SMSUtility.getHeader(message.getUserData()), null);
 				// ricordarsi che getBody prende il body e lo restituisce
 				// convertito in Base64 !!!
 				// Oppure torna null se il body non c'è
