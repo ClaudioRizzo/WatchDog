@@ -17,7 +17,7 @@ public class GpsSwitchClickHandler implements OnClickListener {
 	@Override
 	public void onClick(View v) {
 		
-		mFragMan.beginTransaction().replace(R.id.gps_fragment_container, new MyMapFragment()).commit();
+		mFragMan.beginTransaction().replace(R.id.gps_fragment_container, new MyMapFragment(null)).commit();
 	}
 
 }

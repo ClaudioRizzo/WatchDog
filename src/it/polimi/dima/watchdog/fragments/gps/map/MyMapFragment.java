@@ -25,32 +25,49 @@ public class MyMapFragment extends Fragment implements LocationChangeListenerInt
 
 	public static String TAG = "MAP_FRAGMENT";
 	private GoogleMap mMap;
+	private Location location;
+	
+	
+	public MyMapFragment(Location location) {
+		this.location = location;
+	}
 	
 	@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		
+		
+		
         View v = inflater.inflate(R.layout.fragment_mymap, container, false);
+        GpsTracker gps;
         
-        /*for debug purpose*/
-		GpsTracker gps;
-		try {
-			
-			Context ctx = getActivity().getApplicationContext();
-			gps = new GpsTracker(ctx, (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE));
-			gps.addListener(this);
-			Location lastLoc = gps.getLastKnownLocation();
-			Log.i("DEBUG", "DEBUG last position: "+lastLoc);
-			mMap = ((SupportMapFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
-			
-			mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lastLoc.getLatitude(), lastLoc.getLongitude()), 12.0f));
-			
-			mMap.addMarker(new MarkerOptions()
-			        .position(new LatLng(lastLoc.getLatitude(), lastLoc.getLongitude()))
-			        .title("Hello world"));
-		} catch (LocationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+        if(location == null) {
+        	
+        	try {
+    			
+    			Context ctx = getActivity().getApplicationContext();
+    			gps = new GpsTracker(ctx, (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE));
+    			gps.addListener(this);
+    			Location lastLoc = gps.getLastKnownLocation();
+    			
+    			Log.i("DEBUG", "DEBUG last position: "+lastLoc);
+    			if(lastLoc != null) {
+    				mMap = ((SupportMapFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
+    				mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lastLoc.getLatitude(), lastLoc.getLongitude()), 12.0f));
+    			}
+    			
+    			
+    		} catch (LocationException e) {
+    			// TODO Auto-generated catch block
+    			e.printStackTrace();
+    		}
+        	
+        }
+        
+       /* mMap.addMarker(new MarkerOptions()
+        .position(new LatLng(lastLoc.getLatitude(), lastLoc.getLongitude()))
+        .title("Hello world"));*/
+		
+		
         
         return v;
     }
