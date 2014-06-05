@@ -15,8 +15,10 @@ import org.spongycastle.crypto.InvalidCipherTextException;
 
 import it.polimi.dima.watchdog.exceptions.ArbitraryMessageReceivedException;
 import it.polimi.dima.watchdog.exceptions.ErrorInSignatureCheckingException;
+import it.polimi.dima.watchdog.exceptions.NoSignatureDoneException;
 import it.polimi.dima.watchdog.exceptions.NoSuchPreferenceFoundException;
 import it.polimi.dima.watchdog.exceptions.NotECKeyException;
+import it.polimi.dima.watchdog.exceptions.TooLongResponseException;
 import it.polimi.dima.watchdog.sms.ParsableSMS;
 import it.polimi.dima.watchdog.sms.commands.CommandFactory;
 import it.polimi.dima.watchdog.sms.timeout.TimeoutWrapper;
@@ -48,7 +50,7 @@ public class StatusM3Sent implements CommandProtocolFlagsReactionInterface {
 	
 	
 	@Override
-	public void parse(Context context, SmsMessage message, String other) throws NoSuchPreferenceFoundException, NoSuchAlgorithmException, NoSuchProviderException, InvalidKeySpecException, IllegalArgumentException, IllegalStateException, InvalidCipherTextException, ArbitraryMessageReceivedException, NotECKeyException, ErrorInSignatureCheckingException  {
+	public void parse(Context context, SmsMessage message, String other) throws NoSuchPreferenceFoundException, NoSuchAlgorithmException, NoSuchProviderException, InvalidKeySpecException, IllegalArgumentException, IllegalStateException, InvalidCipherTextException, ArbitraryMessageReceivedException, NotECKeyException, ErrorInSignatureCheckingException, TooLongResponseException, NoSignatureDoneException  {
 		TimeoutWrapper.removeTimeout(SMSUtility.MY_PHONE, other, context);
 		MyPrefFiles.replacePreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + other, StatusM3Sent.STATUS_RECEIVED, context);
 		
@@ -65,7 +67,7 @@ public class StatusM3Sent implements CommandProtocolFlagsReactionInterface {
 		MyPrefFiles.replacePreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + other, StatusM3Sent.NEXT_SENT_STATUS, context);
 	}
 	
-	private void handleReturnedData(byte[] header, byte[] body, String other, Context context) throws ArbitraryMessageReceivedException {
+	private void handleReturnedData(byte[] header, byte[] body, String other, Context context) throws ArbitraryMessageReceivedException, IllegalArgumentException, TooLongResponseException, NoSuchAlgorithmException, InvalidKeySpecException, NoSuchPreferenceFoundException, NoSignatureDoneException, NotECKeyException {
 		CommandFactory factory = new CommandFactory();
 		String factoryHeader = SMSUtility.bytesToHex(body);
 		String factorybody = Base64.encodeToString(body, Base64.DEFAULT);

@@ -8,16 +8,21 @@ import java.security.PublicKey;
 import java.security.Security;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.X509EncodedKeySpec;
+
 import javax.crypto.spec.SecretKeySpec;
+
 import org.spongycastle.crypto.InvalidCipherTextException;
+
 import android.content.Context;
 import android.telephony.SmsMessage;
 import android.util.Base64;
 import android.util.Log;
 import it.polimi.dima.watchdog.exceptions.ArbitraryMessageReceivedException;
 import it.polimi.dima.watchdog.exceptions.ErrorInSignatureCheckingException;
+import it.polimi.dima.watchdog.exceptions.NoSignatureDoneException;
 import it.polimi.dima.watchdog.exceptions.NoSuchPreferenceFoundException;
 import it.polimi.dima.watchdog.exceptions.NotECKeyException;
+import it.polimi.dima.watchdog.exceptions.TooLongResponseException;
 import it.polimi.dima.watchdog.sms.ParsableSMS;
 import it.polimi.dima.watchdog.sms.commands.CommandFactory;
 import it.polimi.dima.watchdog.sms.timeout.TimeoutWrapper;
@@ -48,7 +53,7 @@ public class StatusM2Sent implements CommandProtocolFlagsReactionInterface {
 	
 	
 	@Override
-	public void parse(Context context, SmsMessage message, String other) throws IllegalStateException, InvalidCipherTextException, ArbitraryMessageReceivedException, ErrorInSignatureCheckingException, NoSuchAlgorithmException, InvalidKeySpecException, NoSuchPreferenceFoundException, NotECKeyException, NoSuchProviderException {
+	public void parse(Context context, SmsMessage message, String other) throws IllegalStateException, InvalidCipherTextException, ArbitraryMessageReceivedException, ErrorInSignatureCheckingException, NoSuchAlgorithmException, InvalidKeySpecException, NoSuchPreferenceFoundException, NotECKeyException, NoSuchProviderException, IllegalArgumentException, TooLongResponseException, NoSignatureDoneException {
 		TimeoutWrapper.removeTimeout(SMSUtility.MY_PHONE, other, context);
 		MyPrefFiles.replacePreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + other, StatusM2Sent.STATUS_RECEIVED, context);
 					
@@ -59,7 +64,7 @@ public class StatusM2Sent implements CommandProtocolFlagsReactionInterface {
 		MyPrefFiles.replacePreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + other, StatusM2Sent.NEXT_SENT_STATUS, context);
 	}
 	
-	private void handleReturnedData(String other, Context context) throws ArbitraryMessageReceivedException {
+	private void handleReturnedData(String other, Context context) throws ArbitraryMessageReceivedException, IllegalArgumentException, TooLongResponseException, NoSuchAlgorithmException, InvalidKeySpecException, NoSuchPreferenceFoundException, NoSignatureDoneException, NotECKeyException {
 		CommandFactory factory = new CommandFactory();
 		SMSM3Handler handler = new SMSM3Handler(other, context);
 		ParsableSMS smsToParse = factory.getMessage(SMSUtility.bytesToHex(this.parser.getPlaintext()), null);
