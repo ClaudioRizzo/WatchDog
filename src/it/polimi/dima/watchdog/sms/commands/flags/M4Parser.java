@@ -7,10 +7,14 @@ import it.polimi.dima.watchdog.exceptions.ErrorInSignatureCheckingException;
 import it.polimi.dima.watchdog.exceptions.NotECKeyException;
 import it.polimi.dima.watchdog.sms.ParsableSMS;
 import it.polimi.dima.watchdog.utilities.SMSUtility;
+
 import java.security.Key;
 import java.security.PublicKey;
 import java.util.Arrays;
+
 import org.spongycastle.crypto.InvalidCipherTextException;
+
+import android.util.Log;
 
 /**
  * 
@@ -46,13 +50,17 @@ public class M4Parser {
 	
 	public void parse() throws IllegalArgumentException, ArbitraryMessageReceivedException, NotECKeyException, ErrorInSignatureCheckingException, IllegalStateException, InvalidCipherTextException{
 		decrypt();
+		Log.i("[DEBUG_COMMAND]", "[DEBUG_COMMAND] m4 decrypted");
 		int headerLength = ParsableSMS.HEADER_LENGTH;
 		int specificHeaderLength = ParsableSMS.HEADER_LENGTH;
 		int bodyLength = SMSUtility.M4_BODY_LENGTH;
 		int signatureLength = this.decryptedSMS.length - headerLength - specificHeaderLength - bodyLength;
 		separateMessageParts(headerLength, specificHeaderLength, bodyLength, signatureLength);
+		Log.i("[DEBUG_COMMAND]", "[DEBUG_COMMAND] m4 parts separated");
 		verifySignature();
+		Log.i("[DEBUG_COMMAND]", "[DEBUG_COMMAND] m4 signature verified");
 		verifyHeader(SMSUtility.hexStringToByteArray(SMSUtility.M4_HEADER));
+		Log.i("[DEBUG_COMMAND]", "[DEBUG_COMMAND] m4 header verified");
 	}
 
 	private void verifySignature() throws NotECKeyException, ArbitraryMessageReceivedException, ErrorInSignatureCheckingException {
