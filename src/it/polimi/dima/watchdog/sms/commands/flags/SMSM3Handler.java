@@ -1,16 +1,11 @@
 package it.polimi.dima.watchdog.sms.commands.flags;
 
 import java.nio.ByteBuffer;
-import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.spec.InvalidKeySpecException;
-import java.security.spec.PKCS8EncodedKeySpec;
-
 import android.content.Context;
-import android.util.Base64;
 import android.util.Log;
-import it.polimi.dima.watchdog.crypto.ECDSA_Signature;
 import it.polimi.dima.watchdog.exceptions.NoSignatureDoneException;
 import it.polimi.dima.watchdog.exceptions.NoSuchPreferenceFoundException;
 import it.polimi.dima.watchdog.exceptions.NotECKeyException;
@@ -80,57 +75,55 @@ public class SMSM3Handler implements SMSCommandVisitorInterface {
 		// TODO Auto-generated method stub
 		Log.i("[DEBUG_COMMAND]", "[DEBUG_COMMAND] LOCATE RICEVUTO");
 		String location = null; //TODO inizializzare coi dati del gps
-		constructLocateResponse(SMSUtility.hexStringToByteArray(SMSUtility.LOCATE), location);
+		constructResponse(SMSUtility.hexStringToByteArray(SMSUtility.LOCATE), location);
 	}
 	
-	private void constructLocateResponse(byte[] specificHeader, String location) throws TooLongResponseException, NoSuchPreferenceFoundException, NoSuchAlgorithmException, InvalidKeySpecException, NoSignatureDoneException, NotECKeyException{
-		
-		//creo l'header (prima parte, poi c'è anche specificHeader)
+	private void constructResponse(byte[] specificHeader, String location) throws TooLongResponseException, NoSuchPreferenceFoundException, NoSuchAlgorithmException, InvalidKeySpecException, NoSignatureDoneException, NotECKeyException{
 		byte[] header = SMSUtility.hexStringToByteArray(SMSUtility.M4_HEADER);
+		byte[] subBody = location.getBytes();
 		
-		//alloco spazio per il body
-		byte[] body = new byte[SMSUtility.M4_BODY_LENGTH];
-		
-		//creo il sottobody
-		byte[] locationBytes = location.getBytes();
-		
-		//lunghezza dei byte che indicano la lunghezza del sottobody
 		final int lengthBytesSize = 4;
+		int subBodyLength = subBody.length;
+		int paddingLength = SMSUtility.getM4BodyPaddingLength(SMSUtility.M4_BODY_LENGTH, lengthBytesSize, subBodyLength);
 		
-		//lunghezza del sottobody
-		int locationLength = locationBytes.length;
+		byte[] lengthByte = ByteBuffer.allocate(lengthBytesSize).putInt(subBodyLength).array();
+		byte[] padding = generatePadding(paddingLength);
+		byte[] body = fillBody(lengthByte, subBody, padding, lengthBytesSize, subBodyLength, paddingLength);
+		byte[] messageWithoutSignature = generatePlaintext(header, specificHeader, body);
 		
-		//lunghezza del padding
-		int paddingLength = SMSUtility.getM4BodyPaddingLength(SMSUtility.M4_BODY_LENGTH, lengthBytesSize, locationLength);
-		
-		//creo i 4 byte che simbloeggiano la lunghezza del sottobody
-		byte[] lengthByte = ByteBuffer.allocate(lengthBytesSize).putInt(locationLength).array();
-		
-		//creo il padding e lo inizializzo a tutti zeri
+		PrivateKey mPriv = MyPrefFiles.getMyPrivateKey(this.ctx);
+		byte[] signature = CryptoUtility.doSignature(messageWithoutSignature, mPriv);
+		byte[] message = packMessage(messageWithoutSignature, signature);
+	}
+	
+	private byte[] packMessage(byte[] messageWithoutSignature, byte[] signature) {
+		byte[] message = new byte[messageWithoutSignature.length + signature.length];
+		System.arraycopy(messageWithoutSignature, 0, message, 0, messageWithoutSignature.length);
+		System.arraycopy(signature, 0, message, messageWithoutSignature.length, signature.length);
+		return message;
+	}
+
+	private byte[] fillBody(byte[] lengthByte, byte[] subBody, byte[] padding, int lengthBytesSize, int subBodyLength, int paddingLength) {
+		byte[] body = new byte[SMSUtility.M4_BODY_LENGTH];
+		System.arraycopy(lengthByte, 0, body, 0, lengthBytesSize);
+		System.arraycopy(subBody, 0, body, lengthBytesSize, subBodyLength);
+		System.arraycopy(padding, 0, body, lengthBytesSize + subBodyLength, paddingLength);
+		return body;
+	}
+
+	private byte[] generatePadding(int paddingLength){
 		byte[] padding = ByteBuffer.allocate(paddingLength).array();
 		for(int i=0; i<paddingLength; i++){
 			padding[i] = '\0';
 		}
-		
-		//creo il body
-		System.arraycopy(lengthByte, 0, body, 0, lengthBytesSize);
-		System.arraycopy(locationBytes, 0, body, lengthBytesSize, locationLength);
-		System.arraycopy(padding, 0, body, lengthBytesSize + locationLength, paddingLength);
-		
-		//creo il messaggio senza firma
+		return padding;
+	}
+	
+	private byte[] generatePlaintext(byte[] header, byte[] specificHeader, byte[] body){
 		byte[] messageWithoutSignature = new byte[header.length + specificHeader.length + body.length];
 		System.arraycopy(header, 0, messageWithoutSignature, 0, header.length);
 		System.arraycopy(specificHeader, 0, messageWithoutSignature, header.length, specificHeader.length);
 		System.arraycopy(body, 0, messageWithoutSignature, header.length + specificHeader.length, body.length);
-		
-		PrivateKey mPriv = MyPrefFiles.getMyPrivateKey(this.ctx);
-		
-		ECDSA_Signature signer = new ECDSA_Signature(messageWithoutSignature, mPriv);
-		signer.sign();
-		byte[] signature = signer.getSignature();
-		
-		byte[] message = new byte[messageWithoutSignature.length + signature.length];
-		System.arraycopy(messageWithoutSignature, 0, message, 0, messageWithoutSignature.length);
-		System.arraycopy(signature, 0, message, messageWithoutSignature.length, signature.length);
+		return messageWithoutSignature;
 	}
 }

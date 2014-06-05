@@ -1,5 +1,11 @@
 package it.polimi.dima.watchdog.utilities;
 
+import it.polimi.dima.watchdog.crypto.ECDSA_Signature;
+import it.polimi.dima.watchdog.exceptions.NoSignatureDoneException;
+import it.polimi.dima.watchdog.exceptions.NotECKeyException;
+
+import java.security.PrivateKey;
+
 /**
  * Classe che contiene le stringhe che identificano gli algoritmi usati.
  * 
@@ -51,4 +57,11 @@ public class CryptoUtility {
 	 * Encryption flag per AES
 	 */
 	public static final int ENC = 1;
+	
+	
+	public static byte[] doSignature(byte[] ptx, PrivateKey priv) throws NoSignatureDoneException, NotECKeyException{
+		ECDSA_Signature signer = new ECDSA_Signature(ptx, priv);
+		signer.sign();
+		return signer.getSignature();
+	}
 }
