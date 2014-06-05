@@ -4,12 +4,18 @@ import java.nio.ByteBuffer;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.spec.InvalidKeySpecException;
+
 import android.content.Context;
+import android.location.Location;
+import android.location.LocationManager;
 import android.util.Log;
 import it.polimi.dima.watchdog.exceptions.NoSignatureDoneException;
 import it.polimi.dima.watchdog.exceptions.NoSuchPreferenceFoundException;
 import it.polimi.dima.watchdog.exceptions.NotECKeyException;
 import it.polimi.dima.watchdog.exceptions.TooLongResponseException;
+import it.polimi.dima.watchdog.fragments.gps.map.GpsTracker;
+import it.polimi.dima.watchdog.fragments.gps.map.LocationChangeListenerInterface;
+import it.polimi.dima.watchdog.fragments.gps.map.LocationException;
 import it.polimi.dima.watchdog.sms.commands.LocateCodeMessage;
 import it.polimi.dima.watchdog.sms.commands.MarkFoundCodeMessage;
 import it.polimi.dima.watchdog.sms.commands.MarkLostCodeMessage;
@@ -22,14 +28,18 @@ import it.polimi.dima.watchdog.utilities.CryptoUtility;
 import it.polimi.dima.watchdog.utilities.MyPrefFiles;
 import it.polimi.dima.watchdog.utilities.SMSUtility;
 
-public class SMSM3Handler implements SMSCommandVisitorInterface {
+public class SMSM3Handler implements SMSCommandVisitorInterface, LocationChangeListenerInterface {
 
 	private String other;
 	private Context ctx;
+	private String locationString = null;
+	private GpsTracker gps;
 	
 	public SMSM3Handler(String other, Context context){
 		this.other = other;
 		this.ctx = context;
+		
+		
 	}
 	
 	@Override
@@ -72,10 +82,20 @@ public class SMSM3Handler implements SMSCommandVisitorInterface {
 
 	@Override
 	public void visit(LocateCodeMessage locateCodeMessage) throws IllegalArgumentException, TooLongResponseException, NoSuchPreferenceFoundException, NoSuchAlgorithmException, InvalidKeySpecException, NoSignatureDoneException, NotECKeyException {
-		// TODO Auto-generated method stub
+		
 		Log.i("[DEBUG_COMMAND]", "[DEBUG_COMMAND] LOCATE RICEVUTO");
-		String location = null; //TODO inizializzare coi dati del gps
-		constructResponse(SMSUtility.hexStringToByteArray(SMSUtility.LOCATE), location);
+		try {
+			gps = new GpsTracker(ctx, (LocationManager) ctx.getSystemService(Context.LOCATION_SERVICE));
+			gps.addListener(this);
+			gps.getLocationUpdates();
+			
+			constructResponse(SMSUtility.hexStringToByteArray(SMSUtility.LOCATE), this.locationString);
+		} catch (LocationException e) {
+			// TODO gestire errore device spenti
+			e.printStackTrace();
+		}
+		
+		
 	}
 	
 	private void constructResponse(byte[] specificHeader, String location) throws TooLongResponseException, NoSuchPreferenceFoundException, NoSuchAlgorithmException, InvalidKeySpecException, NoSignatureDoneException, NotECKeyException{
@@ -125,5 +145,15 @@ public class SMSM3Handler implements SMSCommandVisitorInterface {
 		System.arraycopy(specificHeader, 0, messageWithoutSignature, header.length, specificHeader.length);
 		System.arraycopy(body, 0, messageWithoutSignature, header.length + specificHeader.length, body.length);
 		return messageWithoutSignature;
+	}
+
+	@Override
+	public void onlocationChange(Location location) {
+		double lat = location.getLatitude();
+		double lon = location.getLongitude();
+		
+		this.locationString = "lat="+lat+"lon="+lon+"end";
+		gps.removeLocationUpdates();
+		
 	}
 }
