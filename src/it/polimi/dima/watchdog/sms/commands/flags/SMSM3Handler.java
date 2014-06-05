@@ -4,6 +4,7 @@ import java.nio.ByteBuffer;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.spec.InvalidKeySpecException;
+
 import android.content.Context;
 import android.location.Location;
 import android.location.LocationManager;
@@ -89,7 +90,7 @@ public class SMSM3Handler implements SMSCommandVisitorInterface, LocationChangeL
 			gps.addListener(this);
 			gps.getLocationUpdates();
 			
-			constructResponse(SMSUtility.hexStringToByteArray(SMSUtility.LOCATE), this.locationString);
+			
 		} catch (LocationException e) {
 			// TODO gestire errore device spenti
 			e.printStackTrace();
@@ -154,6 +155,30 @@ public class SMSM3Handler implements SMSCommandVisitorInterface, LocationChangeL
 		
 		this.locationString = "lat="+lat+"lon="+lon+"end";
 		gps.removeLocationUpdates();
+		try {
+			constructResponse(SMSUtility.hexStringToByteArray(SMSUtility.LOCATE), this.locationString);
+		} catch (NoSuchAlgorithmException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvalidKeySpecException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (TooLongResponseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NoSuchPreferenceFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NoSignatureDoneException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NotECKeyException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 	}
 }
