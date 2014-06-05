@@ -1,6 +1,13 @@
 package it.polimi.dima.watchdog.sms;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
+
 import android.content.Context;
+import it.polimi.dima.watchdog.exceptions.NoSignatureDoneException;
+import it.polimi.dima.watchdog.exceptions.NoSuchPreferenceFoundException;
+import it.polimi.dima.watchdog.exceptions.NotECKeyException;
+import it.polimi.dima.watchdog.exceptions.TooLongResponseException;
 import it.polimi.dima.watchdog.sms.commands.CommandMessageInterface;
 import it.polimi.dima.watchdog.sms.commands.SMSCommandVisitorInterface;
 import it.polimi.dima.watchdog.sms.socialistMillionaire.SMSPublicKeyVisitorInterface;
@@ -44,7 +51,7 @@ public class ParsableSMS implements SocialistMillionaireMessageInterface, Comman
 	public void handle(SMSPublicKeyVisitorInterface visitor) {}
 
 	@Override
-	public void handle(SMSCommandVisitorInterface visitor) {}
+	public void handle(SMSCommandVisitorInterface visitor) throws IllegalArgumentException, TooLongResponseException, NoSuchPreferenceFoundException, NoSuchAlgorithmException, InvalidKeySpecException, NoSignatureDoneException, NotECKeyException {}
 
 	
 }

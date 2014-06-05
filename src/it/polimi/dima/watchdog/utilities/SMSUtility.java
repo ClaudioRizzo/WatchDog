@@ -2,6 +2,7 @@ package it.polimi.dima.watchdog.utilities;
 
 import it.polimi.dima.watchdog.exceptions.ArbitraryMessageReceivedException;
 import it.polimi.dima.watchdog.exceptions.MessageWillBeIgnoredException;
+import it.polimi.dima.watchdog.exceptions.TooLongResponseException;
 import it.polimi.dima.watchdog.sms.ParsableSMS;
 import it.polimi.dima.watchdog.sms.commands.flags.StatusFree;
 import java.util.regex.Pattern;
@@ -117,7 +118,9 @@ public class SMSUtility {
 	 * effettivi e infine un padding di zeri)
 	 */
 	public static int M4_BODY_LENGTH = 40; //TODO calibrare a seconda delle necessità
-	
+	/**
+	 * Usato solo nei metodi byte[] --> Hex e Hex --> byte[]
+	 */
 	private static final char[] hexArray = "0123456789ABCDEF".toCharArray();
 	/**
 	 * Porta su cui vengono ricevuti solo i messaggi del SMP.
@@ -319,5 +322,11 @@ public class SMSUtility {
 		}
 	}
 	
-	
+	public static int getM4BodyPaddingLength(int m4BodyLength, int lengthBytesSize, int dataLength) throws TooLongResponseException {
+		
+		if(dataLength > m4BodyLength - lengthBytesSize){
+			throw new TooLongResponseException("Dati troppo lunghi!!!");
+		}
+		return m4BodyLength - lengthBytesSize - dataLength;
+	}
 }
