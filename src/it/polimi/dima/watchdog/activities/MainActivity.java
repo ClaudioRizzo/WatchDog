@@ -3,6 +3,8 @@ package it.polimi.dima.watchdog.activities;
 import it.polimi.dima.watchdog.R;
 import it.polimi.dima.watchdog.fragments.gps.GpsMainFragment;
 import it.polimi.dima.watchdog.fragments.gps.map.GpsTracker;
+import it.polimi.dima.watchdog.fragments.gps.map.LocationChangeListenerInterface;
+import it.polimi.dima.watchdog.fragments.gps.map.LocationException;
 import it.polimi.dima.watchdog.utilities.MyDrawerUtility;
 import it.polimi.dima.watchdog.utilities.MyPrefFiles;
 import it.polimi.dima.watchdog.utilities.SMSUtility;
@@ -10,31 +12,33 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 /**
  * 
  * @author claudio
  *
  */
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends ActionBarActivity implements LocationChangeListenerInterface {
 
 	MyDrawerUtility mDrawerUtil;
 	static final String ACTION = "android.intent.action.DATA_SMS_RECEIVED";
-
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		/*for debug pourpose*/
-		GpsTracker gps = new GpsTracker(getApplicationContext());
-		SMSUtility.showShortToastMessage(String.valueOf(gps.getLatitude()), getApplicationContext());
 		
 		SharedPreferences settings = getSharedPreferences(MyPrefFiles.PREF_INIT, Context.MODE_PRIVATE);
 		boolean wizardDone = settings.getBoolean(MyPrefFiles.WIZARD_DONE, false);
@@ -102,5 +106,11 @@ public class MainActivity extends ActionBarActivity {
 		transaction.replace(R.id.main_fragment_container, fragment, tag);
 		transaction.addToBackStack(tag);
 		transaction.commit();
+	}
+
+	@Override
+	public void onlocationChange(Location location) {
+		Log.i("[DEBUG]", "[DEBUG] lat: "+location.getLatitude());
+		
 	}
 }

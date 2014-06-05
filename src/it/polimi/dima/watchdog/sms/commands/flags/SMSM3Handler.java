@@ -11,7 +11,7 @@ import it.polimi.dima.watchdog.sms.commands.SirenOffCodeMessage;
 import it.polimi.dima.watchdog.sms.commands.SirenOnCodeMessage;
 
 public class SMSM3Handler implements SMSCommandVisitorInterface {
-
+	
 	@Override
 	public void visit(SirenOnCodeMessage sirenOnCodeMessage) {
 		// TODO fare quello che serve e creare m4 cosi' fatto:
