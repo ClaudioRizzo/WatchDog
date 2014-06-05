@@ -2,8 +2,10 @@ package it.polimi.dima.watchdog.activities;
 
 import it.polimi.dima.watchdog.R;
 import it.polimi.dima.watchdog.fragments.gps.GpsMainFragment;
+import it.polimi.dima.watchdog.fragments.gps.map.GpsTracker;
 import it.polimi.dima.watchdog.utilities.MyDrawerUtility;
 import it.polimi.dima.watchdog.utilities.MyPrefFiles;
+import it.polimi.dima.watchdog.utilities.SMSUtility;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -29,6 +31,11 @@ public class MainActivity extends ActionBarActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		/*for debug pourpose*/
+		GpsTracker gps = new GpsTracker(getApplicationContext());
+		SMSUtility.showShortToastMessage(String.valueOf(gps.getLatitude()), getApplicationContext());
+		
 		SharedPreferences settings = getSharedPreferences(MyPrefFiles.PREF_INIT, Context.MODE_PRIVATE);
 		boolean wizardDone = settings.getBoolean(MyPrefFiles.WIZARD_DONE, false);
 		getSupportActionBar().setTitle(R.string.default_tab);
