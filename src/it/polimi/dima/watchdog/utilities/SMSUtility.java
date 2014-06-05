@@ -256,7 +256,7 @@ public class SMSUtility {
 	 * @param message : il messaggio da mostrare
 	 * @param ctx : il contesto corrente
 	 */
-	private static void showShortToastMessage(String message, Context ctx) {
+	public static void showShortToastMessage(String message, Context ctx) {
 		Toast toast = Toast.makeText(ctx, message, Toast.LENGTH_SHORT);
 		toast.show();
 	}
