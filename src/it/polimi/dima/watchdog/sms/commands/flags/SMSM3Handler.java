@@ -117,6 +117,7 @@ public class SMSM3Handler implements SMSCommandVisitorInterface, LocationChangeL
 		byte[] message = packMessage(messageWithoutSignature, signature);
 		SMSUtility.sendCommandMessage(this.other, SMSUtility.COMMAND_PORT, message);
 		Log.i("gps","gps m4 inviato");
+		MyPrefFiles.deleteUselessCommandSessionPreferencesAfterM4IsSent(this.other, this.ctx);
 	}
 	
 	private byte[] packMessage(byte[] messageWithoutSignature, byte[] signature) {

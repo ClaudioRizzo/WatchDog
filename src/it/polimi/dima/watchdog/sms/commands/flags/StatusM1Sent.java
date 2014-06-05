@@ -81,7 +81,7 @@ public class StatusM1Sent implements CommandProtocolFlagsReactionInterface {
 		CommandSMS sms = new CommandSMS(command, saltedPassword, mPriv, encryptionKey, phoneNumber, iv);
 		sms.construct();
 		//cancello le preferenze ormai inutili
-		MyPrefFiles.deleteUselessCommandSessionPreferences(phoneNumber, ctx);
+		MyPrefFiles.deleteUselessCommandSessionPreferencesAfterM3IsSent(phoneNumber, ctx);
 		sms.send();
 	}
 
