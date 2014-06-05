@@ -139,9 +139,11 @@ public class StatusFree implements CommandProtocolFlagsReactionInterface{
 	}
 	
 	private void generateAndStoreAesKeyForM4(byte[] secret, byte[] salt, String phoneNumber, Context ctx) {
+		Log.i("DEBUG", "DEBUG sale prima di generare la chiave: " + Base64.encodeToString(salt, Base64.DEFAULT));
 		AESKeyGenerator aesKeyGenerator = new AESKeyGenerator(secret, salt);
 		String sessionKey = Base64.encodeToString(aesKeyGenerator.generateKey().getEncoded(), Base64.DEFAULT);
 		MyPrefFiles.setMyPreference(MyPrefFiles.COMMAND_SESSION, phoneNumber + MyPrefFiles.KEY_FOR_M4, sessionKey, ctx);
+		Log.i("DEBUG", "DEBUG chiave prima di essere inviata: " + sessionKey);
 	}
 	
 	private byte[] packMessage(byte[] partialMessage, byte[] signature) {

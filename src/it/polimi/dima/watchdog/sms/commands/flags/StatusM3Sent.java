@@ -80,6 +80,7 @@ public class StatusM3Sent implements CommandProtocolFlagsReactionInterface {
 
 	private Key fetchDecryptionKey(String other, Context ctx) throws NoSuchPreferenceFoundException {
 		String decKey = MyPrefFiles.getMyPreference(MyPrefFiles.COMMAND_SESSION, other + MyPrefFiles.KEY_FOR_M4, ctx);
+		Log.i("DEBUG", "DEBUG chiave lato ricevente appena prima di utilizzarla: " + decKey);
 		byte[] decKeyValue = Base64.decode(decKey, Base64.DEFAULT);
 		return new SecretKeySpec(decKeyValue, CryptoUtility.AES_256);
 	}

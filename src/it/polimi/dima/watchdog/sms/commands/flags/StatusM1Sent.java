@@ -69,10 +69,12 @@ public class StatusM1Sent implements CommandProtocolFlagsReactionInterface {
 		String iv = Base64.encodeToString(this.parser.getIv(), Base64.DEFAULT);
 		MyPrefFiles.setMyPreference(MyPrefFiles.COMMAND_SESSION, other + MyPrefFiles.IV_FOR_M4, iv, context);
 		byte[] secret = Base64.decode(MyPrefFiles.getMyPreference(MyPrefFiles.SHARED_SECRETS, other, context), Base64.DEFAULT);
+		Log.i("DEBUG", "DEBUG lato ricevente: sale prima di generare la chiave: " + Base64.encodeToString(this.parser.getSalt(), Base64.DEFAULT));
 		AESKeyGenerator keygen = new AESKeyGenerator(secret, this.parser.getSalt());
 		Key aesKey = keygen.generateKey();
 		String aesKeyBase64 = Base64.encodeToString(aesKey.getEncoded(), Base64.DEFAULT);
 		MyPrefFiles.setMyPreference(MyPrefFiles.COMMAND_SESSION, other + MyPrefFiles.KEY_FOR_M4, aesKeyBase64, context);
+		Log.i("DEBUG", "DEBUG chiave lato ricevente: " + aesKeyBase64);
 	}
 
 

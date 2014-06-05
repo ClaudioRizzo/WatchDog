@@ -1,14 +1,22 @@
 package it.polimi.dima.watchdog.sms.commands.flags;
 
 import java.nio.ByteBuffer;
+import java.security.Key;
+import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.spec.InvalidKeySpecException;
 
+import javax.crypto.spec.SecretKeySpec;
+
+import org.spongycastle.crypto.InvalidCipherTextException;
+
 import android.content.Context;
 import android.location.Location;
 import android.location.LocationManager;
+import android.util.Base64;
 import android.util.Log;
+import it.polimi.dima.watchdog.crypto.AES256GCM;
 import it.polimi.dima.watchdog.exceptions.NoSignatureDoneException;
 import it.polimi.dima.watchdog.exceptions.NoSuchPreferenceFoundException;
 import it.polimi.dima.watchdog.exceptions.NotECKeyException;
@@ -100,7 +108,7 @@ public class SMSM3Handler implements SMSCommandVisitorInterface, LocationChangeL
 		
 	}
 	
-	private void constructResponse(byte[] specificHeader, String location) throws TooLongResponseException, NoSuchPreferenceFoundException, NoSuchAlgorithmException, InvalidKeySpecException, NoSignatureDoneException, NotECKeyException{
+	private void constructResponse(byte[] specificHeader, String location) throws TooLongResponseException, NoSuchPreferenceFoundException, NoSuchAlgorithmException, InvalidKeySpecException, NoSignatureDoneException, NotECKeyException, IllegalStateException, InvalidCipherTextException{
 		byte[] header = SMSUtility.hexStringToByteArray(SMSUtility.M4_HEADER);
 		byte[] subBody = location.getBytes();
 		
@@ -115,11 +123,27 @@ public class SMSM3Handler implements SMSCommandVisitorInterface, LocationChangeL
 		PrivateKey mPriv = MyPrefFiles.getMyPrivateKey(this.ctx);
 		byte[] signature = CryptoUtility.doSignature(messageWithoutSignature, mPriv);
 		byte[] message = packMessage(messageWithoutSignature, signature);
-		SMSUtility.sendCommandMessage(this.other, SMSUtility.COMMAND_PORT, message);
+		Key encKey = fetchEncryptionKey();
+		byte[] iv = fetchIv();
+		AES256GCM encryptor = new AES256GCM(encKey, message, iv, CryptoUtility.ENC);
+		encryptor.encrypt();
+		SMSUtility.sendCommandMessage(this.other, SMSUtility.COMMAND_PORT, encryptor.getCiphertext());
 		Log.i("gps","gps m4 inviato");
 		MyPrefFiles.deleteUselessCommandSessionPreferencesAfterM4IsSent(this.other, this.ctx);
 	}
 	
+	private byte[] fetchIv() throws NoSuchPreferenceFoundException {
+		String iv = MyPrefFiles.getMyPreference(MyPrefFiles.COMMAND_SESSION, this.other + MyPrefFiles.IV_FOR_M4, this.ctx);
+		return Base64.decode(iv, Base64.DEFAULT);
+	}
+
+	private Key fetchEncryptionKey() throws NoSuchPreferenceFoundException, NoSuchAlgorithmException {
+		String key = MyPrefFiles.getMyPreference(MyPrefFiles.COMMAND_SESSION, this.other + MyPrefFiles.KEY_FOR_M4, this.ctx);
+		Log.i("DEBUG", "DEBUG chiave appena prima di usarla per criptare: " + key);
+		byte[] keyBytes = Base64.decode(key, Base64.DEFAULT);
+		return new SecretKeySpec(keyBytes, CryptoUtility.AES_256);
+	}
+
 	private byte[] packMessage(byte[] messageWithoutSignature, byte[] signature) {
 		byte[] message = new byte[messageWithoutSignature.length + signature.length];
 		System.arraycopy(messageWithoutSignature, 0, message, 0, messageWithoutSignature.length);
@@ -181,6 +205,12 @@ public class SMSM3Handler implements SMSCommandVisitorInterface, LocationChangeL
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (NotECKeyException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalStateException e){
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvalidCipherTextException e){
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
