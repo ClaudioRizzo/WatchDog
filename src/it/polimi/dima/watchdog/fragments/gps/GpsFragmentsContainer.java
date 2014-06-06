@@ -21,7 +21,9 @@ public class GpsFragmentsContainer extends Fragment implements
 			Bundle savedInstanceState) {
 		View v = (View) inflater.inflate(R.layout.fragment_gps_container,
 				container, false);
+		
 		ListenerUtility.getInstance().addListener(this);
+		Log.i("[DEBUG]", "[DEBUG] aggiunto il fragment come listener");
 		
 		if (savedInstanceState == null) {
 			FragmentTransaction trans = getChildFragmentManager()
