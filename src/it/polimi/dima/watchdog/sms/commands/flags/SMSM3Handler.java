@@ -183,8 +183,8 @@ public class SMSM3Handler implements SMSCommandVisitorInterface, LocationChangeL
 		double lon = location.getLongitude();
 		
 		this.locationString = lat+"i"+lon+"e";
-		System.out.println(this.locationString);
-		System.out.println(this.locationString.length());
+		Log.i("[DEBUG]", "[DEBUG] " + lat);
+		Log.i("[DEBUG]", "[DEBUG] " + lon);
 		gps.removeLocationUpdates();
 		Log.i("[GPS]", "[GPS] posizione acquisita");
 		Log.i("[GPS]", "[GPS] lat: "+lat+" lon: "+lon);

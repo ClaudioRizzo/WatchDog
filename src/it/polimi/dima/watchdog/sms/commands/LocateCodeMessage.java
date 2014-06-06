@@ -37,6 +37,7 @@ public class LocateCodeMessage extends ParsableSMS {
 	
 	private List<Double> convertSubBody(byte[] subBody) {
 		String body = new String(subBody);
+		Log.i("[DEBUG]", "[DEBUG] stringa arrivata: " + body);
 		if(!body.matches(".+" + "i" + ".+" + "e" + ".*") || subBody.length != 30){
 			throw new IllegalArgumentException("Il body non è ciò che mi aspetto!!!");
 		}
