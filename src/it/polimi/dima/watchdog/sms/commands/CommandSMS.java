@@ -1,20 +1,16 @@
 package it.polimi.dima.watchdog.sms.commands;
 
 import it.polimi.dima.watchdog.crypto.AES256GCM;
-import it.polimi.dima.watchdog.crypto.ECDSA_Signature;
 import it.polimi.dima.watchdog.exceptions.NotECKeyException;
 import it.polimi.dima.watchdog.exceptions.NoSignatureDoneException;
 import it.polimi.dima.watchdog.utilities.CryptoUtility;
 import it.polimi.dima.watchdog.utilities.SMSUtility;
-
 import java.io.UnsupportedEncodingException;
 import java.security.Key;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
-
 import org.spongycastle.crypto.InvalidCipherTextException;
-
 import android.telephony.SmsManager;
 import android.util.Log;
 
@@ -84,20 +80,9 @@ public class CommandSMS {
 			System.arraycopy(this.passwordHash, 0, this.finalMessage, 0, this.passwordHash.length);
 			System.arraycopy(text, 0, this.finalMessage, this.passwordHash.length, this.text.length);
 			
-			sign();
+			this.signature = CryptoUtility.doSignature(this.finalMessage, this.myPrivateKey);
 			encrypt();
 		}
-	}
-
-	/**
-	 * Genera la firma digitale del messaggio con SHA-256 ed ECDSA.
-	 * @throws NotECKeyException
-	 * @throws NoSignatureDoneException
-	 */
-	private void sign() throws NotECKeyException, NoSignatureDoneException {
-		ECDSA_Signature sig = new ECDSA_Signature(this.finalMessage, this.myPrivateKey);
-		sig.sign();
-		this.signature = sig.getSignature();
 	}
 
 

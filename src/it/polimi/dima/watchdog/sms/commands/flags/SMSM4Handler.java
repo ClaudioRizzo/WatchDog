@@ -1,7 +1,5 @@
 package it.polimi.dima.watchdog.sms.commands.flags;
 
-import java.util.List;
-
 import android.content.Context;
 import android.util.Log;
 import it.polimi.dima.watchdog.sms.commands.LocateCodeMessage;
@@ -13,6 +11,11 @@ import it.polimi.dima.watchdog.sms.commands.SMSCommandVisitorInterface;
 import it.polimi.dima.watchdog.sms.commands.SirenOffCodeMessage;
 import it.polimi.dima.watchdog.sms.commands.SirenOnCodeMessage;
 
+/**
+ * 
+ * @author emanuele
+ *
+ */
 public class SMSM4Handler implements SMSCommandVisitorInterface {
 	
 	private String other; //TODO utile?
@@ -63,7 +66,9 @@ public class SMSM4Handler implements SMSCommandVisitorInterface {
 	public void visit(LocateCodeMessage locateCodeMessage) {
 		// TODO Auto-generated method stub
 		Log.i("[DEBUG_COMMAND]", "[DEBUG_COMMAND] LOCATE RESPONSE RICEVUTO");
-		List<Double> coordinates = locateCodeMessage.extractSubBody(locateCodeMessage.getBody());
+		locateCodeMessage.extractSubBody(locateCodeMessage.getBody());
+		double latitude = locateCodeMessage.getlatitude();
+		double longitude = locateCodeMessage.getLongitude();
 	}
 
 }

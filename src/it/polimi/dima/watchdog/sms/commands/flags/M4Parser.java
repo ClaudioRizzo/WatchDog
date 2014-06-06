@@ -11,7 +11,6 @@ import java.security.Key;
 import java.security.PublicKey;
 import java.util.Arrays;
 import org.spongycastle.crypto.InvalidCipherTextException;
-import android.util.Log;
 
 /**
  * 
@@ -47,23 +46,14 @@ public class M4Parser {
 	
 	public void parse() throws IllegalArgumentException, ArbitraryMessageReceivedException, NotECKeyException, ErrorInSignatureCheckingException, IllegalStateException, InvalidCipherTextException{
 		decrypt();
-		Log.i("[DEBUG_COMMAND]", "[DEBUG_COMMAND] m4 decrypted");
 		int headerLength = ParsableSMS.HEADER_LENGTH;
 		int specificHeaderLength = ParsableSMS.HEADER_LENGTH;
 		int bodyLength = SMSUtility.M4_BODY_LENGTH;
 		int signatureLength = this.decryptedSMS.length - headerLength - specificHeaderLength - bodyLength;
 		separateMessageParts(headerLength, specificHeaderLength, bodyLength, signatureLength);
-		Log.i("[DEBUG_COMMAND]", "[DEBUG_COMMAND] m4 parts separated");
 		verifySignature();
-		Log.i("[DEBUG_COMMAND]", "[DEBUG_COMMAND] m4 signature verified");
 		verifyHeader(SMSUtility.hexStringToByteArray(SMSUtility.M4_HEADER));
-		Log.i("[DEBUG_COMMAND]", "[DEBUG_COMMAND] m4 header verified");
-		verifySubHeader();Log.i("[DEBUG_COMMAND]", "[DEBUG_COMMAND] m4 subheader verified");
-		Log.i("[DEBUG_COMMAND]", "decrypted sms length (header + subHeader + body + signature: " + this.decryptedSMS.length);
-		Log.i("[DEBUG_COMMAND]", "header length: " + this.header.length);
-		Log.i("[DEBUG_COMMAND]", "subHeader length: " + this.specificHeader.length);
-		Log.i("[DEBUG_COMMAND]", "body length: " + this.body.length);
-		Log.i("[DEBUG_COMMAND]", "signature length: " + this.signature.length);
+		verifySubHeader();
 	}
 
 	private void verifySignature() throws NotECKeyException, ArbitraryMessageReceivedException, ErrorInSignatureCheckingException {
@@ -99,8 +89,6 @@ public class M4Parser {
 	}
 
 	private void separateMessageParts(int headerLength, int specificHeaderLength, int bodyLength, int signatureLength) {
-		Log.i("[DEBUG]", "[DEBUG] header length in ricezione = " + headerLength);
-		Log.i("[DEBUG]", "[DEBUG] specificHeader length in ricezione = " + specificHeaderLength);
 		this.header = new byte[headerLength];
 		this.specificHeader = new byte[specificHeaderLength];
 		this.body = new byte[bodyLength];

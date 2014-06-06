@@ -14,6 +14,7 @@ import it.polimi.dima.watchdog.exceptions.NoSuchPreferenceFoundException;
 import it.polimi.dima.watchdog.exceptions.NotECKeyException;
 import it.polimi.dima.watchdog.sms.commands.flags.StatusM1Sent;
 import it.polimi.dima.watchdog.sms.timeout.TimeoutWrapper;
+import it.polimi.dima.watchdog.utilities.CryptoUtility;
 import it.polimi.dima.watchdog.utilities.MyPrefFiles;
 import it.polimi.dima.watchdog.utilities.SMSUtility;
 import android.content.Context;
@@ -44,7 +45,6 @@ public class GpsLocalizeClickHandler implements OnClickListener {
 			
 			byte[] command = SMSUtility.hexStringToByteArray(SMSUtility.LOCATE); //TODO in realtà il tipo di comando va preso dal tipo di bottone cliccato
 			
-			Log.i("[DEBUG]", "DEBUG "+this.otherNumber);
 			if(!MyPrefFiles.existsPreference(MyPrefFiles.KEYRING, this.otherNumber, this.ctx)){
 				throw new NoSuchPreferenceFoundException("Non si può iniziare una sessione di comando con un utente con cui non è stato fatto SMP!!!");
 			}
@@ -98,11 +98,7 @@ public class GpsLocalizeClickHandler implements OnClickListener {
 
 	private byte[] generateSignature(byte[] message) throws NoSuchAlgorithmException, NoSuchProviderException, InvalidKeySpecException, NoSuchPreferenceFoundException, NoSignatureDoneException, NotECKeyException {
 		PrivateKey mPriv = MyPrefFiles.getMyPrivateKey(this.ctx);
-		String mPub = MyPrefFiles.getMyPreference(MyPrefFiles.MY_KEYS, MyPrefFiles.MY_PUB, this.ctx);
-		Log.i("[DEBUG]", "[DEBUG] la mia chiave pubblica: " + mPub);
-		ECDSA_Signature sigMaker = new ECDSA_Signature(message, mPriv);
-		sigMaker.sign();
-		return sigMaker.getSignature();
+		return CryptoUtility.doSignature(message, mPriv);
 	}
 
 	private byte[] constructBody(byte[] iv, byte[] salt) {
@@ -135,14 +131,12 @@ public class GpsLocalizeClickHandler implements OnClickListener {
 	private String getPhoneNumber() {
 		EditText mEditText = (EditText) fragView.findViewById(R.id.phone_number1);
 		String phoneNum = mEditText.getText().toString();
-		Log.i("[DEBUG]", "DEBUG"+phoneNum);
 		return phoneNum;
 	}
 	
 	private String getPassword() {
 		EditText mEditText = (EditText) fragView.findViewById(R.id.password_localize_1);
 		String cleanPassword = mEditText.getText().toString();
-		Log.i("[DEBUG]", "DEBUG"+cleanPassword);
 		return cleanPassword;
 	}
 

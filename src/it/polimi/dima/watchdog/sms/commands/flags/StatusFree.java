@@ -3,7 +3,6 @@ package it.polimi.dima.watchdog.sms.commands.flags;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
-import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.Security;
 import java.security.spec.InvalidKeySpecException;
@@ -13,13 +12,13 @@ import android.telephony.SmsMessage;
 import android.util.Base64;
 import android.util.Log;
 import it.polimi.dima.watchdog.crypto.AESKeyGenerator;
-import it.polimi.dima.watchdog.crypto.ECDSA_Signature;
 import it.polimi.dima.watchdog.exceptions.ArbitraryMessageReceivedException;
 import it.polimi.dima.watchdog.exceptions.ErrorInSignatureCheckingException;
 import it.polimi.dima.watchdog.exceptions.NotECKeyException;
 import it.polimi.dima.watchdog.exceptions.NoSignatureDoneException;
 import it.polimi.dima.watchdog.exceptions.NoSuchPreferenceFoundException;
 import it.polimi.dima.watchdog.sms.timeout.TimeoutWrapper;
+import it.polimi.dima.watchdog.utilities.CryptoUtility;
 import it.polimi.dima.watchdog.utilities.MyPrefFiles;
 import it.polimi.dima.watchdog.utilities.SMSUtility;
 
@@ -91,16 +90,9 @@ public class StatusFree implements CommandProtocolFlagsReactionInterface{
 		byte[] secret = Base64.decode(MyPrefFiles.getMyPreference(MyPrefFiles.SHARED_SECRETS, phoneNumber, ctx), Base64.DEFAULT);
 		generateAndStoreAesKeyForM4(secret, this.keySalt, phoneNumber, ctx);
 		byte[] message = packHeaderAndBody(header, body);
-		byte[] signature = generateSignature(message, ctx);
+		byte[] signature = CryptoUtility.doSignature(message, MyPrefFiles.getMyPrivateKey(ctx));
 		byte[] finalMessage = packMessage(message, signature);
 		SMSUtility.sendCommandMessage(phoneNumber, SMSUtility.COMMAND_PORT, finalMessage);
-	}
-	
-	private byte[] generateSignature(byte[] message, Context ctx) throws NotECKeyException, NoSignatureDoneException, NoSuchAlgorithmException, NoSuchProviderException, InvalidKeySpecException, NoSuchPreferenceFoundException{
-		PrivateKey mPriv = MyPrefFiles.getMyPrivateKey(ctx);
-		ECDSA_Signature signer = new ECDSA_Signature(message, mPriv);
-		signer.sign();
-		return signer.getSignature();
 	}
 	
 	private byte[] packIvAndSalt(String phoneNumber, Context ctx) throws NoSuchPreferenceFoundException, NotECKeyException, NoSuchAlgorithmException, NoSuchProviderException, InvalidKeySpecException, NoSignatureDoneException {

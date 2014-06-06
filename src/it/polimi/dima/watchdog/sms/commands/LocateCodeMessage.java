@@ -2,8 +2,6 @@ package it.polimi.dima.watchdog.sms.commands;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
-import java.util.ArrayList;
-import java.util.List;
 import android.util.Base64;
 import android.util.Log;
 import it.polimi.dima.watchdog.exceptions.NoSignatureDoneException;
@@ -20,6 +18,9 @@ import it.polimi.dima.watchdog.utilities.SMSUtility;
  */
 public class LocateCodeMessage extends ParsableSMS {
 
+	private double latitude;
+	private double longitude;
+	
 	public LocateCodeMessage(String header, String body) {
 		super(header, body);
 	}
@@ -28,73 +29,61 @@ public class LocateCodeMessage extends ParsableSMS {
 		return super.getBody();
 	}
 	
-	public List<Double> extractSubBody(String body){
-		byte[] fullBody = Base64.decode(body, Base64.DEFAULT); //coordinate + padding
-		return convertSubBody(fullBody);
+	public double getlatitude(){
+		return this.latitude;
 	}
 	
-	private List<Double> convertSubBody(byte[] subBody) {
-		byte[] four = new byte[4];
-		System.arraycopy(subBody, 0, four, 0, 4);
-		String fourHex = SMSUtility.bytesToHex(four);
-		Log.i("[DEBUG]", "[DEBUG] i primi 4 byte dell'array (non ancora convertito a stringa): " + fourHex);
-		
-		Log.i("[DEBUG]", "[DEBUG] lunghezza del byte[] arrivato: " + subBody.length);
+	public double getLongitude(){
+		return this.longitude;
+	}
+	
+	public void extractSubBody(String body){
+		byte[] fullBody = Base64.decode(body, Base64.DEFAULT); //coordinate + padding
+		convertSubBody(fullBody);
+	}
+	
+	private void convertSubBody(byte[] subBody) {
 		String temp = new String(subBody);
-		Log.i("[DEBUG]", "[DEBUG] conversione del byte[]: " + temp);
-		Log.i("[DEBUG]", "[DEBUG] lunghezza della stringa generata: " + temp.length());
-		
-		byte[] temp2 = temp.getBytes();
-		byte[] four2 = new byte[4];
-		System.arraycopy(temp2, 0, four2, 0, 4);
-		String fourHex2 = SMSUtility.bytesToHex(four2);
-		Log.i("[DEBUG]", "[DEBUG] i primi 4 byte dell'array convertito a stringa: " + fourHex2);
 		
 		if(!temp.matches(".+" + "i" + ".+" + "e" + ".*") || subBody.length != SMSUtility.M4_BODY_LENGTH){
 			throw new IllegalArgumentException("Il body non è ciò che mi aspetto!!!");
 		}
-		//String temp = body;
+		
 		char[] tempArray = temp.toCharArray();
-		
-		Double latitude = getLatitude(tempArray, temp);
-		Double longitude = getLongitude(tempArray, temp);
-		
-		List<Double> coordinates = new ArrayList<Double>();
-		coordinates.add(latitude);
-		coordinates.add(longitude);
-		return coordinates;
+		this.latitude = getLatitude(tempArray, temp).doubleValue();
+		this.longitude = getLongitude(tempArray, temp).doubleValue();
 	}
 
 	private Double getLongitude(char[] tempArray, String temp) {
-		int dollarIndex = -1;
-		int sharpIndex = -1;
-		for(int i=dollarIndex+1; i<tempArray.length; i++){
+		int separatorIndex = -1;
+		int endIndex = -1;
+		for(int i=separatorIndex+1; i<tempArray.length; i++){
 			if(tempArray[i]=='i'){
-				dollarIndex = i;
+				separatorIndex = i;
 			}
 			else if(tempArray[i] == 'e'){
-				sharpIndex = i;
+				endIndex = i;
 			}
 		}
-		if(dollarIndex == -1 || sharpIndex == -1){
+		if(separatorIndex == -1 || endIndex == -1){
 			throw new IllegalArgumentException();
 		}
-		String longitudeString = temp.substring(dollarIndex + 1, sharpIndex - 1);
+		String longitudeString = temp.substring(separatorIndex + 1, endIndex - 1);
 		Log.i("DEBUG", "DEBUG longitude string = " + longitudeString);
 		return new Double(longitudeString);
 	}
 
 	private Double getLatitude(char[] tempArray, String temp) {
-		int dollarIndex = -1;
+		int separatorIndex = -1;
 		for(int i=0; i<tempArray.length; i++){
 			if(tempArray[i]=='i'){
-				dollarIndex = i;
+				separatorIndex = i;
 			}
 		}
-		if(dollarIndex == -1){
+		if(separatorIndex == -1){
 			throw new IllegalArgumentException();
 		}
-		String latitudeString = temp.substring(0, dollarIndex - 1);
+		String latitudeString = temp.substring(0, separatorIndex - 1);
 		Log.i("DEBUG", "DEBUG latitude string = " + latitudeString);
 		return new Double(latitudeString);
 	}

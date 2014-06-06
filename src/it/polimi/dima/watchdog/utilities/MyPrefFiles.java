@@ -1,5 +1,6 @@
 package it.polimi.dima.watchdog.utilities;
 
+import java.security.Key;
 import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
@@ -10,6 +11,8 @@ import java.security.spec.X509EncodedKeySpec;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import javax.crypto.spec.SecretKeySpec;
 
 import it.polimi.dima.watchdog.exceptions.NoSuchPreferenceFoundException;
 import android.content.Context;
@@ -552,5 +555,51 @@ public class MyPrefFiles {
 		byte[] oPubEncoded = Base64.decode(oPubBase64, Base64.DEFAULT);
 		KeyFactory keyFactory = KeyFactory.getInstance(CryptoUtility.EC);
 		return keyFactory.generatePublic(new X509EncodedKeySpec(oPubEncoded));
+	}
+	
+	public static Key getSymmetricCryptoKey(Context context, String other, boolean m3_or_m4) throws NoSuchPreferenceFoundException{
+		String key = null;
+		if(m3_or_m4){
+			key = MyPrefFiles.SESSION_KEY;
+		}
+		else{
+			key = MyPrefFiles.KEY_FOR_M4;
+		}
+		String decKey = MyPrefFiles.getMyPreference(MyPrefFiles.COMMAND_SESSION, other + key, context);
+		byte[] decKeyValue = Base64.decode(decKey, Base64.DEFAULT);
+		return new SecretKeySpec(decKeyValue, CryptoUtility.AES_256);
+	}
+	
+	public static byte[] getIV(Context context, String other, boolean m3_or_m4) throws NoSuchPreferenceFoundException{
+		String key = null;
+		if(m3_or_m4){
+			key = MyPrefFiles.IV;
+		}
+		else{
+			key = MyPrefFiles.IV_FOR_M4;
+		}
+		String iv = MyPrefFiles.getMyPreference(MyPrefFiles.COMMAND_SESSION, other + key, context);
+		return Base64.decode(iv, Base64.DEFAULT);
+	}
+	
+	public static byte[] getPasswordSalt(Context context, String other) throws NoSuchPreferenceFoundException{
+		String salt = MyPrefFiles.getMyPreference(MyPrefFiles.HASHRING, other, context);
+		return Base64.decode(salt, Base64.DEFAULT);
+	}
+	
+	public static byte[] getSessionCommand(Context context, String other) throws NoSuchPreferenceFoundException{
+		String key = other + MyPrefFiles.TEMP_COMMAND;
+		String command = MyPrefFiles.getMyPreference(MyPrefFiles.COMMAND_SESSION, key, context);
+		return Base64.decode(command, Base64.DEFAULT);
+	}
+	
+	public static byte[] getPreviouslyStoredPassword(Context context, String other) throws NoSuchPreferenceFoundException{
+		String passwordKey = other + MyPrefFiles.OTHER_PASSWORD;
+		return MyPrefFiles.getMyPreference(MyPrefFiles.COMMAND_SESSION, passwordKey, context).getBytes();
+	}
+	
+	public static byte[] getMyPasswordHash(Context context) throws NoSuchPreferenceFoundException{
+		String storedHash = MyPrefFiles.getMyPreference(MyPrefFiles.PASSWORD_AND_SALT, MyPrefFiles.MY_PASSWORD_HASH, context);
+		return Base64.decode(storedHash, Base64.DEFAULT);
 	}
 }

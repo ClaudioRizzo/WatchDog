@@ -6,11 +6,9 @@ import java.security.NoSuchProviderException;
 import java.security.PublicKey;
 import java.security.Security;
 import java.security.spec.InvalidKeySpecException;
-import javax.crypto.spec.SecretKeySpec;
 import org.spongycastle.crypto.InvalidCipherTextException;
 import android.content.Context;
 import android.telephony.SmsMessage;
-import android.util.Base64;
 import android.util.Log;
 import it.polimi.dima.watchdog.exceptions.ArbitraryMessageReceivedException;
 import it.polimi.dima.watchdog.exceptions.ErrorInSignatureCheckingException;
@@ -21,7 +19,6 @@ import it.polimi.dima.watchdog.exceptions.TooLongResponseException;
 import it.polimi.dima.watchdog.sms.ParsableSMS;
 import it.polimi.dima.watchdog.sms.commands.CommandFactory;
 import it.polimi.dima.watchdog.sms.timeout.TimeoutWrapper;
-import it.polimi.dima.watchdog.utilities.CryptoUtility;
 import it.polimi.dima.watchdog.utilities.MyPrefFiles;
 import it.polimi.dima.watchdog.utilities.SMSUtility;
 
@@ -68,20 +65,11 @@ public class StatusM2Sent implements CommandProtocolFlagsReactionInterface {
 	
 	private M3Parser popolateParser(SmsMessage sms, Context ctx, String other) throws NoSuchPreferenceFoundException, NoSuchAlgorithmException, InvalidKeySpecException, NoSuchProviderException {
 		byte[] encryptedMessage = sms.getUserData();
-		
-		String decKey = MyPrefFiles.getMyPreference(MyPrefFiles.COMMAND_SESSION, other + MyPrefFiles.SESSION_KEY, ctx);
-		byte[] decKeyValue = Base64.decode(decKey, Base64.DEFAULT);
-		Key decryptionKey = new SecretKeySpec(decKeyValue, CryptoUtility.AES_256);
-		
+		Key decryptionKey = MyPrefFiles.getSymmetricCryptoKey(ctx, other, true);
 		PublicKey oPub = MyPrefFiles.getOtherPublicKey(ctx, other);
-		
-		String storedHash = MyPrefFiles.getMyPreference(MyPrefFiles.PASSWORD_AND_SALT, MyPrefFiles.MY_PASSWORD_HASH, ctx);
-		byte[] storedPasswordHash = Base64.decode(storedHash, Base64.DEFAULT);
-		
-		String iv = MyPrefFiles.getMyPreference(MyPrefFiles.COMMAND_SESSION, other + MyPrefFiles.IV, ctx);
-		byte[] ivValue = Base64.decode(iv, Base64.DEFAULT);
-		
-		return new M3Parser(encryptedMessage, decryptionKey, oPub, storedPasswordHash, ivValue);
+		byte[] storedPasswordHash = MyPrefFiles.getMyPasswordHash(ctx);
+		byte[] iv = MyPrefFiles.getIV(ctx, other, true);
+		return new M3Parser(encryptedMessage, decryptionKey, oPub, storedPasswordHash, iv);
 	}
 
 	@Override

@@ -8,11 +8,8 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.Security;
 import java.security.spec.InvalidKeySpecException;
-
 import javax.crypto.spec.SecretKeySpec;
-
 import org.spongycastle.crypto.InvalidCipherTextException;
-
 import it.polimi.dima.watchdog.crypto.AESKeyGenerator;
 import it.polimi.dima.watchdog.exceptions.ArbitraryMessageReceivedException;
 import it.polimi.dima.watchdog.exceptions.ErrorInSignatureCheckingException;
@@ -23,7 +20,6 @@ import it.polimi.dima.watchdog.sms.commands.CommandSMS;
 import it.polimi.dima.watchdog.sms.timeout.TimeoutWrapper;
 import it.polimi.dima.watchdog.utilities.CryptoUtility;
 import it.polimi.dima.watchdog.utilities.MyPrefFiles;
-import it.polimi.dima.watchdog.utilities.SMSUtility;
 import android.content.Context;
 import android.telephony.SmsMessage;
 import android.util.Base64;
@@ -79,21 +75,15 @@ public class StatusM1Sent implements CommandProtocolFlagsReactionInterface {
 
 
 	private void generateAndSendM3(String phoneNumber, Context ctx) throws NoSuchPreferenceFoundException, NoSuchAlgorithmException, InvalidKeySpecException, UnsupportedEncodingException, IllegalStateException, InvalidCipherTextException, NotECKeyException, NoSignatureDoneException, NoSuchProviderException {
-		String commandKey = phoneNumber + MyPrefFiles.TEMP_COMMAND;
-		String passwordKey = phoneNumber + MyPrefFiles.OTHER_PASSWORD;
-		String sessionKeyKey = phoneNumber + MyPrefFiles.SESSION_KEY;
-		String ivKey = phoneNumber + MyPrefFiles.IV;
-		
-		byte[] command = Base64.decode(MyPrefFiles.getMyPreference(MyPrefFiles.COMMAND_SESSION, commandKey, ctx), Base64.DEFAULT);
-		byte[] password = MyPrefFiles.getMyPreference(MyPrefFiles.COMMAND_SESSION, passwordKey, ctx).getBytes();
-		byte[] passwordSalt = Base64.decode(MyPrefFiles.getMyPreference(MyPrefFiles.HASHRING, phoneNumber, ctx), Base64.DEFAULT);
+		byte[] command = MyPrefFiles.getSessionCommand(ctx, phoneNumber);
+		byte[] password = MyPrefFiles.getPreviouslyStoredPassword(ctx, phoneNumber);
+		byte[] passwordSalt = MyPrefFiles.getPasswordSalt(ctx, phoneNumber);
 		byte[] saltedPassword = new byte[password.length + passwordSalt.length];
 		System.arraycopy(password, 0, saltedPassword, 0, password.length);
 		System.arraycopy(passwordSalt, 0, saltedPassword, password.length, passwordSalt.length);
 		
-		byte[] aesKey = Base64.decode(MyPrefFiles.getMyPreference(MyPrefFiles.COMMAND_SESSION, sessionKeyKey, ctx), Base64.DEFAULT);
-		Key encryptionKey = new SecretKeySpec(aesKey, CryptoUtility.AES_256);
-		byte[] iv = Base64.decode(MyPrefFiles.getMyPreference(MyPrefFiles.COMMAND_SESSION, ivKey, ctx), Base64.DEFAULT);
+		Key encryptionKey = MyPrefFiles.getSymmetricCryptoKey(ctx, phoneNumber, true);
+		byte[] iv = MyPrefFiles.getIV(ctx, phoneNumber, true);
 		PrivateKey mPriv = MyPrefFiles.getMyPrivateKey(ctx);
 		
 		CommandSMS sms = new CommandSMS(command, saltedPassword, mPriv, encryptionKey, phoneNumber, iv);

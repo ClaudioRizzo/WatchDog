@@ -6,7 +6,6 @@ import java.security.NoSuchProviderException;
 import java.security.PublicKey;
 import java.security.Security;
 import java.security.spec.InvalidKeySpecException;
-import javax.crypto.spec.SecretKeySpec;
 import org.spongycastle.crypto.InvalidCipherTextException;
 import it.polimi.dima.watchdog.exceptions.ArbitraryMessageReceivedException;
 import it.polimi.dima.watchdog.exceptions.ErrorInSignatureCheckingException;
@@ -17,7 +16,6 @@ import it.polimi.dima.watchdog.exceptions.TooLongResponseException;
 import it.polimi.dima.watchdog.sms.ParsableSMS;
 import it.polimi.dima.watchdog.sms.commands.CommandFactory;
 import it.polimi.dima.watchdog.sms.timeout.TimeoutWrapper;
-import it.polimi.dima.watchdog.utilities.CryptoUtility;
 import it.polimi.dima.watchdog.utilities.MyPrefFiles;
 import it.polimi.dima.watchdog.utilities.SMSUtility;
 import android.content.Context;
@@ -50,8 +48,8 @@ public class StatusM3Sent implements CommandProtocolFlagsReactionInterface {
 		MyPrefFiles.replacePreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + other, StatusM3Sent.STATUS_RECEIVED, context);
 		
 		PublicKey oPub = MyPrefFiles.getOtherPublicKey(context, other);
-		Key decryptionKey = fetchDecryptionKey(other, context);
-		byte[] iv = fetchIv(other, context);
+		Key decryptionKey = MyPrefFiles.getSymmetricCryptoKey(context, other, false);
+		byte[] iv = MyPrefFiles.getIV(context, other, false);
 		
 		this.parser = new M4Parser(message.getUserData(), oPub, decryptionKey, iv);
 		this.parser.parse();
@@ -69,20 +67,6 @@ public class StatusM3Sent implements CommandProtocolFlagsReactionInterface {
 		SMSM4Handler handler = new SMSM4Handler(other, context);
 		ParsableSMS smsToParse = factory.getMessage(factoryHeader, factorybody);
 		smsToParse.handle(handler);
-	}
-
-
-	private byte[] fetchIv(String other, Context ctx) throws NoSuchPreferenceFoundException {
-		String iv = MyPrefFiles.getMyPreference(MyPrefFiles.COMMAND_SESSION, other + MyPrefFiles.IV_FOR_M4, ctx);
-		return Base64.decode(iv, Base64.DEFAULT);
-	}
-
-
-	private Key fetchDecryptionKey(String other, Context ctx) throws NoSuchPreferenceFoundException {
-		String decKey = MyPrefFiles.getMyPreference(MyPrefFiles.COMMAND_SESSION, other + MyPrefFiles.KEY_FOR_M4, ctx);
-		Log.i("DEBUG", "DEBUG chiave lato ricevente appena prima di utilizzarla: " + decKey);
-		byte[] decKeyValue = Base64.decode(decKey, Base64.DEFAULT);
-		return new SecretKeySpec(decKeyValue, CryptoUtility.AES_256);
 	}
 
 	@Override
