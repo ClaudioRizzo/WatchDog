@@ -30,19 +30,13 @@ public class LocateCodeMessage extends ParsableSMS {
 	}
 	
 	public List<Double> extractSubBody(String body){
-		int subBodyPosition = SMSUtility.M4_LENGTH_BYTES_SIZE;
-		byte[] lengthBytes = new byte[SMSUtility.M4_LENGTH_BYTES_SIZE];
-		byte[] fullBody = Base64.decode(body, Base64.DEFAULT);
-		System.arraycopy(fullBody, 0, lengthBytes, 0, SMSUtility.M4_LENGTH_BYTES_SIZE);
-		int subBodyLength = ByteBuffer.wrap(lengthBytes).getInt();
-		byte[] subBody = new byte[subBodyLength];
-		System.arraycopy(fullBody, subBodyPosition, subBody, 0, subBodyLength);
-		return convertSubBody(subBody);
+		byte[] fullBody = Base64.decode(body, Base64.DEFAULT); //coordinate + padding
+		return convertSubBody(fullBody);
 	}
 	
 	private List<Double> convertSubBody(byte[] subBody) {
 		String body = new String(subBody);
-		if(!body.matches(".+" + "i" + ".+" + "e")){
+		if(!body.matches(".+" + "i" + ".+" + "e" + ".*") || subBody.length != 30){
 			throw new IllegalArgumentException("Il body non è ciò che mi aspetto!!!");
 		}
 		String temp = body;

@@ -113,11 +113,10 @@ public class SMSM3Handler implements SMSCommandVisitorInterface, LocationChangeL
 		byte[] subBody = location.getBytes();
 		//byte[] subBody = "ciao".getBytes();
 		int subBodyLength = subBody.length;
-		int paddingLength = SMSUtility.getM4BodyPaddingLength(SMSUtility.M4_BODY_LENGTH, SMSUtility.M4_LENGTH_BYTES_SIZE, subBodyLength);
+		int paddingLength = SMSUtility.getM4BodyPaddingLength(SMSUtility.M4_BODY_LENGTH, subBodyLength);
 		
-		byte[] lengthByte = ByteBuffer.allocate(SMSUtility.M4_LENGTH_BYTES_SIZE).putInt(subBodyLength).array();
 		byte[] padding = generatePadding(paddingLength);
-		byte[] body = fillBody(lengthByte, subBody, padding, SMSUtility.M4_LENGTH_BYTES_SIZE, subBodyLength, paddingLength);
+		byte[] body = fillBody(subBody, padding, subBodyLength, paddingLength);
 		byte[] messageWithoutSignature = generatePlaintext(header, specificHeader, body);
 		
 		PrivateKey mPriv = MyPrefFiles.getMyPrivateKey(this.ctx);
@@ -155,11 +154,10 @@ public class SMSM3Handler implements SMSCommandVisitorInterface, LocationChangeL
 		return message;
 	}
 
-	private byte[] fillBody(byte[] lengthByte, byte[] subBody, byte[] padding, int lengthBytesSize, int subBodyLength, int paddingLength) {
+	private byte[] fillBody(byte[] subBody, byte[] padding, int subBodyLength, int paddingLength) {
 		byte[] body = new byte[SMSUtility.M4_BODY_LENGTH];
-		System.arraycopy(lengthByte, 0, body, 0, lengthBytesSize);
-		System.arraycopy(subBody, 0, body, lengthBytesSize, subBodyLength);
-		System.arraycopy(padding, 0, body, lengthBytesSize + subBodyLength, paddingLength);
+		System.arraycopy(subBody, 0, body, 0, subBodyLength);
+		System.arraycopy(padding, 0, body, subBodyLength, paddingLength);
 		return body;
 	}
 

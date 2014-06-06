@@ -117,7 +117,7 @@ public class SMSUtility {
 	 * Lunghezza fissata del body di m4 (il primo byte indica la lunghezza reale, poi ci sono i dati
 	 * effettivi e infine un padding di zeri)
 	 */
-	public static final int M4_BODY_LENGTH = 40; //TODO calibrare a seconda delle necessità
+	public static final int M4_BODY_LENGTH = 30; //TODO calibrare a seconda delle necessità
 	/**
 	 * Numero di byte che indicano la lunghezza del subBody in m4
 	 */
@@ -326,11 +326,11 @@ public class SMSUtility {
 		}
 	}
 	
-	public static int getM4BodyPaddingLength(int m4BodyLength, int lengthBytesSize, int dataLength) throws TooLongResponseException {
+	public static int getM4BodyPaddingLength(int m4BodyLength, int dataLength) throws TooLongResponseException {
 		
-		if(dataLength > m4BodyLength - lengthBytesSize){
+		if(dataLength > m4BodyLength){
 			throw new TooLongResponseException("Dati troppo lunghi!!!");
 		}
-		return m4BodyLength - lengthBytesSize - dataLength;
+		return m4BodyLength - dataLength;
 	}
 }
