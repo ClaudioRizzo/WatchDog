@@ -170,6 +170,8 @@ public class SMSM3Handler implements SMSCommandVisitorInterface, LocationChangeL
 	}
 	
 	private byte[] generatePlaintext(byte[] header, byte[] specificHeader, byte[] body){
+		Log.i("[DEBUG]", "[DEBUG] header length = " + header.length);
+		Log.i("[DEBUG]", "[DEBUG] specificHeader length = " + specificHeader.length);
 		byte[] messageWithoutSignature = new byte[header.length + specificHeader.length + body.length];
 		System.arraycopy(header, 0, messageWithoutSignature, 0, header.length);
 		System.arraycopy(specificHeader, 0, messageWithoutSignature, header.length, specificHeader.length);

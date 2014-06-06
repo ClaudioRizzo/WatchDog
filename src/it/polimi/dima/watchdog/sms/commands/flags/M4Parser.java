@@ -77,6 +77,8 @@ public class M4Parser {
 	}
 
 	private void separateMessageParts(int headerLength, int specificHeaderLength, int bodyLength, int signatureLength) {
+		Log.i("[DEBUG]", "[DEBUG] header length in ricezione = " + headerLength);
+		Log.i("[DEBUG]", "[DEBUG] specificHeader length in ricezione = " + specificHeaderLength);
 		this.header = new byte[headerLength];
 		this.specificHeader = new byte[specificHeaderLength];
 		this.body = new byte[bodyLength];
