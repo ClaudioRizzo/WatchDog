@@ -7,7 +7,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import it.polimi.dima.watchdog.R;
-import it.polimi.dima.watchdog.fragments.gps.map.LocationReceivedListener;
+import it.polimi.dima.watchdog.fragments.gps.map.MessageActionListener;
 import it.polimi.dima.watchdog.fragments.gps.map.MyMapFragment;
 import it.polimi.dima.watchdog.sms.commands.LocateCodeMessage;
 import it.polimi.dima.watchdog.sms.commands.MarkFoundCodeMessage;
@@ -17,6 +17,7 @@ import it.polimi.dima.watchdog.sms.commands.MarkStolenCodeMessage;
 import it.polimi.dima.watchdog.sms.commands.SMSCommandVisitorInterface;
 import it.polimi.dima.watchdog.sms.commands.SirenOffCodeMessage;
 import it.polimi.dima.watchdog.sms.commands.SirenOnCodeMessage;
+import it.polimi.dima.watchdog.utilities.ListenerUtility;
 
 /**
  * 
@@ -79,17 +80,7 @@ public class SMSM4Handler implements SMSCommandVisitorInterface {
 		double latitude = locateCodeMessage.getlatitude();
 		double longitude = locateCodeMessage.getLongitude();
 		
-		Location l = new Location("");
-		l.setLatitude(latitude);
-		l.setLongitude(longitude);
-		
-		MyMapFragment mapFrag = new MyMapFragment(l);
-		
-		FragmentActivity myFrag = (FragmentActivity) ctx;
-		FragmentTransaction trans = myFrag.getSupportFragmentManager().beginTransaction();
-		trans.replace(R.id.gps_fragment_container, mapFrag);
-		trans.addToBackStack(null);
-		trans.commit();
+		ListenerUtility.getInstance().notifyLocationAcquired(latitude, longitude);
 			
 	}
 	

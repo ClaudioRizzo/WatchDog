@@ -1,6 +1,6 @@
 package it.polimi.dima.watchdog.fragments.gps.map;
 
-public interface LocationReceivedListener {
+public interface MessageActionListener {
 
 	void onLocationMessageReceived(double lat, double lon);
 }
