@@ -106,6 +106,7 @@ public class SMSM3Handler implements SMSCommandVisitorInterface, LocationChangeL
 	
 	private void constructResponse(byte[] specificHeader, String location) throws TooLongResponseException, NoSuchPreferenceFoundException, NoSuchAlgorithmException, InvalidKeySpecException, NoSignatureDoneException, NotECKeyException, IllegalStateException, InvalidCipherTextException{
 		byte[] header = SMSUtility.hexStringToByteArray(SMSUtility.M4_HEADER);
+		Log.i("DEBUG", "DEBUG location prima di essere inviata = " + location);
 		byte[] subBody = location.getBytes();
 		//byte[] subBody = "ciao".getBytes();
 		int subBodyLength = subBody.length;
@@ -114,7 +115,7 @@ public class SMSM3Handler implements SMSCommandVisitorInterface, LocationChangeL
 		byte[] padding = generatePadding(paddingLength);
 		byte[] body = fillBody(subBody, padding, subBodyLength, paddingLength);
 		byte[] messageWithoutSignature = generatePlaintext(header, specificHeader, body);
-		
+		Log.i("DEBUG", "DEBUG messaggio senza firma: lunghezza supposta = 38; lunghezza effettiva = " + messageWithoutSignature.length);
 		PrivateKey mPriv = MyPrefFiles.getMyPrivateKey(this.ctx);
 		byte[] signature = CryptoUtility.doSignature(messageWithoutSignature, mPriv);
 		byte[] message = packMessage(messageWithoutSignature, signature);
