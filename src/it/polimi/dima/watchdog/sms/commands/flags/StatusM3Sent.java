@@ -64,7 +64,7 @@ public class StatusM3Sent implements CommandProtocolFlagsReactionInterface {
 	
 	private void handleReturnedData(byte[] header, byte[] body, String other, Context context) throws ArbitraryMessageReceivedException, IllegalArgumentException, TooLongResponseException, NoSuchAlgorithmException, InvalidKeySpecException, NoSuchPreferenceFoundException, NoSignatureDoneException, NotECKeyException {
 		CommandFactory factory = new CommandFactory();
-		String factoryHeader = SMSUtility.bytesToHex(body);
+		String factoryHeader = SMSUtility.bytesToHex(header);
 		String factorybody = Base64.encodeToString(body, Base64.DEFAULT);
 		SMSM4Handler handler = new SMSM4Handler(other, context);
 		ParsableSMS smsToParse = factory.getMessage(factoryHeader, factorybody);
