@@ -2,15 +2,11 @@ package it.polimi.dima.watchdog.sms.commands.flags;
 
 import java.nio.ByteBuffer;
 import java.security.Key;
-import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.spec.InvalidKeySpecException;
-
 import javax.crypto.spec.SecretKeySpec;
-
 import org.spongycastle.crypto.InvalidCipherTextException;
-
 import android.content.Context;
 import android.location.Location;
 import android.location.LocationManager;

@@ -2,10 +2,8 @@ package it.polimi.dima.watchdog.fragments.gps.map;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 
 import it.polimi.dima.watchdog.R;
 import android.content.Context;

@@ -1,11 +1,9 @@
 package it.polimi.dima.watchdog.sms.commands;
 
-import java.nio.ByteBuffer;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.ArrayList;
 import java.util.List;
-
 import android.util.Base64;
 import android.util.Log;
 import it.polimi.dima.watchdog.exceptions.NoSignatureDoneException;
@@ -40,7 +38,7 @@ public class LocateCodeMessage extends ParsableSMS {
 		String body = new String(subBody);
 		Log.i("[DEBUG]", "[DEBUG] conversione del byte[]: " + body);
 		Log.i("[DEBUG]", "[DEBUG] lunghezza della stringa generata: " + body.length());
-		if(!body.matches(".+" + "i" + ".+" + "e" + ".*") || subBody.length != 30){
+		if(!body.matches(".+" + "i" + ".+" + "e" + ".*") || subBody.length != SMSUtility.M4_BODY_LENGTH){
 			throw new IllegalArgumentException("Il body non è ciò che mi aspetto!!!");
 		}
 		String temp = body;

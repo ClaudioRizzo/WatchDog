@@ -2,20 +2,15 @@ package it.polimi.dima.watchdog.activities;
 
 import it.polimi.dima.watchdog.R;
 import it.polimi.dima.watchdog.fragments.gps.GpsMainFragment;
-import it.polimi.dima.watchdog.fragments.gps.map.GpsTracker;
 import it.polimi.dima.watchdog.fragments.gps.map.LocationChangeListenerInterface;
-import it.polimi.dima.watchdog.fragments.gps.map.LocationException;
 import it.polimi.dima.watchdog.sms.timeout.TimeoutCountDown;
 import it.polimi.dima.watchdog.utilities.MyDrawerUtility;
 import it.polimi.dima.watchdog.utilities.MyPrefFiles;
-import it.polimi.dima.watchdog.utilities.SMSUtility;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.location.Criteria;
 import android.location.Location;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -24,7 +19,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 /**
  * 

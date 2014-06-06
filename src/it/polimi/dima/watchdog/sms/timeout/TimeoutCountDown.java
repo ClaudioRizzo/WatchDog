@@ -2,7 +2,6 @@ package it.polimi.dima.watchdog.sms.timeout;
 
 import android.os.CountDownTimer;
 import android.util.Log;
-import android.widget.Toast;
 
 public class TimeoutCountDown extends CountDownTimer {
 

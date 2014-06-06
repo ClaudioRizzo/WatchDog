@@ -7,13 +7,10 @@ import it.polimi.dima.watchdog.exceptions.ErrorInSignatureCheckingException;
 import it.polimi.dima.watchdog.exceptions.NotECKeyException;
 import it.polimi.dima.watchdog.sms.ParsableSMS;
 import it.polimi.dima.watchdog.utilities.SMSUtility;
-
 import java.security.Key;
 import java.security.PublicKey;
 import java.util.Arrays;
-
 import org.spongycastle.crypto.InvalidCipherTextException;
-
 import android.util.Log;
 
 /**
@@ -31,7 +28,7 @@ public class M4Parser {
 	private byte[] signature; //firma scorporata dal messaggio
 	private byte[] header; // header di m4
 	private byte[] specificHeader; //header specifico
-	private byte[] body; //corpo del messaggio = length || real body || padding
+	private byte[] body; //corpo del messaggio = real body || padding
 	
 	public byte[] getSpecificHeader(){
 		return this.specificHeader;
@@ -61,6 +58,7 @@ public class M4Parser {
 		Log.i("[DEBUG_COMMAND]", "[DEBUG_COMMAND] m4 signature verified");
 		verifyHeader(SMSUtility.hexStringToByteArray(SMSUtility.M4_HEADER));
 		Log.i("[DEBUG_COMMAND]", "[DEBUG_COMMAND] m4 header verified");
+		verifySubHeader();Log.i("[DEBUG_COMMAND]", "[DEBUG_COMMAND] m4 subheader verified");
 	}
 
 	private void verifySignature() throws NotECKeyException, ArbitraryMessageReceivedException, ErrorInSignatureCheckingException {
@@ -72,7 +70,26 @@ public class M4Parser {
 	
 	private void verifyHeader(byte[] header) throws ArbitraryMessageReceivedException{
 		if(!Arrays.equals(this.header, header)){
-			throw new ArbitraryMessageReceivedException();
+			throw new ArbitraryMessageReceivedException("Header diverso la quello di m4!!!");
+		}
+	}
+	
+	private void verifySubHeader() throws ArbitraryMessageReceivedException{
+		String header = SMSUtility.bytesToHex(this.specificHeader);
+		if(!header.equals(SMSUtility.SIREN_ON)){
+			if(!header.equals(SMSUtility.SIREN_OFF)){
+				if(!header.equals(SMSUtility.MARK_LOST)){
+					if(!header.equals(SMSUtility.MARK_STOLEN)){
+						if(!header.equals(SMSUtility.MARK_LOST_OR_STOLEN)){
+							if(!header.equals(SMSUtility.MARK_FOUND)){
+								if(!header.equals(SMSUtility.LOCATE)){
+									throw new ArbitraryMessageReceivedException("Subheader non riconosciuto!!!");
+								}
+							}
+						}
+					}
+				}
+			}
 		}
 	}
 
