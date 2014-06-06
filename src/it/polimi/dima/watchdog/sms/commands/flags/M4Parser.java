@@ -108,7 +108,7 @@ public class M4Parser {
 		this.signature = new byte[signatureLength];
 		System.arraycopy(this.decryptedSMS, 0, this.header, 0, headerLength);
 		System.arraycopy(this.decryptedSMS, headerLength, this.specificHeader, 0, specificHeaderLength);
-		System.arraycopy(this.decryptedSMS, specificHeaderLength, this.body, 0, bodyLength);
+		System.arraycopy(this.decryptedSMS, headerLength + specificHeaderLength, this.body, 0, bodyLength);
 		System.arraycopy(this.decryptedSMS, 0, this.messageWithoutSignature, 0, headerLength + specificHeaderLength + bodyLength);
 		System.arraycopy(this.decryptedSMS, headerLength + specificHeaderLength + bodyLength, this.signature, 0, signatureLength);
 	}
