@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.util.Base64;
+import android.util.Log;
 import it.polimi.dima.watchdog.exceptions.NoSignatureDoneException;
 import it.polimi.dima.watchdog.exceptions.NoSuchPreferenceFoundException;
 import it.polimi.dima.watchdog.exceptions.NotECKeyException;
@@ -66,6 +67,7 @@ public class LocateCodeMessage extends ParsableSMS {
 			throw new IllegalArgumentException();
 		}
 		String longitudeString = temp.substring(dollarIndex + 1, sharpIndex - 1);
+		Log.i("DEBUG", "DEBUG longitude string = " + longitudeString);
 		return new Double(longitudeString);
 	}
 
@@ -80,6 +82,7 @@ public class LocateCodeMessage extends ParsableSMS {
 			throw new IllegalArgumentException();
 		}
 		String latitudeString = temp.substring(0, dollarIndex - 1);
+		Log.i("DEBUG", "DEBUG latitude string = " + latitudeString);
 		return new Double(latitudeString);
 	}
 
