@@ -59,6 +59,11 @@ public class M4Parser {
 		verifyHeader(SMSUtility.hexStringToByteArray(SMSUtility.M4_HEADER));
 		Log.i("[DEBUG_COMMAND]", "[DEBUG_COMMAND] m4 header verified");
 		verifySubHeader();Log.i("[DEBUG_COMMAND]", "[DEBUG_COMMAND] m4 subheader verified");
+		Log.i("[DEBUG_COMMAND]", "decrypted sms length (header + subHeader + body + signature: " + this.decryptedSMS.length);
+		Log.i("[DEBUG_COMMAND]", "header length: " + this.header.length);
+		Log.i("[DEBUG_COMMAND]", "subHeader length: " + this.specificHeader.length);
+		Log.i("[DEBUG_COMMAND]", "body length: " + this.body.length);
+		Log.i("[DEBUG_COMMAND]", "signature length: " + this.signature.length);
 	}
 
 	private void verifySignature() throws NotECKeyException, ArbitraryMessageReceivedException, ErrorInSignatureCheckingException {
