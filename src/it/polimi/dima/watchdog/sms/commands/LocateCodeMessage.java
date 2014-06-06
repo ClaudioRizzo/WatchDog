@@ -34,14 +34,26 @@ public class LocateCodeMessage extends ParsableSMS {
 	}
 	
 	private List<Double> convertSubBody(byte[] subBody) {
+		byte[] four = new byte[4];
+		System.arraycopy(subBody, 0, four, 0, 4);
+		String fourHex = SMSUtility.bytesToHex(four);
+		Log.i("[DEBUG]", "[DEBUG] i primi 4 byte dell'array (non ancora convertito a stringa): " + fourHex);
+		
 		Log.i("[DEBUG]", "[DEBUG] lunghezza del byte[] arrivato: " + subBody.length);
-		String body = new String(subBody);
-		Log.i("[DEBUG]", "[DEBUG] conversione del byte[]: " + body);
-		Log.i("[DEBUG]", "[DEBUG] lunghezza della stringa generata: " + body.length());
-		if(!body.matches(".+" + "i" + ".+" + "e" + ".*") || subBody.length != SMSUtility.M4_BODY_LENGTH){
+		String temp = new String(subBody);
+		Log.i("[DEBUG]", "[DEBUG] conversione del byte[]: " + temp);
+		Log.i("[DEBUG]", "[DEBUG] lunghezza della stringa generata: " + temp.length());
+		
+		byte[] temp2 = temp.getBytes();
+		byte[] four2 = new byte[4];
+		System.arraycopy(temp2, 0, four2, 0, 4);
+		String fourHex2 = SMSUtility.bytesToHex(four2);
+		Log.i("[DEBUG]", "[DEBUG] i primi 4 byte dell'array convertito a stringa: " + fourHex2);
+		
+		if(!temp.matches(".+" + "i" + ".+" + "e" + ".*") || subBody.length != SMSUtility.M4_BODY_LENGTH){
 			throw new IllegalArgumentException("Il body non è ciò che mi aspetto!!!");
 		}
-		String temp = body;
+		//String temp = body;
 		char[] tempArray = temp.toCharArray();
 		
 		Double latitude = getLatitude(tempArray, temp);
