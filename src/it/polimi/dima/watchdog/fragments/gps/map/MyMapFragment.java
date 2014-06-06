@@ -12,6 +12,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,17 +26,17 @@ public class MyMapFragment extends Fragment {
 	public static String TAG = "MAP_FRAGMENT";
 	private GoogleMap mMap;
 	private Location location;
-	
-	
+
+
 	public MyMapFragment(Location location) {
 		this.location = location;
 	}
-	
+
 	@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		
-		
-		
+
+
+
         View v = inflater.inflate(R.layout.fragment_mymap, container, false);
         GpsTracker gps;
         mMap = ((SupportMapFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
@@ -77,6 +78,5 @@ public class MyMapFragment extends Fragment {
         return v;
     }
 	
-
 
 }
