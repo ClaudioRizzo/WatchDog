@@ -38,6 +38,7 @@ public class MyMapFragment extends Fragment {
 		
         View v = inflater.inflate(R.layout.fragment_mymap, container, false);
         GpsTracker gps;
+        mMap = ((SupportMapFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
         
         
         if(location == null) {
@@ -51,13 +52,10 @@ public class MyMapFragment extends Fragment {
     			
     			Log.i("DEBUG", "DEBUG last position: "+lastLoc);
     			if(lastLoc != null) {
-    				mMap = ((SupportMapFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
+    				
     				mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lastLoc.getLatitude(), lastLoc.getLongitude()), 12.0f));
     				
-    				//ogni folta ci fermiamo sull'ultima locazione 
-    				mMap.addMarker(new MarkerOptions()
-    		        .position(new LatLng(lastLoc.getLatitude(), lastLoc.getLongitude()))
-    		        .title("Your Phone"));
+    				
     			}
     			
     			
@@ -66,6 +64,13 @@ public class MyMapFragment extends Fragment {
     			e.printStackTrace();
     		}
         	
+        }
+        else {
+        	Log.i("[DEBUG]", "latitudine "+location.getLatitude()+" longitudine: "+location.getLongitude()); 
+        	mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 12.0f));
+			mMap.addMarker(new MarkerOptions()
+	        .position(new LatLng(location.getLatitude(), location.getLongitude()))
+	        .title("Your Phone"));
         }
         
         

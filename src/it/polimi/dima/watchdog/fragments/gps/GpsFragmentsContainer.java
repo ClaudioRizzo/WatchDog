@@ -52,7 +52,7 @@ public class GpsFragmentsContainer extends Fragment implements
 		
 		trans.replace(R.id.gps_fragment_container, mapFrag);
 		trans.addToBackStack(null);
-		trans.commit();
+		trans.commitAllowingStateLoss();
 
 	}
 

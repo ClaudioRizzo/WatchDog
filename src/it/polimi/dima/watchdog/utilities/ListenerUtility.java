@@ -20,12 +20,10 @@ public class ListenerUtility {
 	
 	public static ListenerUtility getInstance() {
 		if(listUtil == null) {
-			return new ListenerUtility();
+			listUtil = new ListenerUtility();
+			
 		}
-		else
-		{
-			return listUtil;
-		}
+		return listUtil;
 	}
 	
 	public void addListener(MessageActionListener listener) {
@@ -34,6 +32,7 @@ public class ListenerUtility {
 		if(!listeners.contains(listener)){
 			Log.i("[DEBUG]", "[DEBUG] in listenrUtil aggiungo il listenr");
 			this.listeners.add(listener);
+			Log.i("[DEBUG]", "[DEBUG] in listenrUtil aggiungo il listenr "+listeners.size());
 		}
 	}
 	
