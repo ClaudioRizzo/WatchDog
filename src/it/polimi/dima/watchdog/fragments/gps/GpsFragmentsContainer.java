@@ -1,6 +1,9 @@
 package it.polimi.dima.watchdog.fragments.gps;
 
 import it.polimi.dima.watchdog.R;
+import it.polimi.dima.watchdog.fragments.gps.map.LocationReceivedListener;
+import it.polimi.dima.watchdog.fragments.gps.map.MyMapFragment;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;

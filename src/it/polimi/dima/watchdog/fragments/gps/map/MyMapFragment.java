@@ -4,6 +4,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import it.polimi.dima.watchdog.R;
 import android.content.Context;
@@ -38,6 +39,7 @@ public class MyMapFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_mymap, container, false);
         GpsTracker gps;
         
+        
         if(location == null) {
         	
         	try {
@@ -51,6 +53,11 @@ public class MyMapFragment extends Fragment {
     			if(lastLoc != null) {
     				mMap = ((SupportMapFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
     				mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lastLoc.getLatitude(), lastLoc.getLongitude()), 12.0f));
+    				
+    				//ogni folta ci fermiamo sull'ultima locazione 
+    				mMap.addMarker(new MarkerOptions()
+    		        .position(new LatLng(lastLoc.getLatitude(), lastLoc.getLongitude()))
+    		        .title("Your Phone"));
     			}
     			
     			
@@ -61,11 +68,6 @@ public class MyMapFragment extends Fragment {
         	
         }
         
-       /* mMap.addMarker(new MarkerOptions()
-        .position(new LatLng(lastLoc.getLatitude(), lastLoc.getLongitude()))
-        .title("Hello world"));*/
-		
-		
         
         return v;
     }
