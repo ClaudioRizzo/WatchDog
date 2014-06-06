@@ -130,7 +130,7 @@ public class SMSM3Handler implements SMSCommandVisitorInterface, LocationChangeL
 		//SMSUtility.sendCommandMessage(this.other, SMSUtility.COMMAND_PORT, "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa".getBytes());
 		Log.i("[DEBUG_COMMAND]", "[DEBUG_COMMAND] ciphertext = " + Base64.encodeToString(encryptor.getCiphertext(), Base64.DEFAULT));
 		Log.i("[DEBUG_COMMAND]", "[DEBUG_COMMAND] ciphertext length = " + encryptor.getCiphertext().length);
-		//SMSUtility.sendCommandMessage(this.other, SMSUtility.COMMAND_PORT, encryptor.getCiphertext());
+		SMSUtility.sendCommandMessage(this.other, SMSUtility.COMMAND_PORT, encryptor.getCiphertext());
 		Log.i("gps","gps m4 inviato");
 		MyPrefFiles.deleteUselessCommandSessionPreferencesAfterM4IsSent(this.other, this.ctx);
 	}

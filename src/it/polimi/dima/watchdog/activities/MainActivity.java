@@ -5,6 +5,7 @@ import it.polimi.dima.watchdog.fragments.gps.GpsMainFragment;
 import it.polimi.dima.watchdog.fragments.gps.map.GpsTracker;
 import it.polimi.dima.watchdog.fragments.gps.map.LocationChangeListenerInterface;
 import it.polimi.dima.watchdog.fragments.gps.map.LocationException;
+import it.polimi.dima.watchdog.sms.timeout.TimeoutCountDown;
 import it.polimi.dima.watchdog.utilities.MyDrawerUtility;
 import it.polimi.dima.watchdog.utilities.MyPrefFiles;
 import it.polimi.dima.watchdog.utilities.SMSUtility;
@@ -39,7 +40,8 @@ public class MainActivity extends ActionBarActivity implements LocationChangeLis
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		
+		TimeoutCountDown timer = new TimeoutCountDown(30000, 1000);
+		timer.start();
 		SharedPreferences settings = getSharedPreferences(MyPrefFiles.PREF_INIT, Context.MODE_PRIVATE);
 		boolean wizardDone = settings.getBoolean(MyPrefFiles.WIZARD_DONE, false);
 		getSupportActionBar().setTitle(R.string.default_tab);
