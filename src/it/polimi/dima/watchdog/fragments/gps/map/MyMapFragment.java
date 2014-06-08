@@ -18,65 +18,84 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-
-
-
 public class MyMapFragment extends Fragment {
 
 	public static String TAG = "MAP_FRAGMENT";
 	private GoogleMap mMap;
 	private Location location;
-
+	private GpsTracker gps;
 
 	public MyMapFragment(Location location) {
 		this.location = location;
 	}
 
 	@Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
 
+		View v = inflater.inflate(R.layout.fragment_mymap, container, false);
 
+		mMap = ((SupportMapFragment) getActivity().getSupportFragmentManager()
+				.findFragmentById(R.id.map)).getMap();
 
-        View v = inflater.inflate(R.layout.fragment_mymap, container, false);
-        GpsTracker gps;
-        mMap = ((SupportMapFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
-        
-        
-        if(location == null) {
-        	
-        	try {
-    			
-    			Context ctx = getActivity().getApplicationContext();
-    			gps = new GpsTracker(ctx, (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE));
-    			
-    			Location lastLoc = gps.getLastKnownLocation();
-    			
-    			Log.i("DEBUG", "DEBUG last position: "+lastLoc);
-    			if(lastLoc != null) {
-    				
-    				mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lastLoc.getLatitude(), lastLoc.getLongitude()), 12.0f));
-    				
-    				
-    			}
-    			
-    			
-    		} catch (LocationException e) {
-    			// TODO Auto-generated catch block
-    			e.printStackTrace();
-    		}
-        	
-        }
-        else {
-        	Log.i("[DEBUG]", "latitudine "+location.getLatitude()+" longitudine: "+location.getLongitude()); 
-        	mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 12.0f));
+		if (location == null) {
+
+			try {
+
+				Context ctx = getActivity().getApplicationContext();
+				gps = new GpsTracker(ctx, (LocationManager) getActivity()
+						.getSystemService(Context.LOCATION_SERVICE));
+
+				Location lastLoc = gps.getLastKnownLocation();
+
+				Log.i("DEBUG", "DEBUG last position: " + lastLoc);
+				if (lastLoc != null) {
+
+					mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
+							new LatLng(lastLoc.getLatitude(), lastLoc
+									.getLongitude()), 12.0f));
+
+				}
+
+			} catch (LocationException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+		} else {
+			Log.i("[DEBUG]", "latitudine " + location.getLatitude()
+					+ " longitudine: " + location.getLongitude());
+			mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(
+					location.getLatitude(), location.getLongitude()), 12.0f));
 			mMap.addMarker(new MarkerOptions()
-	        .position(new LatLng(location.getLatitude(), location.getLongitude()))
-	        .title("Your Phone"));
-        }
-        
-        
-        return v;
-    }
-	
+					.position(
+							new LatLng(location.getLatitude(), location
+									.getLongitude())).title("Your Phone"));
+		}
+
+		return v;
+	}
+
+	@Override
+	public void onPause() {
+		// Destroy map
+		super.onPause();
+
+	}
+
+	@Override
+	public void onDestroy() {
+
+		super.onDestroy();
+		if (mMap != null) {
+			mMap.clear();
+		}
+
+		Fragment fragment = (getFragmentManager().findFragmentById(R.id.map));
+		FragmentTransaction ft = getActivity().getSupportFragmentManager()
+				.beginTransaction();
+		ft.remove(fragment);
+		ft.commit();
+	}
 
 }

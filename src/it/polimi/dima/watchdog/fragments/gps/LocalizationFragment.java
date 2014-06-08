@@ -25,10 +25,13 @@ public class LocalizationFragment extends Fragment {
 	@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		Security.addProvider(new org.spongycastle.jce.provider.BouncyCastleProvider());
+		
 		Context ctx = getActivity().getApplicationContext();
         View v = inflater.inflate(R.layout.fragment_localization, container, false);
+        
         Button mButton = (Button) v.findViewById(R.id.button_localization);
         Button mSwitchButton = (Button) v.findViewById(R.id.button_switch_map);
+        
         mSwitchButton.setOnClickListener(new GpsSwitchClickHandler(getFragmentManager()));
         mButton.setOnClickListener(new GpsLocalizeClickHandler(v, ctx));
         return v;
