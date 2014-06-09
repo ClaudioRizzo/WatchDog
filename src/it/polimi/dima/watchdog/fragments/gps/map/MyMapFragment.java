@@ -1,7 +1,10 @@
 package it.polimi.dima.watchdog.fragments.gps.map;
 
+
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -12,7 +15,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
+
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +25,8 @@ public class MyMapFragment extends Fragment {
 
 	public static String TAG = "MAP_FRAGMENT";
 	private GoogleMap mMap;
+	private MapView mMapView;
+	private Bundle mBundle;
 	private Location location;
 	private GpsTracker gps;
 
@@ -35,9 +40,32 @@ public class MyMapFragment extends Fragment {
 
 		View v = inflater.inflate(R.layout.fragment_mymap, container, false);
 
-		mMap = ((SupportMapFragment) getActivity().getSupportFragmentManager()
-				.findFragmentById(R.id.map)).getMap();
+		MapsInitializer.initialize(getActivity());
 
+		mMapView = (MapView) v.findViewById(R.id.map);
+		mMapView.onCreate(mBundle);
+
+		setUpMapIfNeeded(v);
+		
+		return v;
+
+		
+
+	}
+
+	private void setUpMapIfNeeded(View v) {
+
+		if (mMap == null) {
+			mMap = ((MapView) v.findViewById(R.id.map)).getMap();
+
+			if (mMap != null) {
+				setUpMap();
+			}
+		}
+
+	}
+
+	private void setUpMap() {
 		if (location == null) {
 
 			try {
@@ -58,7 +86,7 @@ public class MyMapFragment extends Fragment {
 				}
 
 			} catch (LocationException e) {
-				// TODO Auto-generated catch block
+				// TODO i serivizi sono spenti
 				e.printStackTrace();
 			}
 
@@ -72,30 +100,33 @@ public class MyMapFragment extends Fragment {
 							new LatLng(location.getLatitude(), location
 									.getLongitude())).title("Your Phone"));
 		}
+	}
 
-		return v;
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		mBundle = savedInstanceState;
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
+		mMapView.onResume();
 	}
 
 	@Override
 	public void onPause() {
 		// Destroy map
 		super.onPause();
+		mMapView.onPause();
 
 	}
 
 	@Override
 	public void onDestroy() {
-
 		super.onDestroy();
-		if (mMap != null) {
-			mMap.clear();
-		}
+		mMapView.onDestroy();
 
-		Fragment fragment = (getFragmentManager().findFragmentById(R.id.map));
-		FragmentTransaction ft = getActivity().getSupportFragmentManager()
-				.beginTransaction();
-		ft.remove(fragment);
-		ft.commit();
 	}
 
 }
