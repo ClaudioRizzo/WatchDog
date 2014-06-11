@@ -3,7 +3,9 @@ package it.polimi.dima.watchdog.activities;
 import it.polimi.dima.watchdog.R;
 import it.polimi.dima.watchdog.fragments.gps.GpsMainFragment;
 import it.polimi.dima.watchdog.fragments.gps.map.LocationChangeListenerInterface;
+import it.polimi.dima.watchdog.fragments.gps.map.MessageActionListener;
 import it.polimi.dima.watchdog.sms.timeout.TimeoutCountDown;
+import it.polimi.dima.watchdog.utilities.ListenerUtility;
 import it.polimi.dima.watchdog.utilities.MyDrawerUtility;
 import it.polimi.dima.watchdog.utilities.MyPrefFiles;
 import android.content.Context;
@@ -25,7 +27,7 @@ import android.view.MenuItem;
  * @author claudio
  *
  */
-public class MainActivity extends ActionBarActivity implements LocationChangeListenerInterface {
+public class MainActivity extends ActionBarActivity implements MessageActionListener {
 
 	MyDrawerUtility mDrawerUtil;
 	static final String ACTION = "android.intent.action.DATA_SMS_RECEIVED";
@@ -34,8 +36,7 @@ public class MainActivity extends ActionBarActivity implements LocationChangeLis
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		TimeoutCountDown timer = new TimeoutCountDown(30000, 1000);
-		timer.start();
+		ListenerUtility.getInstance().addListener(this);
 		SharedPreferences settings = getSharedPreferences(MyPrefFiles.PREF_INIT, Context.MODE_PRIVATE);
 		boolean wizardDone = settings.getBoolean(MyPrefFiles.WIZARD_DONE, false);
 		getSupportActionBar().setTitle(R.string.default_tab);
@@ -105,8 +106,15 @@ public class MainActivity extends ActionBarActivity implements LocationChangeLis
 	}
 
 	@Override
-	public void onlocationChange(Location location) {
-		Log.i("[DEBUG]", "[DEBUG] lat: "+location.getLatitude());
+	public void onLocationMessageReceived(double lat, double lon) {
+
+		Log.i("[DEBUG]", "[DEBUG] ricevuta la locazione tento di cambiare");
+
 		
+		Intent intent = new Intent(this, MyMapActivity.class);
+		intent.putExtra("latitude", lat);
+		intent.putExtra("longitude", lon);
+		startActivity(intent);
+		//TODO: start new activity map
 	}
 }
