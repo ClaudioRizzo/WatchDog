@@ -2,3 +2,5 @@
 2) implementare un fragment che consenta l'invio di sms di comando (con la creazione di m1, il set del timeout e dello stato della sessione di comando)
 3) implementare le reazioni ai vari comandi
 4) nelle classi StatusM3Sent e M4Parser c'è da implementare cosa fare con i dati che ritornano a chi ha inviato il comando
+
+5) Implementare la mappa in una Activity a parte in modo da avere un piu' snello work-flow dell'app
