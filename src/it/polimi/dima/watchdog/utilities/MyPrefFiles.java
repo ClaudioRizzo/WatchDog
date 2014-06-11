@@ -261,6 +261,11 @@ public class MyPrefFiles {
 	 * di crittazione/decrittazione di m4 in codifica Base64
 	 */
 	public static final String KEY_FOR_M4 = "m4_key";
+
+	/**
+	 * File con i numeri di telefono associati
+	 */
+	public static final String ASSOCIATED = "associated";
 	
 	
 	
@@ -387,6 +392,10 @@ public class MyPrefFiles {
 		//dato che non ha più senso avere uno stato della sessione di comando, lo cancello se esiste
 		if(MyPrefFiles.existsPreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + phoneNumber, ctx)){
 			MyPrefFiles.deleteMyPreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + phoneNumber, ctx);
+		}
+		
+		if(MyPrefFiles.existsPreference(MyPrefFiles.ASSOCIATED, phoneNumber, ctx)) {
+			MyPrefFiles.deleteMyPreference(MyPrefFiles.ASSOCIATED, phoneNumber, ctx);
 		}
 	}
 	

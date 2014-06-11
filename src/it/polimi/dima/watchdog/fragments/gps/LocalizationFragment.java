@@ -1,16 +1,25 @@
 package it.polimi.dima.watchdog.fragments.gps;
 
 import it.polimi.dima.watchdog.R;
+import it.polimi.dima.watchdog.fragments.actionBar.PendingRequestsAdapter;
+import it.polimi.dima.watchdog.fragments.actionBar.SocialistRequestWrapper;
+import it.polimi.dima.watchdog.utilities.MyPrefFiles;
 
 import java.security.Security;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ListView;
 
 /**
  * 
@@ -29,13 +38,31 @@ public class LocalizationFragment extends Fragment {
 		Context ctx = getActivity().getApplicationContext();
         View v = inflater.inflate(R.layout.fragment_localization, container, false);
         
-        Button mButton = (Button) v.findViewById(R.id.button_localization);
-        Button mSwitchButton = (Button) v.findViewById(R.id.button_switch_map);
+        ListView mListView = (ListView) v.findViewById(R.id.list_localize);
         
-        mSwitchButton.setOnClickListener(new GpsSwitchClickHandler(getFragmentManager()));
-        mButton.setOnClickListener(new GpsLocalizeClickHandler(v, ctx));
+        GpsAdapter adapter = new GpsAdapter(getActivity(), getData());
+        mListView.setAdapter(adapter);
+        
+        //Button mButton = (Button) v.findViewById(R.id.button_localization);
+        //Button mSwitchButton = (Button) v.findViewById(R.id.button_switch_map);
+        
+        //mSwitchButton.setOnClickListener(new GpsSwitchClickHandler(getFragmentManager()));
+        //mButton.setOnClickListener(new GpsLocalizeClickHandler(v, ctx));
         return v;
     }
+	
+	
+	private List<String> getData() {
+		Map<String, ?> pendingReqMap = getActivity().getSharedPreferences(MyPrefFiles.ASSOCIATED, Context.MODE_PRIVATE).getAll();
+		List<String> data = new ArrayList<String>();
+		//data.add("+393488941694");
+		Log.i("[DEBUG]", "[DEBUG] prima del for");
+		for(String num: pendingReqMap.keySet()) {
+			Log.i("[DEBUG]", "[DEBUG] ci sono numeri associati "+num);
+			data.add(num); 
+		}
+		return data;
+	}
 	
 	
 	

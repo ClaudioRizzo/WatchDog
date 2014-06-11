@@ -57,14 +57,19 @@ public class PendingRequestsAdapter extends BaseAdapter {
 		TextView mTextView = (TextView) mLinearLayout.findViewById(R.id.text_view_pending1);
 		SocialistRequestWrapper current = data.get(position);
 		setStringToShow(current, mTextView);
+		
 		EditText secAnswerEditText = (EditText) mLinearLayout.findViewById(R.id.edit_text_secret_answer);
 		EditText mySecQuestionEditText = (EditText) mLinearLayout.findViewById(R.id.edit_text_my_secret_question);
 		EditText mySecAnswerEditText = (EditText) mLinearLayout.findViewById(R.id.edit_text_my_secret_answer);
+		
 		List<EditText> editTextList = new ArrayList<EditText>(Arrays.asList(secAnswerEditText, mySecQuestionEditText, mySecAnswerEditText));
+		
 		Button refuseButton = (Button) mLinearLayout.findViewById(R.id.button_refuse_smp);
 		Button sendButton = (Button) mLinearLayout.findViewById(R.id.button_accept_smp);
+		
 		handleRefuse(refuseButton, current.getNumber());
 		handleSend(sendButton, current.getNumber(),editTextList);
+		
 		return vi;
 	}
 

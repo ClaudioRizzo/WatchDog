@@ -32,16 +32,17 @@ public class GpsLocalizeClickHandler implements OnClickListener {
 	private Context ctx;
 	private View fragView;
 	
-	public GpsLocalizeClickHandler(View fragView, Context ctx) {
+	public GpsLocalizeClickHandler(View fragView,String otherNumber, Context ctx) {
 		this.fragView = fragView;
 		this.ctx = ctx;
+		this.otherNumber = otherNumber;
 	}
 	
 	@Override
 	public void onClick(View v) {
 		try{
 			this.pswd = getPassword();
-			this.otherNumber = getPhoneNumber();
+			//this.otherNumber = getPhoneNumber();
 			
 			byte[] command = SMSUtility.hexStringToByteArray(SMSUtility.LOCATE); //TODO in realtà il tipo di comando va preso dal tipo di bottone cliccato
 			
@@ -128,14 +129,14 @@ public class GpsLocalizeClickHandler implements OnClickListener {
 		return iv;
 	}
 	
-	private String getPhoneNumber() {
+	/*private String getPhoneNumber() {
 		EditText mEditText = (EditText) fragView.findViewById(R.id.phone_number1);
 		String phoneNum = mEditText.getText().toString();
 		return phoneNum;
-	}
+	}*/
 	
 	private String getPassword() {
-		EditText mEditText = (EditText) fragView.findViewById(R.id.password_localize_1);
+		EditText mEditText = (EditText) fragView.findViewById(R.id.edit_text_associated_password);
 		String cleanPassword = mEditText.getText().toString();
 		return cleanPassword;
 	}

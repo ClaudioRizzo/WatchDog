@@ -52,6 +52,7 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 		final Bundle bundle = intent.getExtras();
 
 		Log.i("[DEBUG_SMP]", "[DEBUG_SMP] SMS RECEIVED");
+		
 		try {
 			if (bundle != null) {
 				final Object[] pdusObj = (Object[]) bundle.get(SMSUtility.SMS_EXTRA_NAME);
@@ -62,6 +63,7 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 				}
 
 				this.other = message.getDisplayOriginatingAddress();
+				saveNumber();
 				this.recMsg = this.mSocMilFactory.getMessage(SMSUtility.getHeader(message.getUserData()), null);
 				// ricordarsi che getBody prende il body e lo restituisce
 				// convertito in Base64 !!!
@@ -350,5 +352,12 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 		
 		//... e segno di essere disponibile a iniziare una sessione di comando
 		MyPrefFiles.setMyPreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + this.other, StatusFree.CURRENT_STATUS, this.ctx);
+	}
+	
+	private void saveNumber() {
+		
+		if(!MyPrefFiles.existsPreference(MyPrefFiles.ASSOCIATED, other, ctx))
+			Log.i("[DEBUG SMP]", "[DEBUG-SMP] ho salvato il numero: "+other);
+			MyPrefFiles.setMyPreference(MyPrefFiles.ASSOCIATED, other, other, ctx);
 	}
 }
