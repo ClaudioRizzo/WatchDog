@@ -3,8 +3,6 @@ package it.polimi.dima.watchdog.fragments.gps;
 import it.polimi.dima.watchdog.R;
 
 import java.util.List;
-import java.util.zip.Inflater;
-
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;

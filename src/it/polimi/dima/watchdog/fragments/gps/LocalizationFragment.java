@@ -1,27 +1,18 @@
 package it.polimi.dima.watchdog.fragments.gps;
 
 import it.polimi.dima.watchdog.R;
-import it.polimi.dima.watchdog.fragments.actionBar.PendingRequestsAdapter;
-import it.polimi.dima.watchdog.fragments.actionBar.SocialistRequestWrapper;
-import it.polimi.dima.watchdog.fragments.gps.map.MessageActionListener;
-import it.polimi.dima.watchdog.utilities.ListenerUtility;
 import it.polimi.dima.watchdog.utilities.MyPrefFiles;
-
 import java.security.Security;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-
 import android.content.Context;
-import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ListView;
 
 /**

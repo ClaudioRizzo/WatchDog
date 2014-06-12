@@ -1,13 +1,11 @@
 package it.polimi.dima.watchdog.activities;
 
 import it.polimi.dima.watchdog.R;
-import it.polimi.dima.watchdog.fragments.gps.map.MessageActionListener;
 import it.polimi.dima.watchdog.fragments.gps.map.MyMapFragment;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 
 public class MyMapActivity extends ActionBarActivity {
 

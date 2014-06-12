@@ -1,14 +1,7 @@
 package it.polimi.dima.watchdog.sms.commands.flags;
 
 import android.content.Context;
-import android.location.Location;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
-import it.polimi.dima.watchdog.R;
-import it.polimi.dima.watchdog.fragments.gps.map.MessageActionListener;
-import it.polimi.dima.watchdog.fragments.gps.map.MyMapFragment;
 import it.polimi.dima.watchdog.sms.commands.LocateCodeMessage;
 import it.polimi.dima.watchdog.sms.commands.MarkFoundCodeMessage;
 import it.polimi.dima.watchdog.sms.commands.MarkLostCodeMessage;
