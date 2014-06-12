@@ -107,6 +107,11 @@ public class MyPrefFiles {
 	 */
 	public static final String TIMEOUTS_IDS = "timeouts_ids";
 	
+	/**
+	 * File del siren on.
+	 */
+	public static final String SIREN_ON_FILE = "sounds/siren_on.mp3";
+	
 	
 	
 	

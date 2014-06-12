@@ -25,7 +25,7 @@ public class SMSUtility {
 	/**
 	 * Durata del timeout: 120 secondi
 	 */
-	public static final long TIMEOUT_LENGTH = 120000;
+	public static final int TIMEOUT_LENGTH = 120;
 	
 	/**
 	 * Da usare nel metodo onReceive delle classi che ricevono sms.

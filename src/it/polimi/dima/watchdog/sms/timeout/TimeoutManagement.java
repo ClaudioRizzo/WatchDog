@@ -25,8 +25,8 @@ public class TimeoutManagement extends BroadcastReceiver {
 	 */
 	@Override
 	public void onReceive(Context context, Intent intent) {
-		Log.i("[DEBUG]", "[DEBUG] timeout-scattato");
-		Log.i("[DEBUG]", "[DEBUG] "+intent.getStringExtra(SMSUtility.OTHER_PHONE));
+		Log.i("[DEBUG]", "[DEBUG TIMEOUT] timeout scattato");
+		Log.i("[DEBUG]", "[DEBUG TIMEOUT] waited: " + intent.getStringExtra(SMSUtility.OTHER_PHONE));
 		
 		//... cancello i riferimenti all'altro utente nella sessione di comando...
 		MyPrefFiles.eraseCommandSession(intent.getStringExtra(SMSUtility.OTHER_PHONE), context);

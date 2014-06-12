@@ -18,6 +18,7 @@ import it.polimi.dima.watchdog.exceptions.ErrorInSignatureCheckingException;
 import it.polimi.dima.watchdog.exceptions.NotECKeyException;
 import it.polimi.dima.watchdog.exceptions.NoSignatureDoneException;
 import it.polimi.dima.watchdog.exceptions.NoSuchPreferenceFoundException;
+import it.polimi.dima.watchdog.sms.timeout.TimeoutWrapper;
 import it.polimi.dima.watchdog.utilities.MyPrefFiles;
 import it.polimi.dima.watchdog.utilities.SMSUtility;
 
@@ -55,7 +56,7 @@ public class StatusFree implements CommandProtocolFlagsReactionInterface{
 		generateAndSendM2(other, context);
 		Log.i("[DEBUG_COMMAND]", "[DEBUG_COMMAND] m2 sent");
 		MyPrefFiles.replacePreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + other, StatusFree.NEXT_SENT_STATUS, context);
-		//TimeoutWrapper.addTimeout(SMSUtility.MY_PHONE, other, context);
+		TimeoutWrapper.addTimeout(SMSUtility.MY_PHONE, other, context);
 	}
 
 	@Override

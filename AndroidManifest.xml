@@ -17,12 +17,12 @@
     <uses-permission android:name="android.permission.WRITE_SMS" />
     <uses-permission android:name="android.permission.READ_SMS" />
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
-    <uses-permission
-        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-        android:maxSdkVersion="19" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="19" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="com.android.alarm.permission.SET_ALARM"/>
 
     <application
         android:allowBackup="true"
@@ -35,7 +35,6 @@
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="AIzaSyBSmivaEV1tTGrBDvK-RRD8gdv4c_Nckio" />
-        <!-- AIzaSyDg1yCUkWFGtd6Uuglxj1_PS1h8ucMZFpo -->
 
         <receiver android:name="it.polimi.dima.watchdog.sms.commands.SMSCommandHandler" >
             <intent-filter android:priority="10" >
@@ -60,7 +59,7 @@
         <receiver android:name="it.polimi.dima.watchdog.sms.timeout.TimeoutManagement"
             	  android:process=".remote" >
         </receiver>
-
+        
         <activity
             android:name="it.polimi.dima.watchdog.activities.MainActivity"
             android:launchMode="singleTop"

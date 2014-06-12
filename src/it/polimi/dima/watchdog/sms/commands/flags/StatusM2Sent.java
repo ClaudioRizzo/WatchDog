@@ -18,6 +18,7 @@ import it.polimi.dima.watchdog.exceptions.NotECKeyException;
 import it.polimi.dima.watchdog.exceptions.TooLongResponseException;
 import it.polimi.dima.watchdog.sms.ParsableSMS;
 import it.polimi.dima.watchdog.sms.commands.CommandFactory;
+import it.polimi.dima.watchdog.sms.timeout.TimeoutWrapper;
 import it.polimi.dima.watchdog.utilities.MyPrefFiles;
 import it.polimi.dima.watchdog.utilities.SMSUtility;
 
@@ -29,9 +30,6 @@ import it.polimi.dima.watchdog.utilities.SMSUtility;
 //Ho mandato m2, mi aspetto m3, lo parso e lo ritorno
 public class StatusM2Sent implements CommandProtocolFlagsReactionInterface {
 
-	
-	//private ParsableSMS recMsg;
-	//private CommandFactory commandFactory;
 	private M3Parser parser;
 	public static String CURRENT_STATUS = "m2_sent";
 	private static String STATUS_RECEIVED = "m3_received";
@@ -45,7 +43,7 @@ public class StatusM2Sent implements CommandProtocolFlagsReactionInterface {
 	
 	@Override
 	public void parse(Context context, SmsMessage message, String other) throws IllegalStateException, InvalidCipherTextException, ArbitraryMessageReceivedException, ErrorInSignatureCheckingException, NoSuchAlgorithmException, InvalidKeySpecException, NoSuchPreferenceFoundException, NotECKeyException, NoSuchProviderException, IllegalArgumentException, TooLongResponseException, NoSignatureDoneException {
-		//TimeoutWrapper.removeTimeout(SMSUtility.MY_PHONE, other, context);
+		TimeoutWrapper.removeTimeout(SMSUtility.MY_PHONE, other, context);
 		MyPrefFiles.replacePreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + other, StatusM2Sent.STATUS_RECEIVED, context);
 					
 		this.parser = popolateParser(message, context, other);
