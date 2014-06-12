@@ -12,7 +12,6 @@ import it.polimi.dima.watchdog.exceptions.NoSignatureDoneException;
 import it.polimi.dima.watchdog.exceptions.NoSuchPreferenceFoundException;
 import it.polimi.dima.watchdog.exceptions.NotECKeyException;
 import it.polimi.dima.watchdog.sms.commands.flags.StatusM1Sent;
-import it.polimi.dima.watchdog.sms.timeout.TimeoutCountDown;
 import it.polimi.dima.watchdog.sms.timeout.TimeoutWrapper;
 import it.polimi.dima.watchdog.utilities.MyPrefFiles;
 import it.polimi.dima.watchdog.utilities.SMSUtility;
@@ -61,8 +60,8 @@ public class GpsLocalizeClickHandler implements OnClickListener {
 			SMSUtility.sendCommandMessage(this.otherNumber, SMSUtility.COMMAND_PORT, finalMessage);
 			MyPrefFiles.replacePreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + this.otherNumber, StatusM1Sent.CURRENT_STATUS, this.ctx);
 			TimeoutWrapper.addTimeout(SMSUtility.MY_PHONE, this.otherNumber, this.ctx);
-			TimeoutCountDown timeOut = new TimeoutCountDown(3000, 1000);
-			timeOut.start();
+			
+			
 		}
 		catch (Exception e){
 			SMSUtility.handleErrorOrExceptionInCommandSession(e, this.otherNumber, this.ctx);

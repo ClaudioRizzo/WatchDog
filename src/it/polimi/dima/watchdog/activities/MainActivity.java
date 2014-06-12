@@ -2,6 +2,7 @@ package it.polimi.dima.watchdog.activities;
 
 import it.polimi.dima.watchdog.R;
 import it.polimi.dima.watchdog.fragments.gps.GpsMainFragment;
+import it.polimi.dima.watchdog.fragments.gps.PerimeterTracker;
 import it.polimi.dima.watchdog.fragments.gps.map.MessageActionListener;
 import it.polimi.dima.watchdog.utilities.ListenerUtility;
 import it.polimi.dima.watchdog.utilities.MyDrawerUtility;
@@ -114,4 +115,6 @@ public class MainActivity extends ActionBarActivity implements MessageActionList
 		startActivity(intent);
 		//TODO: start new activity map
 	}
+	
+
 }

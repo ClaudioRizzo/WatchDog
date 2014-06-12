@@ -5,6 +5,7 @@ import it.polimi.dima.watchdog.factory.FeatureFactory;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager.OnPageChangeListener;
 
 /**
  * Classe usata per gestire le tabs nei fragment che ne hanno bisogno.
@@ -14,11 +15,14 @@ import android.support.v4.app.FragmentPagerAdapter;
  */
 public class TabsAdapter extends FragmentPagerAdapter {
 
+
+	
 	private int tabsNum;
 	private FeatureEnum mFeatureEnum;
 	
 	public TabsAdapter(FragmentManager fm, int tabsNum, FeatureEnum mFeatureEnum) {
 		super(fm);
+		
 		this.tabsNum = tabsNum;
 		this.mFeatureEnum = mFeatureEnum;
 	}

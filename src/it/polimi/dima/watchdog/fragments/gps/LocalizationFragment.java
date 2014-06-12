@@ -1,11 +1,14 @@
 package it.polimi.dima.watchdog.fragments.gps;
 
 import it.polimi.dima.watchdog.R;
+import it.polimi.dima.watchdog.utilities.FragmentAdapterLifecycle;
 import it.polimi.dima.watchdog.utilities.MyPrefFiles;
+
 import java.security.Security;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -20,7 +23,7 @@ import android.widget.ListView;
  * @author claudio, emanuele
  * 
  */
-public class LocalizationFragment extends Fragment {
+public class LocalizationFragment extends Fragment implements FragmentAdapterLifecycle {
 
 	public static String TAG = "LOCALIZATION_FRAGMENT";
 
@@ -51,6 +54,18 @@ public class LocalizationFragment extends Fragment {
 			data.add(num);
 		}
 		return data;
+	}
+
+	@Override
+	public void onResumeFragment() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onPauseFragment() {
+		// TODO Auto-generated method stub
+		
 	}
 
 	

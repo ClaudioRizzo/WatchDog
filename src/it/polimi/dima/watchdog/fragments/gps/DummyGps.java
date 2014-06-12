@@ -1,6 +1,7 @@
 package it.polimi.dima.watchdog.fragments.gps;
 
 import it.polimi.dima.watchdog.R;
+import it.polimi.dima.watchdog.utilities.FragmentAdapterLifecycle;
 import it.polimi.dima.watchdog.utilities.SMSUtility;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -18,7 +19,7 @@ import android.widget.Button;
  * @author claudio
  *
  */
-public class DummyGps extends Fragment implements OnClickListener {
+public class DummyGps extends Fragment implements OnClickListener, FragmentAdapterLifecycle {
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -34,5 +35,17 @@ public class DummyGps extends Fragment implements OnClickListener {
 		SmsManager man = SmsManager.getDefault();
 		byte[] message = SMSUtility.hexStringToByteArray(SMSUtility.CODE2); //provo solo l'header
 		man.sendDataMessage("+393466342499", null, SMSUtility.SMP_PORT, message, null, null);
+	}
+
+	@Override
+	public void onResumeFragment() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onPauseFragment() {
+		// TODO Auto-generated method stub
+		
 	}
 }
