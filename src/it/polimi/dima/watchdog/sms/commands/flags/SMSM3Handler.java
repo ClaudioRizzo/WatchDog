@@ -15,7 +15,7 @@ import it.polimi.dima.watchdog.exceptions.NoSignatureDoneException;
 import it.polimi.dima.watchdog.exceptions.NoSuchPreferenceFoundException;
 import it.polimi.dima.watchdog.exceptions.NotECKeyException;
 import it.polimi.dima.watchdog.exceptions.TooLongResponseException;
-import it.polimi.dima.watchdog.fragments.gps.map.GpsTracker;
+import it.polimi.dima.watchdog.fragments.gps.map.GpsLocalizer;
 import it.polimi.dima.watchdog.fragments.gps.map.LocationChangeListenerInterface;
 import it.polimi.dima.watchdog.fragments.gps.map.LocationException;
 import it.polimi.dima.watchdog.sms.commands.LocateCodeMessage;
@@ -40,7 +40,7 @@ public class SMSM3Handler implements SMSCommandVisitorInterface, LocationChangeL
 	private String other;
 	private Context ctx;
 	private String locationString = null;
-	private GpsTracker gps;
+	private GpsLocalizer gps;
 	
 	public SMSM3Handler(String other, Context context){
 		this.other = other;
@@ -93,7 +93,7 @@ public class SMSM3Handler implements SMSCommandVisitorInterface, LocationChangeL
 		Log.i("[DEBUG_COMMAND]", "[DEBUG_COMMAND] LOCATE RICEVUTO");
 		
 		try {
-			gps = new GpsTracker(ctx, (LocationManager) ctx.getSystemService(Context.LOCATION_SERVICE));
+			gps = new GpsLocalizer(ctx, (LocationManager) ctx.getSystemService(Context.LOCATION_SERVICE));
 			gps.addListener(this);
 			gps.getLocationUpdates();
 			

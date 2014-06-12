@@ -28,7 +28,7 @@ public class MyMapFragment extends Fragment {
 	private MapView mMapView;
 	private Bundle mBundle;
 	private Location location;
-	private GpsTracker gps;
+	private GpsLocalizer gps;
 
 	public MyMapFragment(Location location) {
 		this.location = location;
@@ -71,7 +71,7 @@ public class MyMapFragment extends Fragment {
 			try {
 
 				Context ctx = getActivity().getApplicationContext();
-				gps = new GpsTracker(ctx, (LocationManager) getActivity()
+				gps = new GpsLocalizer(ctx, (LocationManager) getActivity()
 						.getSystemService(Context.LOCATION_SERVICE));
 
 				Location lastLoc = gps.getLastKnownLocation();
