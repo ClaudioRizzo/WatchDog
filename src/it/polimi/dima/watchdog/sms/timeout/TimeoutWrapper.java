@@ -1,11 +1,13 @@
 package it.polimi.dima.watchdog.sms.timeout;
 
+import it.polimi.dima.watchdog.crypto.CryptoUtility;
 import it.polimi.dima.watchdog.exceptions.NoSuchPreferenceFoundException;
-import it.polimi.dima.watchdog.utilities.CryptoUtility;
 import it.polimi.dima.watchdog.utilities.MyPrefFiles;
 import it.polimi.dima.watchdog.utilities.SMSUtility;
+
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
+
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;

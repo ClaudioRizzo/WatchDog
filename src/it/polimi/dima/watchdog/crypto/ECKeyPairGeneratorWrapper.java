@@ -8,11 +8,12 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.SecureRandom;
 import java.security.Security;
+
 import org.spongycastle.jce.ECNamedCurveTable;
 import org.spongycastle.jce.spec.ECParameterSpec;
+
 import android.annotation.SuppressLint;
 import android.util.Log;
-import it.polimi.dima.watchdog.utilities.CryptoUtility;
 
 /**
  * Classe che genera una coppia di chiavi pubblica/privata a partire dalla curva ellittica secp256r1 e da un

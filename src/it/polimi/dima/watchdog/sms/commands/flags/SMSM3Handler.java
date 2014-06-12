@@ -5,12 +5,14 @@ import java.security.Key;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.spec.InvalidKeySpecException;
+
 import org.spongycastle.crypto.InvalidCipherTextException;
+
 import android.content.Context;
 import android.location.Location;
 import android.location.LocationManager;
 import android.util.Log;
-import it.polimi.dima.watchdog.crypto.AES256GCM;
+import it.polimi.dima.watchdog.crypto.CryptoUtility;
 import it.polimi.dima.watchdog.exceptions.NoSignatureDoneException;
 import it.polimi.dima.watchdog.exceptions.NoSuchPreferenceFoundException;
 import it.polimi.dima.watchdog.exceptions.NotECKeyException;
@@ -26,11 +28,11 @@ import it.polimi.dima.watchdog.sms.commands.MarkStolenCodeMessage;
 import it.polimi.dima.watchdog.sms.commands.SMSCommandVisitorInterface;
 import it.polimi.dima.watchdog.sms.commands.SirenOffCodeMessage;
 import it.polimi.dima.watchdog.sms.commands.SirenOnCodeMessage;
-import it.polimi.dima.watchdog.utilities.CryptoUtility;
 import it.polimi.dima.watchdog.utilities.MyPrefFiles;
 import it.polimi.dima.watchdog.utilities.SMSUtility;
 
 /**
+ * Classe che gestisce il comando arrivato con m3 e costruisce la risposta (m4)
  * 
  * @author emanuele
  *
@@ -121,10 +123,10 @@ public class SMSM3Handler implements SMSCommandVisitorInterface, LocationChangeL
 		byte[] message = packMessage(messageWithoutSignature, signature);
 		Key encKey = MyPrefFiles.getSymmetricCryptoKey(this.ctx, this.other, false);
 		byte[] iv = MyPrefFiles.getIV(this.ctx, this.other, false);
-		AES256GCM encryptor = new AES256GCM(encKey, message, iv, CryptoUtility.ENC);
-		encryptor.encrypt();
-		SMSUtility.sendCommandMessage(this.other, SMSUtility.COMMAND_PORT, encryptor.getCiphertext());
-		MyPrefFiles.deleteUselessCommandSessionPreferencesAfterM4IsSent(this.other, this.ctx);
+		byte[] commandMessage = CryptoUtility.doEncryptionOrDecryption(message, encKey, iv, CryptoUtility.ENC);
+		
+		SMSUtility.sendCommandMessage(this.other, SMSUtility.COMMAND_PORT, commandMessage);
+		MyPrefFiles.deleteUselessCommandSessionPreferencesForM4(this.other, this.ctx);
 	}
 
 	private byte[] packMessage(byte[] messageWithoutSignature, byte[] signature) {
@@ -165,8 +167,6 @@ public class SMSM3Handler implements SMSCommandVisitorInterface, LocationChangeL
 		double lon = location.getLongitude();
 		
 		this.locationString = lat+"i"+lon+"e";
-		Log.i("[DEBUG]", "[DEBUG] " + lat);
-		Log.i("[DEBUG]", "[DEBUG] " + lon);
 		gps.removeLocationUpdates();
 		Log.i("[GPS]", "[GPS] posizione acquisita");
 		Log.i("[GPS]", "[GPS] lat: "+lat+" lon: "+lon);

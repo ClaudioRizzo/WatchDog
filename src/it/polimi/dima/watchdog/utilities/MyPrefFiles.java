@@ -14,6 +14,7 @@ import java.util.Map;
 
 import javax.crypto.spec.SecretKeySpec;
 
+import it.polimi.dima.watchdog.crypto.CryptoUtility;
 import it.polimi.dima.watchdog.exceptions.NoSuchPreferenceFoundException;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -486,7 +487,7 @@ public class MyPrefFiles {
 	}
 	
 	/**
-	 * Cancella l'intera sessione di comando
+	 * Cancella l'intera sessione di comando. Anche 'MyPrefFiles.COMMUNICATION_STATUS_WITH + other' viene cancellato, NON settato a free.
 	 * 
 	 * @param other : il numero di telefono dell'altro
 	 * @param ctx : il contesto corrente
@@ -516,12 +517,12 @@ public class MyPrefFiles {
 	}
 	
 	/**
-	 * Cancella chiave dell'aes, iv, comando e password inserita (non servono più dopo che m3 è stato inviato).
+	 * Metodo che cancella iv e chiave dopo il loro utilizzo per creare/crittare/decrittare m3.
 	 * 
 	 * @param other : il numero di telefono dell'altro
 	 * @param ctx : il contesto corrente
 	 */
-	public static void deleteUselessCommandSessionPreferencesAfterM3IsSent(String other, Context ctx){
+	public static void deleteUselessCommandSessionPreferencesForM3(String other, Context ctx){
 		if(MyPrefFiles.existsPreference(MyPrefFiles.COMMAND_SESSION, other + MyPrefFiles.SESSION_KEY, ctx)){
 			MyPrefFiles.deleteMyPreference(MyPrefFiles.COMMAND_SESSION, other + MyPrefFiles.SESSION_KEY, ctx);
 		}
@@ -536,7 +537,13 @@ public class MyPrefFiles {
 		}
 	}
 	
-	public static void deleteUselessCommandSessionPreferencesAfterM4IsSent(String other, Context ctx){
+	/**
+	 * Metodo che cancella iv e chiave dopo il loro utilizzo per crittare/decrittare m4.
+	 * 
+	 * @param other : il numero di telefono dell'altro
+	 * @param ctx : il contesto corrente
+	 */
+	public static void deleteUselessCommandSessionPreferencesForM4(String other, Context ctx){
 		if(MyPrefFiles.existsPreference(MyPrefFiles.COMMAND_SESSION, other + MyPrefFiles.KEY_FOR_M4, ctx)){
 			MyPrefFiles.deleteMyPreference(MyPrefFiles.COMMAND_SESSION, other + MyPrefFiles.KEY_FOR_M4, ctx);
 		}

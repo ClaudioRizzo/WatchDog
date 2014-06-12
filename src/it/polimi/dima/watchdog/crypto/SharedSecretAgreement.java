@@ -1,7 +1,7 @@
 package it.polimi.dima.watchdog.crypto;
 
 import android.util.Base64;
-import it.polimi.dima.watchdog.utilities.CryptoUtility;
+
 import java.security.InvalidKeyException;
 import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
@@ -12,6 +12,7 @@ import java.security.Security;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
+
 import javax.crypto.KeyAgreement;
 
 /**

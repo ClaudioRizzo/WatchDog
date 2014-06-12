@@ -1,18 +1,19 @@
 package it.polimi.dima.watchdog.sms.commands;
 
-import it.polimi.dima.watchdog.crypto.AES256GCM;
+import it.polimi.dima.watchdog.crypto.CryptoUtility;
 import it.polimi.dima.watchdog.exceptions.NotECKeyException;
 import it.polimi.dima.watchdog.exceptions.NoSignatureDoneException;
-import it.polimi.dima.watchdog.utilities.CryptoUtility;
 import it.polimi.dima.watchdog.utilities.SMSUtility;
+
 import java.io.UnsupportedEncodingException;
 import java.security.Key;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
+
 import org.spongycastle.crypto.InvalidCipherTextException;
+
 import android.telephony.SmsManager;
-import android.util.Log;
 
 /**
  * Classe che gestisce la costruzione degli SMS. IMPORTANTE: per gli sms di configurazione (scambio chiavi, ecc.)
@@ -96,11 +97,8 @@ public class CommandSMS {
 		byte[] signaturePlusMessage = new byte[this.finalMessage.length + this.signature.length + 1];
 		System.arraycopy(this.finalMessage, 0, signaturePlusMessage, 0, this.finalMessage.length);
 		signaturePlusMessage[this.finalMessage.length] = ' ';
-		System.arraycopy(this.signature, 0, signaturePlusMessage, this.finalMessage.length + 1, this.signature.length);
-		Log.i("[DEBUG]", "[DEBUG - pre costruttore aes] "+signaturePlusMessage);
-		AES256GCM enc = new AES256GCM(this.encryptionKey, signaturePlusMessage, this.iv, CryptoUtility.ENC);
-		enc.encrypt();
-		this.finalSignedAndEncryptedMessage = enc.getCiphertext();
+		System.arraycopy(this.signature, 0, signaturePlusMessage, this.finalMessage.length + 1, this.signature.length);	
+		this.finalSignedAndEncryptedMessage = CryptoUtility.doEncryptionOrDecryption(signaturePlusMessage, this.encryptionKey, this.iv, CryptoUtility.ENC);
 	}
 	
 	public void send(){

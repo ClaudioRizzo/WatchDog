@@ -1,7 +1,6 @@
 package it.polimi.dima.watchdog.sms.commands.flags;
 
-import it.polimi.dima.watchdog.crypto.AES256GCM;
-import it.polimi.dima.watchdog.crypto.ECDSA_Signature;
+import it.polimi.dima.watchdog.crypto.CryptoUtility;
 import it.polimi.dima.watchdog.exceptions.ArbitraryMessageReceivedException;
 import it.polimi.dima.watchdog.exceptions.ErrorInSignatureCheckingException;
 import it.polimi.dima.watchdog.exceptions.NotECKeyException;
@@ -45,7 +44,7 @@ public class M4Parser {
 	}
 	
 	public void parse() throws IllegalArgumentException, ArbitraryMessageReceivedException, NotECKeyException, ErrorInSignatureCheckingException, IllegalStateException, InvalidCipherTextException{
-		decrypt();
+		this.decryptedSMS = CryptoUtility.doEncryptionOrDecryption(this.smsEncrypted, this.decryptionKey, this.iv, CryptoUtility.DEC);
 		int headerLength = ParsableSMS.HEADER_LENGTH;
 		int specificHeaderLength = ParsableSMS.HEADER_LENGTH;
 		int bodyLength = SMSUtility.M4_BODY_LENGTH;
@@ -57,8 +56,7 @@ public class M4Parser {
 	}
 
 	private void verifySignature() throws NotECKeyException, ArbitraryMessageReceivedException, ErrorInSignatureCheckingException {
-		ECDSA_Signature ver = new ECDSA_Signature(this.messageWithoutSignature, this.oPub, this.signature);
-		if(!ver.verifySignature()){
+		if(!CryptoUtility.verifySignature(this.messageWithoutSignature, this.signature, this.oPub)){
 			throw new ArbitraryMessageReceivedException();
 		}
 	}
@@ -99,10 +97,5 @@ public class M4Parser {
 		System.arraycopy(this.decryptedSMS, headerLength + specificHeaderLength, this.body, 0, bodyLength);
 		System.arraycopy(this.decryptedSMS, 0, this.messageWithoutSignature, 0, headerLength + specificHeaderLength + bodyLength);
 		System.arraycopy(this.decryptedSMS, headerLength + specificHeaderLength + bodyLength, this.signature, 0, signatureLength);
-	}
-
-	private void decrypt() throws IllegalStateException, InvalidCipherTextException {
-		AES256GCM dec = new AES256GCM(this.decryptionKey, this.smsEncrypted, this.iv);
-		this.decryptedSMS = dec.decrypt();
 	}
 }

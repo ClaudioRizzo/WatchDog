@@ -8,9 +8,13 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.Security;
 import java.security.spec.InvalidKeySpecException;
+
 import javax.crypto.spec.SecretKeySpec;
+
 import org.spongycastle.crypto.InvalidCipherTextException;
+
 import it.polimi.dima.watchdog.crypto.AESKeyGenerator;
+import it.polimi.dima.watchdog.crypto.CryptoUtility;
 import it.polimi.dima.watchdog.exceptions.ArbitraryMessageReceivedException;
 import it.polimi.dima.watchdog.exceptions.ErrorInSignatureCheckingException;
 import it.polimi.dima.watchdog.exceptions.NotECKeyException;
@@ -18,7 +22,6 @@ import it.polimi.dima.watchdog.exceptions.NoSignatureDoneException;
 import it.polimi.dima.watchdog.exceptions.NoSuchPreferenceFoundException;
 import it.polimi.dima.watchdog.sms.commands.CommandSMS;
 import it.polimi.dima.watchdog.sms.timeout.TimeoutWrapper;
-import it.polimi.dima.watchdog.utilities.CryptoUtility;
 import it.polimi.dima.watchdog.utilities.MyPrefFiles;
 import android.content.Context;
 import android.telephony.SmsMessage;
@@ -89,7 +92,7 @@ public class StatusM1Sent implements CommandProtocolFlagsReactionInterface {
 		CommandSMS sms = new CommandSMS(command, saltedPassword, mPriv, encryptionKey, phoneNumber, iv);
 		sms.construct();
 		//cancello le preferenze ormai inutili
-		MyPrefFiles.deleteUselessCommandSessionPreferencesAfterM3IsSent(phoneNumber, ctx);
+		MyPrefFiles.deleteUselessCommandSessionPreferencesForM3(phoneNumber, ctx);
 		sms.send();
 	}
 

@@ -2,7 +2,7 @@ package it.polimi.dima.watchdog.sms.commands.flags;
 
 import java.security.PublicKey;
 import java.util.Arrays;
-import it.polimi.dima.watchdog.crypto.ECDSA_Signature;
+import it.polimi.dima.watchdog.crypto.CryptoUtility;
 import it.polimi.dima.watchdog.exceptions.ArbitraryMessageReceivedException;
 import it.polimi.dima.watchdog.exceptions.ErrorInSignatureCheckingException;
 import it.polimi.dima.watchdog.exceptions.NotECKeyException;
@@ -67,8 +67,7 @@ public class M1Parser {
 	private void verifySignature(int messageWithoutSignatureLength) throws ArbitraryMessageReceivedException, ErrorInSignatureCheckingException, NotECKeyException {
 		byte[] messageWithoutSignature = new byte[messageWithoutSignatureLength];
 		System.arraycopy(this.rawMessage, 0, messageWithoutSignature, 0, messageWithoutSignatureLength);
-		ECDSA_Signature verifier = new ECDSA_Signature(messageWithoutSignature, this.oPub, this.signature);
-		if(!verifier.verifySignature()){
+		if(!CryptoUtility.verifySignature(messageWithoutSignature, this.signature, this.oPub)){
 			throw new ArbitraryMessageReceivedException("Firma non valida/non corrispondente!!!");
 		}
 	}

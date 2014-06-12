@@ -19,52 +19,80 @@ import android.widget.Toast;
  *
  */
 public class SMSUtility {
+	
+	//QUI UTILITIES VARIE
+	
 	/**
 	 * Durata del timeout: 120 secondi
 	 */
 	public static final long TIMEOUT_LENGTH = 120000;
+	
 	/**
 	 * Da usare nel metodo onReceive delle classi che ricevono sms.
 	 */
 	public static final String SMS_EXTRA_NAME ="pdus";
+	
+	/**
+	 * Lunghezza fissata del body di m4 (subBody + padding).
+	 */
+	public static final int M4_BODY_LENGTH = 30;
+	
+	/**
+	 * Usato solo nei metodi byte[] --> Hex e Hex --> byte[]
+	 */
+	private static final char[] hexArray = "0123456789ABCDEF".toCharArray();
+	
+	/**
+	 * Indicatore del mio telefono per il timeout
+	 */
+	public static final String MY_PHONE = "my_phone";
+	
+	/**
+	 * Indicatore di un altro telefono per il timeout
+	 */
+	public static final String OTHER_PHONE = "other_phone";
+	
+	
+	
+	//QUI I CODICI PER I MESSAGGI DEL SMP
+	
 	/**
 	 * PublicKeyRequestCode (for SMP only) : header del messaggio che chiede all'altro la chiave pubblica.
 	 */
 	public static String CODE1 = "C0DE1FFF";
+	
 	/**
 	 * PublicKeySentCode (for SMP only) : header del messaggio che manda la chiave pubblica a chi l'ha chiesta.
 	 */
 	public static String CODE2 = "C0DE2FFF";
+	
 	/**
 	 * SecretQuestionSentCode (for SMP only) : header del messaggio che manda la domanda segreta all'altro.
 	 */
 	public static String CODE3 = "C0DE3FFF";
+	
 	/**
 	 * SecretAnswerAndPublicKeyHashSentCode (for SMP only) : header del messaggio che manda l'hash di
 	 * propria chiave pubblica || risposta segreta all'altro.
 	 */
 	public static String CODE4 = "C0DE4FFF";
+	
 	/**
 	 * KeyValidatedCode (for SMP only) : header del messaggio che conferma l'avvenuta validazione della chiave
 	 * pubblica.
 	 */
 	public static String CODE5 = "C0DE5FFF";
+	
 	/**
 	 * IDontWantToAssociateCode (for SMP only) : header del messaggio che informa dell'abort del processo di
 	 * validazione della chiave (vale per tutti i possibili errori, non solo per la mancata uguaglianza degli
 	 * hash).
 	 */
 	public static String CODE6 = "C0DE6FFF";
-	/**
-	 * HereIsMyPublicKeyCode (for ECDH only) : header del messaggio di colui che invia per primo all'altro la
-	 * propria chiave pubblica.
-	 */
-	public static String CODE7 = "C0DE7FFF";
-	/**
-	 * HereIsMyPublicKeyTooCode (for ECDH only) : header del messaggio di colui che invia all'altro la propria
-	 * chiave pubblica solo dopo aver ricevuto quella dell'altro.
-	 */
-	public static String CODE8 = "C0DE8FFF";
+	
+	
+	
+	//QUI I CODICI PER I COMANDI
 	
 	/**
 	 * SirenOnCode (for commands only)
@@ -101,46 +129,49 @@ public class SMSUtility {
 	 */
 	public static String LOCATE = "C0DE07FF";
 	
+	
+	
+	//QUI GLI HEADER DEI MESSAGGI DI COMANDO (M3_HEADER NON ESISTE)
+	
 	/**
 	 * Header del primo messaggio della sessione di comando.
 	 */
 	public static String M1_HEADER = "C0DE001F";
+	
 	/**
 	 * Header del secondo messaggio della sessione di comando.
 	 */
 	public static String M2_HEADER = "C0DE002F";
+	
 	/**
 	 * Header del quarto messaggio della sessione di comando.
 	 */
 	public static String M4_HEADER = "C0DE004F";
-	/**
-	 * Lunghezza fissata del body di m4 (subBody + padding).
-	 */
-	public static final int M4_BODY_LENGTH = 30;
-	/**
-	 * Usato solo nei metodi byte[] --> Hex e Hex --> byte[]
-	 */
-	private static final char[] hexArray = "0123456789ABCDEF".toCharArray();
+	
+	
+	
+	//QUI LE PORTE PER LA RICEZIONE SMS
+	
 	/**
 	 * Porta su cui vengono ricevuti solo i messaggi del SMP.
 	 */
 	public static final short SMP_PORT = (short) 999;
+	
 	/**
 	 * Porta su cui vengono ricevuti solo i messaggi dela sessione di controllo.
 	 */
 	public static final short COMMAND_PORT = (short) 9999;
+	
 	/**
 	 * Porta usata esclusivamente per i test (TODO aggiungere al manifest le classi che testano)
 	 */
 	public static final short TEST_PORT = (short) 777;
-	/**
-	 * Indicatore del mio telefono per il timeout
-	 */
-	public static final String MY_PHONE = "my_phone";
-	/**
-	 * Indicatore di un altro telefono per il timeout
-	 */
-	public static final String OTHER_PHONE = "other_phone";
+	
+	
+	
+	
+	
+	//QUI I METODI
 	
 	/**
 	 * Converte un array byte[] nella corrispondente stringa esadecimale.
@@ -238,8 +269,6 @@ public class SMSUtility {
 		if(msg.length < ParsableSMS.HEADER_LENGTH){
 			throw new ArbitraryMessageReceivedException("Messaggio inaspettato: troppo corto!!!");
 		}
-		//android pare (dalla javadoc) non aggiungere un terminatore all'array di byte quando si usa getUserData(). In caso contrario la lunghezza
-		//va decurtata di 1.
 		int bodyLength = msg.length - ParsableSMS.HEADER_LENGTH;
 		
 		if(bodyLength == 0){
@@ -293,7 +322,7 @@ public class SMSUtility {
 	
 	/**
 	 * Se qualcosa va storto nella sessione di comando, viene gestita l'eccezione e vengono cancellate le
-	 * preferenze della command session.
+	 * preferenze della command session; lo stato della comunicazione con l'altro viene resettato a free.
 	 * 
 	 * @param e : l'eccezione da gestire
 	 * @param other : il numero di telefono dell'altro
@@ -321,6 +350,14 @@ public class SMSUtility {
 		}
 	}
 	
+	/**
+	 * Ottiene la lunghezza del padding di m4 a partire dalla lunghezza target e quella effettiva.
+	 * 
+	 * @param m4BodyLength : la lunghezza target di m4
+	 * @param dataLength : la lunghezza effettiva di m4
+	 * @return la lunghezza del padding di m4
+	 * @throws TooLongResponseException se la lunghezza effettiva è maggiore della lunghezza target
+	 */
 	public static int getM4BodyPaddingLength(int m4BodyLength, int dataLength) throws TooLongResponseException {
 		
 		if(dataLength > m4BodyLength){

@@ -20,6 +20,7 @@ import it.polimi.dima.watchdog.sms.commands.SirenOnCodeMessage;
 import it.polimi.dima.watchdog.utilities.ListenerUtility;
 
 /**
+ * Classe che gestisce i dati ritornati da m4.
  * 
  * @author emanuele
  *

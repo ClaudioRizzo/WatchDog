@@ -1,7 +1,7 @@
 package it.polimi.dima.watchdog.fragments.wizard;
 
 import it.polimi.dima.watchdog.R;
-import it.polimi.dima.watchdog.utilities.CryptoUtility;
+import it.polimi.dima.watchdog.crypto.CryptoUtility;
 import it.polimi.dima.watchdog.utilities.PasswordUtils;
 
 import java.security.NoSuchAlgorithmException;

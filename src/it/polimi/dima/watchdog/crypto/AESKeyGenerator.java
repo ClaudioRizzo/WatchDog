@@ -1,8 +1,9 @@
 package it.polimi.dima.watchdog.crypto;
 
-import it.polimi.dima.watchdog.utilities.CryptoUtility;
 import java.security.Key;
+
 import javax.crypto.spec.SecretKeySpec;
+
 import org.spongycastle.crypto.digests.SHA256Digest;
 import org.spongycastle.crypto.generators.PKCS5S2ParametersGenerator;
 import org.spongycastle.crypto.params.KeyParameter;

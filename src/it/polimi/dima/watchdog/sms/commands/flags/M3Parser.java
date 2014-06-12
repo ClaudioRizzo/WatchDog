@@ -4,11 +4,11 @@ import java.security.Key;
 import java.security.PublicKey;
 import org.spongycastle.crypto.InvalidCipherTextException;
 import android.util.Base64;
-import it.polimi.dima.watchdog.crypto.AES256GCM;
-import it.polimi.dima.watchdog.crypto.ECDSA_Signature;
+import it.polimi.dima.watchdog.crypto.CryptoUtility;
 import it.polimi.dima.watchdog.exceptions.ArbitraryMessageReceivedException;
 import it.polimi.dima.watchdog.exceptions.ErrorInSignatureCheckingException;
 import it.polimi.dima.watchdog.exceptions.NotECKeyException;
+import it.polimi.dima.watchdog.utilities.PasswordUtils;
 
 /**
  * Classe che si occupa di spacchettare il contenuto di un sms, dividendolo in hash della password e testo.
@@ -35,8 +35,8 @@ public class M3Parser {
 	}
 	
 	/**
-	 * Costurttore che alla fine popola la classe con il messaggio originale dopo averne controllato l'integrità
-	 * mediante firma e la correttezza della password.
+	 * Costruttore che popola la classe con messaggio crittato, chiave di decrittazione, iv, chiave pubblica
+	 * dell'altro e hash della propria password.
 	 */
 	public M3Parser(byte[] smsEncrypted, Key decryptionKey, PublicKey oPub, byte[] storedPasswordHash, byte[] iv){
 		this.smsEncrypted = smsEncrypted;
@@ -47,7 +47,7 @@ public class M3Parser {
 	}
 	
 	/**
-	 * Decritta il messaggio eseguendo tutti i round dell'AES al contrario
+	 * Decritta il messaggio eseguendo tutti i round dell'AES al contrario.
 	 * 
 	 * @throws ErrorInSignatureCheckingException 
 	 * @throws ArbitraryMessageReceivedException 
@@ -56,8 +56,7 @@ public class M3Parser {
 	 * @throws NotECKeyException 
 	 */
 	public void decrypt() throws IllegalStateException, InvalidCipherTextException, ArbitraryMessageReceivedException, ErrorInSignatureCheckingException, NotECKeyException {
-		AES256GCM dec = new AES256GCM(this.decryptionKey, this.smsEncrypted, this.iv);
-		byte[] decryptedSMS = dec.decrypt(); // messaggio || ' ' || firma
+		byte[] decryptedSMS = CryptoUtility.doEncryptionOrDecryption(this.smsEncrypted, this.decryptionKey, this.iv, CryptoUtility.DEC); // messaggio || ' ' || firma
 		int spacePosition = getSpacePosition(decryptedSMS);
 		//copia la firma
 		this.signature = new byte[decryptedSMS.length - spacePosition - 1];
@@ -70,18 +69,14 @@ public class M3Parser {
 	}
 
 	/**
-	 * Ritorna la posizione dello spazio separatore. La ricerca parte dal 257esimo carattere perchè quelli prima
-	 * fanno parte della password messa come header.
+	 * Ritorna la posizione dello spazio separatore.
 	 * 
 	 * @param string : la struttura messaggio || ' ' || firma
 	 * @return un intero che indica la posizione del separatore
 	 * @throws ArbitraryMessageReceivedException 
 	 */
 	private int getSpacePosition(byte[] string) throws ArbitraryMessageReceivedException {
-		/*if(string.length <= 257){
-			throw new ArbitraryMessageReceivedException();
-		}*/
-		for(int i=32; i < string.length; i++){
+		for(int i = PasswordUtils.HASH_LENGTH; i < string.length; i++){
 			if(string[i] == ' '){
 				return i;
 			}
@@ -96,9 +91,8 @@ public class M3Parser {
 	 * @throws ErrorInSignatureCheckingException
 	 * @throws NotECKeyException 
 	 */
-	private void validateSignature() throws ArbitraryMessageReceivedException, ErrorInSignatureCheckingException, NotECKeyException{
-		ECDSA_Signature ver = new ECDSA_Signature(this.sms, this.oPub, this.signature);
-		if(!ver.verifySignature()){
+	private void validateSignature() throws ArbitraryMessageReceivedException, ErrorInSignatureCheckingException, NotECKeyException {
+		if(!CryptoUtility.verifySignature(this.sms, this.signature, this.oPub)){
 			throw new ArbitraryMessageReceivedException("Firma non valida/non corrispondente!!!");
 		}
 	}
@@ -119,10 +113,10 @@ public class M3Parser {
 	 * Scompone l'sms ricevuto (già decrittato e scoprorato dalla firma) in hash della password e testo in chiaro.
 	 */
 	private void decompose() {
-		this.passwordHash = new byte[32]; //TODO magic number!!!
-		System.arraycopy(this.sms, 0, this.passwordHash, 0, 32);
-		byte[] plaintext = new byte[this.sms.length-32];
-		System.arraycopy(this.sms, 32, plaintext, 0, this.sms.length-32);
+		this.passwordHash = new byte[PasswordUtils.HASH_LENGTH];
+		System.arraycopy(this.sms, 0, this.passwordHash, 0, PasswordUtils.HASH_LENGTH);
+		byte[] plaintext = new byte[this.sms.length - PasswordUtils.HASH_LENGTH];
+		System.arraycopy(this.sms, PasswordUtils.HASH_LENGTH, plaintext, 0, this.sms.length - PasswordUtils.HASH_LENGTH);
 		this.plaintext = plaintext;
 	}
 

@@ -22,8 +22,11 @@ public class PasswordUtils {
 	/**
 	 * Lunghezza del sale con cui verrà salata una password
 	 */
-	public static final int SALT_LENGTH = 32; // 256 bit, come la lunghezza del
-												// digest di sha256
+	public static final int SALT_LENGTH = 32;
+	/**
+	 * Lunghezza dell'hash di una password
+	 */
+	public static final int HASH_LENGTH = 32;
 
 	/**
 	 * Genera il prossimo sale con un generatore di numeri casuali.

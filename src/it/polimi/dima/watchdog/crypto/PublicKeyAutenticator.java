@@ -1,8 +1,8 @@
 package it.polimi.dima.watchdog.crypto;
 
-import it.polimi.dima.watchdog.utilities.CryptoUtility;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+
 import android.util.Base64;
 
 /**
