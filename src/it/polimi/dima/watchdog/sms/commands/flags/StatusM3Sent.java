@@ -58,15 +58,15 @@ public class StatusM3Sent implements CommandProtocolFlagsReactionInterface {
 		byte[] header = this.parser.getSpecificHeader();
 		byte[] body = this.parser.getBody();
 		Log.i("[DEBUG_COMMAND]", "[DEBUG_COMMAND] m4 received and parsed");
-		handleReturnedData(header, body, other, context);
+		handleReturnedData(header, body);
 		MyPrefFiles.replacePreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + other, StatusM3Sent.NEXT_SENT_STATUS, context);
 	}
 	
-	private void handleReturnedData(byte[] header, byte[] body, String other, Context context) throws ArbitraryMessageReceivedException, IllegalArgumentException, TooLongResponseException, NoSuchAlgorithmException, InvalidKeySpecException, NoSuchPreferenceFoundException, NoSignatureDoneException, NotECKeyException, IllegalStateException, InvalidCipherTextException {
+	private void handleReturnedData(byte[] header, byte[] body) throws ArbitraryMessageReceivedException, IllegalArgumentException, TooLongResponseException, NoSuchAlgorithmException, InvalidKeySpecException, NoSuchPreferenceFoundException, NoSignatureDoneException, NotECKeyException, IllegalStateException, InvalidCipherTextException {
 		CommandFactory factory = new CommandFactory();
 		String factoryHeader = SMSUtility.bytesToHex(header);
 		String factorybody = Base64.encodeToString(body, Base64.DEFAULT);
-		SMSM4Handler handler = new SMSM4Handler(other, context);
+		SMSM4Handler handler = new SMSM4Handler();
 		ParsableSMS smsToParse = factory.getMessage(factoryHeader, factorybody);
 		smsToParse.handle(handler);
 	}

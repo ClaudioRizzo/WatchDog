@@ -5,7 +5,6 @@ import it.polimi.dima.watchdog.factory.FeatureFactory;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager.OnPageChangeListener;
 
 /**
  * Classe usata per gestire le tabs nei fragment che ne hanno bisogno.
