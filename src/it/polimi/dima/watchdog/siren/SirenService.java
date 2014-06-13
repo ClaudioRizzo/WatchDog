@@ -1,11 +1,7 @@
 package it.polimi.dima.watchdog.siren;
 
 import it.polimi.dima.watchdog.utilities.SMSUtility;
-
 import java.security.NoSuchAlgorithmException;
-
-import android.app.ActivityManager;
-import android.app.ActivityManager.RunningServiceInfo;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -31,18 +27,18 @@ public class SirenService extends Service {
 	
 	@Override
 	public IBinder onBind(Intent intent) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 	
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
+		Log.i("DEBUG", "DEBUG: servizio delle sirene partito correttamente");
 		this.context = getApplicationContext();
 	    try {
 			return handleCommand(intent);
 		} catch (NoSuchAlgorithmException e) {
 			e.printStackTrace();
-			Log.i("DEBUG", "DEBUG: servizio non partito correttamente!!!");
+			Log.i("DEBUG", "DEBUG: servizio delle sirene non partito correttamente!!!");
 			this.stopSelf();
 			return START_NOT_STICKY;
 		}
@@ -54,6 +50,9 @@ public class SirenService extends Service {
 		if(command == SMSUtility.SIREN_ON){
 			return doSirenon();
 		}
+		else if(command == SMSUtility.SIREN_OFF){
+			return doSirenOff();
+		}
 		else {
 			throw new IllegalArgumentException("comando non riconosciuto!!!");
 		}
@@ -62,6 +61,7 @@ public class SirenService extends Service {
 	private int doSirenOff() {
 		stopRingtoneControl();
 		this.sirenHandler.stopAlarmSound();
+		Log.i("DEBUG", "DEBUG: sirena e looper disattivati correttamente");
 		this.stopSelf();
 		return START_NOT_STICKY; //serve per notificare lo stop
 	}
@@ -69,6 +69,7 @@ public class SirenService extends Service {
 	private int doSirenon() throws NoSuchAlgorithmException {
 		startSiren();
 		startRingtoneControl();
+		Log.i("DEBUG", "DEBUG: sirena e looper attivati correttamente");
 		return START_STICKY; //serve per continuare a far runnare il service
 	}
 	
@@ -87,14 +88,15 @@ public class SirenService extends Service {
 		this.sirenHandler.playAlarmSound();
 	}
 	
-	public static boolean isMyServiceRunning(Context context) {
-		ActivityManager manager = (ActivityManager) context.getSystemService(ACTIVITY_SERVICE);
-		String myServiceName = "it.polimi.dima.watchdog.siren.SirenService"; //TODO
-		for (RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-			if (myServiceName.equals(service.service.getClassName())) {
-				return true;
-			}
+	@Override
+	public void onDestroy(){
+		Log.i("DEBUG", "DEBUG: servizio delle sirene fermato correttamente");
+		try{
+			doSirenOff();
 		}
-		return false;
+		catch (Exception e){
+			//non si fa proprio niente se la sirena non era attiva
+			Log.i("DEBUG", "DEBUG: la sirena non era attiva: non ho fatto niente");
+		}
 	}
 }

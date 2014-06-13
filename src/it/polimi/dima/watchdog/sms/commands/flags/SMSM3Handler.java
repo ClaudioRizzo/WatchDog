@@ -5,11 +5,7 @@ import java.security.Key;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.spec.InvalidKeySpecException;
-
 import org.spongycastle.crypto.InvalidCipherTextException;
-
-import android.app.ActivityManager;
-import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
@@ -34,6 +30,7 @@ import it.polimi.dima.watchdog.sms.commands.SirenOffCodeMessage;
 import it.polimi.dima.watchdog.sms.commands.SirenOnCodeMessage;
 import it.polimi.dima.watchdog.utilities.MyPrefFiles;
 import it.polimi.dima.watchdog.utilities.SMSUtility;
+import it.polimi.dima.watchdog.utilities.ServicesUtilities;
 
 /**
  * Classe che gestisce il comando arrivato con m3 e costruisce la risposta (m4)
@@ -56,18 +53,30 @@ public class SMSM3Handler implements SMSCommandVisitorInterface, LocationChangeL
 	@Override
 	public void visit(SirenOnCodeMessage sirenOnCodeMessage) {
 		Log.i("[DEBUG_COMMAND]", "[DEBUG_COMMAND] SIREN ON RECEIVED");
-		if(!SirenService.isMyServiceRunning(this.ctx)){
+		if(!ServicesUtilities.isMyServiceRunning(this.ctx, SirenService.class)){
 			Intent intent = new Intent(this.ctx,SirenService.class);
 			intent.putExtra(SMSUtility.COMMAND, SMSUtility.SIREN_ON);
 			this.ctx.startService(intent);
+			//TODO
+		}
+		else{
+			Log.i("[DEBUG]", "[DEBUG] The service is busy, command not executed!!!");
+			//TODO
 		}
 	}
 
 	@Override
 	public void visit(SirenOffCodeMessage sirenOffCodeMessage) {
 		Log.i("[DEBUG_COMMAND]", "[DEBUG_COMMAND] SIREN OFF RECEIVED");
-		if(SirenService.isMyServiceRunning(this.ctx)){
-			//TODO mandare comandi al service
+		if(ServicesUtilities.isMyServiceRunning(this.ctx, SirenService.class)){
+			Intent intent = new Intent(this.ctx,SirenService.class);
+			intent.putExtra(SMSUtility.COMMAND, SMSUtility.SIREN_OFF);
+			this.ctx.startService(intent);
+			//TODO
+		}
+		else{
+			Log.i("[DEBUG]", "[DEBUG] The service is not active, thus siren off has no effect!!!");
+			//TODO
 		}
 	}
 
