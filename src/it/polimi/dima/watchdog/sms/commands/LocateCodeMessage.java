@@ -2,6 +2,9 @@ package it.polimi.dima.watchdog.sms.commands;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
+
+import org.spongycastle.crypto.InvalidCipherTextException;
+
 import android.util.Base64;
 import android.util.Log;
 import it.polimi.dima.watchdog.exceptions.NoSignatureDoneException;
@@ -20,6 +23,7 @@ public class LocateCodeMessage extends ParsableSMS {
 
 	private double latitude;
 	private double longitude;
+	private String errorCode = null;
 	
 	public LocateCodeMessage(String header, String body) {
 		super(header, body);
@@ -37,7 +41,11 @@ public class LocateCodeMessage extends ParsableSMS {
 		return this.longitude;
 	}
 	
-	public void extractSubBody(String body){
+	public String getErrorCode(){
+		return this.errorCode;
+	}
+	
+	public void extractSubBody(String body) {
 		byte[] fullBody = Base64.decode(body, Base64.DEFAULT); //coordinate + padding
 		convertSubBody(fullBody);
 	}
@@ -45,13 +53,20 @@ public class LocateCodeMessage extends ParsableSMS {
 	private void convertSubBody(byte[] subBody) {
 		String temp = new String(subBody);
 		
-		if(!temp.matches(".+" + "i" + ".+" + "e" + ".*") || subBody.length != SMSUtility.M4_BODY_LENGTH){
+		if(subBody.length != SMSUtility.M4_BODY_LENGTH){
 			throw new IllegalArgumentException("Il body non è ciò che mi aspetto!!!");
 		}
-		
-		char[] tempArray = temp.toCharArray();
-		this.latitude = getLatitude(tempArray, temp).doubleValue();
-		this.longitude = getLongitude(tempArray, temp).doubleValue();
+		else if(temp.matches(SMSUtility.LOCATE_RESPONSE_KO + ".*")){
+			this.errorCode = SMSUtility.LOCATE_RESPONSE_KO;
+		}
+		else if(!temp.matches(".+" + "i" + ".+" + "e" + ".*")){
+			throw new IllegalArgumentException("Il body non è ciò che mi aspetto!!!");
+		}
+		else{
+			char[] tempArray = temp.toCharArray();
+			this.latitude = getLatitude(tempArray, temp).doubleValue();
+			this.longitude = getLongitude(tempArray, temp).doubleValue();
+		}
 	}
 
 	private Double getLongitude(char[] tempArray, String temp) {
@@ -89,7 +104,7 @@ public class LocateCodeMessage extends ParsableSMS {
 	}
 
 	@Override
-	public void handle(SMSCommandVisitorInterface visitor) throws IllegalArgumentException, TooLongResponseException, NoSuchPreferenceFoundException, NoSuchAlgorithmException, InvalidKeySpecException, NoSignatureDoneException, NotECKeyException {
+	public void handle(SMSCommandVisitorInterface visitor) throws IllegalArgumentException, TooLongResponseException, NoSuchPreferenceFoundException, NoSuchAlgorithmException, InvalidKeySpecException, NoSignatureDoneException, NotECKeyException, IllegalStateException, InvalidCipherTextException {
 		visitor.visit(this);
 	}
 }

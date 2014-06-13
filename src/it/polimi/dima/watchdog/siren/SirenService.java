@@ -9,6 +9,13 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
 
+/**
+ * Servizio che fa partire l'handler della sirena e i controller che la rilanciano qualora dovesse essere
+ * spenta e che mantengono il volume al massimo.
+ * 
+ * @author emanuele
+ *
+ */
 public class SirenService extends Service {
 
 	private Context context;

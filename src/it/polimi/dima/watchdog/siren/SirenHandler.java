@@ -6,6 +6,12 @@ import java.io.File;
 import android.content.Context;
 import android.media.AudioManager;
 
+/**
+ * Classe che consente di creare, attivare e spegnere la sirena utilizzata in seguito a siren on e siren off.
+ * 
+ * @author emanuele
+ *
+ */
 public class SirenHandler {
 
 	private File siren;

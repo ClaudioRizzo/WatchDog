@@ -44,5 +44,11 @@ public class ListenerUtility {
 		}
 	}
 	
+	public void notifyLocationAcquired(String errorCode) {
+		
+		Log.i("[DEBUG]", "[DEBUG] nella notify ho ricevuto correttamente il messaggio di errore della locate");
+		//TODO fare qualcosa con l'errore
+	}
+	
 	
 }

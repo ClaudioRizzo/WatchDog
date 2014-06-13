@@ -6,7 +6,9 @@ import java.security.NoSuchProviderException;
 import java.security.PublicKey;
 import java.security.Security;
 import java.security.spec.InvalidKeySpecException;
+
 import org.spongycastle.crypto.InvalidCipherTextException;
+
 import it.polimi.dima.watchdog.exceptions.ArbitraryMessageReceivedException;
 import it.polimi.dima.watchdog.exceptions.ErrorInSignatureCheckingException;
 import it.polimi.dima.watchdog.exceptions.NoSignatureDoneException;
@@ -60,7 +62,7 @@ public class StatusM3Sent implements CommandProtocolFlagsReactionInterface {
 		MyPrefFiles.replacePreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + other, StatusM3Sent.NEXT_SENT_STATUS, context);
 	}
 	
-	private void handleReturnedData(byte[] header, byte[] body, String other, Context context) throws ArbitraryMessageReceivedException, IllegalArgumentException, TooLongResponseException, NoSuchAlgorithmException, InvalidKeySpecException, NoSuchPreferenceFoundException, NoSignatureDoneException, NotECKeyException {
+	private void handleReturnedData(byte[] header, byte[] body, String other, Context context) throws ArbitraryMessageReceivedException, IllegalArgumentException, TooLongResponseException, NoSuchAlgorithmException, InvalidKeySpecException, NoSuchPreferenceFoundException, NoSignatureDoneException, NotECKeyException, IllegalStateException, InvalidCipherTextException {
 		CommandFactory factory = new CommandFactory();
 		String factoryHeader = SMSUtility.bytesToHex(header);
 		String factorybody = Base64.encodeToString(body, Base64.DEFAULT);

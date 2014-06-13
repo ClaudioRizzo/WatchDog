@@ -6,7 +6,9 @@ import java.security.NoSuchProviderException;
 import java.security.PublicKey;
 import java.security.Security;
 import java.security.spec.InvalidKeySpecException;
+
 import org.spongycastle.crypto.InvalidCipherTextException;
+
 import android.content.Context;
 import android.telephony.SmsMessage;
 import android.util.Log;
@@ -53,7 +55,7 @@ public class StatusM2Sent implements CommandProtocolFlagsReactionInterface {
 		MyPrefFiles.replacePreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + other, StatusM2Sent.NEXT_SENT_STATUS, context);
 	}
 	
-	private void handleReturnedData(String other, Context context) throws ArbitraryMessageReceivedException, IllegalArgumentException, TooLongResponseException, NoSuchAlgorithmException, InvalidKeySpecException, NoSuchPreferenceFoundException, NoSignatureDoneException, NotECKeyException {
+	private void handleReturnedData(String other, Context context) throws ArbitraryMessageReceivedException, IllegalArgumentException, TooLongResponseException, NoSuchAlgorithmException, InvalidKeySpecException, NoSuchPreferenceFoundException, NoSignatureDoneException, NotECKeyException, IllegalStateException, InvalidCipherTextException {
 		CommandFactory factory = new CommandFactory();
 		SMSM3Handler handler = new SMSM3Handler(other, context);
 		ParsableSMS smsToParse = factory.getMessage(SMSUtility.bytesToHex(this.parser.getPlaintext()), null);

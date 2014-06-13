@@ -5,7 +5,9 @@ import java.security.Key;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.spec.InvalidKeySpecException;
+
 import org.spongycastle.crypto.InvalidCipherTextException;
+
 import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
@@ -51,32 +53,32 @@ public class SMSM3Handler implements SMSCommandVisitorInterface, LocationChangeL
 	}
 	
 	@Override
-	public void visit(SirenOnCodeMessage sirenOnCodeMessage) {
+	public void visit(SirenOnCodeMessage sirenOnCodeMessage) throws NoSuchAlgorithmException, InvalidKeySpecException, IllegalStateException, InvalidCipherTextException, IllegalArgumentException, TooLongResponseException, NoSuchPreferenceFoundException, NoSignatureDoneException, NotECKeyException {
 		Log.i("[DEBUG_COMMAND]", "[DEBUG_COMMAND] SIREN ON RECEIVED");
 		if(!ServicesUtilities.isMyServiceRunning(this.ctx, SirenService.class)){
 			Intent intent = new Intent(this.ctx,SirenService.class);
 			intent.putExtra(SMSUtility.COMMAND, SMSUtility.SIREN_ON);
 			this.ctx.startService(intent);
-			//TODO
+			constructResponse(SMSUtility.hexStringToByteArray(SMSUtility.SIREN_ON), SMSUtility.SIREN_ON_RESPONSE_OK);
 		}
 		else{
 			Log.i("[DEBUG]", "[DEBUG] The service is busy, command not executed!!!");
-			//TODO
+			constructResponse(SMSUtility.hexStringToByteArray(SMSUtility.SIREN_ON), SMSUtility.SIREN_ON_RESPONSE_KO);
 		}
 	}
 
 	@Override
-	public void visit(SirenOffCodeMessage sirenOffCodeMessage) {
+	public void visit(SirenOffCodeMessage sirenOffCodeMessage) throws NoSuchAlgorithmException, InvalidKeySpecException, IllegalStateException, InvalidCipherTextException, IllegalArgumentException, TooLongResponseException, NoSuchPreferenceFoundException, NoSignatureDoneException, NotECKeyException {
 		Log.i("[DEBUG_COMMAND]", "[DEBUG_COMMAND] SIREN OFF RECEIVED");
 		if(ServicesUtilities.isMyServiceRunning(this.ctx, SirenService.class)){
 			Intent intent = new Intent(this.ctx,SirenService.class);
 			intent.putExtra(SMSUtility.COMMAND, SMSUtility.SIREN_OFF);
 			this.ctx.startService(intent);
-			//TODO
+			constructResponse(SMSUtility.hexStringToByteArray(SMSUtility.SIREN_OFF), SMSUtility.SIREN_OFF_RESPONSE_OK);
 		}
 		else{
 			Log.i("[DEBUG]", "[DEBUG] The service is not active, thus siren off has no effect!!!");
-			//TODO
+			constructResponse(SMSUtility.hexStringToByteArray(SMSUtility.SIREN_OFF), SMSUtility.SIREN_ON_RESPONSE_KO);
 		}
 	}
 
@@ -105,7 +107,7 @@ public class SMSM3Handler implements SMSCommandVisitorInterface, LocationChangeL
 	}
 
 	@Override
-	public void visit(LocateCodeMessage locateCodeMessage) throws IllegalArgumentException, TooLongResponseException, NoSuchPreferenceFoundException, NoSuchAlgorithmException, InvalidKeySpecException, NoSignatureDoneException, NotECKeyException {
+	public void visit(LocateCodeMessage locateCodeMessage) throws IllegalArgumentException, TooLongResponseException, NoSuchPreferenceFoundException, NoSuchAlgorithmException, InvalidKeySpecException, NoSignatureDoneException, NotECKeyException, IllegalStateException, InvalidCipherTextException {
 		
 		Log.i("[DEBUG_COMMAND]", "[DEBUG_COMMAND] LOCATE RICEVUTO");
 		
@@ -114,14 +116,13 @@ public class SMSM3Handler implements SMSCommandVisitorInterface, LocationChangeL
 			this.gps.addListener(this);
 			this.gps.getLocationUpdates();
 		} catch (LocationException e) {
-			// TODO gestire errore device spenti
-			e.printStackTrace();
+			constructResponse(SMSUtility.hexStringToByteArray(SMSUtility.LOCATE), SMSUtility.LOCATE_RESPONSE_KO);
 		}
 	}
 	
-	private void constructResponse(byte[] specificHeader, String location) throws TooLongResponseException, NoSuchPreferenceFoundException, NoSuchAlgorithmException, InvalidKeySpecException, NoSignatureDoneException, NotECKeyException, IllegalStateException, InvalidCipherTextException{
+	private void constructResponse(byte[] specificHeader, String subBodyString) throws TooLongResponseException, NoSuchPreferenceFoundException, NoSuchAlgorithmException, InvalidKeySpecException, NoSignatureDoneException, NotECKeyException, IllegalStateException, InvalidCipherTextException{
 		byte[] header = SMSUtility.hexStringToByteArray(SMSUtility.M4_HEADER);
-		byte[] subBody = location.getBytes();
+		byte[] subBody = subBodyString.getBytes();
 		int subBodyLength = subBody.length;
 		int paddingLength = SMSUtility.getM4BodyPaddingLength(SMSUtility.M4_BODY_LENGTH, subBodyLength);
 		

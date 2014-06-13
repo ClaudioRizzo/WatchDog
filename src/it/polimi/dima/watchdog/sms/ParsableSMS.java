@@ -2,6 +2,9 @@ package it.polimi.dima.watchdog.sms;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
+
+import org.spongycastle.crypto.InvalidCipherTextException;
+
 import android.content.Context;
 import it.polimi.dima.watchdog.exceptions.NoSignatureDoneException;
 import it.polimi.dima.watchdog.exceptions.NoSuchPreferenceFoundException;
@@ -50,7 +53,7 @@ public class ParsableSMS implements SocialistMillionaireMessageInterface, Comman
 	public void handle(SMSPublicKeyVisitorInterface visitor) {}
 
 	@Override
-	public void handle(SMSCommandVisitorInterface visitor) throws IllegalArgumentException, TooLongResponseException, NoSuchPreferenceFoundException, NoSuchAlgorithmException, InvalidKeySpecException, NoSignatureDoneException, NotECKeyException {}
+	public void handle(SMSCommandVisitorInterface visitor) throws IllegalArgumentException, TooLongResponseException, NoSuchPreferenceFoundException, NoSuchAlgorithmException, InvalidKeySpecException, NoSignatureDoneException, NotECKeyException, IllegalStateException, InvalidCipherTextException {}
 
 	
 }

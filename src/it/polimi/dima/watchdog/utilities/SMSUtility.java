@@ -155,6 +155,37 @@ public class SMSUtility {
 	
 	
 	
+	
+	//QUI I MESSAGGI DI RITORNO DI SIREN ON, SIREN OFF E ...
+	
+	/**
+	 * Messaggio che indica il successo di siren on
+	 */
+	public static String SIREN_ON_RESPONSE_OK = "siren_activated";
+	
+	/**
+	 * Messaggio che indica il fallimento di siren on
+	 */
+	public static String SIREN_ON_RESPONSE_KO = "siren_activated";
+	
+	/**
+	 * Messaggio che indica il successo di siren off
+	 */
+	public static String SIREN_OFF_RESPONSE_OK = "siren_activated";
+	
+	/**
+	 * Messaggio che indica il fallimento di siren off
+	 */
+	public static String SIREN_OFF_RESPONSE_KO = "siren_activated";
+	
+	/**
+	 * Messaggio che indica il fallimento di locate
+	 */
+	public static String LOCATE_RESPONSE_KO = "locate_failed";
+	
+	
+	
+	
 	//QUI LE PORTE PER LA RICEZIONE SMS
 	
 	/**

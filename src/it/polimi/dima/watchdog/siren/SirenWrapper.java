@@ -8,6 +8,12 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.provider.MediaStore;
 
+/**
+ * Classe che wrappa la sirena da riprodurre in seguito a siren on.
+ * 
+ * @author emanuele
+ *
+ */
 public class SirenWrapper {
 	
 	private static SirenWrapper sirenWrapper;
