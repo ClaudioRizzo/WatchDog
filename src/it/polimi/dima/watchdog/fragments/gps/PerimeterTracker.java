@@ -1,10 +1,11 @@
 package it.polimi.dima.watchdog.fragments.gps;
 
-import it.polimi.dima.watchdog.fragments.gps.map.LocationException;
+import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.Log;
 
 public class PerimeterTracker implements LocationListener {
 
@@ -42,10 +43,14 @@ public class PerimeterTracker implements LocationListener {
 		double lat = location.getLatitude();
 		double lon = location.getLongitude();
 
+		Log.i("[DEBUG]", "perimeter-tracker location " + lat);
+
 		if (beta == 0 && alpha == 0) {
 			// first localization
 			this.alpha = lat;
 			this.beta = lon;
+			Log.i("[DEBUG]", "[DEBUG - first location]");
+			mCallBack.onLocationAcquired(lat, lon);
 
 		} else {
 
@@ -108,5 +113,23 @@ public class PerimeterTracker implements LocationListener {
 	public void setListener(PerimeterTrackerListener listener) {
 		this.mCallBack = listener;
 	}
+
+	/**
+	 * register the gpsTracker to get location updates
+	 */
+	public void getLocationUpdates() {
+		Criteria criteria = new Criteria();
+		String provider = mLocationManager.getBestProvider(criteria, false);
+		mLocationManager.requestLocationUpdates(provider, 400, 1, this);
+	}
+
+	public Location getLastLocation() {
+
+		Criteria criteria = new Criteria();
+		String provider = mLocationManager.getBestProvider(criteria, false);
+		return mLocationManager.getLastKnownLocation(provider);
+
+	}
+
 
 }
