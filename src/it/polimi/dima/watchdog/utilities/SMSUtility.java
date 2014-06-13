@@ -52,6 +52,11 @@ public class SMSUtility {
 	 */
 	public static final String OTHER_PHONE = "other_phone";
 	
+	/**
+	 * Indicatore generico di un comando (serve al service di siren on e siren off)
+	 */
+	public static final String COMMAND = "command";
+	
 	
 	
 	//QUI I CODICI PER I MESSAGGI DEL SMP

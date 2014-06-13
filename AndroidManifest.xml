@@ -60,6 +60,8 @@
             	  android:process=".remote" >
         </receiver>
         
+        <service android:enabled="true" android:name="it.polimi.dima.watchdog.siren.SirenService" />
+        
         <activity
             android:name="it.polimi.dima.watchdog.activities.MainActivity"
             android:launchMode="singleTop"

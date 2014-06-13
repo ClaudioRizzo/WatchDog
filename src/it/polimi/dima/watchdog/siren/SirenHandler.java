@@ -10,8 +10,10 @@ public class SirenHandler {
 
 	private File siren;
 	private Context context;
+	private AudioManager audioManager;
+	private SirenWrapper sirenWrapper;
 	
-	private SirenHandler(Context context){
+	public SirenHandler(Context context){
 		this.context = context;
 		this.siren = new File(MyPrefFiles.SIREN_ON_FILE);
 	}
@@ -27,20 +29,20 @@ public class SirenHandler {
 		else throw new IllegalArgumentException("Operazione non riconosciuta!!!");
 	}
 	
-	private void turnVolumeToMax(){
-		AudioManager man = (AudioManager) this.context.getSystemService(Context.AUDIO_SERVICE);
-		man.setStreamVolume(AudioManager.STREAM_RING, man.getStreamMaxVolume(AudioManager.STREAM_RING), AudioManager.FLAG_ALLOW_RINGER_MODES);
+	public void turnVolumeToMax(){
+		this.audioManager = (AudioManager) this.context.getSystemService(Context.AUDIO_SERVICE);
+		this.audioManager.setStreamVolume(AudioManager.STREAM_RING, this.audioManager.getStreamMaxVolume(AudioManager.STREAM_RING), AudioManager.FLAG_ALLOW_RINGER_MODES);
 	}
 	
-	private void playAlarmSound() {
-		SirenWrapper sirenWrapper = SirenWrapper.getInstance(this.context, this.siren);
-		if(!sirenWrapper.getSiren().isPlaying()){
-			sirenWrapper.play();
+	public void playAlarmSound() {
+		this.sirenWrapper = SirenWrapper.getInstance(this.context, this.siren);
+		if(!this.sirenWrapper.getSiren().isPlaying()){
+			this.sirenWrapper.play();
 		}
 	}
 
-	private void stopAlarmSound() {
-		SirenWrapper sirenWrapper = SirenWrapper.getInstance(this.context, this.siren);
-		sirenWrapper.stop();
+	public void stopAlarmSound() {
+		this.sirenWrapper = SirenWrapper.getInstance(this.context, this.siren);
+		this.sirenWrapper.stop();
 	}
 }

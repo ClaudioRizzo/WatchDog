@@ -8,7 +8,10 @@ import java.security.spec.InvalidKeySpecException;
 
 import org.spongycastle.crypto.InvalidCipherTextException;
 
+import android.app.ActivityManager;
+import android.app.Service;
 import android.content.Context;
+import android.content.Intent;
 import android.location.Location;
 import android.location.LocationManager;
 import android.util.Log;
@@ -20,6 +23,7 @@ import it.polimi.dima.watchdog.exceptions.TooLongResponseException;
 import it.polimi.dima.watchdog.fragments.gps.map.GpsLocalizer;
 import it.polimi.dima.watchdog.fragments.gps.map.LocationChangeListenerInterface;
 import it.polimi.dima.watchdog.fragments.gps.map.LocationException;
+import it.polimi.dima.watchdog.siren.SirenService;
 import it.polimi.dima.watchdog.sms.commands.LocateCodeMessage;
 import it.polimi.dima.watchdog.sms.commands.MarkFoundCodeMessage;
 import it.polimi.dima.watchdog.sms.commands.MarkLostCodeMessage;
@@ -47,22 +51,24 @@ public class SMSM3Handler implements SMSCommandVisitorInterface, LocationChangeL
 	public SMSM3Handler(String other, Context context){
 		this.other = other;
 		this.ctx = context;
-		
-		
 	}
 	
 	@Override
 	public void visit(SirenOnCodeMessage sirenOnCodeMessage) {
-		// TODO fare quello che serve e creare m4 cosi' fatto:
-		// aes256gcm(key fetched from pref (number + KEY_FOR_M4), iv fetched (number + IV_FOR_M4), m4header + specific command header + data + signature)
 		Log.i("[DEBUG_COMMAND]", "[DEBUG_COMMAND] SIREN ON RECEIVED");
-		
+		if(!SirenService.isMyServiceRunning(this.ctx)){
+			Intent intent = new Intent(this.ctx,SirenService.class);
+			intent.putExtra(SMSUtility.COMMAND, SMSUtility.SIREN_ON);
+			this.ctx.startService(intent);
+		}
 	}
 
 	@Override
 	public void visit(SirenOffCodeMessage sirenOffCodeMessage) {
-		// TODO Auto-generated method stub
 		Log.i("[DEBUG_COMMAND]", "[DEBUG_COMMAND] SIREN OFF RECEIVED");
+		if(SirenService.isMyServiceRunning(this.ctx)){
+			//TODO mandare comandi al service
+		}
 	}
 
 	@Override
@@ -95,18 +101,13 @@ public class SMSM3Handler implements SMSCommandVisitorInterface, LocationChangeL
 		Log.i("[DEBUG_COMMAND]", "[DEBUG_COMMAND] LOCATE RICEVUTO");
 		
 		try {
-			gps = new GpsLocalizer(ctx, (LocationManager) ctx.getSystemService(Context.LOCATION_SERVICE));
-			gps.addListener(this);
-			gps.getLocationUpdates();
-			
-			
+			this.gps = new GpsLocalizer(ctx, (LocationManager) ctx.getSystemService(Context.LOCATION_SERVICE));
+			this.gps.addListener(this);
+			this.gps.getLocationUpdates();
 		} catch (LocationException e) {
 			// TODO gestire errore device spenti
 			e.printStackTrace();
 		}
-		
-		
-		
 	}
 	
 	private void constructResponse(byte[] specificHeader, String location) throws TooLongResponseException, NoSuchPreferenceFoundException, NoSuchAlgorithmException, InvalidKeySpecException, NoSignatureDoneException, NotECKeyException, IllegalStateException, InvalidCipherTextException{
@@ -167,39 +168,14 @@ public class SMSM3Handler implements SMSCommandVisitorInterface, LocationChangeL
 		double lon = location.getLongitude();
 		
 		this.locationString = lat+"i"+lon+"e";
-		gps.removeLocationUpdates();
+		this.gps.removeLocationUpdates();
 		Log.i("[GPS]", "[GPS] posizione acquisita");
 		Log.i("[GPS]", "[GPS] lat: "+lat+" lon: "+lon);
 		try {
 			constructResponse(SMSUtility.hexStringToByteArray(SMSUtility.LOCATE), this.locationString);
-		} catch (NoSuchAlgorithmException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InvalidKeySpecException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (TooLongResponseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (NoSuchPreferenceFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (NoSignatureDoneException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (NotECKeyException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalStateException e){
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InvalidCipherTextException e){
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
 	}
 }
