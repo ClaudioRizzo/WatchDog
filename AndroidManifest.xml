@@ -65,7 +65,7 @@
         <activity
             android:name="it.polimi.dima.watchdog.activities.MainActivity"
             android:launchMode="singleTop"
-            android:theme="@style/Theme.AppCompat.Light" >
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -74,26 +74,26 @@
         </activity>
         <activity
             android:name="it.polimi.dima.watchdog.activities.InitializationWizardActivity"
-            android:theme="@style/Theme.AppCompat.Light" >
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar" >
         </activity>
         <activity
             android:name="it.polimi.dima.watchdog.activities.PendingRequestsActivity"
-            android:theme="@style/Theme.AppCompat.Light" >
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar" >
         </activity>
         <activity
             android:name="it.polimi.dima.watchdog.activities.MyMapActivity"
-            android:theme="@style/Theme.AppCompat.Light" >
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar" >
         </activity>
         <activity
             android:name="it.polimi.dima.watchdog.activities.SettingsActivity"
-            android:theme="@style/Theme.AppCompat.Light" >
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="it.polimi.dima.watchdog.activities.MainActivity" />
         </activity>
         <activity
             android:name="it.polimi.dima.watchdog.activities.AssociateNumberActivity"
-            android:theme="@style/Theme.AppCompat.Light" >
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="it.polimi.dima.watchdog.activities.SettingsActivity" />

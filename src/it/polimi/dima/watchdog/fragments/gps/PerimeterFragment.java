@@ -189,8 +189,6 @@ public class PerimeterFragment extends Fragment implements
 
 		mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lat,
 				lon), 19f));
-		lastKnown.setLatitude(lat);
-		lastKnown.setLongitude(lon);
 
 		// Get back the mutable Circle
 		Circle circle = mMap.addCircle(circleOptions);
