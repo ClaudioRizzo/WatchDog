@@ -65,16 +65,19 @@
         <activity
             android:name="it.polimi.dima.watchdog.activities.MainActivity"
             android:launchMode="singleTop"
-            android:theme="@style/Theme.AppCompat.Light.DarkActionBar" >
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            
         </activity>
         <activity
             android:name="it.polimi.dima.watchdog.activities.InitializationWizardActivity"
-            android:theme="@style/Theme.AppCompat.Light.DarkActionBar" >
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="it.polimi.dima.watchdog.activities.PendingRequestsActivity"

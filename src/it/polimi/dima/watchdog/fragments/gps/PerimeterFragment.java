@@ -16,7 +16,11 @@ import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.SeekBar;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -43,10 +47,23 @@ public class PerimeterFragment extends Fragment implements
 				.inflate(R.layout.fragment_perimeter, container, false);
 
 		MapsInitializer.initialize(getActivity());
-
 		mMapView = (MapView) v.findViewById(R.id.perimeter_map);
 		mMapView.onCreate(mBundle);
 		setUpMapIfNeed(v);
+
+		Button trackButton = (Button) v.findViewById(R.id.button_track);
+		trackButton.setOnClickListener(new TrackButtonListener(
+				perimeterTracker, getActivity()));
+
+		Button stopTrackingButton = (Button) v
+				.findViewById(R.id.button_stop_tracking);
+		stopTrackingButton.setOnClickListener(new StopTrackButtonListener(
+				perimeterTracker, getActivity()));
+
+		SeekBar seekBar = (SeekBar) v.findViewById(R.id.seek_bar_radius);
+		seekBar.setOnSeekBarChangeListener(new SeekBarPerimeterListener(
+				getActivity(), perimeterTracker));
+
 		return v;
 	}
 
@@ -64,11 +81,11 @@ public class PerimeterFragment extends Fragment implements
 	private void setUpMap() {
 		// Context ctx = getActivity().getApplicationContext();
 
-		perimeterTracker = new PerimeterTracker(10,
+		perimeterTracker = new PerimeterTracker(0,
 				(LocationManager) getActivity().getSystemService(
 						Context.LOCATION_SERVICE));
 		perimeterTracker.setListener(this);
-		perimeterTracker.getLocationUpdates();
+		// perimeterTracker.getLocationUpdates();
 
 		this.lastKnown = perimeterTracker.getLastLocation();
 
@@ -76,46 +93,6 @@ public class PerimeterFragment extends Fragment implements
 			mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(
 					lastKnown.getLatitude(), lastKnown.getLongitude()), 19f));
 		}
-
-	}
-
-	private void askForLocationEnabled() {
-		/**
-		 * Function to show settings alert dialog
-		 * */
-
-		AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
-
-		// Setting Dialog Title
-		alertDialog.setTitle("GPS is settings");
-
-		// Setting Dialog Message
-		alertDialog
-				.setMessage("GPS is not enabled. Do you want to go to settings menu?");
-
-		// Setting Icon to Dialog
-		// alertDialog.setIcon(R.drawable.delete);
-
-		// On pressing Settings button
-		alertDialog.setPositiveButton("Settings",
-				new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int which) {
-						Intent intent = new Intent(
-								Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-						startActivity(intent);
-					}
-				});
-
-		// on pressing cancel button
-		alertDialog.setNegativeButton("Cancel",
-				new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int which) {
-						dialog.cancel();
-					}
-				});
-
-		// Showing Alert Message
-		alertDialog.show();
 
 	}
 
@@ -150,19 +127,13 @@ public class PerimeterFragment extends Fragment implements
 
 	@Override
 	public void onPerimeterViolated() {
-
+		Log.i("[DEBUG]", "[VIOLATE] ho violato il perimetro");
+		//TODO: la precisione non è troppo scarsa :( 
 	}
 
 	@Override
 	public void onResumeFragment() {
 		Log.i("[DEBuG]", "onResumeFragment() perimeter " + getActivity());
-
-		LocationManager locationMan = (LocationManager) getActivity()
-				.getSystemService(Context.LOCATION_SERVICE);
-
-		if (!perimeterTracker.isProviderEnabled(locationMan)) {
-			askForLocationEnabled();
-		}
 
 	}
 
@@ -185,12 +156,14 @@ public class PerimeterFragment extends Fragment implements
 		// Instantiates a new CircleOptions object and defines the center and
 		// radius
 		CircleOptions circleOptions = new CircleOptions().center(
-				new LatLng(lat, lon)).radius(10); // In meters
+				new LatLng(lat, lon)).radius(perimeterTracker.getRadius()); // In
+																			// meters
 
 		mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lat,
 				lon), 19f));
 
 		// Get back the mutable Circle
+
 		Circle circle = mMap.addCircle(circleOptions);
 		circle.setStrokeColor(Color.BLUE);
 		circle.setFillColor(Color.TRANSPARENT);

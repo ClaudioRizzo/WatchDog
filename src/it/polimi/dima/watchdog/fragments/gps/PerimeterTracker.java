@@ -54,8 +54,11 @@ public class PerimeterTracker implements LocationListener {
 
 		} else {
 
+			Log.i("[DEBUG]","[VIOLATE] sono nell'else r="+r+"nuovo: "+getDistance(lat, lon));
 			// mobile is moving with a settled perimeter
-			if (this.r <= computeRadius(lat, lon)) {
+			Log.i("[DEBUG]","[VIOLATE] accuracy: "+location.getAccuracy());
+			
+			if (this.r <= getDistance(lat, lon)) {
 				mCallBack.onPerimeterViolated();
 			}
 		}
@@ -79,18 +82,30 @@ public class PerimeterTracker implements LocationListener {
 	}
 
 	/**
-	 * 
-	 * @param x
-	 *            : la latitudine corrente
-	 * @param y
-	 *            : la longitudine corrente
-	 * @return il raggio computato
+	 * get distance from the new point passed as latitude and longitude and the center in alpa beta
+	 * @param lat
+	 * @param lon
+	 * @return
 	 */
-	private double computeRadius(double x, double y) {
-		double newSquareRadius = (x - alpha) * (x - alpha) + (y - beta)
-				* (y - beta);
-
-		return Math.sqrt(newSquareRadius);
+	private double getDistance(double lat, double lon) {
+		
+		double distance;
+		Location center = new Location("");
+		Location newLoc = new Location("");
+		
+		newLoc.setLatitude(lat);
+		newLoc.setLongitude(lon);
+		
+		Log.i("[DEBUG]", "[VIOLATE] a= "+alpha+", b= "+beta);
+		Log.i("[DEBUG]", "[VIOLATE] new_lat= "+lat+", new_lon= "+lon);
+		
+		center.setLatitude(alpha);
+		center.setLongitude(beta);
+		
+		distance = center.distanceTo(newLoc);
+	
+		
+		return distance;
 	}
 
 	public boolean isProviderEnabled(LocationManager mLocationManager) {
@@ -120,7 +135,7 @@ public class PerimeterTracker implements LocationListener {
 	public void getLocationUpdates() {
 		Criteria criteria = new Criteria();
 		String provider = mLocationManager.getBestProvider(criteria, false);
-		mLocationManager.requestLocationUpdates(provider, 400, 1, this);
+		mLocationManager.requestLocationUpdates(provider, 200, 1, this);
 	}
 
 	public Location getLastLocation() {
@@ -129,6 +144,14 @@ public class PerimeterTracker implements LocationListener {
 		String provider = mLocationManager.getBestProvider(criteria, false);
 		return mLocationManager.getLastKnownLocation(provider);
 
+	}
+	
+	public double getRadius() {
+		return this.r;
+	}
+	
+	public void setRadius(double r) {
+		this.r = r;
 	}
 
 

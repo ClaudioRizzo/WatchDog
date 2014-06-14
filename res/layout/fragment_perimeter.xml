@@ -30,19 +30,27 @@
                 android:textSize="20sp" />
             
             <Button
+                android:id="@+id/button_track"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Track" />
 
             <Button
+                android:id="@+id/button_stop_tracking"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Stop" />
 
         </LinearLayout>
-
+		
+        <TextView
+            android:id="@+id/text_view_settled_radius"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp" />
+        
         <SeekBar
-            android:id="@+id/volume_bar"
+            android:id="@+id/seek_bar_radius"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
@@ -52,6 +60,7 @@
             android:secondaryProgress="0" />
 
         <LinearLayout
+            android:id="@+id/linear_layout_seek_bar_values"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
