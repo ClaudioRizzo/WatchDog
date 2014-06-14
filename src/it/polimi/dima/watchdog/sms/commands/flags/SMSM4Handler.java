@@ -81,7 +81,7 @@ public class SMSM4Handler implements SMSCommandVisitorInterface {
 		Log.i("[DEBUG_COMMAND]", "[DEBUG_COMMAND] LOCATE RESPONSE RICEVUTO");
 		locateCodeMessage.extractSubBody(locateCodeMessage.getBody());
 		
-		if(locateCodeMessage.getErrorCode() != null){
+		if(!(locateCodeMessage.getErrorCode() != null)){
 			double latitude = locateCodeMessage.getlatitude();
 			double longitude = locateCodeMessage.getLongitude();
 			
