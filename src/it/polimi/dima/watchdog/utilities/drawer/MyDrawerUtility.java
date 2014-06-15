@@ -1,4 +1,4 @@
-package it.polimi.dima.watchdog.utilities;
+package it.polimi.dima.watchdog.utilities.drawer;
 
 import it.polimi.dima.watchdog.R;
 import it.polimi.dima.watchdog.activities.MainActivity;
@@ -37,11 +37,18 @@ public class MyDrawerUtility {
 	 */
 	public void InitializeDrawerList(ActionBarActivity mActivity, int drawerLayout, int drawerList) {
 		
+		ObjectDrawerItem[] drawerItem = new ObjectDrawerItem[3];
+		 
+		//QUa si prendono le icone e il loro nome: icone 48x48
+		drawerItem[0] = new ObjectDrawerItem(R.drawable.radaricon, "Gps");
+		drawerItem[1] = new ObjectDrawerItem(R.drawable.radaricon, "Remote");
+		drawerItem[2] = new ObjectDrawerItem(R.drawable.radaricon, "Status");
+		
 		mGenFeatures = mActivity.getResources().getStringArray(R.array.gen_features_array);
 		mDrawerLayout = (DrawerLayout) mActivity.findViewById(drawerLayout);
 		mDrawerList = (ListView) mActivity.findViewById(drawerList);
-
-		mDrawerList.setAdapter(new ArrayAdapter<String>(mActivity, R.layout.drawer_list_item, mGenFeatures));
+		//new ArrayAdapter<String>(mActivity, R.layout.drawer_list_item, mGenFeatures)
+		mDrawerList.setAdapter(new DrawerItemAdapter(mActivity, R.layout.drawer_list_item, drawerItem));
 
 		mActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		mActivity.getSupportActionBar().setHomeButtonEnabled(true);

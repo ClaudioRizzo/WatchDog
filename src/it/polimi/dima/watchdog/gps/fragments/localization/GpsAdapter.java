@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 public class GpsAdapter extends BaseAdapter {
@@ -50,14 +51,14 @@ public class GpsAdapter extends BaseAdapter {
 			view = inflater.inflate(R.layout.list_item_asscociated, null);
 		}
 		
-		LinearLayout mLinearLayout = (LinearLayout) view.findViewById(R.id.linear_layout_localize_list);
+		RelativeLayout mRelativeLayout = (RelativeLayout) view.findViewById(R.id.relative_layout_localize_list);
 		
-		TextView numberTextView = (TextView) mLinearLayout.findViewById(R.id.text_view_localize_number);
+		TextView numberTextView = (TextView) mRelativeLayout.findViewById(R.id.text_view_localize_number);
 		String num = numbers.get(position);
 		Log.i("[DEBUG gps-adapter]", "[DEBUG - GPS-Adapter] "+num);
 		numberTextView.setText(num);
 		
-		Button localizeButton = (Button) mLinearLayout.findViewById(R.id.button_localize);
+		Button localizeButton = (Button) mRelativeLayout.findViewById(R.id.button_localize);
 		localizeButton.setOnClickListener(new GpsLocalizeClickHandler(view, num, ctx));
 		
 		

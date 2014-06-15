@@ -4,8 +4,8 @@ import it.polimi.dima.watchdog.R;
 import it.polimi.dima.watchdog.gps.fragment.GpsMainFragment;
 import it.polimi.dima.watchdog.gps.fragments.localization.interfaces.MessageActionListener;
 import it.polimi.dima.watchdog.utilities.ListenerUtility;
-import it.polimi.dima.watchdog.utilities.MyDrawerUtility;
 import it.polimi.dima.watchdog.utilities.MyPrefFiles;
+import it.polimi.dima.watchdog.utilities.drawer.MyDrawerUtility;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -38,6 +38,7 @@ public class MainActivity extends ActionBarActivity implements MessageActionList
 		boolean wizardDone = settings.getBoolean(MyPrefFiles.WIZARD_DONE, false);
 		getSupportActionBar().setTitle(R.string.default_tab);
 		setContentView(R.layout.activity_main_layout);
+		
 		this.mDrawerUtil = new MyDrawerUtility();
 		this.mDrawerUtil.InitializeDrawerList(this, R.id.drawer_layout,R.id.left_drawer);
 		this.mDrawerUtil.handleOpenCloseDrawer(this, R.id.drawer_layout);
