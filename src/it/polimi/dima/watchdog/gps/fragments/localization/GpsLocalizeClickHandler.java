@@ -1,4 +1,4 @@
-package it.polimi.dima.watchdog.fragments.gps;
+package it.polimi.dima.watchdog.gps.fragments.localization;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;

@@ -1,4 +1,4 @@
-package it.polimi.dima.watchdog.fragments.gps;
+package it.polimi.dima.watchdog.gps.fragment.perimeter.listener;
 
 public interface PerimeterTrackerListener {
 

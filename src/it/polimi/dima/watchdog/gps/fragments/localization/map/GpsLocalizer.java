@@ -1,5 +1,8 @@
-package it.polimi.dima.watchdog.fragments.gps.map;
+package it.polimi.dima.watchdog.gps.fragments.localization.map;
 
+import it.polimi.dima.watchdog.gps.exceptions.LocationDisabledExeption;
+import it.polimi.dima.watchdog.gps.exceptions.LocationException;
+import it.polimi.dima.watchdog.gps.fragments.localization.interfaces.LocationChangeListenerInterface;
 import android.content.Context;
 import android.location.Criteria;
 import android.location.Location;

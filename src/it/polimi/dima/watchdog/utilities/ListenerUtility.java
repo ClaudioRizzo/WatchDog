@@ -1,6 +1,6 @@
 package it.polimi.dima.watchdog.utilities;
 
-import it.polimi.dima.watchdog.fragments.gps.map.MessageActionListener;
+import it.polimi.dima.watchdog.gps.fragments.localization.interfaces.MessageActionListener;
 
 import java.util.ArrayList;
 import java.util.List;

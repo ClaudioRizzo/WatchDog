@@ -1,8 +1,8 @@
 package it.polimi.dima.watchdog.activities;
 
 import it.polimi.dima.watchdog.R;
-import it.polimi.dima.watchdog.fragments.gps.GpsMainFragment;
-import it.polimi.dima.watchdog.fragments.gps.map.MessageActionListener;
+import it.polimi.dima.watchdog.gps.fragment.GpsMainFragment;
+import it.polimi.dima.watchdog.gps.fragments.localization.interfaces.MessageActionListener;
 import it.polimi.dima.watchdog.utilities.ListenerUtility;
 import it.polimi.dima.watchdog.utilities.MyDrawerUtility;
 import it.polimi.dima.watchdog.utilities.MyPrefFiles;

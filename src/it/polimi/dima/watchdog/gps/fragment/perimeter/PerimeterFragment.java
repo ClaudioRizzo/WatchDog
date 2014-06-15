@@ -1,6 +1,10 @@
-package it.polimi.dima.watchdog.fragments.gps;
+package it.polimi.dima.watchdog.gps.fragment.perimeter;
 
 import it.polimi.dima.watchdog.R;
+import it.polimi.dima.watchdog.gps.fragment.perimeter.listener.PerimeterTrackerListener;
+import it.polimi.dima.watchdog.gps.fragment.perimeter.listener.SeekBarPerimeterListener;
+import it.polimi.dima.watchdog.gps.fragment.perimeter.listener.StopTrackButtonListener;
+import it.polimi.dima.watchdog.gps.fragment.perimeter.listener.TrackButtonListener;
 import it.polimi.dima.watchdog.utilities.FragmentAdapterLifecycle;
 import android.app.Activity;
 import android.app.AlertDialog;

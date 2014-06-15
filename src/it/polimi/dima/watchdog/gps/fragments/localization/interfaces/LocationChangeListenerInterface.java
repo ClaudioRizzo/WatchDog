@@ -1,4 +1,4 @@
-package it.polimi.dima.watchdog.fragments.gps.map;
+package it.polimi.dima.watchdog.gps.fragments.localization.interfaces;
 
 import android.location.Location;
 

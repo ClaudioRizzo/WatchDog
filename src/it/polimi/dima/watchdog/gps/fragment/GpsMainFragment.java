@@ -1,4 +1,4 @@
-package it.polimi.dima.watchdog.fragments.gps;
+package it.polimi.dima.watchdog.gps.fragment;
 
 import it.polimi.dima.watchdog.R;
 import it.polimi.dima.watchdog.factory.FeatureEnum;

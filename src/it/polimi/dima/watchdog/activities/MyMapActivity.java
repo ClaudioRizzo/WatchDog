@@ -1,7 +1,7 @@
 package it.polimi.dima.watchdog.activities;
 
 import it.polimi.dima.watchdog.R;
-import it.polimi.dima.watchdog.fragments.gps.map.MyMapFragment;
+import it.polimi.dima.watchdog.gps.fragments.localization.map.MyMapFragment;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;

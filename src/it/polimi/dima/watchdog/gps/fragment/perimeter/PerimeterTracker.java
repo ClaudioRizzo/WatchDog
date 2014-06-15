@@ -1,5 +1,6 @@
-package it.polimi.dima.watchdog.fragments.gps;
+package it.polimi.dima.watchdog.gps.fragment.perimeter;
 
+import it.polimi.dima.watchdog.gps.fragment.perimeter.listener.PerimeterTrackerListener;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;

@@ -1,4 +1,4 @@
-package it.polimi.dima.watchdog.fragments.gps.map;
+package it.polimi.dima.watchdog.gps.fragments.localization.map;
 
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -9,12 +9,12 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import it.polimi.dima.watchdog.R;
+import it.polimi.dima.watchdog.gps.exceptions.LocationException;
 import android.content.Context;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;

@@ -1,8 +1,9 @@
-package it.polimi.dima.watchdog.fragments.gps;
+package it.polimi.dima.watchdog.gps.fragments.localization;
 
 import it.polimi.dima.watchdog.R;
 
 import java.util.List;
+
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;

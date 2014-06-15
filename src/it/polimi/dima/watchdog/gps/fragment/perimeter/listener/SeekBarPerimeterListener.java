@@ -1,6 +1,7 @@
-package it.polimi.dima.watchdog.fragments.gps;
+package it.polimi.dima.watchdog.gps.fragment.perimeter.listener;
 
 import it.polimi.dima.watchdog.R;
+import it.polimi.dima.watchdog.gps.fragment.perimeter.PerimeterTracker;
 import android.content.Context;
 import android.support.v7.app.ActionBarActivity;
 import android.widget.SeekBar;
