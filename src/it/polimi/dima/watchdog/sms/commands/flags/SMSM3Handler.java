@@ -136,7 +136,7 @@ public class SMSM3Handler implements SMSCommandVisitorInterface, LocationChangeL
 		byte[] iv = MyPrefFiles.getIV(this.ctx, this.other, false);
 		byte[] commandMessage = CryptoUtility.doEncryptionOrDecryption(message, encKey, iv, CryptoUtility.ENC);
 		
-		SMSUtility.sendCommandMessage(this.other, SMSUtility.COMMAND_PORT, commandMessage);
+		SMSUtility.sendSingleMessage(this.other, SMSUtility.COMMAND_PORT, commandMessage);
 		MyPrefFiles.deleteUselessCommandSessionPreferencesForM4(this.other, this.ctx);
 	}
 

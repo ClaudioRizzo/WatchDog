@@ -2,7 +2,7 @@ package it.polimi.dima.watchdog.fragments.wizard;
 
 import it.polimi.dima.watchdog.R;
 import it.polimi.dima.watchdog.crypto.CryptoUtility;
-import it.polimi.dima.watchdog.utilities.PasswordUtils;
+import it.polimi.dima.watchdog.password.PasswordUtils;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
@@ -48,7 +48,7 @@ public class InitializeWizardFragment extends Fragment implements OnClickListene
 				//e che deve essere lunga almeno 8 caratteri e non più di 20. Quindi chiedere di immetterla di nuovo
 				//e salvarla di nuovo in cleanPassword
 			}*/
-			byte[] hashToSave = this.getHash(cleanPassword.getBytes());
+			byte[] hashToSave = PasswordUtils.computeHash(cleanPassword.getBytes(), this.salt, CryptoUtility.SHA_256);
 			this.mCallBack.getWizardChanges(true, hashToSave, this.salt);
 		}
 		catch (NoSuchAlgorithmException e)
@@ -76,19 +76,5 @@ public class InitializeWizardFragment extends Fragment implements OnClickListene
 		{
 			throw new ClassCastException(activity.toString() + "must implement OnPasswordInizializedListener");
 		}
-	}
-
-	/**
-	 * Prende la password, la sala, ne fa l'hashe ritorna quest'ultimo.
-	 * 
-	 * @param pswd : la password
-	 * @return l'hash salato della password
-	 * @throws NoSuchAlgorithmException 
-	 */
-	private byte[] getHash(byte[] pswd) throws NoSuchAlgorithmException {
-		byte[] saltedPswd = new byte[pswd.length + this.salt.length];
-		System.arraycopy(pswd, 0, saltedPswd, 0, pswd.length);
-		System.arraycopy(this.salt, 0, saltedPswd, pswd.length, this.salt.length);
-		return PasswordUtils.getByteHash(saltedPswd, CryptoUtility.SHA_256);
 	}
 }

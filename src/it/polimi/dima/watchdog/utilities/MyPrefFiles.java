@@ -623,4 +623,9 @@ public class MyPrefFiles {
 		String storedHash = MyPrefFiles.getMyPreference(MyPrefFiles.PASSWORD_AND_SALT, MyPrefFiles.MY_PASSWORD_HASH, context);
 		return Base64.decode(storedHash, Base64.DEFAULT);
 	}
+	
+	public static byte[] getMyPasswordSalt(Context context) throws NoSuchPreferenceFoundException{
+		String storedHash = MyPrefFiles.getMyPreference(MyPrefFiles.PASSWORD_AND_SALT, MyPrefFiles.MY_PASSWORD_SALT, context);
+		return Base64.decode(storedHash, Base64.DEFAULT);
+	}
 }

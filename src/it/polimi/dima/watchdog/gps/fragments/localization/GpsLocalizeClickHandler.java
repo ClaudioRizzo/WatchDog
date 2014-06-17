@@ -57,7 +57,7 @@ public class GpsLocalizeClickHandler implements OnClickListener {
 			byte[] signature = generateSignature(message);
 			byte[] finalMessage = packMessage(message, signature);
 			
-			SMSUtility.sendCommandMessage(this.otherNumber, SMSUtility.COMMAND_PORT, finalMessage);
+			SMSUtility.sendSingleMessage(this.otherNumber, SMSUtility.COMMAND_PORT, finalMessage);
 			MyPrefFiles.replacePreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + this.otherNumber, StatusM1Sent.CURRENT_STATUS, this.ctx);
 			TimeoutWrapper.addTimeout(SMSUtility.MY_PHONE, this.otherNumber, this.ctx);
 			

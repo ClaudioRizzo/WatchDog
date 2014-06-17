@@ -2,13 +2,15 @@ package it.polimi.dima.watchdog.sms.commands.flags;
 
 import java.security.Key;
 import java.security.PublicKey;
+
 import org.spongycastle.crypto.InvalidCipherTextException;
+
 import android.util.Base64;
 import it.polimi.dima.watchdog.crypto.CryptoUtility;
 import it.polimi.dima.watchdog.exceptions.ArbitraryMessageReceivedException;
 import it.polimi.dima.watchdog.exceptions.ErrorInSignatureCheckingException;
 import it.polimi.dima.watchdog.exceptions.NotECKeyException;
-import it.polimi.dima.watchdog.utilities.PasswordUtils;
+import it.polimi.dima.watchdog.password.PasswordUtils;
 
 /**
  * Classe che si occupa di spacchettare il contenuto di un sms, dividendolo in hash della password e testo.

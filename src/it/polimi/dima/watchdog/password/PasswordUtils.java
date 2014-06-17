@@ -1,4 +1,4 @@
-package it.polimi.dima.watchdog.utilities;
+package it.polimi.dima.watchdog.password;
 
 import android.annotation.SuppressLint;
 import java.security.MessageDigest;
@@ -39,17 +39,29 @@ public class PasswordUtils {
 		sr.nextBytes(salt);
 		return salt;
 	}
-
+	
 	/**
-	 * Genera il digest a partire dal plaintext e da un algoritmo.
+	 * Crea e ritorna un hash a partire da plaintext, sale e algoritmo.
 	 * 
-	 * @param text : il plaintext
-	 * @param algorithm : l'algoritmo scelto
-	 * @return l'hash di text con algorithm
-	 * @throws NoSuchAlgorithmException se algorithm non è un algoritmo di hash valido
+	 * @param plaintext : l plaintext di cui si vuole calcolare l'hash
+	 * @param salt : il sale
+	 * @param algorithm : l'algoritmo
+	 * @return l'hash salato del plaintext
+	 * @throws NoSuchAlgorithmException se l'algoritmo passato non esiste
 	 */
-	public static byte[] getByteHash(byte[] ptx, String algorithm) throws NoSuchAlgorithmException {
+	public static byte[] computeHash(byte[] plaintext, byte[] salt, String algorithm) throws NoSuchAlgorithmException{
 		MessageDigest digest = MessageDigest.getInstance(algorithm);
+		byte[] ptx;
+		
+		if(salt != null){
+			ptx = new byte[plaintext.length + salt.length];
+			System.arraycopy(plaintext, 0, ptx, 0, plaintext.length);
+			System.arraycopy(salt, 0, ptx, plaintext.length, salt.length);
+		}
+		else{
+			ptx = new byte[plaintext.length];
+			System.arraycopy(plaintext, 0, ptx, 0, plaintext.length);
+		}
 		return digest.digest(ptx);
 	}
 

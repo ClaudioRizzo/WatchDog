@@ -92,7 +92,7 @@ public class StatusFree implements CommandProtocolFlagsReactionInterface{
 		byte[] message = packHeaderAndBody(header, body);
 		byte[] signature = CryptoUtility.doSignature(message, MyPrefFiles.getMyPrivateKey(ctx));
 		byte[] finalMessage = packMessage(message, signature);
-		SMSUtility.sendCommandMessage(phoneNumber, SMSUtility.COMMAND_PORT, finalMessage);
+		SMSUtility.sendSingleMessage(phoneNumber, SMSUtility.COMMAND_PORT, finalMessage);
 	}
 	
 	private byte[] packIvAndSalt(String phoneNumber, Context ctx) throws NoSuchPreferenceFoundException, NotECKeyException, NoSuchAlgorithmException, NoSuchProviderException, InvalidKeySpecException, NoSignatureDoneException {

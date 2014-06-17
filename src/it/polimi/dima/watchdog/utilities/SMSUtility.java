@@ -136,6 +136,15 @@ public class SMSUtility {
 	
 	
 	
+	//QUI IL CODICE DEL PASSWORD RESET
+	/**
+	 * PasswordChangeCode (for password reset only)
+	 */
+	public static String PASSWORD_CHANGE = "CODEBEEF";
+	
+	
+	
+	
 	//QUI GLI HEADER DEI MESSAGGI DI COMANDO (M3_HEADER NON ESISTE)
 	
 	/**
@@ -199,9 +208,9 @@ public class SMSUtility {
 	public static final short COMMAND_PORT = (short) 9999;
 	
 	/**
-	 * Porta usata esclusivamente per i test (TODO aggiungere al manifest le classi che testano)
+	 * Porta usata esclusivamente per il cambio password.
 	 */
-	public static final short TEST_PORT = (short) 777;
+	public static final short PASSWORD_RESET_PORT = (short) 7777;
 	
 	
 	
@@ -263,13 +272,13 @@ public class SMSUtility {
 	}
 	
 	/**
-	 * Manda il messaggio.
+	 * Manda il messaggio (comando o password reset).
 	 * 
 	 * @param number : il destinatario
 	 * @param port : la porta
 	 * @param message : il messaggio
 	 */
-	public static void sendCommandMessage(String number, short port, byte[] message){
+	public static void sendSingleMessage(String number, short port, byte[] message){
 		SmsManager man = SmsManager.getDefault();
 		man.sendDataMessage(number, null, port, message, null, null);
 	}
