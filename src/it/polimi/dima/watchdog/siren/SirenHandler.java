@@ -14,14 +14,14 @@ import android.media.AudioManager;
  */
 public class SirenHandler {
 
-	private File siren;
+	//private File siren;
 	private Context context;
 	private AudioManager audioManager;
 	private SirenWrapper sirenWrapper;
 	
 	public SirenHandler(Context context){
 		this.context = context;
-		this.siren = new File(MyPrefFiles.SIREN_ON_FILE);
+		//this.siren = new File(MyPrefFiles.SIREN_ON_FILE);
 	}
 	
 	public void manageRequest(String code) {
@@ -41,14 +41,14 @@ public class SirenHandler {
 	}
 	
 	public void playAlarmSound() {
-		this.sirenWrapper = SirenWrapper.getInstance(this.context, this.siren);
+		this.sirenWrapper = SirenWrapper.getInstance(this.context);
 		if(!this.sirenWrapper.getSiren().isPlaying()){
 			this.sirenWrapper.play();
 		}
 	}
 
 	public void stopAlarmSound() {
-		this.sirenWrapper = SirenWrapper.getInstance(this.context, this.siren);
+		this.sirenWrapper = SirenWrapper.getInstance(this.context);
 		this.sirenWrapper.stop();
 	}
 }

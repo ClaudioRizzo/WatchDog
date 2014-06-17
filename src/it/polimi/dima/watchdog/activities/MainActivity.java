@@ -3,8 +3,10 @@ package it.polimi.dima.watchdog.activities;
 import it.polimi.dima.watchdog.R;
 import it.polimi.dima.watchdog.gps.fragment.GpsMainFragment;
 import it.polimi.dima.watchdog.gps.fragments.localization.interfaces.MessageActionListener;
+import it.polimi.dima.watchdog.siren.SirenService;
 import it.polimi.dima.watchdog.utilities.ListenerUtility;
 import it.polimi.dima.watchdog.utilities.MyPrefFiles;
+import it.polimi.dima.watchdog.utilities.SMSUtility;
 import it.polimi.dima.watchdog.utilities.drawer.MyDrawerUtility;
 import android.content.Context;
 import android.content.Intent;
@@ -52,6 +54,10 @@ public class MainActivity extends ActionBarActivity implements MessageActionList
 				GpsMainFragment mGpsMainFrag = new GpsMainFragment();
 				getSupportFragmentManager().beginTransaction().add(R.id.main_fragment_container, mGpsMainFrag).commit();
 			}
+			//cancellare TODO
+			Intent intent = new Intent(getApplicationContext(),SirenService.class);
+			intent.putExtra(SMSUtility.COMMAND, SMSUtility.SIREN_ON);
+			getApplicationContext().startService(intent);
 		} else {
 			Intent intent = new Intent(this, InitializationWizardActivity.class);
 			startActivity(intent);

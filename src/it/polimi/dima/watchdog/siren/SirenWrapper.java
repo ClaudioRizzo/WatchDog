@@ -1,6 +1,9 @@
 package it.polimi.dima.watchdog.siren;
 
+import it.polimi.dima.watchdog.R;
+
 import java.io.File;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.media.Ringtone;
@@ -20,28 +23,18 @@ public class SirenWrapper {
 	private Ringtone siren;
 	
 	
-	private SirenWrapper(Context context, File sirenFile){
-		ContentValues values = new ContentValues();
-	    values.put(MediaStore.MediaColumns.DATA, sirenFile.getAbsolutePath());
-	    values.put(MediaStore.MediaColumns.TITLE, "Siren On");
-	    values.put(MediaStore.MediaColumns.MIME_TYPE, "audio/*");
-	    values.put(MediaStore.Audio.Media.ARTIST, "cloudstrife9999");
-	    values.put(MediaStore.Audio.Media.IS_RINGTONE, true);
-	    values.put(MediaStore.Audio.Media.IS_NOTIFICATION, false);
-	    values.put(MediaStore.Audio.Media.IS_ALARM, false);
-	    values.put(MediaStore.Audio.Media.IS_MUSIC, false);
-	    
-		Uri uri = MediaStore.Audio.Media.getContentUriForPath(sirenFile.getAbsolutePath());
-		context.getContentResolver().delete(uri, MediaStore.MediaColumns.DATA + "=\"" + sirenFile.getAbsolutePath() + "\"", null);
-		Uri newUri = context.getContentResolver().insert(uri, values);
+	private SirenWrapper(Context context){
+		Uri uri =  Uri.parse("android.resource://it.polimi.watchdog/raw/sirenon");
+		context.getContentResolver().delete(uri, null, null);
+		Uri newUri = context.getContentResolver().insert(uri, new ContentValues());
 	
 		RingtoneManager.setActualDefaultRingtoneUri(context, RingtoneManager.TYPE_RINGTONE, newUri);
 		this.siren = RingtoneManager.getRingtone(context, RingtoneManager.getActualDefaultRingtoneUri(context, RingtoneManager.TYPE_RINGTONE));
 	}
 	
-	public static SirenWrapper getInstance(Context context, File sirenFile){
+	public static SirenWrapper getInstance(Context context){
 		if(sirenWrapper == null){
-			sirenWrapper = new SirenWrapper(context, sirenFile);
+			sirenWrapper = new SirenWrapper(context);
 		}
 		return sirenWrapper;
 	}

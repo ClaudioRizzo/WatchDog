@@ -54,10 +54,10 @@ public class SirenService extends Service {
 	private int handleCommand(Intent intent) throws NoSuchAlgorithmException {
 		String command = intent.getExtras().getString(SMSUtility.COMMAND);
 		
-		if(command == SMSUtility.SIREN_ON){
+		if(command.equals(SMSUtility.SIREN_ON)){
 			return doSirenon();
 		}
-		else if(command == SMSUtility.SIREN_OFF){
+		else if(command.equals(SMSUtility.SIREN_OFF)){
 			return doSirenOff();
 		}
 		else {
