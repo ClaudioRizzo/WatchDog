@@ -23,7 +23,7 @@ public class InitializeWizardFragment extends Fragment implements OnClickListene
 	private final byte[] salt = PasswordUtils.nextSalt();
 
 	public interface OnPasswordInizializedListener {
-		public void getWizardChanges(boolean wizardDone, byte[] hashToSave, byte[] salt) throws NoSuchAlgorithmException, NoSuchProviderException;
+		public void saveWizardResults(boolean wizardDone, byte[] hashToSave, byte[] salt) throws NoSuchAlgorithmException, NoSuchProviderException;
 	}
 
 	@Override
@@ -49,7 +49,7 @@ public class InitializeWizardFragment extends Fragment implements OnClickListene
 				//e salvarla di nuovo in cleanPassword
 			}*/
 			byte[] hashToSave = PasswordUtils.computeHash(cleanPassword.getBytes(), this.salt, CryptoUtility.SHA_256);
-			this.mCallBack.getWizardChanges(true, hashToSave, this.salt);
+			this.mCallBack.saveWizardResults(true, hashToSave, this.salt);
 		}
 		catch (NoSuchAlgorithmException e)
 		{

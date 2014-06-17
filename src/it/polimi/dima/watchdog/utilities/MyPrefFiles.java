@@ -304,6 +304,18 @@ public class MyPrefFiles {
 	}
 	
 	/**
+	 * Ritorna lo stato del wizard iniziale.
+	 * 
+	 * @param ctx : il contesto corrente
+	 * @return true se il wizard è stato completato, false altrimenti
+	 */
+	public static boolean isWizardDone(Context ctx) {
+		SharedPreferences sp = ctx.getSharedPreferences(MyPrefFiles.PREF_INIT, Context.MODE_PRIVATE);
+		return sp.getBoolean(MyPrefFiles.WIZARD_DONE, false);
+	}
+	
+	
+	/**
 	 * Setta in fileName nel contesto ctx una preferenza che ha key come chiave e value come valore.
 	 * 
 	 * @param fileName : il file in cui inserire la preferenza
@@ -316,6 +328,18 @@ public class MyPrefFiles {
 		SharedPreferences sp = ctx.getSharedPreferences(fileName, Context.MODE_PRIVATE);
 		SharedPreferences.Editor editor = sp.edit();
 		editor.putString(key, value);
+		editor.commit();
+	}
+	
+	/**
+	 * Salva nelle preferenze il fatto che il wizard è stato completato.
+	 * 
+	 * @param ctx : il contesto corrente
+	 */
+	public static void setWizardDone(Context ctx) {
+		SharedPreferences sp = ctx.getSharedPreferences(MyPrefFiles.PREF_INIT, Context.MODE_PRIVATE);
+		SharedPreferences.Editor editor = sp.edit();
+		editor.putBoolean(MyPrefFiles.WIZARD_DONE, true);
 		editor.commit();
 	}
 	
@@ -551,14 +575,14 @@ public class MyPrefFiles {
 	 * Metodo che cancella iv e chiave dopo il loro utilizzo per crittare/decrittare m4.
 	 * 
 	 * @param other : il numero di telefono dell'altro
-	 * @param ctx : il contesto corrente
+	 * @param context : il contesto corrente
 	 */
-	public static void deleteUselessCommandSessionPreferencesForM4(String other, Context ctx){
-		if(MyPrefFiles.existsPreference(MyPrefFiles.COMMAND_SESSION, other + MyPrefFiles.KEY_FOR_M4, ctx)){
-			MyPrefFiles.deleteMyPreference(MyPrefFiles.COMMAND_SESSION, other + MyPrefFiles.KEY_FOR_M4, ctx);
+	public static void deleteUselessCommandSessionPreferencesForM4(String other, Context context){
+		if(MyPrefFiles.existsPreference(MyPrefFiles.COMMAND_SESSION, other + MyPrefFiles.KEY_FOR_M4, context)){
+			MyPrefFiles.deleteMyPreference(MyPrefFiles.COMMAND_SESSION, other + MyPrefFiles.KEY_FOR_M4, context);
 		}
-		if(MyPrefFiles.existsPreference(MyPrefFiles.COMMAND_SESSION, other + MyPrefFiles.IV_FOR_M4, ctx)){
-			MyPrefFiles.deleteMyPreference(MyPrefFiles.COMMAND_SESSION, other + MyPrefFiles.IV_FOR_M4, ctx);
+		if(MyPrefFiles.existsPreference(MyPrefFiles.COMMAND_SESSION, other + MyPrefFiles.IV_FOR_M4, context)){
+			MyPrefFiles.deleteMyPreference(MyPrefFiles.COMMAND_SESSION, other + MyPrefFiles.IV_FOR_M4, context);
 		}
 	}
 	
@@ -583,6 +607,15 @@ public class MyPrefFiles {
 		return keyFactory.generatePublic(new X509EncodedKeySpec(oPubEncoded));
 	}
 	
+	/**
+	 * Ritorna la chiave dell'aes relativa a m3 o m4.
+	 * 
+	 * @param context
+	 * @param other
+	 * @param m3_or_m4 : se è true si riferisce a m3, altrimenti a m4
+	 * @return
+	 * @throws NoSuchPreferenceFoundException
+	 */
 	public static Key getSymmetricCryptoKey(Context context, String other, boolean m3_or_m4) throws NoSuchPreferenceFoundException{
 		String key = null;
 		if(m3_or_m4){
@@ -596,6 +629,15 @@ public class MyPrefFiles {
 		return new SecretKeySpec(decKeyValue, CryptoUtility.AES_256);
 	}
 	
+	/**
+	 * Ritorna l'initialization vector per m3 o m4.
+	 * 
+	 * @param context
+	 * @param other
+	 * @param m3_or_m4 : se è true si riferisce a m3, altrimenti a m4
+	 * @return
+	 * @throws NoSuchPreferenceFoundException
+	 */
 	public static byte[] getIV(Context context, String other, boolean m3_or_m4) throws NoSuchPreferenceFoundException{
 		String key = null;
 		if(m3_or_m4){

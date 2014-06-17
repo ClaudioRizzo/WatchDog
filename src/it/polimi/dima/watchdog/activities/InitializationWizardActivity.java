@@ -23,9 +23,12 @@ import android.util.Base64;
  */
 public class InitializationWizardActivity extends ActionBarActivity implements OnPasswordInizializedListener {
 
+	private Context context;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		this.context = getApplicationContext();
 		setContentView(R.layout.activity_initialize_wizard);
 
 		if (findViewById(R.id.initialize_wizard_container) != null) {
@@ -38,13 +41,7 @@ public class InitializationWizardActivity extends ActionBarActivity implements O
 	}
 
 	@Override
-	public void getWizardChanges(boolean wizardDone, byte[] hashToSave, byte[] salt) throws NoSuchAlgorithmException, NoSuchProviderException {
-		SharedPreferences keys = getSharedPreferences(MyPrefFiles.MY_KEYS, Context.MODE_PRIVATE);
-		SharedPreferences password = getSharedPreferences(MyPrefFiles.PASSWORD_AND_SALT, Context.MODE_PRIVATE);
-		SharedPreferences wizard = getSharedPreferences(MyPrefFiles.PREF_INIT, Context.MODE_PRIVATE);
-		SharedPreferences.Editor editor1 = keys.edit();
-		SharedPreferences.Editor editor2 = password.edit();
-		SharedPreferences.Editor editor3 = wizard.edit();
+	public void saveWizardResults(boolean wizardDone, byte[] hashToSave, byte[] salt) throws NoSuchAlgorithmException, NoSuchProviderException {
 		ECKeyPairGeneratorWrapper mkeyGen = new ECKeyPairGeneratorWrapper();
 		mkeyGen.generateKeyPair();
 		byte[] pubKeyBytes = mkeyGen.getPublicKey().getEncoded();
@@ -53,14 +50,11 @@ public class InitializationWizardActivity extends ActionBarActivity implements O
 		String privateKey = Base64.encodeToString(privateKeyBytes, Base64.DEFAULT);
 		
 		//saving preferences
-		editor1.putString(MyPrefFiles.MY_PUB, pubKey);
-		editor1.putString(MyPrefFiles.MY_PRIV, privateKey);
-		editor2.putString(MyPrefFiles.MY_PASSWORD_HASH, Base64.encodeToString(hashToSave, Base64.DEFAULT));
-		editor2.putString(MyPrefFiles.MY_PASSWORD_SALT, Base64.encodeToString(salt, Base64.DEFAULT));
-		editor3.putBoolean(MyPrefFiles.WIZARD_DONE, wizardDone);
-		editor1.commit();
-		editor2.commit();
-		editor3.commit();
+		MyPrefFiles.setMyPreference(MyPrefFiles.MY_KEYS, MyPrefFiles.MY_PUB, pubKey, this.context);
+		MyPrefFiles.setMyPreference(MyPrefFiles.MY_KEYS, MyPrefFiles.MY_PRIV, privateKey, this.context);
+		MyPrefFiles.setMyPreference(MyPrefFiles.PASSWORD_AND_SALT, MyPrefFiles.MY_PASSWORD_HASH, Base64.encodeToString(hashToSave, Base64.DEFAULT), this.context);
+		MyPrefFiles.setMyPreference(MyPrefFiles.PASSWORD_AND_SALT, MyPrefFiles.MY_PASSWORD_SALT, Base64.encodeToString(salt, Base64.DEFAULT), this.context);
+		MyPrefFiles.setWizardDone(this.context);
 		
 		//start MainActivity
 		Intent intent = new Intent(this, MainActivity.class);
