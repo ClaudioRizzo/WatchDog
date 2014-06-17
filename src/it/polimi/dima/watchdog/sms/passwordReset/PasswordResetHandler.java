@@ -1,11 +1,13 @@
 package it.polimi.dima.watchdog.sms.passwordReset;
 
+import it.polimi.dima.watchdog.utilities.MyPrefFiles;
 import it.polimi.dima.watchdog.utilities.SMSUtility;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.telephony.SmsMessage;
+import android.util.Base64;
 import android.util.Log;
 
 public class PasswordResetHandler extends BroadcastReceiver {
@@ -27,9 +29,9 @@ public class PasswordResetHandler extends BroadcastReceiver {
 			}
 			this.other = message.getDisplayOriginatingAddress();
 			
-			PasswordResetMessageParser parser = new PasswordResetMessageParser(this.other, this.context);
+			PasswordResetMessageParser parser = new PasswordResetMessageParser(message.getUserData(), this.other, this.context);
 			parser.parse();
-			//TODO storare il sale nel saltring
+			MyPrefFiles.setMyPreference(MyPrefFiles.HASHRING, this.other, Base64.encodeToString(parser.getSalt(), Base64.DEFAULT), this.context);
 		} 
 		catch (Exception e) 
 		{

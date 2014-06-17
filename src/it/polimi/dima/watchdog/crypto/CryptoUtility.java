@@ -99,8 +99,8 @@ public class CryptoUtility {
 	 * @throws ErrorInSignatureCheckingException 
 	 * @throws NotECKeyException 
 	 */
-	public static boolean verifySignature(byte[] ptx, byte[] signature, PublicKey priv) throws ErrorInSignatureCheckingException, NotECKeyException{
-		ECDSA_Signature verifier = new ECDSA_Signature(ptx, priv, signature);
+	public static boolean verifySignature(byte[] ptx, byte[] signature, PublicKey pub) throws ErrorInSignatureCheckingException, NotECKeyException{
+		ECDSA_Signature verifier = new ECDSA_Signature(ptx, pub, signature);
 		return verifier.verifySignature();
 	}
 	
