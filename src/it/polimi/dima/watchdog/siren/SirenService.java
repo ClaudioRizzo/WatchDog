@@ -1,10 +1,13 @@
 package it.polimi.dima.watchdog.siren;
 
+import it.polimi.dima.watchdog.exceptions.NoSuchPreferenceFoundException;
+import it.polimi.dima.watchdog.utilities.MyPrefFiles;
 import it.polimi.dima.watchdog.utilities.SMSUtility;
 import java.security.NoSuchAlgorithmException;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
@@ -43,7 +46,7 @@ public class SirenService extends Service {
 		this.context = getApplicationContext();
 	    try {
 			return handleCommand(intent);
-		} catch (NoSuchAlgorithmException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			Log.i("DEBUG", "DEBUG: servizio delle sirene non partito correttamente!!!");
 			this.stopSelf();
@@ -51,8 +54,19 @@ public class SirenService extends Service {
 		}
 	}
 
-	private int handleCommand(Intent intent) throws NoSuchAlgorithmException {
-		String command = intent.getExtras().getString(SMSUtility.COMMAND);
+	private int handleCommand(Intent intent) throws NoSuchAlgorithmException, NoSuchPreferenceFoundException {
+		String command = null;
+		if(intent != null){
+			if(intent.hasExtra(SMSUtility.COMMAND)){
+				Bundle extras = intent.getExtras();
+				command = extras.getString(SMSUtility.COMMAND);
+				MyPrefFiles.setMyPreference(MyPrefFiles.SIREN_FILE, MyPrefFiles.SIREN_FILE_KEY, command, this.context);
+			}
+		}
+		else{
+			command = MyPrefFiles.getMyPreference(MyPrefFiles.SIREN_FILE, MyPrefFiles.SIREN_FILE_KEY, this.context);
+		}
+		
 		
 		if(command.equals(SMSUtility.SIREN_ON)){
 			return doSirenon();
@@ -106,4 +120,11 @@ public class SirenService extends Service {
 			Log.i("DEBUG", "DEBUG: la sirena non era attiva: non ho fatto niente");
 		}
 	}
+	
+	/*@Override
+	public void onTaskRemoved(Intent rootIntent){
+	    Intent restartServiceIntent = new Intent(getApplicationContext(), this.getClass());
+
+	    super.onTaskRemoved(rootIntent);
+	 }*/
 }

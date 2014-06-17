@@ -1,8 +1,6 @@
 package it.polimi.dima.watchdog.siren;
 
-import it.polimi.dima.watchdog.utilities.MyPrefFiles;
 import it.polimi.dima.watchdog.utilities.SMSUtility;
-import java.io.File;
 import android.content.Context;
 import android.media.AudioManager;
 
@@ -14,14 +12,12 @@ import android.media.AudioManager;
  */
 public class SirenHandler {
 
-	//private File siren;
 	private Context context;
 	private AudioManager audioManager;
 	private SirenWrapper sirenWrapper;
 	
 	public SirenHandler(Context context){
 		this.context = context;
-		//this.siren = new File(MyPrefFiles.SIREN_ON_FILE);
 	}
 	
 	public void manageRequest(String code) {

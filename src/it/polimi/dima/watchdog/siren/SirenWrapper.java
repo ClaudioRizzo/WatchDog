@@ -1,15 +1,10 @@
 package it.polimi.dima.watchdog.siren;
 
 import it.polimi.dima.watchdog.R;
-
-import java.io.File;
-
-import android.content.ContentValues;
 import android.content.Context;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
-import android.provider.MediaStore;
 
 /**
  * Classe che wrappa la sirena da riprodurre in seguito a siren on.
@@ -24,11 +19,8 @@ public class SirenWrapper {
 	
 	
 	private SirenWrapper(Context context){
-		Uri uri =  Uri.parse("android.resource://it.polimi.watchdog/raw/sirenon");
-		context.getContentResolver().delete(uri, null, null);
-		Uri newUri = context.getContentResolver().insert(uri, new ContentValues());
-	
-		RingtoneManager.setActualDefaultRingtoneUri(context, RingtoneManager.TYPE_RINGTONE, newUri);
+		Uri uri =  Uri.parse("android.resource://" + context.getPackageName() + "/" + R.raw.sirenon);
+		RingtoneManager.setActualDefaultRingtoneUri(context, RingtoneManager.TYPE_RINGTONE, uri);
 		this.siren = RingtoneManager.getRingtone(context, RingtoneManager.getActualDefaultRingtoneUri(context, RingtoneManager.TYPE_RINGTONE));
 	}
 	

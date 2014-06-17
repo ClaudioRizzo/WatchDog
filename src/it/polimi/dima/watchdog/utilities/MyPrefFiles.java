@@ -107,6 +107,10 @@ public class MyPrefFiles {
 	 */
 	public static final String TIMEOUTS_IDS = "timeouts_ids";
 	
+	/**
+	 * File che contiene l'ultimo comando ricevuto tra siren_on e siren_off
+	 */
+	public static final String SIREN_FILE = "siren_file";
 	
 	
 	
@@ -160,6 +164,12 @@ public class MyPrefFiles {
 	 * e aspettato.
 	 */
 	public static final String TIMEOUT_ID = "timeout_id";
+	
+	/**
+	 * Chiave per il siren file
+	 */
+	public static final String SIREN_FILE_KEY = "siren_file_key";
+	
 	
 	
 	
