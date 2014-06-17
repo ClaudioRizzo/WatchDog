@@ -120,11 +120,4 @@ public class SirenService extends Service {
 			Log.i("DEBUG", "DEBUG: la sirena non era attiva: non ho fatto niente");
 		}
 	}
-	
-	/*@Override
-	public void onTaskRemoved(Intent rootIntent){
-	    Intent restartServiceIntent = new Intent(getApplicationContext(), this.getClass());
-
-	    super.onTaskRemoved(rootIntent);
-	 }*/
 }
