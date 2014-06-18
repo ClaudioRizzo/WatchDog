@@ -3,7 +3,9 @@ package it.polimi.dima.watchdog.activities;
 import it.polimi.dima.watchdog.R;
 import it.polimi.dima.watchdog.fragments.actionBar.PendingRequestsFragment;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBarActivity;
+import android.view.MenuItem;
 
 /**
  * 
@@ -22,8 +24,19 @@ public class PendingRequestsActivity extends ActionBarActivity {
 				return;
 			}
 		}
-		//TODO: creare il fragment da inserire nell'activity e cercare di capire che fare una lista dinamica usando listview e un adapter
+		
+		
 		PendingRequestsFragment mPendReqFrag = new PendingRequestsFragment();
 		getSupportFragmentManager().beginTransaction().add(R.id.pending_requests_container, mPendReqFrag).commit();
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case android.R.id.home:
+			NavUtils.navigateUpFromSameTask(this);
+			return true;
+		}
+		return super.onOptionsItemSelected(item);
 	}
 }

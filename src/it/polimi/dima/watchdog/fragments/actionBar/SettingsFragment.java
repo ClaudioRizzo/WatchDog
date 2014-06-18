@@ -26,7 +26,7 @@ public class SettingsFragment extends Fragment implements OnItemClickListener {
 	 *
 	 */
 	public interface MyOnListItemClicked {
-		public void getClickOnAsscociateNumber();
+		public void getClickOnChangePassword();
 	}
 	
 	private MyOnListItemClicked mCallBack; 
@@ -47,7 +47,7 @@ public class SettingsFragment extends Fragment implements OnItemClickListener {
 		switch (position) {
 		case 0:
 			Log.i("[DEBUG]", "Ho cliccato position " + position);
-			mCallBack.getClickOnAsscociateNumber();
+			mCallBack.getClickOnChangePassword();
 			break;
 		default:
 			break;

@@ -44,7 +44,7 @@ public class SettingsActivity extends ActionBarActivity implements MyOnListItemC
 	}
 
 	@Override
-	public void getClickOnAsscociateNumber() {
+	public void getClickOnChangePassword() {
 		//Intent intent = new Intent(this, AssociateNumberActivity.class);
 		//startActivity(intent);
 	}

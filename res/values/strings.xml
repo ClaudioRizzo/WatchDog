@@ -10,7 +10,7 @@
     
     <!-- Strings Array for settings activity -->
     <string-array name="array_settings">
-        <item>Associate a Number</item>
+        <item>Change Password</item>
     </string-array>
     
     <!-- Application name -->

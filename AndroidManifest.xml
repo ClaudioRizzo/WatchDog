@@ -84,6 +84,9 @@
         <activity
             android:name="it.polimi.dima.watchdog.activities.PendingRequestsActivity"
             android:theme="@style/Theme.AppCompat.Light.DarkActionBar" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="it.polimi.dima.watchdog.activities.MainActivity" />
         </activity>
         <activity
             android:name="it.polimi.dima.watchdog.activities.MyMapActivity"
