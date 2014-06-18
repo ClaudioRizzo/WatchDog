@@ -20,21 +20,16 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-/**
- * 
- * @author claudio, emanuele
- *
- */
 public class PendingRequestsAdapter extends BaseAdapter {
 
-	private Context context;
+	private Context ctx;
 	private LinkedList<SocialistRequestWrapper> data;
 	private static LayoutInflater inflater = null;
 
-	public PendingRequestsAdapter(Context context, List<SocialistRequestWrapper> data) {
-		this.context = context;
+	public PendingRequestsAdapter(Context ctx, List<SocialistRequestWrapper> data) {
+		this.ctx = ctx;
 		this.data = (LinkedList<SocialistRequestWrapper>) data;
-		inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		inflater = (LayoutInflater) ctx.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 	}
 
 	@Override
@@ -91,7 +86,7 @@ public class PendingRequestsAdapter extends BaseAdapter {
 				Log.i("[DEBUG]", "[DEBUG_SMP] Ho cliccato il bottone rifiuto");
 				
 				//Cancello tutte le preferenze relative all'altro (compresa la richiesta pendente)...
-				MyPrefFiles.eraseSmpPreferences(number, context);
+				MyPrefFiles.eraseSmpPreferences(number, ctx);
 				
 				//... lo notifico...
 				SMSUtility.sendMessage(number, SMSUtility.SMP_PORT, SMSUtility.hexStringToByteArray(SMSUtility.CODE6), null);
@@ -115,11 +110,11 @@ public class PendingRequestsAdapter extends BaseAdapter {
 					Log.i("[DEBUG]", "[DEBUG_SMP] Ho cliccato send: " + secAnsw);
 					
 					//...poi setto nelle mie preferenze domanda e risposta segrete che ho scelto (saranno utilizzate dopo il giro di boa)...
-					MyPrefFiles.setMyPreference(MyPrefFiles.SECRET_Q_A, number + MyPrefFiles.SECRET_QUESTION, mySecQuestion, context);
-					MyPrefFiles.setMyPreference(MyPrefFiles.SECRET_Q_A, number + MyPrefFiles.SECRET_ANSWER, mySecAnswer, context);
+					MyPrefFiles.setMyPreference(MyPrefFiles.SECRET_Q_A, number + MyPrefFiles.SECRET_QUESTION, mySecQuestion, ctx);
+					MyPrefFiles.setMyPreference(MyPrefFiles.SECRET_Q_A, number + MyPrefFiles.SECRET_ANSWER, mySecAnswer, ctx);
 					
 					//... poi recupero la mia chiave pubblica...
-					pka.setMyPublicKey(MyPrefFiles.getMyPreference(MyPrefFiles.MY_KEYS, MyPrefFiles.MY_PUB, context));
+					pka.setMyPublicKey(MyPrefFiles.getMyPreference(MyPrefFiles.MY_KEYS, MyPrefFiles.MY_PUB, ctx));
 					
 					//... e setto nel pka anche la risposta da me digitata...
 					pka.setSecretAnswer(secAnsw);
@@ -132,16 +127,16 @@ public class PendingRequestsAdapter extends BaseAdapter {
 					
 					//... segno in SMP_STATUS di aver inviato l'hash
 					String preferenceKey = number + MyPrefFiles.HASH_FORWARDED;
-					MyPrefFiles.setMyPreference(MyPrefFiles.SMP_STATUS, preferenceKey, number, context);
+					MyPrefFiles.setMyPreference(MyPrefFiles.SMP_STATUS, preferenceKey, number, ctx);
 					
 					//... e tolgo dal file PENDENT la richiesta
-					MyPrefFiles.deleteMyPreference(MyPrefFiles.PENDENT, number, context);
+					MyPrefFiles.deleteMyPreference(MyPrefFiles.PENDENT, number, ctx);
 
 				} 
 				catch (Exception e)
 				{
 					//notifico e invio richiesta di stop forzato, oltre alla cancellazione delle preferenze
-					SMSUtility.handleErrorOrExceptionInSmp(e, number, context);
+					SMSUtility.handleErrorOrExceptionInSmp(e, number, ctx);
 				}
 			}
 		});

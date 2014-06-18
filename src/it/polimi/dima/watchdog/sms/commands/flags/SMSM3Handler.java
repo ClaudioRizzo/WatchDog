@@ -43,22 +43,22 @@ import it.polimi.dima.watchdog.utilities.ServicesUtilities;
 public class SMSM3Handler implements SMSCommandVisitorInterface, LocationChangeListenerInterface {
 
 	private String other;
-	private Context context;
+	private Context ctx;
 	private String locationString = null;
 	private GpsLocalizer gps;
 	
 	public SMSM3Handler(String other, Context context){
 		this.other = other;
-		this.context = context;
+		this.ctx = context;
 	}
 	
 	@Override
 	public void visit(SirenOnCodeMessage sirenOnCodeMessage) throws NoSuchAlgorithmException, InvalidKeySpecException, IllegalStateException, InvalidCipherTextException, IllegalArgumentException, TooLongResponseException, NoSuchPreferenceFoundException, NoSignatureDoneException, NotECKeyException {
 		Log.i("[DEBUG_COMMAND]", "[DEBUG_COMMAND] SIREN ON RECEIVED");
-		if(!ServicesUtilities.isMyServiceRunning(this.context, SirenService.class)){
-			Intent intent = new Intent(this.context,SirenService.class);
+		if(!ServicesUtilities.isMyServiceRunning(this.ctx, SirenService.class)){
+			Intent intent = new Intent(this.ctx,SirenService.class);
 			intent.putExtra(SMSUtility.COMMAND, SMSUtility.SIREN_ON);
-			this.context.startService(intent);
+			this.ctx.startService(intent);
 			constructResponse(SMSUtility.hexStringToByteArray(SMSUtility.SIREN_ON), SMSUtility.SIREN_ON_RESPONSE_OK);
 		}
 		else{
@@ -70,10 +70,10 @@ public class SMSM3Handler implements SMSCommandVisitorInterface, LocationChangeL
 	@Override
 	public void visit(SirenOffCodeMessage sirenOffCodeMessage) throws NoSuchAlgorithmException, InvalidKeySpecException, IllegalStateException, InvalidCipherTextException, IllegalArgumentException, TooLongResponseException, NoSuchPreferenceFoundException, NoSignatureDoneException, NotECKeyException {
 		Log.i("[DEBUG_COMMAND]", "[DEBUG_COMMAND] SIREN OFF RECEIVED");
-		if(ServicesUtilities.isMyServiceRunning(this.context, SirenService.class)){
-			Intent intent = new Intent(this.context,SirenService.class);
+		if(ServicesUtilities.isMyServiceRunning(this.ctx, SirenService.class)){
+			Intent intent = new Intent(this.ctx,SirenService.class);
 			intent.putExtra(SMSUtility.COMMAND, SMSUtility.SIREN_OFF);
-			this.context.startService(intent);
+			this.ctx.startService(intent);
 			constructResponse(SMSUtility.hexStringToByteArray(SMSUtility.SIREN_OFF), SMSUtility.SIREN_OFF_RESPONSE_OK);
 		}
 		else{
@@ -112,7 +112,7 @@ public class SMSM3Handler implements SMSCommandVisitorInterface, LocationChangeL
 		Log.i("[DEBUG_COMMAND]", "[DEBUG_COMMAND] LOCATE RICEVUTO");
 		
 		try {
-			this.gps = new GpsLocalizer(context, (LocationManager) context.getSystemService(Context.LOCATION_SERVICE));
+			this.gps = new GpsLocalizer(ctx, (LocationManager) ctx.getSystemService(Context.LOCATION_SERVICE));
 			this.gps.addListener(this);
 			this.gps.getLocationUpdates();
 		} catch (LocationException e) {
@@ -129,15 +129,15 @@ public class SMSM3Handler implements SMSCommandVisitorInterface, LocationChangeL
 		byte[] padding = generatePadding(paddingLength);
 		byte[] body = fillBody(subBody, padding, subBodyLength, paddingLength);
 		byte[] messageWithoutSignature = generatePlaintext(header, specificHeader, body);
-		PrivateKey mPriv = MyPrefFiles.getMyPrivateKey(this.context);
+		PrivateKey mPriv = MyPrefFiles.getMyPrivateKey(this.ctx);
 		byte[] signature = CryptoUtility.doSignature(messageWithoutSignature, mPriv);
 		byte[] message = packMessage(messageWithoutSignature, signature);
-		Key encKey = MyPrefFiles.getSymmetricCryptoKey(this.context, this.other, false);
-		byte[] iv = MyPrefFiles.getIV(this.context, this.other, false);
+		Key encKey = MyPrefFiles.getSymmetricCryptoKey(this.ctx, this.other, false);
+		byte[] iv = MyPrefFiles.getIV(this.ctx, this.other, false);
 		byte[] commandMessage = CryptoUtility.doEncryptionOrDecryption(message, encKey, iv, CryptoUtility.ENC);
 		
 		SMSUtility.sendSingleMessage(this.other, SMSUtility.COMMAND_PORT, commandMessage);
-		MyPrefFiles.deleteUselessCommandSessionPreferencesForM4(this.other, this.context);
+		MyPrefFiles.deleteUselessCommandSessionPreferencesForM4(this.other, this.ctx);
 	}
 
 	private byte[] packMessage(byte[] messageWithoutSignature, byte[] signature) {

@@ -10,6 +10,7 @@ import it.polimi.dima.watchdog.utilities.SMSUtility;
 import it.polimi.dima.watchdog.utilities.drawer.MyDrawerUtility;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -27,17 +28,16 @@ import android.view.MenuItem;
  */
 public class MainActivity extends ActionBarActivity implements MessageActionListener {
 
-	private Context context;
 	MyDrawerUtility mDrawerUtil;
 	static final String ACTION = "android.intent.action.DATA_SMS_RECEIVED";
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		this.context = getApplicationContext();
 		
 		ListenerUtility.getInstance().addListener(this);
-		boolean wizardDone = MyPrefFiles.isWizardDone(this.context);
+		SharedPreferences settings = getSharedPreferences(MyPrefFiles.PREF_INIT, Context.MODE_PRIVATE);
+		boolean wizardDone = settings.getBoolean(MyPrefFiles.WIZARD_DONE, false);
 		getSupportActionBar().setTitle(R.string.default_tab);
 		setContentView(R.layout.activity_main_layout);
 		
@@ -112,7 +112,7 @@ public class MainActivity extends ActionBarActivity implements MessageActionList
 	@Override
 	public void onLocationMessageReceived(double lat, double lon) {
 
-		Log.i("[DEBUG]", "[DEBUG] ricevuta la locazione: tento di cambiare");
+		Log.i("[DEBUG]", "[DEBUG] ricevuta la locazione tento di cambiare");
 
 		
 		Intent intent = new Intent(this, MyMapActivity.class);

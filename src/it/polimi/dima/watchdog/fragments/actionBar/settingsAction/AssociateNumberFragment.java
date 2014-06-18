@@ -22,11 +22,11 @@ import android.widget.EditText;
  */
 public class AssociateNumberFragment extends Fragment implements OnClickListener {
 	private String otherNumber;
-	private Context context;
+	private Context ctx;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		this.context = getActivity().getApplicationContext();
+		this.ctx = getActivity().getApplicationContext();
 		View v = inflater.inflate(R.layout.fragment_associate_number, container, false);
 		Button mButton = (Button) v.findViewById(R.id.button_associate);
 		mButton.setOnClickListener(this);
@@ -35,7 +35,7 @@ public class AssociateNumberFragment extends Fragment implements OnClickListener
 
 	@Override
 	public void onClick(View v) {
-		this.context = getActivity().getApplicationContext();
+		this.ctx = getActivity().getApplicationContext();
 		try{
 			Log.i("[DEBUG]", "Ho cliccato per inviare");
 			
@@ -46,7 +46,7 @@ public class AssociateNumberFragment extends Fragment implements OnClickListener
 			// prendo la domanda digitata e la salva nelle preferenze
 			this.getAndSaveQuestion();
 			try {
-				MyPrefFiles.getMyPreference(MyPrefFiles.SECRET_Q_A, this.otherNumber + MyPrefFiles.SECRET_QUESTION, this.context);
+				MyPrefFiles.getMyPreference(MyPrefFiles.SECRET_Q_A, this.otherNumber + MyPrefFiles.SECRET_QUESTION, this.ctx);
 			} catch (NoSuchPreferenceFoundException e) {
 				e.printStackTrace();
 				return;
@@ -56,7 +56,7 @@ public class AssociateNumberFragment extends Fragment implements OnClickListener
 		}
 		catch (Exception e){
 			if(this.otherNumber != null){
-				SMSUtility.handleErrorOrExceptionInSmp(e, this.otherNumber, this.context);
+				SMSUtility.handleErrorOrExceptionInSmp(e, this.otherNumber, this.ctx);
 			}
 			else{
 				//TODO notificare
@@ -84,7 +84,7 @@ public class AssociateNumberFragment extends Fragment implements OnClickListener
 		Log.i("[DEBUG]", mQuestion);
 		
 		//salvo nelle preferenze la domanda segreta che sarà inviata all'altro più avanti
-		MyPrefFiles.setMyPreference(MyPrefFiles.SECRET_Q_A, this.otherNumber + MyPrefFiles.SECRET_QUESTION, mQuestion, this.context);
+		MyPrefFiles.setMyPreference(MyPrefFiles.SECRET_Q_A, this.otherNumber + MyPrefFiles.SECRET_QUESTION, mQuestion, this.ctx);
 	}
 
 	/**
@@ -96,7 +96,7 @@ public class AssociateNumberFragment extends Fragment implements OnClickListener
 		String mQuestion = mQuestionEditText.getText().toString();
 		
 		//salvo nelle preferenze la risposta alla domanda segreta che sarà inviata all'altro più avanti
-		MyPrefFiles.setMyPreference(MyPrefFiles.SECRET_Q_A, this.otherNumber + MyPrefFiles.SECRET_ANSWER, mQuestion, this.context);
+		MyPrefFiles.setMyPreference(MyPrefFiles.SECRET_Q_A, this.otherNumber + MyPrefFiles.SECRET_ANSWER, mQuestion, this.ctx);
 	}
 
 	/**
@@ -111,6 +111,6 @@ public class AssociateNumberFragment extends Fragment implements OnClickListener
 		
 		//... e segno di aver mandato la richiesta in SMP_STATUS
 		String preferenceKey = this.otherNumber + MyPrefFiles.PUB_KEY_REQUEST_FORWARDED;
-		MyPrefFiles.setMyPreference(MyPrefFiles.SMP_STATUS, preferenceKey, this.otherNumber, this.context);
+		MyPrefFiles.setMyPreference(MyPrefFiles.SMP_STATUS, preferenceKey, this.otherNumber, this.ctx);
 	}
 }
