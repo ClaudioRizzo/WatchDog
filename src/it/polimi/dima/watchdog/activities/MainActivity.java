@@ -75,15 +75,22 @@ public class MainActivity extends ActionBarActivity implements MessageActionList
 	public boolean onOptionsItemSelected(MenuItem item) {
 		this.mDrawerUtil.getOnOptionsItemSelected(item);
 		
+		Intent intent;
+		
 		switch (item.getItemId()) {
 		case R.id.settings_panel:
-			Intent intent = new Intent(this, SettingsActivity.class);
+			intent = new Intent(this, SettingsActivity.class);
 			startActivity(intent);
 			break;
 		case R.id.pending_requests_panel:
-			Intent intent1 = new Intent(this, PendingRequestsActivity.class);
-			startActivity(intent1);
+			intent = new Intent(this, PendingRequestsActivity.class);
+			startActivity(intent);
 			break;
+		case R.id.associate_panel:
+			intent= new Intent(this, AssociateNumberActivity.class);
+			startActivity(intent);
+			break;
+			
 		default:
 			break;
 		}	

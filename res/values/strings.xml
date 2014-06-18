@@ -34,6 +34,8 @@
     <string name="drawer_close">Close navigation drawer</string>
     <!-- Settings title -->
     <string name="settings_title">Settings</string>
+    <!-- Associate title -->
+    <string name="associate_title">Associate Number</string>
 
     <!-- Action Bar Titles -->
     <!-- GPS title -->

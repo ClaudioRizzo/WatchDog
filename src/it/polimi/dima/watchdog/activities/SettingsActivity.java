@@ -45,7 +45,7 @@ public class SettingsActivity extends ActionBarActivity implements MyOnListItemC
 
 	@Override
 	public void getClickOnAsscociateNumber() {
-		Intent intent = new Intent(this, AssociateNumberActivity.class);
-		startActivity(intent);
+		//Intent intent = new Intent(this, AssociateNumberActivity.class);
+		//startActivity(intent);
 	}
 }
