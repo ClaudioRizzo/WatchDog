@@ -3,34 +3,40 @@
     android:id="@+id/linear_layout_pending_list"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:layout_gravity="center"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:paddingTop="16dp"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    android:background="@color/jet_black" >
 
     <TextView
         android:id="@+id/text_view_pending1"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:gravity="center|right" />
+        android:textColor="@color/hacker_green"/>
 
     <EditText
         android:id="@+id/edit_text_secret_answer"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:hint="Secret Answer" />
+        android:hint="Secret Answer"
+        android:textColor="@color/hacker_green" />
 
     <EditText
         android:id="@+id/edit_text_my_secret_question"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:hint="Your Secret Question" />
+        android:hint="Your Secret Question"
+        android:textColor="@color/hacker_green" />
 
     <EditText
         android:id="@+id/edit_text_my_secret_answer"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:hint="Your Secret Answer" />
+        android:hint="Your Secret Answer"
+        android:textColor="@color/hacker_green" />
 
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -41,13 +47,13 @@
 
         <Button
             android:id="@+id/button_accept_smp"
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="accept" />
 
         <Button
             android:id="@+id/button_refuse_smp"
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="refuse" />
     </LinearLayout>

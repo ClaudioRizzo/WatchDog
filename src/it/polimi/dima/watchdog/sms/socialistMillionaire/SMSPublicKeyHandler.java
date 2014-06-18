@@ -10,6 +10,7 @@ import it.polimi.dima.watchdog.crypto.PublicKeyAutenticator;
 import it.polimi.dima.watchdog.crypto.SharedSecretAgreement;
 import it.polimi.dima.watchdog.exceptions.NoSuchPreferenceFoundException;
 import it.polimi.dima.watchdog.exceptions.SmpHashesMismatchException;
+import it.polimi.dima.watchdog.fragments.actionBar.PendingRequestsAdapter;
 import it.polimi.dima.watchdog.password.PasswordUtils;
 import it.polimi.dima.watchdog.sms.ParsableSMS;
 import it.polimi.dima.watchdog.sms.commands.flags.StatusFree;
@@ -119,7 +120,7 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 
 			//salvo nel keysquare la chiave ricevuta...
 			MyPrefFiles.setMyPreference(MyPrefFiles.KEYSQUARE, this.other, pubKeySentMsg.getBody(), this.ctx);
-			
+			PendingRequestsAdapter.otherNumber = this.other;
 			//... e anche in SMP_STATUS il fatto che l'abbia ricevuta
 			String prefKey = this.other + MyPrefFiles.PUB_KEY_RECEIVED;
 			MyPrefFiles.setMyPreference(MyPrefFiles.SMP_STATUS, prefKey, this.other, this.ctx);
