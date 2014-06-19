@@ -39,6 +39,8 @@ public class MainActivity extends ActionBarActivity implements MessageActionList
 		getSupportActionBar().setTitle(R.string.default_tab);
 		setContentView(R.layout.activity_main_layout);
 		
+		setTheme(R.style.Theme_Hacker);
+		
 		this.mDrawerUtil = new MyDrawerUtility();
 		this.mDrawerUtil.InitializeDrawerList(this, R.id.drawer_layout,R.id.left_drawer);
 		this.mDrawerUtil.handleOpenCloseDrawer(this, R.id.drawer_layout);

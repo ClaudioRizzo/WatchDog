@@ -50,12 +50,12 @@ public class GpsAdapter extends BaseAdapter {
 		
 		RelativeLayout mRelativeLayout = (RelativeLayout) view.findViewById(R.id.relative_layout_localize_list);
 		
-		TextView numberTextView = (TextView) mRelativeLayout.findViewById(R.id.text_view_localize_number);
+		TextView numberTextView = (TextView) mRelativeLayout.findViewById(R.id.text_view_number);
 		String num = this.numbers.get(position);
 		Log.i("[DEBUG gps-adapter]", "[DEBUG - GPS-Adapter] "+num);
 		numberTextView.setText(num);
 		
-		Button localizeButton = (Button) mRelativeLayout.findViewById(R.id.button_localize);
+		Button localizeButton = (Button) mRelativeLayout.findViewById(R.id.button_send);
 		localizeButton.setOnClickListener(new GpsLocalizeClickHandler(view, num, this.context));
 		
 		

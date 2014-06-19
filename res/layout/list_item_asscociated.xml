@@ -3,13 +3,12 @@
     android:id="@+id/relative_layout_localize_list"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@color/jet_black"
-    android:paddingTop="16dp"
     android:paddingLeft="16dp"
-    android:paddingRight="16dp" >
+    android:paddingRight="16dp"
+    android:paddingTop="16dp" >
 
     <TextView
-        android:id="@+id/text_view_localize_number"
+        android:id="@+id/text_view_number"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/edit_text_associated_password"
@@ -29,15 +28,14 @@
         android:textColor="@color/hacker_green" />
 
     <Button
-        android:id="@+id/button_localize"
+        android:id="@+id/button_send"
         android:layout_width="96dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_below="@id/edit_text_associated_password"
+        android:layout_alignRight="@+id/edit_text_associated_password"
+        android:layout_below="@+id/edit_text_associated_password"
         android:text="Localize" />
 
-</RelativeLayout>
-<!--
+</RelativeLayout><!--
  <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/linear_layout_localize_list"
     android:layout_width="fill_parent"

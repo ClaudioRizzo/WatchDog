@@ -2,7 +2,8 @@
 <android.support.v4.view.ViewPager xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/sms_remote_pager"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+    style="?app_background" >
 
     <android.support.v4.view.PagerTabStrip
         android:id="@+id/sms_remote_pager_title_strip"

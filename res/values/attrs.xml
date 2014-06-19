@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <attr name="fragment_title_text_style" format="reference" />
+    <attr name="app_background" format="reference" />
+    
+</resources>

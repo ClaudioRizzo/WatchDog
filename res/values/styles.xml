@@ -16,8 +16,53 @@
     <style name="AppTheme" parent="AppBaseTheme">
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
     </style>
-    
-    <style name="BlackCustomTheme" parent="@android:style/Theme.Black"/>
 
+    <style name="BlackCustomTheme" parent="@android:style/Theme.Black" />
+
+    <!-- prova flessibilità maggiore per la scelta runtime dello stile -->
+
+
+    <!--
+          approccio stile temi del cellulare, cioè si definiscono dei temi (es. green wood, sky ecc.) e in una seconda
+  		  fase si precisano nel  dettaglio**
+  		  
+  		  nei fragment, ad esempio nei layout, si specifica quale dettaglio** si sta usando,
+  		  l'implementazione effettiva di quel dettaglio varia in funziona del tema scelto, 
+  		  tema che può essere scelto anche a runtime
+    -->
+
+
+    <!-- se nessun tema viene specificato si parte così con le opzioni "base" -->
+    <style name="Theme" parent="android:Theme">
+        <item name="android:textColor">@color/hacker_green</item>
+    </style>
+
+    <!-- altrimenti nella main activity (.java) si può settare un tema -->
+
+    <style name="Theme.Hacker">
+        <item name="fragment_title_text_style">@style/hacker_fragment_title</item>
+        <item name="app_background">@style/hacker_background</item>
+    </style>
+
+    
+
+    <!-- dark forest theme - dettagli -->
+    <style name="hacker_fragment_title">
+        <item name="android:textSize">22sp</item>
+        <item name="android:textColor">@color/hacker_green</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:paddingBottom">5dip</item>
+    </style>
+
+    <style name="hacker_background">
+        <item name="android:background">@color/jet_black</item>
+    </style>
+
+
+    <!-- fine dark forest -->
+   
+
+   
+    <!-- fine prova flessibilità maggiore scelta runtime dello stile -->
 
 </resources>
