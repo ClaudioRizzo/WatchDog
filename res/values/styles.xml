@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!--
         Base application theme, dependent on API level. This theme is replaced
@@ -42,11 +42,14 @@
     <style name="Theme.Hacker">
         <item name="fragment_title_text_style">@style/hacker_fragment_title</item>
         <item name="app_background">@style/hacker_background</item>
+        <item name="tabs_style">@style/hacker_tabs</item>
     </style>
+    
+    
 
     
 
-    <!-- dark forest theme - dettagli -->
+    <!-- hacker theme - dettagli -->
     <style name="hacker_fragment_title">
         <item name="android:textSize">22sp</item>
         <item name="android:textColor">@color/hacker_green</item>
@@ -58,8 +61,12 @@
         <item name="android:background">@color/jet_black</item>
     </style>
 
+    <style name="hacker_tabs">
+        <item name="android:background">@drawable/view_tab_gradient</item>
+        <item name="android:textColor">@color/hacker_green</item>
+    </style>
 
-    <!-- fine dark forest -->
+    <!-- fine hacker -->
    
 
    

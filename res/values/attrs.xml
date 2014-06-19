@@ -3,5 +3,6 @@
 
     <attr name="fragment_title_text_style" format="reference" />
     <attr name="app_background" format="reference" />
+    <attr name="tabs_style" format="reference" />
     
 </resources>
