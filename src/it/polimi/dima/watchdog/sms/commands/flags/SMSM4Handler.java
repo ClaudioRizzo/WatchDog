@@ -1,5 +1,6 @@
 package it.polimi.dima.watchdog.sms.commands.flags;
 
+import android.content.Context;
 import android.util.Log;
 import it.polimi.dima.watchdog.sms.commands.LocateCodeMessage;
 import it.polimi.dima.watchdog.sms.commands.MarkFoundCodeMessage;
@@ -10,6 +11,7 @@ import it.polimi.dima.watchdog.sms.commands.SMSCommandVisitorInterface;
 import it.polimi.dima.watchdog.sms.commands.SirenOffCodeMessage;
 import it.polimi.dima.watchdog.sms.commands.SirenOnCodeMessage;
 import it.polimi.dima.watchdog.utilities.ListenerUtility;
+import it.polimi.dima.watchdog.utilities.MyPrefFiles;
 import it.polimi.dima.watchdog.utilities.SMSUtility;
 
 /**
@@ -19,6 +21,15 @@ import it.polimi.dima.watchdog.utilities.SMSUtility;
  *
  */
 public class SMSM4Handler implements SMSCommandVisitorInterface {	
+	
+	private String other;
+	private Context context;
+	
+	
+	public SMSM4Handler(String other, Context context){
+		this.other = other;
+		this.context = context;
+	}
 	
 	@Override
 	public void visit(SirenOnCodeMessage sirenOnCodeMessage) {
@@ -34,6 +45,8 @@ public class SMSM4Handler implements SMSCommandVisitorInterface {
 		else{
 			throw new IllegalArgumentException();
 		}
+		//Cancello anche da questo lato la sessione di comando ormai terminata
+		MyPrefFiles.eraseCommandSession(this.other, this.context);
 	}
 
 	@Override

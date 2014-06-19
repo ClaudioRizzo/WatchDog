@@ -1,1 +1,2 @@
-\paragraph{First message}
+\paragraph{First message}\hspace{0pt}\\
+The first message (m1) is constructed by concatenating a specific header, the initialization vector which will be needed to decrypt m3 (as it will be used in its encryption, see GCM explaination section), the salt needed to compute the correct decryption key for m3, and a digital signature (the iv and the salt are computed on the fly; the first is stored, the second is used to compute the encryption key for m3, which is also stored). After the message is sent a 120 seconds timeout is started and the command session log is updated.

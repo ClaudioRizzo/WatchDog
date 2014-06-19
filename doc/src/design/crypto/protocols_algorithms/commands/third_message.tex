@@ -1,1 +1,2 @@
-\paragraph{Third message}
+\paragraph{Third message}\hspace{0pt}\\
+When m2 is received before the timeout (if not it will be treated as m1, and obviously will be rejected in the header validation phase), the timeout is stopped, the signature/header validations are done, the iv is stored and the decryption key for m4 computed and saved in the preferences. Now m3 is created in this way: AES256GCM(key-for-m3, iv-for-m3, SHA256(password) + command code + a space character separator + ecdsa signature); after that m3 is sent to the other, the log is updated and the timeout restarted.

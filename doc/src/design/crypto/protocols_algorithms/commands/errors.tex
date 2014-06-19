@@ -1,1 +1,2 @@
-\paragraph{Error management}
+\paragraph{Error management}\hspace{0pt}\\
+An error in the m1, m2, m3 or m4 decryption/signature validation/header validation is managed simply by ignoring the message, restoring the log to the state it had before receiving such message and restarting the timeout (if one existed). Otherwise, if the error occurs in the execution of the actions required by the m3 command, the construction of m4 is different: AES256GCM(key-for-m4, iv-for-m4, header + fixed length body with padding and error code + ecdsa signature).

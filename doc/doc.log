@@ -1,10 +1,10 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2014.5.24)  4 JUN 2014 22:24
+This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014/Debian) (preloaded format=pdflatex 2014.6.17)  19 JUN 2014 15:40
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
 **doc.tex
 (./doc.tex
-LaTeX2e <2011/06/27>
+LaTeX2e <2014/05/01>
 Babel <3.9k> and hyphenation patterns for 78 languages loaded.
 (/usr/share/texlive/texmf-dist/tex/latex/base/article.cls
 Document Class: article 2007/10/19 v1.4h Standard LaTeX document class
@@ -36,7 +36,7 @@ Package: scrbase 2013/12/19 v3.12 KOMA-Script package (KOMA-Script-independent
 basics and keyval usage)
 
 (/usr/share/texlive/texmf-dist/tex/latex/graphics/keyval.sty
-Package: keyval 1999/03/16 v1.13 key=value parser (DPC)
+Package: keyval 2014/05/08 v1.15 key=value parser (DPC)
 \KV@toks@=\toks14
 )
 (/usr/share/texlive/texmf-dist/tex/latex/koma-script/scrlfile.sty
@@ -48,11 +48,11 @@ Package scrlfile, 2013/12/19 v3.12 KOMA-Script package (loading files)
 ))))
 
 Package scrextend Warning: Using fallback calculation to setup font sizes
-(scrextend)                for basic size `16pt' on input line 5.
+(scrextend)                for basic size `16pt' on input line 4.
 
 
 LaTeX Font Warning: Font shape `OT1/cmr/m/n' in size <16> not available
-(Font)              size <17.28> substituted on input line 5.
+(Font)              size <17.28> substituted on input line 4.
 
 (/usr/share/texlive/texmf-dist/tex/latex/base/fontenc.sty
 Package: fontenc 2005/09/27 v1.99g Standard LaTeX package
@@ -101,7 +101,7 @@ LaTeX Font Info:    Overwriting math alphabet `\mathtt' in version `bold'
 (Font)                  OT1/cmtt/m/n --> OT1/lmtt/m/n on input line 38.
 )
 (/usr/share/texlive/texmf-dist/tex/latex/base/inputenc.sty
-Package: inputenc 2008/03/30 v1.1d Input encoding file
+Package: inputenc 2014/04/30 v1.2b Input encoding file
 \inpenc@prehook=\toks15
 \inpenc@posthook=\toks16
 
@@ -120,7 +120,7 @@ File: uni-global.def 2013/05/13 UCS: Unicode global data
 \uc@temptokena=\toks19
 )
 (/usr/share/texlive/texmf-dist/tex/latex/graphics/graphicx.sty
-Package: graphicx 1999/02/16 v1.0f Enhanced LaTeX Graphics (DPC,SPQR)
+Package: graphicx 2014/04/25 v1.0g Enhanced LaTeX Graphics (DPC,SPQR)
 
 (/usr/share/texlive/texmf-dist/tex/latex/graphics/graphics.sty
 Package: graphics 2009/02/05 v1.0o Standard LaTeX Graphics (DPC,SPQR)
@@ -148,7 +148,7 @@ Package: ltxcmds 2011/11/09 v1.22 LaTeX kernel commands for general use (HO)
 \Gin@req@width=\dimen104
 )
 (/usr/share/texlive/texmf-dist/tex/latex/tools/tabularx.sty
-Package: tabularx 1999/01/07 v2.07 `tabularx' package (DPC)
+Package: tabularx 2014/05/13 v2.10 `tabularx' package (DPC)
 
 (/usr/share/texlive/texmf-dist/tex/latex/tools/array.sty
 Package: array 2008/09/09 v2.4c Tabular extension package (FMi)
@@ -193,12 +193,12 @@ Package: booktabs 2005/04/14 v1.61803 publication quality tables
 Package: colortbl 2012/02/13 v1.0a Color table columns (DPC)
 
 (/usr/share/texlive/texmf-dist/tex/latex/graphics/color.sty
-Package: color 2005/11/14 v1.0j Standard LaTeX Color (DPC)
+Package: color 2014/04/23 v1.1a Standard LaTeX Color (DPC)
 
 (/usr/share/texlive/texmf-dist/tex/latex/latexconfig/color.cfg
 File: color.cfg 2007/01/18 v1.5 color configuration of teTeX/TeXLive
 )
-Package color Info: Driver file: pdftex.def on input line 130.
+Package color Info: Driver file: pdftex.def on input line 137.
 )
 \everycr=\toks22
 \minrowclearance=\skip45
@@ -259,19 +259,19 @@ Package: titlesec 2011/12/15 v2.10.0 Sectioning titles
 ) (./doc.aux)
 \openout1 = `doc.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 53.
-LaTeX Font Info:    ... okay on input line 53.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 53.
-LaTeX Font Info:    ... okay on input line 53.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 53.
-LaTeX Font Info:    ... okay on input line 53.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 53.
-LaTeX Font Info:    ... okay on input line 53.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 53.
-LaTeX Font Info:    ... okay on input line 53.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 53.
-LaTeX Font Info:    ... okay on input line 53.
-LaTeX Font Info:    Try loading font information for T1+lmss on input line 53.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 52.
+LaTeX Font Info:    ... okay on input line 52.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 52.
+LaTeX Font Info:    ... okay on input line 52.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 52.
+LaTeX Font Info:    ... okay on input line 52.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 52.
+LaTeX Font Info:    ... okay on input line 52.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 52.
+LaTeX Font Info:    ... okay on input line 52.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 52.
+LaTeX Font Info:    ... okay on input line 52.
+LaTeX Font Info:    Try loading font information for T1+lmss on input line 52.
 
 (/usr/share/texmf/tex/latex/lm/t1lmss.fd
 File: t1lmss.fd 2009/10/30 v1.6 Font defs for Latin Modern
@@ -373,38 +373,38 @@ e
 <images/polimi.png, id=1, 722.7pt x 722.7pt>
 File: images/polimi.png Graphic file (type png)
  <use images/polimi.png>
-Package pdftex.def Info: images/polimi.png used on input line 54.
+Package pdftex.def Info: images/polimi.png used on input line 53.
 (pdftex.def)             Requested size: 216.81166pt x 216.81166pt.
-LaTeX Font Info:    Calculating math sizes for size <19.19995> on input line 54
+LaTeX Font Info:    Calculating math sizes for size <19.19995> on input line 53
 .
-LaTeX Font Info:    Try loading font information for OT1+lmr on input line 54.
+LaTeX Font Info:    Try loading font information for OT1+lmr on input line 53.
 
 (/usr/share/texmf/tex/latex/lm/ot1lmr.fd
 File: ot1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
-LaTeX Font Info:    Try loading font information for OML+lmm on input line 54.
+LaTeX Font Info:    Try loading font information for OML+lmm on input line 53.
 
 (/usr/share/texmf/tex/latex/lm/omllmm.fd
 File: omllmm.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
-LaTeX Font Info:    Try loading font information for OMS+lmsy on input line 54.
+LaTeX Font Info:    Try loading font information for OMS+lmsy on input line 53.
 
 
 (/usr/share/texmf/tex/latex/lm/omslmsy.fd
 File: omslmsy.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
-LaTeX Font Info:    Try loading font information for OMX+lmex on input line 54.
+LaTeX Font Info:    Try loading font information for OMX+lmex on input line 53.
 
 
 (/usr/share/texmf/tex/latex/lm/omxlmex.fd
 File: omxlmex.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <19.19995> on input line 54.
+(Font)              <19.19995> on input line 53.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <13.4399> on input line 54.
+(Font)              <13.4399> on input line 53.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <9.59998> on input line 54.
+(Font)              <9.59998> on input line 53.
  [1
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map} <./images/polimi.png>] (./d
@@ -558,52 +558,73 @@ rotocols_algorithms/smp.tex)
 (./src/design/crypto/protocols_algorithms/smp/pksending.tex)
 (./src/design/crypto/protocols_algorithms/smp/question_sending.tex)
 (./src/design/crypto/protocols_algorithms/smp/hash_sending.tex)
-(./src/design/crypto/protocols_algorithms/smp/ack_and_salt_sending.tex)
-(./src/design/crypto/protocols_algorithms/smp/second_half.tex [16
+(./src/design/crypto/protocols_algorithms/smp/ack_and_salt_sending.tex [16
 
 ])
+(./src/design/crypto/protocols_algorithms/smp/second_half.tex)
 (./src/design/crypto/protocols_algorithms/smp/errors.tex)
 (./src/design/crypto/protocols_algorithms/command_protocol.tex)
-(./src/design/crypto/protocols_algorithms/commands/first_message.tex)
+(./src/design/crypto/protocols_algorithms/commands/first_message.tex [17])
 (./src/design/crypto/protocols_algorithms/commands/second_message.tex)
 (./src/design/crypto/protocols_algorithms/commands/third_message.tex)
 (./src/design/crypto/protocols_algorithms/commands/fourth_message.tex)
-(./src/design/crypto/protocols_algorithms/commands/errors.tex [17])
-(./src/design/crypto/protocols_algorithms/commands/timeout.tex) [18]
-(./src/testing/testing.tex) (./src/testing/crypto.tex)
-(./src/testing/protocols.tex) [19
+(./src/design/crypto/protocols_algorithms/commands/errors.tex [18])
+(./src/design/crypto/protocols_algorithms/commands/timeout.tex) [19]
+(./src/open_issues/open_issues.tex)
+(./src/open_issues/issues/unilateral_uninstall.tex
+Underfull \hbox (badness 10000) in paragraph at lines 2--3
 
-] (./src/manuals/installation_usage.tex)
-(./src/manuals/installation.tex) (./src/manuals/usage.tex)
-(./src/manuals/usage/wizard.tex) (./src/manuals/usage/settings.tex)
-(./src/manuals/usage/commands.tex) [20
+ []
 
-] (./doc.aux)
+LaTeX Font Info:    Try loading font information for OMS+lmss on input line 4.
+LaTeX Font Info:    No file OMSlmss.fd. on input line 4.
+
+LaTeX Font Warning: Font shape `OMS/lmss/m/n' undefined
+(Font)              using `OMS/cmsy/m/n' instead
+(Font)              for symbol `textbullet' on input line 4.
+
+) (./src/open_issues/issues/association_deletion.tex)
+(./src/open_issues/issues/marks.tex) [20
+
+] (./src/testing/testing.tex)
+(./src/testing/crypto.tex) (./src/testing/protocols.tex) [21
+
+]
+(./src/manuals/installation_usage.tex) (./src/manuals/installation.tex)
+(./src/manuals/usage.tex) (./src/manuals/usage/wizard.tex)
+(./src/manuals/usage/settings.tex) (./src/manuals/usage/commands.tex) [22
+
+]
+(./doc.aux)
 
 LaTeX Font Warning: Size substitutions with differences
 (Font)              up to 1.28pt have occurred.
 
+
+LaTeX Font Warning: Some font shapes were not available, defaults substituted.
+
  ) 
 Here is how much of TeX's memory you used:
- 4647 strings out of 493304
- 80679 string characters out of 6139871
- 162102 words of memory out of 5000000
- 7788 multiletter control sequences out of 15000+600000
- 65550 words of font info for 55 fonts, out of 8000000 for 9000
- 957 hyphenation exceptions out of 8191
+ 4687 strings out of 493113
+ 81883 string characters out of 6137488
+ 162752 words of memory out of 5000000
+ 7817 multiletter control sequences out of 15000+600000
+ 65807 words of font info for 56 fonts, out of 8000000 for 9000
+ 1141 hyphenation exceptions out of 8191
  47i,7n,37p,2194b,234s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texmf/fonts/enc/dvips/lm/lm-rm.enc}{/usr/share/texmf/fonts/enc/dv
 ips/lm/lm-mathsy.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-mathit.enc}{/usr/s
-hare/texmf/fonts/enc/dvips/lm/lm-ec.enc}</usr/share/texmf/fonts/type1/public/lm
-/lmmi12.pfb></usr/share/texmf/fonts/type1/public/lm/lmr10.pfb></usr/share/texmf
-/fonts/type1/public/lm/lmr12.pfb></usr/share/texmf/fonts/type1/public/lm/lmss12
-.pfb></usr/share/texmf/fonts/type1/public/lm/lmss17.pfb></usr/share/texmf/fonts
-/type1/public/lm/lmssbo10.pfb></usr/share/texmf/fonts/type1/public/lm/lmssbx10.
-pfb></usr/share/texmf/fonts/type1/public/lm/lmsy10.pfb>
-Output written on doc.pdf (20 pages, 423458 bytes).
+hare/texmf/fonts/enc/dvips/lm/lm-ec.enc}</usr/share/texlive/texmf-dist/fonts/ty
+pe1/public/amsfonts/cm/cmsy10.pfb></usr/share/texmf/fonts/type1/public/lm/lmmi1
+2.pfb></usr/share/texmf/fonts/type1/public/lm/lmr10.pfb></usr/share/texmf/fonts
+/type1/public/lm/lmr12.pfb></usr/share/texmf/fonts/type1/public/lm/lmss12.pfb><
+/usr/share/texmf/fonts/type1/public/lm/lmss17.pfb></usr/share/texmf/fonts/type1
+/public/lm/lmssbo10.pfb></usr/share/texmf/fonts/type1/public/lm/lmssbx10.pfb></
+usr/share/texmf/fonts/type1/public/lm/lmsy10.pfb>
+Output written on doc.pdf (22 pages, 444554 bytes).
 PDF statistics:
- 115 PDF objects out of 1000 (max. 8388607)
- 75 compressed objects within 1 object stream
+ 125 PDF objects out of 1000 (max. 8388607)
+ 82 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  31 words of extra memory for PDF output out of 10000 (max. 10000000)
 
