@@ -1,0 +1,9 @@
+\subsection{Unilateral Uninstallation}
+If the application is removed (or the preferences deleted) on a telephone, then, after a reinstall, the owner of that mobile phone won't be able to reassociate to his old contacts, since on the other side the situation will still look like a completed association, so any SMP message coming from an already associated phone (including IDontWantToAssociate) will be simply discarded in the message validation phase. A possible workaround is to notificate to all the contacts when the application is uninstalled, but\\
+\begin{itemize}
+\item it may not be always possible ("dirty" uninstall ways);
+\item the application is mainly intended to be used by the same person on two telephones, so the user has likely the control on both (he is likely the one to uninstall the app);
+\item a validation of such message (real or fake or error) is not trivial.
+\end{itemize}
+\vspace{0.7cm}
+The second possible solution is to create a way to locally delete some preferences relative to the other user(s).
