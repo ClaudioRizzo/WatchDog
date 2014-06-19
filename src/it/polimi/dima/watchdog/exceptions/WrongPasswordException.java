@@ -1,4 +1,4 @@
-package it.polimi.dima.watchdog.password;
+package it.polimi.dima.watchdog.exceptions;
 
 public class WrongPasswordException extends Exception {
 

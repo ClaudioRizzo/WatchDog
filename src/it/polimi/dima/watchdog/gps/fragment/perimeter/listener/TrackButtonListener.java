@@ -9,34 +9,32 @@ import android.content.Intent;
 import android.location.LocationManager;
 import android.provider.Settings;
 import android.support.v7.app.ActionBarActivity;
-import android.transition.Visibility;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.TextView;
 
 public class TrackButtonListener implements OnClickListener {
 
 	private PerimeterTracker tracker;
-	private Context ctx;
+	private Context context;
 
-	public TrackButtonListener(PerimeterTracker tracker, Context ctx) {
+	public TrackButtonListener(PerimeterTracker tracker, Context context) {
 		this.tracker = tracker;
-		this.ctx = ctx;
+		this.context = context;
 	}
 
 	@Override
 	public void onClick(View v) {
 
-		LocationManager locationMan = (LocationManager) ctx
+		LocationManager locationMan = (LocationManager) context
 				.getSystemService(Context.LOCATION_SERVICE);
 
-		if (!tracker.isProviderEnabled(locationMan)) {
+		if (!this.tracker.isProviderEnabled(locationMan)) {
 			askForLocationEnabled();
 		}
 
-		tracker.getLocationUpdates();
-		((ActionBarActivity) ctx).findViewById(R.id.seek_bar_radius).setVisibility(View.INVISIBLE);
-		((ActionBarActivity) ctx).findViewById(R.id.linear_layout_seek_bar_values).setVisibility(View.INVISIBLE);
+		this.tracker.getLocationUpdates();
+		((ActionBarActivity) this.context).findViewById(R.id.seek_bar_radius).setVisibility(View.INVISIBLE);
+		((ActionBarActivity) this.context).findViewById(R.id.linear_layout_seek_bar_values).setVisibility(View.INVISIBLE);
 		
 
 	}
@@ -46,7 +44,7 @@ public class TrackButtonListener implements OnClickListener {
 		 * Function to show settings alert dialog
 		 * */
 
-		AlertDialog.Builder alertDialog = new AlertDialog.Builder(ctx);
+		AlertDialog.Builder alertDialog = new AlertDialog.Builder(this.context);
 
 		// Setting Dialog Title
 		alertDialog.setTitle("GPS is settings");
@@ -64,7 +62,7 @@ public class TrackButtonListener implements OnClickListener {
 					public void onClick(DialogInterface dialog, int which) {
 						Intent intent = new Intent(
 								Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-						ctx.startActivity(intent);
+						context.startActivity(intent);
 					}
 				});
 

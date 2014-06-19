@@ -11,7 +11,6 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 /**
@@ -21,7 +20,7 @@ import android.widget.ListView;
  */
 public class MyDrawerUtility {
 
-	private String[] mGenFeatures;
+	//private String[] mGenFeatures;
 	private DrawerLayout mDrawerLayout;
 	private ListView mDrawerList;
 	private ActionBarDrawerToggle mDrawerToggle;
@@ -44,7 +43,7 @@ public class MyDrawerUtility {
 		drawerItem[1] = new ObjectDrawerItem(R.drawable.radaricon, "Remote");
 		drawerItem[2] = new ObjectDrawerItem(R.drawable.radaricon, "Status");
 		
-		mGenFeatures = mActivity.getResources().getStringArray(R.array.gen_features_array);
+		//mGenFeatures = mActivity.getResources().getStringArray(R.array.gen_features_array);
 		mDrawerLayout = (DrawerLayout) mActivity.findViewById(drawerLayout);
 		mDrawerList = (ListView) mActivity.findViewById(drawerList);
 		//new ArrayAdapter<String>(mActivity, R.layout.drawer_list_item, mGenFeatures)

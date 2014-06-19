@@ -29,16 +29,16 @@ public class TimeoutWrapper {
 	 * 
 	 * @param waiting : il numero di telefono di colui che aspetta
 	 * @param waited : il numero di telefono di colui da cui ci si aspetta un messaggio
-	 * @param ctx : il contesto corrente
+	 * @param context : il contesto corrente
 	 * @throws NoSuchAlgorithmException
 	 */
-	public static void addTimeout(String waiting, String waited, Context ctx) throws NoSuchAlgorithmException{
+	public static void addTimeout(String waiting, String waited, Context context) throws NoSuchAlgorithmException{
 		Calendar nextTimeoutCalendar = Calendar.getInstance();
-		Intent intent = TimeoutWrapper.createAndFillIntent(waited, ctx);
-		PendingIntent pendingIntent = TimeoutWrapper.createPendingIntent(ctx, intent);
-		TimeoutWrapper.createTimeout(ctx, pendingIntent, nextTimeoutCalendar);
+		Intent intent = TimeoutWrapper.createAndFillIntent(waited, context);
+		PendingIntent pendingIntent = TimeoutWrapper.createPendingIntent(context, intent);
+		TimeoutWrapper.createTimeout(context, pendingIntent, nextTimeoutCalendar);
 		Log.i("DEBUG", "DEBUG TIMEOUT: timeout creato");
-		TimeoutWrapper.storeTimeoutId(waiting, waited, ctx, TimeoutWrapper.PENDING_INTENT_ID);
+		TimeoutWrapper.storeTimeoutId(waiting, waited, context, TimeoutWrapper.PENDING_INTENT_ID);
 	}
 	
 	/**
@@ -46,46 +46,46 @@ public class TimeoutWrapper {
 	 * 
 	 * @param waiting : il numero di telefono di colui che aspetta
 	 * @param waited : il numero di telefono di colui da cui ci si aspetta un messaggio
-	 * @param ctx : il contesto corrente
+	 * @param context : il contesto corrente
 	 * @throws NumberFormatException
 	 * @throws NoSuchPreferenceFoundException
 	 */
-	public static void removeTimeout(String waiting, String waited, Context ctx) throws NumberFormatException, NoSuchPreferenceFoundException {
-		Intent intent = new Intent(ctx, TimeoutManagement.class);
-		PendingIntent pendingIntent = TimeoutWrapper.createPendingIntentForTimeoutDeletion(waiting, waited, ctx, intent);
-		TimeoutWrapper.cancelTimeout(ctx, pendingIntent);
+	public static void removeTimeout(String waiting, String waited, Context context) throws NumberFormatException, NoSuchPreferenceFoundException {
+		Intent intent = new Intent(context, TimeoutManagement.class);
+		PendingIntent pendingIntent = TimeoutWrapper.createPendingIntentForTimeoutDeletion(waiting, waited, context, intent);
+		TimeoutWrapper.cancelTimeout(context, pendingIntent);
 	}
 	
-	private static Intent createAndFillIntent(String waited, Context ctx){
-		Intent intent = new Intent(ctx, TimeoutManagement.class);
+	private static Intent createAndFillIntent(String waited, Context context){
+		Intent intent = new Intent(context, TimeoutManagement.class);
 		intent.putExtra(SMSUtility.OTHER_PHONE, waited);
 		return intent;
 	}
 	
-	private static PendingIntent createPendingIntent(Context ctx, Intent intent) throws NoSuchAlgorithmException{
+	private static PendingIntent createPendingIntent(Context context, Intent intent) throws NoSuchAlgorithmException{
 		TimeoutWrapper.PENDING_INTENT_ID = SecureRandom.getInstance(CryptoUtility.SHA1_PRNG).nextInt(Integer.MAX_VALUE);
-		return PendingIntent.getBroadcast(ctx, TimeoutWrapper.PENDING_INTENT_ID, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+		return PendingIntent.getBroadcast(context, TimeoutWrapper.PENDING_INTENT_ID, intent, PendingIntent.FLAG_CANCEL_CURRENT);
 	}
 	
-	private static void createTimeout(Context ctx, PendingIntent pendingIntent, Calendar nextTimeoutCalendar){
-		AlarmManager alarmManager = (AlarmManager) ctx.getSystemService(Context.ALARM_SERVICE);
+	private static void createTimeout(Context context, PendingIntent pendingIntent, Calendar nextTimeoutCalendar){
+		AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 		nextTimeoutCalendar.add(Calendar.SECOND, SMSUtility.TIMEOUT_LENGTH);
 		alarmManager.setExact(AlarmManager.RTC_WAKEUP, nextTimeoutCalendar.getTimeInMillis(), pendingIntent);
 	}
 	
-	private static void storeTimeoutId(String waiting, String waited, Context ctx, int pendingIntentId){
+	private static void storeTimeoutId(String waiting, String waited, Context context, int pendingIntentId){
 		String timeoutKey = MyPrefFiles.TIMEOUT_ID + waiting + waited;
-		MyPrefFiles.setMyPreference(MyPrefFiles.TIMEOUTS_IDS, timeoutKey, String.valueOf(pendingIntentId), ctx);
+		MyPrefFiles.setMyPreference(MyPrefFiles.TIMEOUTS_IDS, timeoutKey, String.valueOf(pendingIntentId), context);
 	}
 	
-	private static PendingIntent createPendingIntentForTimeoutDeletion(String waiting, String waited, Context ctx, Intent intent) throws NumberFormatException, NoSuchPreferenceFoundException{
+	private static PendingIntent createPendingIntentForTimeoutDeletion(String waiting, String waited, Context context, Intent intent) throws NumberFormatException, NoSuchPreferenceFoundException{
 		String timeoutKey = MyPrefFiles.TIMEOUT_ID + waiting + waited;
-		TimeoutWrapper.PENDING_INTENT_ID = Integer.valueOf(MyPrefFiles.getMyPreference(MyPrefFiles.TIMEOUTS_IDS, timeoutKey, ctx)).intValue();
-		return PendingIntent.getBroadcast(ctx, TimeoutWrapper.PENDING_INTENT_ID, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+		TimeoutWrapper.PENDING_INTENT_ID = Integer.valueOf(MyPrefFiles.getMyPreference(MyPrefFiles.TIMEOUTS_IDS, timeoutKey, context)).intValue();
+		return PendingIntent.getBroadcast(context, TimeoutWrapper.PENDING_INTENT_ID, intent, PendingIntent.FLAG_CANCEL_CURRENT);
 	}
 	
-	private static void cancelTimeout(Context ctx, PendingIntent pendingIntent){
-		AlarmManager alarmManager = (AlarmManager) ctx.getSystemService(Context.ALARM_SERVICE);
+	private static void cancelTimeout(Context context, PendingIntent pendingIntent){
+		AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 		alarmManager.cancel(pendingIntent);
 	}
 }

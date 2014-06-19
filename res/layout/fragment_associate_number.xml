@@ -9,7 +9,7 @@
         android:id="@+id/edit_text_associate_number"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:inputType="numberSigned"
+        android:inputType="phone"
         android:hint="@string/edit_text_phone" />
     <EditText
         android:id="@+id/edit_text_associate_question"

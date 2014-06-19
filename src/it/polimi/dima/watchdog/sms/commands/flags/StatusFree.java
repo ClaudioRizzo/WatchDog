@@ -69,34 +69,34 @@ public class StatusFree implements CommandProtocolFlagsReactionInterface{
 		return StatusFree.NEXT_SENT_STATUS;
 	}
 	
-	private void generateAndSaveAESKeyForM3(String phoneNumber, Context ctx) throws NoSuchPreferenceFoundException, InvalidKeyException, NoSuchAlgorithmException{
+	private void generateAndSaveAESKeyForM3(String phoneNumber, Context context) throws NoSuchPreferenceFoundException, InvalidKeyException, NoSuchAlgorithmException{
 		byte[] salt = this.parser.getSalt();
-		byte[] sharedSecret = Base64.decode(MyPrefFiles.getMyPreference(MyPrefFiles.SHARED_SECRETS, phoneNumber, ctx),Base64.DEFAULT);
+		byte[] sharedSecret = Base64.decode(MyPrefFiles.getMyPreference(MyPrefFiles.SHARED_SECRETS, phoneNumber, context),Base64.DEFAULT);
 		AESKeyGenerator generator = new AESKeyGenerator(sharedSecret, salt);
 		String aesKey = Base64.encodeToString(generator.generateKey().getEncoded(), Base64.DEFAULT);
 		String identifier = phoneNumber + MyPrefFiles.SESSION_KEY;
-		MyPrefFiles.setMyPreference(MyPrefFiles.COMMAND_SESSION, identifier, aesKey, ctx);
+		MyPrefFiles.setMyPreference(MyPrefFiles.COMMAND_SESSION, identifier, aesKey, context);
 	}
 	
-	private void saveIVForM3(String phoneNumber, Context ctx){
+	private void saveIVForM3(String phoneNumber, Context context){
 		String identifier = phoneNumber + MyPrefFiles.IV;
 		String ivBase64 = Base64.encodeToString(this.parser.getIV(), Base64.DEFAULT);
-		MyPrefFiles.setMyPreference(MyPrefFiles.COMMAND_SESSION, identifier, ivBase64, ctx);
+		MyPrefFiles.setMyPreference(MyPrefFiles.COMMAND_SESSION, identifier, ivBase64, context);
 	}
 	
-	private void generateAndSendM2(String phoneNumber, Context ctx) throws NoSuchPreferenceFoundException, NoSuchAlgorithmException, InvalidKeySpecException, NotECKeyException, NoSignatureDoneException, NoSuchProviderException{
+	private void generateAndSendM2(String phoneNumber, Context context) throws NoSuchPreferenceFoundException, NoSuchAlgorithmException, InvalidKeySpecException, NotECKeyException, NoSignatureDoneException, NoSuchProviderException{
 		byte[] header = SMSUtility.hexStringToByteArray(SMSUtility.M2_HEADER);
-		byte[] body  = packIvAndSalt(phoneNumber, ctx);
-		byte[] secret = Base64.decode(MyPrefFiles.getMyPreference(MyPrefFiles.SHARED_SECRETS, phoneNumber, ctx), Base64.DEFAULT);
-		generateAndStoreAesKeyForM4(secret, this.keySalt, phoneNumber, ctx);
+		byte[] body  = packIvAndSalt(phoneNumber, context);
+		byte[] secret = Base64.decode(MyPrefFiles.getMyPreference(MyPrefFiles.SHARED_SECRETS, phoneNumber, context), Base64.DEFAULT);
+		generateAndStoreAesKeyForM4(secret, this.keySalt, phoneNumber, context);
 		byte[] message = packHeaderAndBody(header, body);
-		byte[] signature = CryptoUtility.doSignature(message, MyPrefFiles.getMyPrivateKey(ctx));
+		byte[] signature = CryptoUtility.doSignature(message, MyPrefFiles.getMyPrivateKey(context));
 		byte[] finalMessage = packMessage(message, signature);
 		SMSUtility.sendSingleMessage(phoneNumber, SMSUtility.COMMAND_PORT, finalMessage);
 	}
 	
-	private byte[] packIvAndSalt(String phoneNumber, Context ctx) throws NoSuchPreferenceFoundException, NotECKeyException, NoSuchAlgorithmException, NoSuchProviderException, InvalidKeySpecException, NoSignatureDoneException {
-		byte[] iv = generateAndStoreIVForM4(phoneNumber, ctx);
+	private byte[] packIvAndSalt(String phoneNumber, Context context) throws NoSuchPreferenceFoundException, NotECKeyException, NoSuchAlgorithmException, NoSuchProviderException, InvalidKeySpecException, NoSignatureDoneException {
+		byte[] iv = generateAndStoreIVForM4(phoneNumber, context);
 		byte[] salt = generateSalt();
 		this.keySalt = salt;
 		return constructBody(iv, salt);
@@ -115,11 +115,11 @@ public class StatusFree implements CommandProtocolFlagsReactionInterface{
 		return salt;
 	}
 
-	private byte[] generateAndStoreIVForM4(String phoneNumber, Context ctx) {
+	private byte[] generateAndStoreIVForM4(String phoneNumber, Context context) {
 		byte[] iv = new byte[12];
 		new Random().nextBytes(iv);
 		String initializationVector = Base64.encodeToString(iv, Base64.DEFAULT);
-		MyPrefFiles.setMyPreference(MyPrefFiles.COMMAND_SESSION, phoneNumber + MyPrefFiles.IV_FOR_M4, initializationVector, ctx);
+		MyPrefFiles.setMyPreference(MyPrefFiles.COMMAND_SESSION, phoneNumber + MyPrefFiles.IV_FOR_M4, initializationVector, context);
 		return iv;
 	}
 	
@@ -130,11 +130,11 @@ public class StatusFree implements CommandProtocolFlagsReactionInterface{
 		return message;
 	}
 	
-	private void generateAndStoreAesKeyForM4(byte[] secret, byte[] salt, String phoneNumber, Context ctx) {
+	private void generateAndStoreAesKeyForM4(byte[] secret, byte[] salt, String phoneNumber, Context context) {
 		Log.i("DEBUG", "DEBUG sale prima di generare la chiave: " + Base64.encodeToString(salt, Base64.DEFAULT));
 		AESKeyGenerator aesKeyGenerator = new AESKeyGenerator(secret, salt);
 		String sessionKey = Base64.encodeToString(aesKeyGenerator.generateKey().getEncoded(), Base64.DEFAULT);
-		MyPrefFiles.setMyPreference(MyPrefFiles.COMMAND_SESSION, phoneNumber + MyPrefFiles.KEY_FOR_M4, sessionKey, ctx);
+		MyPrefFiles.setMyPreference(MyPrefFiles.COMMAND_SESSION, phoneNumber + MyPrefFiles.KEY_FOR_M4, sessionKey, context);
 		Log.i("DEBUG", "DEBUG chiave prima di essere inviata: " + sessionKey);
 	}
 	

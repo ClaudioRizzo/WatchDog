@@ -3,23 +3,15 @@ package it.polimi.dima.watchdog.sms.commands;
 import it.polimi.dima.watchdog.crypto.CryptoUtility;
 import it.polimi.dima.watchdog.exceptions.NotECKeyException;
 import it.polimi.dima.watchdog.exceptions.NoSignatureDoneException;
-import it.polimi.dima.watchdog.utilities.SMSUtility;
-
 import java.io.UnsupportedEncodingException;
 import java.security.Key;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
-
 import org.spongycastle.crypto.InvalidCipherTextException;
 
-import android.telephony.SmsManager;
-
 /**
- * Classe che gestisce la costruzione degli SMS. IMPORTANTE: per gli sms di configurazione (scambio chiavi, ecc.)
- * NON si usa questa classe: questa classe è pensata solo per costruire i messaggi che costituiscono i comandi,
- * accompagnati da password. Altra cosa importante: prima di ogni messaggio dovrà essere effettuato lo scambio
- * di chiavi ECDH per concordare il valore della chiave con cui il messaggio sarà crittato.
+ * Classe che gestisce la costruzione del principale sms di comando (m3).
  * 
  * @author emanuele
  *
@@ -33,7 +25,6 @@ public class CommandSMS {
 	private byte[] finalMessage; // hash(password) || text
 	private byte[] signature; //firma digitale
 	private byte[] finalSignedAndEncryptedMessage; //messaggio firmato e crittografato
-	private String dest; //serve per memorizzare il destinatario
 	private byte[] iv;
 	
 	
@@ -48,12 +39,11 @@ public class CommandSMS {
 	/**
 	 * Costruttore con testo e password alla fine del quale il messaggio sarà pronto per essere spedito.
 	 */
-	public CommandSMS(byte[] text, byte[] password, PrivateKey mPriv, Key key, String dest, byte[] iv){
+	public CommandSMS(byte[] text, byte[] password, PrivateKey mPriv, Key key, byte[] iv){
 		this.text = text;
 		this.password = password;
 		this.myPrivateKey = mPriv;
 		this.encryptionKey = key;
-		this.dest = dest;
 		this.iv = iv;
 	}
 
@@ -99,10 +89,5 @@ public class CommandSMS {
 		signaturePlusMessage[this.finalMessage.length] = ' ';
 		System.arraycopy(this.signature, 0, signaturePlusMessage, this.finalMessage.length + 1, this.signature.length);	
 		this.finalSignedAndEncryptedMessage = CryptoUtility.doEncryptionOrDecryption(signaturePlusMessage, this.encryptionKey, this.iv, CryptoUtility.ENC);
-	}
-	
-	public void send(){
-		SmsManager smsManager = SmsManager.getDefault();
-		smsManager.sendDataMessage(this.dest, null, SMSUtility.COMMAND_PORT, this.finalSignedAndEncryptedMessage, null, null);
 	}
 }

@@ -62,12 +62,12 @@ public class StatusM2Sent implements CommandProtocolFlagsReactionInterface {
 		smsToParse.handle(handler);
 	}
 	
-	private M3Parser popolateParser(SmsMessage sms, Context ctx, String other) throws NoSuchPreferenceFoundException, NoSuchAlgorithmException, InvalidKeySpecException, NoSuchProviderException {
+	private M3Parser popolateParser(SmsMessage sms, Context context, String other) throws NoSuchPreferenceFoundException, NoSuchAlgorithmException, InvalidKeySpecException, NoSuchProviderException {
 		byte[] encryptedMessage = sms.getUserData();
-		Key decryptionKey = MyPrefFiles.getSymmetricCryptoKey(ctx, other, true);
-		PublicKey oPub = MyPrefFiles.getOtherPublicKey(ctx, other);
-		byte[] storedPasswordHash = MyPrefFiles.getMyPasswordHash(ctx);
-		byte[] iv = MyPrefFiles.getIV(ctx, other, true);
+		Key decryptionKey = MyPrefFiles.getSymmetricCryptoKey(context, other, true);
+		PublicKey oPub = MyPrefFiles.getOtherPublicKey(context, other);
+		byte[] storedPasswordHash = MyPrefFiles.getMyPasswordHash(context);
+		byte[] iv = MyPrefFiles.getIV(context, other, true);
 		return new M3Parser(encryptedMessage, decryptionKey, oPub, storedPasswordHash, iv);
 	}
 

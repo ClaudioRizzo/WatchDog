@@ -11,11 +11,11 @@ import android.widget.TextView;
 public class SeekBarPerimeterListener implements OnSeekBarChangeListener {
 
 	
-	private Context ctx;
+	private Context context;
 	private PerimeterTracker tracker;
 
-	public SeekBarPerimeterListener(Context ctx, PerimeterTracker tracker) {
-		this.ctx = ctx;
+	public SeekBarPerimeterListener(Context context, PerimeterTracker tracker) {
+		this.context = context;
 		this.tracker = tracker;
 		
 	}
@@ -23,10 +23,10 @@ public class SeekBarPerimeterListener implements OnSeekBarChangeListener {
 	@Override
 	public void onProgressChanged(SeekBar seekBar, int progress,
 			boolean fromUser) {
-		TextView radiusView = (TextView) ((ActionBarActivity) ctx).findViewById(R.id.text_view_settled_radius);
+		TextView radiusView = (TextView) ((ActionBarActivity) this.context).findViewById(R.id.text_view_settled_radius);
 		radiusView.setText("Hai settato un raggio di: "+progress+" metri");
 		
-		tracker.setRadius(progress);
+		this.tracker.setRadius(progress);
 
 		
 	}
@@ -42,5 +42,4 @@ public class SeekBarPerimeterListener implements OnSeekBarChangeListener {
 		// TODO Auto-generated method stub
 		
 	}
-
 }

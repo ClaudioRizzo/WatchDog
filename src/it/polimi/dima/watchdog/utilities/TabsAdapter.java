@@ -13,8 +13,6 @@ import android.support.v4.app.FragmentPagerAdapter;
  *
  */
 public class TabsAdapter extends FragmentPagerAdapter {
-
-
 	
 	private int tabsNum;
 	private FeatureEnum mFeatureEnum;
@@ -29,13 +27,13 @@ public class TabsAdapter extends FragmentPagerAdapter {
 	@Override
 	public Fragment getItem(int position) {
 		
-		FeatureFactory mFactory = FeatureFactory.getFactory(mFeatureEnum);
+		FeatureFactory mFactory = FeatureFactory.getFactory(this.mFeatureEnum);
 		return mFactory.getFragment(position);
 	}
 
 	@Override
 	public int getCount() {
-		return tabsNum;
+		return this.tabsNum;
 	}
 	
 	@Override
@@ -45,6 +43,6 @@ public class TabsAdapter extends FragmentPagerAdapter {
 
 	
 	public int getTABS_NUM() {
-		return tabsNum;
+		return this.tabsNum;
 	}
 }

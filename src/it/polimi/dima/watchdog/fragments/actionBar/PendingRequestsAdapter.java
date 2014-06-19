@@ -33,12 +33,10 @@ public class PendingRequestsAdapter extends BaseAdapter {
 
 	public static String otherNumber;
 
-	public PendingRequestsAdapter(Context context,
-			List<SocialistRequestWrapper> data) {
+	public PendingRequestsAdapter(Context context, List<SocialistRequestWrapper> data) {
 		this.context = context;
 		this.data = (LinkedList<SocialistRequestWrapper>) data;
-		inflater = (LayoutInflater) context
-				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 	}
 
 	@Override
@@ -62,29 +60,21 @@ public class PendingRequestsAdapter extends BaseAdapter {
 		if (vi == null) {
 			vi = inflater.inflate(R.layout.list_item_pending_requests, null);
 		}
-		LinearLayout mLinearLayout = (LinearLayout) vi
-				.findViewById(R.id.linear_layout_pending_list);
-		TextView mTextView = (TextView) mLinearLayout
-				.findViewById(R.id.text_view_pending1);
+		LinearLayout mLinearLayout = (LinearLayout) vi.findViewById(R.id.linear_layout_pending_list);
+		TextView mTextView = (TextView) mLinearLayout.findViewById(R.id.text_view_pending1);
 		SocialistRequestWrapper current = data.get(position);
 		setStringToShow(current, mTextView);
 
-		EditText secAnswerEditText = (EditText) mLinearLayout
-				.findViewById(R.id.edit_text_secret_answer);
-		EditText mySecQuestionEditText = (EditText) mLinearLayout
-				.findViewById(R.id.edit_text_my_secret_question);
-		EditText mySecAnswerEditText = (EditText) mLinearLayout
-				.findViewById(R.id.edit_text_my_secret_answer);
+		EditText secAnswerEditText = (EditText) mLinearLayout.findViewById(R.id.edit_text_secret_answer);
+		EditText mySecQuestionEditText = (EditText) mLinearLayout.findViewById(R.id.edit_text_my_secret_question);
+		EditText mySecAnswerEditText = (EditText) mLinearLayout.findViewById(R.id.edit_text_my_secret_answer);
 		
 		noNeedForSecrets(mLinearLayout);
 		
-		List<EditText> editTextList = new ArrayList<EditText>(Arrays.asList(
-				secAnswerEditText, mySecQuestionEditText, mySecAnswerEditText));
+		List<EditText> editTextList = new ArrayList<EditText>(Arrays.asList(secAnswerEditText, mySecQuestionEditText, mySecAnswerEditText));
 
-		Button refuseButton = (Button) mLinearLayout
-				.findViewById(R.id.button_refuse_smp);
-		Button sendButton = (Button) mLinearLayout
-				.findViewById(R.id.button_accept_smp);
+		Button refuseButton = (Button) mLinearLayout.findViewById(R.id.button_refuse_smp);
+		Button sendButton = (Button) mLinearLayout.findViewById(R.id.button_accept_smp);
 
 		handleRefuse(refuseButton, current.getNumber());
 		handleSend(sendButton, current.getNumber(), editTextList);
@@ -180,19 +170,15 @@ public class PendingRequestsAdapter extends BaseAdapter {
 		});
 	}
 
-	private void setStringToShow(SocialistRequestWrapper socReqWrapper,
-			TextView textView) {
-		String toShow = socReqWrapper.getNumber() + ": "
-				+ socReqWrapper.getQuestion();
+	private void setStringToShow(SocialistRequestWrapper socReqWrapper,TextView textView) {
+		String toShow = socReqWrapper.getNumber() + ": " + socReqWrapper.getQuestion();
 		textView.setText(toShow);
 	}
 
 	private boolean noNeedForSecrets(View v) {
 		if (otherNumber != null) {
-			EditText mySecQuestionEditText = (EditText) v
-					.findViewById(R.id.edit_text_my_secret_question);
-			EditText mySecAnswerEditText = (EditText) v
-					.findViewById(R.id.edit_text_my_secret_answer);
+			EditText mySecQuestionEditText = (EditText) v.findViewById(R.id.edit_text_my_secret_question);
+			EditText mySecAnswerEditText = (EditText) v.findViewById(R.id.edit_text_my_secret_answer);
 			mySecQuestionEditText.setVisibility(View.INVISIBLE);
 			mySecAnswerEditText.setVisibility(View.INVISIBLE);
 			

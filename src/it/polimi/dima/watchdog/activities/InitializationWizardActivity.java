@@ -9,7 +9,6 @@ import it.polimi.dima.watchdog.fragments.wizard.InitializeWizardFragment.OnPassw
 import it.polimi.dima.watchdog.utilities.MyPrefFiles;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Base64;

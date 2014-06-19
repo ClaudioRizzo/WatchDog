@@ -6,12 +6,14 @@ import java.security.spec.InvalidKeySpecException;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.Set;
+
 import android.content.Context;
 import android.util.Base64;
 import it.polimi.dima.watchdog.crypto.CryptoUtility;
 import it.polimi.dima.watchdog.exceptions.NoSignatureDoneException;
 import it.polimi.dima.watchdog.exceptions.NoSuchPreferenceFoundException;
 import it.polimi.dima.watchdog.exceptions.NotECKeyException;
+import it.polimi.dima.watchdog.exceptions.WrongPasswordException;
 import it.polimi.dima.watchdog.utilities.MyPrefFiles;
 import it.polimi.dima.watchdog.utilities.SMSUtility;
 

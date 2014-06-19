@@ -73,23 +73,23 @@ public class StatusM1Sent implements CommandProtocolFlagsReactionInterface {
 	}
 
 
-	private void generateAndSendM3(String phoneNumber, Context ctx) throws NoSuchPreferenceFoundException, NoSuchAlgorithmException, InvalidKeySpecException, UnsupportedEncodingException, IllegalStateException, InvalidCipherTextException, NotECKeyException, NoSignatureDoneException, NoSuchProviderException {
-		byte[] command = MyPrefFiles.getSessionCommand(ctx, phoneNumber);
-		byte[] password = MyPrefFiles.getPreviouslyStoredPassword(ctx, phoneNumber);
-		byte[] passwordSalt = MyPrefFiles.getPasswordSalt(ctx, phoneNumber);
+	private void generateAndSendM3(String phoneNumber, Context context) throws NoSuchPreferenceFoundException, NoSuchAlgorithmException, InvalidKeySpecException, UnsupportedEncodingException, IllegalStateException, InvalidCipherTextException, NotECKeyException, NoSignatureDoneException, NoSuchProviderException {
+		byte[] command = MyPrefFiles.getSessionCommand(context, phoneNumber);
+		byte[] password = MyPrefFiles.getPreviouslyStoredPassword(context, phoneNumber);
+		byte[] passwordSalt = MyPrefFiles.getOtherPasswordSalt(context, phoneNumber);
 		byte[] saltedPassword = new byte[password.length + passwordSalt.length];
 		System.arraycopy(password, 0, saltedPassword, 0, password.length);
 		System.arraycopy(passwordSalt, 0, saltedPassword, password.length, passwordSalt.length);
 		
-		Key encryptionKey = MyPrefFiles.getSymmetricCryptoKey(ctx, phoneNumber, true);
-		byte[] iv = MyPrefFiles.getIV(ctx, phoneNumber, true);
-		PrivateKey mPriv = MyPrefFiles.getMyPrivateKey(ctx);
+		Key encryptionKey = MyPrefFiles.getSymmetricCryptoKey(context, phoneNumber, true);
+		byte[] iv = MyPrefFiles.getIV(context, phoneNumber, true);
+		PrivateKey mPriv = MyPrefFiles.getMyPrivateKey(context);
 		
-		CommandSMS sms = new CommandSMS(command, saltedPassword, mPriv, encryptionKey, phoneNumber, iv);
+		CommandSMS sms = new CommandSMS(command, saltedPassword, mPriv, encryptionKey, iv);
 		sms.construct();
 		//cancello le preferenze ormai inutili
-		MyPrefFiles.deleteUselessCommandSessionPreferencesForM3(phoneNumber, ctx);
-		sms.send();
+		MyPrefFiles.deleteUselessCommandSessionPreferencesForM3(phoneNumber, context);
+		SMSUtility.sendSingleMessage(phoneNumber, SMSUtility.COMMAND_PORT, sms.getFinalSignedAndEncryptedMessage());
 	}
 
 	@Override

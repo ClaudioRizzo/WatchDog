@@ -54,6 +54,4 @@ public class ParsableSMS implements SocialistMillionaireMessageInterface, Comman
 
 	@Override
 	public void handle(SMSCommandVisitorInterface visitor) throws IllegalArgumentException, TooLongResponseException, NoSuchPreferenceFoundException, NoSuchAlgorithmException, InvalidKeySpecException, NoSignatureDoneException, NotECKeyException, IllegalStateException, InvalidCipherTextException {}
-
-	
 }

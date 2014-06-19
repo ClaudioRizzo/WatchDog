@@ -41,7 +41,7 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 	private String other; // a turno sarà sender o receiver
 	private SocialistMillionaireFactory mSocMilFactory;
 	private PublicKeyAutenticator pka;
-	private Context ctx;
+	private Context context;
 
 	public SMSPublicKeyHandler() {
 		this.mSocMilFactory = new SocialistMillionaireFactory();
@@ -50,7 +50,7 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
-		this.ctx = context;
+		this.context = context;
 		final Bundle bundle = intent.getExtras();
 
 		Log.i("[DEBUG_SMP]", "[DEBUG_SMP] SMS RECEIVED");
@@ -75,7 +75,7 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 			}
 		} catch (Exception e) {
 			//notifico e invio richiesta di stop forzato, oltre alla cancellazione delle preferenze
-			SMSUtility.handleErrorOrExceptionInSmp(e, this.other, this.ctx);
+			SMSUtility.handleErrorOrExceptionInSmp(e, this.other, this.context);
 		}
 	}
 
@@ -87,24 +87,24 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 		Log.i("[DEBUG_SMP]", "[DEBUG_SMP] CODE_1 RECEIVED");
 		try {
 			//vedo se accettare il messaggio
-			pubKeyReqMsg.validate(this.other, this.ctx);
+			pubKeyReqMsg.validate(this.other, this.context);
 			
 			//segno in SMP_STATUS che ho ricevuto una richiesta di invio della mia chiave pubblica
 			String prefKey = this.other + MyPrefFiles.PUB_KEY_REQUEST_RECEIVED;
-			MyPrefFiles.setMyPreference(MyPrefFiles.SMP_STATUS, prefKey, this.other, this.ctx);
+			MyPrefFiles.setMyPreference(MyPrefFiles.SMP_STATUS, prefKey, this.other, this.context);
 			
 			//preparo la mia chiave pubblica...
-			this.pka.setMyPublicKey(MyPrefFiles.getMyPreference(MyPrefFiles.MY_KEYS, MyPrefFiles.MY_PUB, this.ctx));
+			this.pka.setMyPublicKey(MyPrefFiles.getMyPreference(MyPrefFiles.MY_KEYS, MyPrefFiles.MY_PUB, this.context));
 			
 			//...poi la invio a chi me l'ha chiesta...
 			SMSUtility.sendMessage(this.other, SMSUtility.SMP_PORT, SMSUtility.hexStringToByteArray(SMSUtility.CODE2), this.pka.getMyPublicKey());
 			
 			//... e infine segno in SMP_STATUS che l'ho inviata
 			String preferenceKey = this.other + MyPrefFiles.PUB_KEY_FORWARDED;
-			MyPrefFiles.setMyPreference(MyPrefFiles.SMP_STATUS, preferenceKey, this.other, this.ctx);
+			MyPrefFiles.setMyPreference(MyPrefFiles.SMP_STATUS, preferenceKey, this.other, this.context);
 		} catch (Exception e){
 			//notifico e invio richiesta di stop forzato, oltre alla cancellazione delle preferenze
-			SMSUtility.handleErrorOrExceptionInSmp(e, this.other, this.ctx);
+			SMSUtility.handleErrorOrExceptionInSmp(e, this.other, this.context);
 		}
 	}
 
@@ -116,27 +116,27 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 		Log.i("[DEBUG_SMP]", "[DEBUG] CODE_2 RECEIVED");
 		try {
 			//vedo se accettare il messaggio
-			pubKeySentMsg.validate(this.other, this.ctx);
+			pubKeySentMsg.validate(this.other, this.context);
 
 			//salvo nel keysquare la chiave ricevuta...
-			MyPrefFiles.setMyPreference(MyPrefFiles.KEYSQUARE, this.other, pubKeySentMsg.getBody(), this.ctx);
+			MyPrefFiles.setMyPreference(MyPrefFiles.KEYSQUARE, this.other, pubKeySentMsg.getBody(), this.context);
 			PendingRequestsAdapter.otherNumber = this.other;
 			//... e anche in SMP_STATUS il fatto che l'abbia ricevuta
 			String prefKey = this.other + MyPrefFiles.PUB_KEY_RECEIVED;
-			MyPrefFiles.setMyPreference(MyPrefFiles.SMP_STATUS, prefKey, this.other, this.ctx);
+			MyPrefFiles.setMyPreference(MyPrefFiles.SMP_STATUS, prefKey, this.other, this.context);
 			
 			//preparo la mia secret question (non è salvata in Base64, quindi non è richiesta la converione)...
-			this.pka.setSecretQuestion(MyPrefFiles.getMyPreference(MyPrefFiles.SECRET_Q_A, this.other + MyPrefFiles.SECRET_QUESTION, this.ctx));
+			this.pka.setSecretQuestion(MyPrefFiles.getMyPreference(MyPrefFiles.SECRET_Q_A, this.other + MyPrefFiles.SECRET_QUESTION, this.context));
 			
 			//... poi la invio a chi mi ha mandato la sua chiave pubblica...
 			SMSUtility.sendMessage(this.other, SMSUtility.SMP_PORT, SMSUtility.hexStringToByteArray(SMSUtility.CODE3), this.pka.getSecretQuestion().getBytes());
 			
 			//... e segno in SMP_STATUS di avergliela mandata
 			String preferenceKey = this.other + MyPrefFiles.SECRET_QUESTION_FORWARDED;
-			MyPrefFiles.setMyPreference(MyPrefFiles.SMP_STATUS, preferenceKey, this.other, this.ctx);
+			MyPrefFiles.setMyPreference(MyPrefFiles.SMP_STATUS, preferenceKey, this.other, this.context);
 		} catch (Exception e){
 			//notifico e invio richiesta di stop forzato, oltre alla cancellazione delle preferenze
-			SMSUtility.handleErrorOrExceptionInSmp(e, this.other, this.ctx);
+			SMSUtility.handleErrorOrExceptionInSmp(e, this.other, this.context);
 		}
 	}
 
@@ -148,21 +148,21 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 		Log.i("[DEBUG_SMP]", "[DEBUG_SMP] CODE_3 RECEIVED");
 		try {
 			//vedo se accettare il messaggio
-			secQuestMsg.validate(this.other, this.ctx);
+			secQuestMsg.validate(this.other, this.context);
 			
 			//segno in SMP_STATUS di aver ricevuto una domanda segreta
 			String prefKey = this.other + MyPrefFiles.SECRET_QUESTION_RECEIVED;
-			MyPrefFiles.setMyPreference(MyPrefFiles.SMP_STATUS, prefKey, this.other, this.ctx);
+			MyPrefFiles.setMyPreference(MyPrefFiles.SMP_STATUS, prefKey, this.other, this.context);
 			
 			//segno in PENDENT il fatto che ho una richiesta pendente da parte di this.other...
 			String question = new String(Base64.decode(secQuestMsg.getBody(), Base64.DEFAULT), PasswordUtils.UTF_8);
-			MyPrefFiles.setMyPreference(MyPrefFiles.PENDENT, this.other, question, ctx);
+			MyPrefFiles.setMyPreference(MyPrefFiles.PENDENT, this.other, question, this.context);
 
 			//... e notifico a me stesso di ciò
 			this.notifyUser();
 		} catch (Exception e){
 			//notifico e invio richiesta di stop forzato, oltre alla cancellazione delle preferenze
-			SMSUtility.handleErrorOrExceptionInSmp(e, this.other, this.ctx);
+			SMSUtility.handleErrorOrExceptionInSmp(e, this.other, this.context);
 		}
 	}
 
@@ -175,13 +175,13 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 		Log.i("[DEBUG_SMP]", "[DEBUG_SMP] CODE_4 RECEIVED");
 		try {
 			//vedo se accettare il messaggio
-			secAnswMsg.validate(this.other, this.ctx);
+			secAnswMsg.validate(this.other, this.context);
 
 			//recupero la risposta segreta dalle preferenze...
-			this.pka.setSecretAnswer(MyPrefFiles.getMyPreference(MyPrefFiles.SECRET_Q_A, this.other + MyPrefFiles.SECRET_ANSWER, this.ctx));
+			this.pka.setSecretAnswer(MyPrefFiles.getMyPreference(MyPrefFiles.SECRET_Q_A, this.other + MyPrefFiles.SECRET_ANSWER, this.context));
 			
 			//... poi recupero dal keysquare la chiave pubblica che mi era stata inviata...
-			this.pka.setReceivedPublicKey(MyPrefFiles.getMyPreference(MyPrefFiles.KEYSQUARE, this.other, this.ctx));
+			this.pka.setReceivedPublicKey(MyPrefFiles.getMyPreference(MyPrefFiles.KEYSQUARE, this.other, this.context));
 			
 			//... computo l'hash di chiave || risposta ...
 			this.pka.doHashToCheck();
@@ -190,7 +190,7 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 			this.pka.setReceivedHash(secAnswMsg.getBody());
 
 			//la chiave è cancellata dal keysquare sempre e comunque
-			MyPrefFiles.deleteMyPreference(MyPrefFiles.KEYSQUARE, this.other, this.ctx);
+			MyPrefFiles.deleteMyPreference(MyPrefFiles.KEYSQUARE, this.other, this.context);
 			
 			//se gli hash non coincidono il SMP si interrompe, altrimenti si prosegue
 			if (!this.pka.checkForEquality()) {
@@ -202,7 +202,7 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 			}
 		} catch (Exception e){
 			//notifico e invio richiesta di stop forzato, oltre alla cancellazione delle preferenze
-			SMSUtility.handleErrorOrExceptionInSmp(e, this.other, this.ctx);
+			SMSUtility.handleErrorOrExceptionInSmp(e, this.other, this.context);
 		}
 	}
 
@@ -214,18 +214,18 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 		Log.i("[DEBUG_SMP]", "[DEBUG_SMP] CODE_5 RECEIVED");
 		try {
 			//vedo se accettare il messaggio
-			keyValMsg.validate(this.other, this.ctx);
+			keyValMsg.validate(this.other, this.context);
 
 			//estrapolo dal messaggio ricevuto il sale...
 			String salt = new String(Base64.decode(this.recMsg.getBody(), Base64.DEFAULT), PasswordUtils.UTF_8);
 			
 			//... e lo salvo nell'HASHRING
-			MyPrefFiles.setMyPreference(MyPrefFiles.HASHRING, this.other, salt, this.ctx);
+			MyPrefFiles.setMyPreference(MyPrefFiles.HASHRING, this.other, salt, this.context);
 			
 			Log.i("[DEBUG_SMP]", "[DEBUG_SMP] HALF_SMP_SUCCESSFUL");
 			
 			//se non ho già validato la chiave dell'altro faccio partire SMP in modo simmetrico
-			if (!MyPrefFiles.existsPreference(MyPrefFiles.KEYRING, this.other, this.ctx)) {
+			if (!MyPrefFiles.existsPreference(MyPrefFiles.KEYRING, this.other, this.context)) {
 				Log.i("[DEBUG_SMP]", "[DEBUG_SMP] STARTING SMP SECOND HALF");
 				
 				//invio il messaggio di richiesta della chiave pubblica...
@@ -233,16 +233,16 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 				
 				//... e segno in SMP_STATUS di averlo inviato
 				String preferenceKey = this.other + MyPrefFiles.PUB_KEY_REQUEST_FORWARDED;
-				MyPrefFiles.setMyPreference(MyPrefFiles.SMP_STATUS, preferenceKey, this.other, this.ctx);
+				MyPrefFiles.setMyPreference(MyPrefFiles.SMP_STATUS, preferenceKey, this.other, this.context);
 			}
 			else{
-				Log.i("[DEBUG_SMP]", "[DEBUG_SMP] FULL_SMP_SUCCESSFUL " + MyPrefFiles.getMyPreference(MyPrefFiles.KEYRING, this.other, this.ctx));
+				Log.i("[DEBUG_SMP]", "[DEBUG_SMP] FULL_SMP_SUCCESSFUL " + MyPrefFiles.getMyPreference(MyPrefFiles.KEYRING, this.other, this.context));
 			
 				//TODO notificare il fragment
 			}
 		} catch (Exception e){
 			//notifico e invio richiesta di stop forzato, oltre alla cancellazione delle preferenze
-			SMSUtility.handleErrorOrExceptionInSmp(e, this.other, this.ctx);
+			SMSUtility.handleErrorOrExceptionInSmp(e, this.other, this.context);
 		}
 	}
 
@@ -254,20 +254,20 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 		Log.i("[DEBUG_SMP]", "[DEBUG_SMP] CODE_6 RECEIVED");
 		try {
 			//vedo se accettare il messaggio
-			noAssMsg.validate(this.other, this.ctx);
+			noAssMsg.validate(this.other, this.context);
 			
 			/**
 			 * Il controllo sulla presenza di riferimenti all'altro utente nelle preferenze serve per non
 			 * mandare avanti all'infinito la catena di notifiche
 			 */
 			//se ho riferimenti all'altro utente nelle preferenze...
-			if (MyPrefFiles.iHaveSomeReferencesToThisUser(this.other, this.ctx)) {
+			if (MyPrefFiles.iHaveSomeReferencesToThisUser(this.other, this.context)) {
 				//... li cancello ed esorto l'altro a fare lo stesso
-				SMSUtility.handleErrorOrExceptionInSmp(null, this.other, this.ctx);
+				SMSUtility.handleErrorOrExceptionInSmp(null, this.other, this.context);
 			}
 		} catch (Exception e){
 			//notifico e invio richiesta di stop forzato, oltre alla cancellazione delle preferenze
-			SMSUtility.handleErrorOrExceptionInSmp(e, this.other, this.ctx);
+			SMSUtility.handleErrorOrExceptionInSmp(e, this.other, this.context);
 		}
 	}
 
@@ -283,8 +283,8 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 	 */
 	private byte[] generateCommonSecret() throws NoSuchPreferenceFoundException, NoSuchAlgorithmException, InvalidKeySpecException, NoSuchProviderException, InvalidKeyException {
 		SharedSecretAgreement ssa = new SharedSecretAgreement();
-		String myPriv = MyPrefFiles.getMyPreference(MyPrefFiles.MY_KEYS, MyPrefFiles.MY_PRIV, this.ctx);
-		String otherPub = MyPrefFiles.getMyPreference(MyPrefFiles.KEYRING, this.other, this.ctx);
+		String myPriv = MyPrefFiles.getMyPreference(MyPrefFiles.MY_KEYS, MyPrefFiles.MY_PRIV, this.context);
+		String otherPub = MyPrefFiles.getMyPreference(MyPrefFiles.KEYRING, this.other, this.context);
 		ssa.setMyPrivateKey(myPriv);
 		ssa.setReceivedOtherPublicKey(otherPub);
 		ssa.generateSharedSecret();
@@ -295,14 +295,14 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 	 * Notifica l'utente della richiesta di associazione.
 	 */
 	private void notifyUser() {
-		NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this.ctx).setSmallIcon(android.R.drawable.stat_notify_chat).setContentTitle("prova").setContentText("hello world").setAutoCancel(true);
-		Intent resultIntent = new Intent(this.ctx, PendingRequestsActivity.class);
-		TaskStackBuilder stackBuilder = TaskStackBuilder.create(this.ctx);
+		NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this.context).setSmallIcon(android.R.drawable.stat_notify_chat).setContentTitle("prova").setContentText("hello world").setAutoCancel(true);
+		Intent resultIntent = new Intent(this.context, PendingRequestsActivity.class);
+		TaskStackBuilder stackBuilder = TaskStackBuilder.create(this.context);
 		stackBuilder.addParentStack(PendingRequestsActivity.class);
 		stackBuilder.addNextIntent(resultIntent);
 		PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
 		mBuilder.setContentIntent(resultPendingIntent);
-		NotificationManager mNotificationManager = (NotificationManager) this.ctx.getSystemService(Context.NOTIFICATION_SERVICE);
+		NotificationManager mNotificationManager = (NotificationManager) this.context.getSystemService(Context.NOTIFICATION_SERVICE);
 		mNotificationManager.notify(0, mBuilder.build());
 	}
 
@@ -319,7 +319,7 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 	private void doECDH() throws NoSuchAlgorithmException, InvalidKeySpecException, NoSuchPreferenceFoundException, NullPointerException, NoSuchProviderException, InvalidKeyException {
 		byte[] secret = generateCommonSecret();
 		String secretBase64 = Base64.encodeToString(secret, Base64.DEFAULT);
-		MyPrefFiles.setMyPreference(MyPrefFiles.SHARED_SECRETS, this.other, secretBase64, this.ctx);
+		MyPrefFiles.setMyPreference(MyPrefFiles.SHARED_SECRETS, this.other, secretBase64, this.context);
 	}
 	
 	/**
@@ -337,29 +337,29 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 		
 		//salvo nel keyring la chiave appena validata...
 		String keyValidated = Base64.encodeToString(this.pka.getReceivedPublicKey(), Base64.DEFAULT);
-		MyPrefFiles.setMyPreference(MyPrefFiles.KEYRING, this.other, keyValidated, this.ctx);
+		MyPrefFiles.setMyPreference(MyPrefFiles.KEYRING, this.other, keyValidated, this.context);
 		
 		//... recupero il sale della mia password...
-		String salt = MyPrefFiles.getMyPreference(MyPrefFiles.PASSWORD_AND_SALT, MyPrefFiles.MY_PASSWORD_SALT, this.ctx);
+		String salt = MyPrefFiles.getMyPreference(MyPrefFiles.PASSWORD_AND_SALT, MyPrefFiles.MY_PASSWORD_SALT, this.context);
 		
 		//... invio un ack che contiene anche il sale...
 		SMSUtility.sendMessage(this.other, SMSUtility.SMP_PORT, SMSUtility.hexStringToByteArray(SMSUtility.CODE5), salt.getBytes());
 		
 		//... e segno in SMP_STATUS di averlo inviato
 		String preferenceKey = this.other + MyPrefFiles.ACK_AND_SALT_FORWARDED;
-		MyPrefFiles.setMyPreference(MyPrefFiles.SMP_STATUS, preferenceKey, this.other, this.ctx);
+		MyPrefFiles.setMyPreference(MyPrefFiles.SMP_STATUS, preferenceKey, this.other, this.context);
 		
 		//infine computo il segreto condiviso...
 		doECDH();
 		
 		//... e segno di essere disponibile a iniziare una sessione di comando
-		MyPrefFiles.setMyPreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + this.other, StatusFree.CURRENT_STATUS, this.ctx);
+		MyPrefFiles.setMyPreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + this.other, StatusFree.CURRENT_STATUS, this.context);
 	}
 	
 	private void saveNumber() {
 		
-		if(!MyPrefFiles.existsPreference(MyPrefFiles.ASSOCIATED, other, ctx))
+		if(!MyPrefFiles.existsPreference(MyPrefFiles.ASSOCIATED, other, context))
 			Log.i("[DEBUG SMP]", "[DEBUG-SMP] ho salvato il numero: "+other);
-			MyPrefFiles.setMyPreference(MyPrefFiles.ASSOCIATED, other, other, ctx);
+			MyPrefFiles.setMyPreference(MyPrefFiles.ASSOCIATED, other, other, context);
 	}
 }

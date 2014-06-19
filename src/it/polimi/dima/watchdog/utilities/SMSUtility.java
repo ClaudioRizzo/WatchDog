@@ -64,36 +64,36 @@ public class SMSUtility {
 	/**
 	 * PublicKeyRequestCode (for SMP only) : header del messaggio che chiede all'altro la chiave pubblica.
 	 */
-	public static String CODE1 = "C0DE1FFF";
+	public static final String CODE1 = "C0DE1FFF";
 	
 	/**
 	 * PublicKeySentCode (for SMP only) : header del messaggio che manda la chiave pubblica a chi l'ha chiesta.
 	 */
-	public static String CODE2 = "C0DE2FFF";
+	public static final String CODE2 = "C0DE2FFF";
 	
 	/**
 	 * SecretQuestionSentCode (for SMP only) : header del messaggio che manda la domanda segreta all'altro.
 	 */
-	public static String CODE3 = "C0DE3FFF";
+	public static final String CODE3 = "C0DE3FFF";
 	
 	/**
 	 * SecretAnswerAndPublicKeyHashSentCode (for SMP only) : header del messaggio che manda l'hash di
 	 * propria chiave pubblica || risposta segreta all'altro.
 	 */
-	public static String CODE4 = "C0DE4FFF";
+	public static final String CODE4 = "C0DE4FFF";
 	
 	/**
 	 * KeyValidatedCode (for SMP only) : header del messaggio che conferma l'avvenuta validazione della chiave
 	 * pubblica.
 	 */
-	public static String CODE5 = "C0DE5FFF";
+	public static final String CODE5 = "C0DE5FFF";
 	
 	/**
 	 * IDontWantToAssociateCode (for SMP only) : header del messaggio che informa dell'abort del processo di
 	 * validazione della chiave (vale per tutti i possibili errori, non solo per la mancata uguaglianza degli
 	 * hash).
 	 */
-	public static String CODE6 = "C0DE6FFF";
+	public static final String CODE6 = "C0DE6FFF";
 	
 	
 	
@@ -102,37 +102,37 @@ public class SMSUtility {
 	/**
 	 * SirenOnCode (for commands only)
 	 */
-	public static String SIREN_ON = "C0DE01FF";
+	public static final String SIREN_ON = "C0DE01FF";
 	
 	/**
 	 * SirenOffCode (for commands only)
 	 */
-	public static String SIREN_OFF = "C0DE02FF";
+	public static final String SIREN_OFF = "C0DE02FF";
 	
 	/**
 	 * MarkStolenCode (for commands only)
 	 */
-	public static String MARK_STOLEN = "C0DE03FF";
+	public static final String MARK_STOLEN = "C0DE03FF";
 	
 	/**
 	 * MarkLostCode (for commands only)
 	 */
-	public static String MARK_LOST = "C0DE04FF";
+	public static final String MARK_LOST = "C0DE04FF";
 	
 	/**
 	 * MarkLostOrStolenCode (for commands only)
 	 */
-	public static String MARK_LOST_OR_STOLEN = "C0DE05FF";
+	public static final String MARK_LOST_OR_STOLEN = "C0DE05FF";
 	
 	/**
 	 * MarkFoundCode (for commands only)
 	 */
-	public static String MARK_FOUND = "C0DE06FF";
+	public static final String MARK_FOUND = "C0DE06FF";
 	
 	/**
 	 * LocateCode (for commands only)
 	 */
-	public static String LOCATE = "C0DE07FF";
+	public static final String LOCATE = "C0DE07FF";
 	
 	
 	
@@ -140,7 +140,7 @@ public class SMSUtility {
 	/**
 	 * PasswordChangeCode (for password reset only)
 	 */
-	public static String PASSWORD_CHANGE = "CODEBEEF";
+	public static final String PASSWORD_CHANGE = "CODEBEEF";
 	
 	
 	
@@ -150,17 +150,17 @@ public class SMSUtility {
 	/**
 	 * Header del primo messaggio della sessione di comando.
 	 */
-	public static String M1_HEADER = "C0DE001F";
+	public static final String M1_HEADER = "C0DE001F";
 	
 	/**
 	 * Header del secondo messaggio della sessione di comando.
 	 */
-	public static String M2_HEADER = "C0DE002F";
+	public static final String M2_HEADER = "C0DE002F";
 	
 	/**
 	 * Header del quarto messaggio della sessione di comando.
 	 */
-	public static String M4_HEADER = "C0DE004F";
+	public static final String M4_HEADER = "C0DE004F";
 	
 	
 	
@@ -170,27 +170,27 @@ public class SMSUtility {
 	/**
 	 * Messaggio che indica il successo di siren on
 	 */
-	public static String SIREN_ON_RESPONSE_OK = "siren_activated";
+	public static final String SIREN_ON_RESPONSE_OK = "siren_activated";
 	
 	/**
 	 * Messaggio che indica il fallimento di siren on
 	 */
-	public static String SIREN_ON_RESPONSE_KO = "siren_activated";
+	public static final String SIREN_ON_RESPONSE_KO = "siren_activated";
 	
 	/**
 	 * Messaggio che indica il successo di siren off
 	 */
-	public static String SIREN_OFF_RESPONSE_OK = "siren_activated";
+	public static final String SIREN_OFF_RESPONSE_OK = "siren_activated";
 	
 	/**
 	 * Messaggio che indica il fallimento di siren off
 	 */
-	public static String SIREN_OFF_RESPONSE_KO = "siren_activated";
+	public static final String SIREN_OFF_RESPONSE_KO = "siren_activated";
 	
 	/**
 	 * Messaggio che indica il fallimento di locate
 	 */
-	public static String LOCATE_RESPONSE_KO = "locate_failed";
+	public static final String LOCATE_RESPONSE_KO = "locate_failed";
 	
 	
 	

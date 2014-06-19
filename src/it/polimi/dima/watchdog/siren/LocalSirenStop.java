@@ -63,5 +63,4 @@ public class LocalSirenStop {
 			SMSUtility.showShortToastMessage("Password sbagliata: non ho potuto interrompere la sirena.", this.context);
 		}
 	}
-
 }

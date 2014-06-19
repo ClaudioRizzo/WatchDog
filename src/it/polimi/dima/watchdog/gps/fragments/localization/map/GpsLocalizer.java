@@ -39,7 +39,7 @@ public class GpsLocalizer implements LocationListener {
 	@Override
 	public void onLocationChanged(Location location) {
 		Log.i("[NOTIFICA]", "[NOTIFICA] ho notificato");
-		mCallback.onlocationChange(location);
+		this.mCallback.onlocationChange(location);
 
 	}
 
@@ -66,20 +66,18 @@ public class GpsLocalizer implements LocationListener {
 	}
 
 	/**
-	 * register the gpsTracker to get location updates
+	 * registers the gpsTracker to get location updates
 	 */
 	public void getLocationUpdates() {
 		Criteria criteria = new Criteria();
-	    String provider = mLocationManager.getBestProvider(criteria, false);
-		mLocationManager.requestLocationUpdates(provider, 400, 1, this);
+	    String provider = this.mLocationManager.getBestProvider(criteria, false);
+		this.mLocationManager.requestLocationUpdates(provider, 400, 1, this);
 	}
 
 	/**
-	 * remove the gpsTracker from listening to location cahnges
+	 * removes the gpsTracker from listening to location changes
 	 */
 	public void removeLocationUpdates() {
-		mLocationManager.removeUpdates(this);
+		this.mLocationManager.removeUpdates(this);
 	}
-	
-
 }

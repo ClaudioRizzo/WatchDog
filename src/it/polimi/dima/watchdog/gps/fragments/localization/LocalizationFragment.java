@@ -67,7 +67,4 @@ public class LocalizationFragment extends Fragment implements FragmentAdapterLif
 		// TODO Auto-generated method stub
 		
 	}
-
-	
-
 }

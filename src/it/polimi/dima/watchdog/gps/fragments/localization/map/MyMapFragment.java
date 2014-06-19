@@ -34,15 +34,14 @@ public class MyMapFragment extends Fragment {
 	}
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
 		View v = inflater.inflate(R.layout.fragment_mymap, container, false);
 
 		MapsInitializer.initialize(getActivity());
 
-		mMapView = (MapView) v.findViewById(R.id.map);
-		mMapView.onCreate(mBundle);
+		this.mMapView = (MapView) v.findViewById(R.id.map);
+		this.mMapView.onCreate(this.mBundle);
 
 		setUpMapIfNeeded(v);
 		
@@ -54,31 +53,30 @@ public class MyMapFragment extends Fragment {
 
 	private void setUpMapIfNeeded(View v) {
 
-		if (mMap == null) {
-			mMap = ((MapView) v.findViewById(R.id.map)).getMap();
+		if (this.mMap == null) {
+			this.mMap = ((MapView) v.findViewById(R.id.map)).getMap();
 
-			if (mMap != null) {
+			if (this.mMap != null) {
 				setUpMap();
 			}
 		}
-
 	}
 
 	private void setUpMap() {
-		if (location == null) {
+		if (this.location == null) {
 
 			try {
 
 				Context ctx = getActivity().getApplicationContext();
-				gps = new GpsLocalizer(ctx, (LocationManager) getActivity()
+				this.gps = new GpsLocalizer(ctx, (LocationManager) getActivity()
 						.getSystemService(Context.LOCATION_SERVICE));
 
-				Location lastLoc = gps.getLastKnownLocation();
+				Location lastLoc = this.gps.getLastKnownLocation();
 
 				Log.i("DEBUG", "DEBUG last position: " + lastLoc);
 				if (lastLoc != null) {
 
-					mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
+					this.mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
 							new LatLng(lastLoc.getLatitude(), lastLoc
 									.getLongitude()), 12.0f));
 
@@ -90,13 +88,13 @@ public class MyMapFragment extends Fragment {
 			}
 
 		} else {
-			Log.i("[DEBUG]", "latitudine " + location.getLatitude()
-					+ " longitudine: " + location.getLongitude());
-			mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(
-					location.getLatitude(), location.getLongitude()), 12.0f));
-			mMap.addMarker(new MarkerOptions()
+			Log.i("[DEBUG]", "latitudine " + this.location.getLatitude()
+					+ " longitudine: " + this.location.getLongitude());
+			this.mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(
+					this.location.getLatitude(), this.location.getLongitude()), 12.0f));
+			this.mMap.addMarker(new MarkerOptions()
 					.position(
-							new LatLng(location.getLatitude(), location
+							new LatLng(this.location.getLatitude(), this.location
 									.getLongitude())).title("Your Phone"));
 		}
 	}
@@ -104,28 +102,27 @@ public class MyMapFragment extends Fragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		mBundle = savedInstanceState;
+		this.mBundle = savedInstanceState;
 	}
 
 	@Override
 	public void onResume() {
 		super.onResume();
-		mMapView.onResume();
+		this.mMapView.onResume();
 	}
 
 	@Override
 	public void onPause() {
 		// Destroy map
 		super.onPause();
-		mMapView.onPause();
+		this.mMapView.onPause();
 
 	}
 
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
-		mMapView.onDestroy();
+		this.mMapView.onDestroy();
 
 	}
-
 }

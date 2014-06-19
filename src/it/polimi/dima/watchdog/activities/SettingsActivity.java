@@ -3,7 +3,6 @@ package it.polimi.dima.watchdog.activities;
 import it.polimi.dima.watchdog.R;
 import it.polimi.dima.watchdog.fragments.actionBar.SettingsFragment;
 import it.polimi.dima.watchdog.fragments.actionBar.SettingsFragment.MyOnListItemClicked;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBarActivity;

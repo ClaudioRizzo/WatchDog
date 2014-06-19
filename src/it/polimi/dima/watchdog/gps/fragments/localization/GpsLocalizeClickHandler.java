@@ -23,34 +23,34 @@ import android.widget.EditText;
 
 public class GpsLocalizeClickHandler implements OnClickListener {
 
-	private String pswd;
+	private String password;
 	private String otherNumber;
 	private byte[] keySalt;
-	private Context ctx;
+	private Context context;
 	private View fragView;
 	
-	public GpsLocalizeClickHandler(View fragView,String otherNumber, Context ctx) {
+	public GpsLocalizeClickHandler(View fragView,String otherNumber, Context context) {
 		this.fragView = fragView;
-		this.ctx = ctx;
+		this.context = context;
 		this.otherNumber = otherNumber;
 	}
 	
 	@Override
 	public void onClick(View v) {
 		try{
-			this.pswd = getPassword();
+			this.password = getPassword();
 			//this.otherNumber = getPhoneNumber();
 			
 			byte[] command = SMSUtility.hexStringToByteArray(SMSUtility.LOCATE); //TODO in realtà il tipo di comando va preso dal tipo di bottone cliccato
 			
-			if(!MyPrefFiles.existsPreference(MyPrefFiles.KEYRING, this.otherNumber, this.ctx)){
+			if(!MyPrefFiles.existsPreference(MyPrefFiles.KEYRING, this.otherNumber, this.context)){
 				throw new NoSuchPreferenceFoundException("Non si può iniziare una sessione di comando con un utente con cui non è stato fatto SMP!!!");
 			}
 			
-			storeDataToReuseInM3(pswd, command);
+			storeDataToReuseInM3(this.password, command);
 			
 			byte[] body = packIvAndSalt();
-			byte[] secret = Base64.decode(MyPrefFiles.getMyPreference(MyPrefFiles.SHARED_SECRETS, this.otherNumber, this.ctx), Base64.DEFAULT);
+			byte[] secret = Base64.decode(MyPrefFiles.getMyPreference(MyPrefFiles.SHARED_SECRETS, this.otherNumber, this.context), Base64.DEFAULT);
 			generateAndStoreAesKey(secret, this.keySalt);
 			byte[] header = SMSUtility.hexStringToByteArray(SMSUtility.M1_HEADER);
 			byte[] message = packHeaderAndBody(header, body);
@@ -58,21 +58,21 @@ public class GpsLocalizeClickHandler implements OnClickListener {
 			byte[] finalMessage = packMessage(message, signature);
 			
 			SMSUtility.sendSingleMessage(this.otherNumber, SMSUtility.COMMAND_PORT, finalMessage);
-			MyPrefFiles.replacePreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + this.otherNumber, StatusM1Sent.CURRENT_STATUS, this.ctx);
-			TimeoutWrapper.addTimeout(SMSUtility.MY_PHONE, this.otherNumber, this.ctx);
+			MyPrefFiles.replacePreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + this.otherNumber, StatusM1Sent.CURRENT_STATUS, this.context);
+			TimeoutWrapper.addTimeout(SMSUtility.MY_PHONE, this.otherNumber, this.context);
 			
 			
 		}
 		catch (Exception e){
-			SMSUtility.handleErrorOrExceptionInCommandSession(e, this.otherNumber, this.ctx);
+			SMSUtility.handleErrorOrExceptionInCommandSession(e, this.otherNumber, this.context);
 		}
 	}
 	
 	private void storeDataToReuseInM3(String insertedPassword, byte[] command) {
 		String passwordKey = this.otherNumber + MyPrefFiles.OTHER_PASSWORD;
 		String commandKey = this.otherNumber + MyPrefFiles.TEMP_COMMAND;
-		MyPrefFiles.setMyPreference(MyPrefFiles.COMMAND_SESSION, passwordKey, insertedPassword, this.ctx);
-		MyPrefFiles.setMyPreference(MyPrefFiles.COMMAND_SESSION, commandKey, Base64.encodeToString(command, Base64.DEFAULT), this.ctx);
+		MyPrefFiles.setMyPreference(MyPrefFiles.COMMAND_SESSION, passwordKey, insertedPassword, this.context);
+		MyPrefFiles.setMyPreference(MyPrefFiles.COMMAND_SESSION, commandKey, Base64.encodeToString(command, Base64.DEFAULT), this.context);
 	}
 
 	private byte[] packIvAndSalt() throws NoSuchPreferenceFoundException, NotECKeyException, NoSuchAlgorithmException, NoSuchProviderException, InvalidKeySpecException, NoSignatureDoneException {
@@ -97,7 +97,7 @@ public class GpsLocalizeClickHandler implements OnClickListener {
 	}
 
 	private byte[] generateSignature(byte[] message) throws NoSuchAlgorithmException, NoSuchProviderException, InvalidKeySpecException, NoSuchPreferenceFoundException, NoSignatureDoneException, NotECKeyException {
-		PrivateKey mPriv = MyPrefFiles.getMyPrivateKey(this.ctx);
+		PrivateKey mPriv = MyPrefFiles.getMyPrivateKey(this.context);
 		return CryptoUtility.doSignature(message, mPriv);
 	}
 
@@ -111,7 +111,7 @@ public class GpsLocalizeClickHandler implements OnClickListener {
 	private void generateAndStoreAesKey(byte[] secret, byte[] salt) {
 		AESKeyGenerator aesKeyGenerator = new AESKeyGenerator(secret, salt);
 		String sessionKey = Base64.encodeToString(aesKeyGenerator.generateKey().getEncoded(), Base64.DEFAULT);
-		MyPrefFiles.setMyPreference(MyPrefFiles.COMMAND_SESSION, this.otherNumber + MyPrefFiles.SESSION_KEY, sessionKey, this.ctx);
+		MyPrefFiles.setMyPreference(MyPrefFiles.COMMAND_SESSION, this.otherNumber + MyPrefFiles.SESSION_KEY, sessionKey, this.context);
 	}
 
 	private byte[] generateSalt() {
@@ -124,7 +124,7 @@ public class GpsLocalizeClickHandler implements OnClickListener {
 		byte[] iv = new byte[12];
 		new Random().nextBytes(iv);
 		String initializationVector = Base64.encodeToString(iv, Base64.DEFAULT);
-		MyPrefFiles.setMyPreference(MyPrefFiles.COMMAND_SESSION, this.otherNumber + MyPrefFiles.IV, initializationVector, this.ctx);
+		MyPrefFiles.setMyPreference(MyPrefFiles.COMMAND_SESSION, this.otherNumber + MyPrefFiles.IV, initializationVector, this.context);
 		return iv;
 	}
 	

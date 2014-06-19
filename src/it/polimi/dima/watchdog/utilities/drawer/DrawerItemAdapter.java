@@ -13,15 +13,15 @@ import android.widget.TextView;
 public class DrawerItemAdapter extends ArrayAdapter<ObjectDrawerItem>  {
 
 	
-	Context mContext;
+	private Context context;
     int layoutResourceId;
-    ObjectDrawerItem data[] = null;
+    private ObjectDrawerItem data[] = null;
  
     public DrawerItemAdapter(Context mContext, int layoutResourceId, ObjectDrawerItem[] data) {
  
         super(mContext, layoutResourceId, data);
         this.layoutResourceId = layoutResourceId;
-        this.mContext = mContext;
+        this.context = mContext;
         this.data = data;
     }
  
@@ -30,7 +30,7 @@ public class DrawerItemAdapter extends ArrayAdapter<ObjectDrawerItem>  {
  
         View listItem = convertView;
  
-        LayoutInflater inflater = ((Activity) mContext).getLayoutInflater();
+        LayoutInflater inflater = ((Activity) context).getLayoutInflater();
         listItem = inflater.inflate(layoutResourceId, parent, false);
  
         ImageView imageViewIcon = (ImageView) listItem.findViewById(R.id.image_view_item);

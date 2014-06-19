@@ -1,9 +1,7 @@
 package it.polimi.dima.watchdog.gps.fragments.localization;
 
 import it.polimi.dima.watchdog.R;
-
 import java.util.List;
-
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,20 +9,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 public class GpsAdapter extends BaseAdapter {
 
-	private Context ctx;
+	private Context context;
 	private List<String> numbers;
 	private static LayoutInflater inflater = null;
 	
-	public GpsAdapter(Context ctx, List<String> numbers) {
-		this.ctx = ctx;
+	public GpsAdapter(Context context, List<String> numbers) {
+		this.context = context;
 		this.numbers = numbers;
-		GpsAdapter.inflater = (LayoutInflater) ctx.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		GpsAdapter.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 	}
 	
 	@Override
@@ -54,16 +51,14 @@ public class GpsAdapter extends BaseAdapter {
 		RelativeLayout mRelativeLayout = (RelativeLayout) view.findViewById(R.id.relative_layout_localize_list);
 		
 		TextView numberTextView = (TextView) mRelativeLayout.findViewById(R.id.text_view_localize_number);
-		String num = numbers.get(position);
+		String num = this.numbers.get(position);
 		Log.i("[DEBUG gps-adapter]", "[DEBUG - GPS-Adapter] "+num);
 		numberTextView.setText(num);
 		
 		Button localizeButton = (Button) mRelativeLayout.findViewById(R.id.button_localize);
-		localizeButton.setOnClickListener(new GpsLocalizeClickHandler(view, num, ctx));
+		localizeButton.setOnClickListener(new GpsLocalizeClickHandler(view, num, this.context));
 		
 		
 		return view;
 	}
-
-
 }
