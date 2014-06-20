@@ -6,6 +6,7 @@ import java.security.spec.InvalidKeySpecException;
 import org.spongycastle.crypto.InvalidCipherTextException;
 
 import android.util.Base64;
+import android.util.Log;
 import it.polimi.dima.watchdog.exceptions.NoSignatureDoneException;
 import it.polimi.dima.watchdog.exceptions.NoSuchPreferenceFoundException;
 import it.polimi.dima.watchdog.exceptions.NotECKeyException;
@@ -38,6 +39,7 @@ public class SirenOnCodeMessage extends ParsableSMS {
 	public void extractSubBody(String body){
 		byte[] fullBody = Base64.decode(body, Base64.DEFAULT); //messaggio + padding
 		String fullBodyMessage = new String(fullBody);
+		Log.i("DEBUG", "DEBUG: full body = " + fullBodyMessage);
 		getMessage(fullBodyMessage);
 	}
 

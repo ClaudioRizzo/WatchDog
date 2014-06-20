@@ -35,9 +35,12 @@ public class SMSM4Handler implements SMSCommandVisitorInterface {
 	public void visit(SirenOnCodeMessage sirenOnCodeMessage) {
 		Log.i("[DEBUG_COMMAND]", "[DEBUG_COMMAND] SIREN ON RESPONSE RECEIVED");
 		sirenOnCodeMessage.extractSubBody(sirenOnCodeMessage.getBody());
-		
-		if(sirenOnCodeMessage.getMessage().equals(SMSUtility.M4_HEADER)) {
-			//TODO: Qualcosa
+		Log.i("DEBUG", "DEBUG: body = " + sirenOnCodeMessage.getMessage());
+		if(sirenOnCodeMessage.getMessage().equals(SMSUtility.SIREN_ON_RESPONSE_OK)){
+			//TODO fare qualcosa
+		}
+		else if(sirenOnCodeMessage.getMessage().equals(SMSUtility.SIREN_ON_RESPONSE_KO)){
+			//TODO fare qualcosa
 		}
 		else{
 			throw new IllegalArgumentException();
