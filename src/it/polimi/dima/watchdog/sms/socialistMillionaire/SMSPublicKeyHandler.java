@@ -65,7 +65,7 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 				}
 
 				this.other = message.getDisplayOriginatingAddress();
-				saveNumber();
+				
 				this.recMsg = this.mSocMilFactory.getMessage(SMSUtility.getHeader(message.getUserData()), null);
 				// ricordarsi che getBody prende il body e lo restituisce
 				// convertito in Base64 !!!
@@ -199,6 +199,7 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 			} 
 			else {
 				manageKeyValidated();
+				saveNumber();
 			}
 		} catch (Exception e){
 			//notifico e invio richiesta di stop forzato, oltre alla cancellazione delle preferenze
