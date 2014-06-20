@@ -43,10 +43,10 @@ public class SirenOffCodeMessage extends ParsableSMS {
 
 	private void getMessage(String fullBodyMessage) {
 		if(fullBodyMessage.matches(SMSUtility.SIREN_OFF_RESPONSE_OK + ".*")){
-			this.message = fullBodyMessage.substring(0, SMSUtility.SIREN_OFF_RESPONSE_OK.length() + 1);
+			this.message = fullBodyMessage.substring(0, SMSUtility.SIREN_OFF_RESPONSE_OK.length());
 		}
 		else if(fullBodyMessage.matches(SMSUtility.SIREN_OFF_RESPONSE_KO + ".*")){
-			this.message = fullBodyMessage.substring(0, SMSUtility.SIREN_OFF_RESPONSE_KO.length() + 1);
+			this.message = fullBodyMessage.substring(0, SMSUtility.SIREN_OFF_RESPONSE_KO.length());
 		}
 		else{
 			throw new IllegalArgumentException("Il body non è ciò che mi aspetto!!!");
