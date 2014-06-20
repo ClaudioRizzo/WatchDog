@@ -1,10 +1,4 @@
-package it.polimi.dima.watchdog.gps.fragments.localization;
-
-import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
-import java.security.PrivateKey;
-import java.security.spec.InvalidKeySpecException;
-import java.util.Random;
+package it.polimi.dima.watchdog.fragments.smsRemote;
 
 import it.polimi.dima.watchdog.R;
 import it.polimi.dima.watchdog.crypto.AESKeyGenerator;
@@ -16,35 +10,41 @@ import it.polimi.dima.watchdog.sms.commands.flags.StatusM1Sent;
 import it.polimi.dima.watchdog.sms.timeout.TimeoutWrapper;
 import it.polimi.dima.watchdog.utilities.MyPrefFiles;
 import it.polimi.dima.watchdog.utilities.SMSUtility;
+
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
+import java.security.PrivateKey;
+import java.security.spec.InvalidKeySpecException;
+import java.util.Random;
+
 import android.content.Context;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.EditText;
 
-public class GpsLocalizeClickHandler implements OnClickListener {
-
+public class GenericSmsClickHandler {
+	
 	private String password;
 	private String otherNumber;
 	private byte[] keySalt;
 	private Context context;
 	private View fragView;
 	
-	public GpsLocalizeClickHandler(View fragView,String otherNumber, Context context) {
+	
+	public GenericSmsClickHandler(View fragView,String otherNumber, Context context) {
 		this.fragView = fragView;
 		this.context = context;
 		this.otherNumber = otherNumber;
 	}
 	
-	@Override
-	public void onClick(View v) {
+	public void handleClick(View v, String commandString) {
 		try{
 			Log.i("[DEBUG]", "[Localize] ho cliccato");
 			this.password = getPassword();
 			//this.otherNumber = getPhoneNumber();
 			
-			byte[] command = SMSUtility.hexStringToByteArray(SMSUtility.LOCATE); //TODO in realtà il tipo di comando va preso dal tipo di bottone cliccato
+			byte[] command = SMSUtility.hexStringToByteArray(commandString); 
 			
 			if(!MyPrefFiles.existsPreference(MyPrefFiles.KEYRING, this.otherNumber, this.context)){
 				throw new NoSuchPreferenceFoundException("Non si può iniziare una sessione di comando con un utente con cui non è stato fatto SMP!!!");
@@ -70,6 +70,7 @@ public class GpsLocalizeClickHandler implements OnClickListener {
 			SMSUtility.handleErrorOrExceptionInCommandSession(e, this.otherNumber, this.context);
 		}
 	}
+	
 	
 	private void storeDataToReuseInM3(String insertedPassword, byte[] command) {
 		String passwordKey = this.otherNumber + MyPrefFiles.OTHER_PASSWORD;
@@ -142,6 +143,5 @@ public class GpsLocalizeClickHandler implements OnClickListener {
 		String cleanPassword = mEditText.getText().toString();
 		return cleanPassword;
 	}
-
 
 }
