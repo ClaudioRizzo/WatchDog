@@ -4,7 +4,6 @@ import it.polimi.dima.watchdog.exceptions.ArbitraryMessageReceivedException;
 import it.polimi.dima.watchdog.exceptions.MessageWillBeIgnoredException;
 import it.polimi.dima.watchdog.exceptions.TooLongResponseException;
 import it.polimi.dima.watchdog.sms.ParsableSMS;
-import it.polimi.dima.watchdog.sms.commands.flags.StatusFree;
 import java.util.regex.Pattern;
 import android.content.Context;
 import android.telephony.SmsManager;
@@ -383,11 +382,9 @@ public class SMSUtility {
 				e.printStackTrace();
 			}
 			
-			//... cancello i riferimenti all'altro utente nella sessione di comando...
+			//... cancello i riferimenti all'altro utente nella sessione di comando (fa anche tornare immediatamente in status free). 
 			MyPrefFiles.eraseCommandSession(other, ctx);
 			
-			//... e torno in status free.
-			MyPrefFiles.setMyPreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + other, StatusFree.CURRENT_STATUS, ctx);
 			// TODO notificare il fragment di quello che è successo
 		}
 		else{

@@ -16,6 +16,7 @@ import javax.crypto.spec.SecretKeySpec;
 
 import it.polimi.dima.watchdog.crypto.CryptoUtility;
 import it.polimi.dima.watchdog.exceptions.NoSuchPreferenceFoundException;
+import it.polimi.dima.watchdog.sms.commands.flags.StatusFree;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Base64;
@@ -548,6 +549,7 @@ public class MyPrefFiles {
 		if(MyPrefFiles.existsPreference(MyPrefFiles.COMMAND_SESSION, other + MyPrefFiles.KEY_FOR_M4, context)){
 			MyPrefFiles.deleteMyPreference(MyPrefFiles.COMMAND_SESSION, other + MyPrefFiles.KEY_FOR_M4, context);
 		}
+		MyPrefFiles.setMyPreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + other, StatusFree.CURRENT_STATUS, context);
 	}
 	
 	/**
