@@ -30,9 +30,9 @@ public class SirenOnFragment extends Fragment implements FragmentAdapterLifecycl
         // Inflate the layout for this fragment
         View v =  inflater.inflate(R.layout.fragment_siren_on, container, false);
         
-        ListView mListView = (ListView) v.findViewById(R.id.list_siren);
+        ListView mListView = (ListView) v.findViewById(R.id.list_siren_on);
 
-		GpsAdapter adapter = new GpsAdapter(getActivity(), getData());
+		SirenAdapter adapter = new SirenAdapter(getActivity(), getData());
 		mListView.setAdapter(adapter);
 
 		return v;
