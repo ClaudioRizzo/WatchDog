@@ -4,11 +4,7 @@
     
     
     <!-- item within the option panel on the right -->
-    <item
-        android:id="@+id/settings_panel"
-        android:title="@string/action_settings"
-        yourapp:showAsAction="never"/>
-    
+   
     <item
         android:id="@+id/associate_panel"
         android:title="@string/associate_title"
@@ -17,6 +13,11 @@
     <item
         android:id="@+id/pending_requests_panel"
         android:title="@string/action_pending"
+        yourapp:showAsAction="never"/>
+    
+    <item
+        android:id="@+id/change_password_panel"
+        android:title="@string/change_password_title"
         yourapp:showAsAction="never"/>
     
     <item

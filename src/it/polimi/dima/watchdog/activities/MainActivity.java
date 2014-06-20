@@ -78,8 +78,8 @@ public class MainActivity extends ActionBarActivity implements MessageActionList
 		Intent intent;
 		
 		switch (item.getItemId()) {
-		case R.id.settings_panel:
-			intent = new Intent(this, SettingsActivity.class);
+		case R.id.change_password_panel:
+			intent = new Intent(this, ChangePasswordActivity.class);
 			startActivity(intent);
 			break;
 		case R.id.pending_requests_panel:
