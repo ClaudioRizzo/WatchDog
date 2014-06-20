@@ -51,7 +51,10 @@ public class SMSCommandHandler extends BroadcastReceiver {
 			if(this.statusMap.containsKey(myContext)) {
 				this.statusMap.get(myContext).parse(this.ctx, message, this.other);
 			}
-			//altrimenti si ignora il messaggio		
+			else{
+				//altrimenti si ignora il messaggio
+				Log.i("debug command","DEBUG COMMAND: messaggio ignorato");
+			}	
 		} 
 		catch (Exception e) 
 		{

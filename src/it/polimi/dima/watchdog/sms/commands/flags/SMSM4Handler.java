@@ -63,24 +63,32 @@ public class SMSM4Handler implements SMSCommandVisitorInterface {
 		else{
 			throw new IllegalArgumentException();
 		}
+		//Cancello anche da questo lato la sessione di comando ormai terminata
+		MyPrefFiles.eraseCommandSession(this.other, this.context);
 	}
 
 	@Override
 	public void visit(MarkLostCodeMessage markLostCodeMessage) {
 		// TODO Auto-generated method stub
 		Log.i("[DEBUG_COMMAND]", "[DEBUG_COMMAND] MARK LOST RESPONSE RECEIVED");
+		//Cancello anche da questo lato la sessione di comando ormai terminata
+		MyPrefFiles.eraseCommandSession(this.other, this.context);
 	}
 
 	@Override
 	public void visit(MarkStolenCodeMessage markStolenCodeMessage) {
 		// TODO Auto-generated method stub
 		Log.i("[DEBUG_COMMAND]", "[DEBUG_COMMAND] MARK STOLEN RESPONSE RECEIVED");
+		//Cancello anche da questo lato la sessione di comando ormai terminata
+		MyPrefFiles.eraseCommandSession(this.other, this.context);
 	}
 
 	@Override
 	public void visit(MarkLostOrStolenCodeMessage markLostOrStolenCodeMessage) {
 		// TODO Auto-generated method stub
 		Log.i("[DEBUG_COMMAND]", "[DEBUG_COMMAND] MARK LOST OR STOLEN RESPONSE RECEIVED");
+		//Cancello anche da questo lato la sessione di comando ormai terminata
+		MyPrefFiles.eraseCommandSession(this.other, this.context);
 	}
 
 	@Override
@@ -102,6 +110,8 @@ public class SMSM4Handler implements SMSCommandVisitorInterface {
 		}
 		else{
 			ListenerUtility.getInstance().notifyLocationAcquired(locateCodeMessage.getErrorCode());
-		}	
+		}
+		//Cancello anche da questo lato la sessione di comando ormai terminata
+		MyPrefFiles.eraseCommandSession(this.other, this.context);
 	}
 }
