@@ -3,6 +3,7 @@ package it.polimi.dima.watchdog.fragments.smsRemote;
 import it.polimi.dima.watchdog.R;
 import it.polimi.dima.watchdog.gps.fragments.localization.GpsAdapter;
 import it.polimi.dima.watchdog.gps.fragments.localization.GpsLocalizeClickHandler;
+import it.polimi.dima.watchdog.utilities.SMSUtility;
 
 import java.util.List;
 
@@ -16,16 +17,16 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-public class SirenAdapter extends BaseAdapter {
+public class SirenOnAdapter extends BaseAdapter {
 
 	private Context context;
 	private List<String> numbers;
 	private static LayoutInflater inflater = null;
 	
-	public SirenAdapter(Context context, List<String> numbers) {
+	public SirenOnAdapter(Context context, List<String> numbers) {
 		this.context = context;
 		this.numbers = numbers;
-		SirenAdapter.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		SirenOnAdapter.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 	}
 	
 	@Override
@@ -59,8 +60,9 @@ public class SirenAdapter extends BaseAdapter {
 		
 		numberTextView.setText(num);
 		
-		Button localizeButton = (Button) mRelativeLayout.findViewById(R.id.button_send);
-		localizeButton.setOnClickListener(new SirenClickHandler(view, num, this.context));
+		Button sirenOnButton = (Button) mRelativeLayout.findViewById(R.id.button_send);
+		sirenOnButton.setText("Siren On");
+		sirenOnButton.setOnClickListener(new SirenOnClickHandler(view, num, this.context));
 		
 		
 		return view;

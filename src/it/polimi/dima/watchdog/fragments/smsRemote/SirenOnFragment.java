@@ -32,7 +32,7 @@ public class SirenOnFragment extends Fragment implements FragmentAdapterLifecycl
         
         ListView mListView = (ListView) v.findViewById(R.id.list_siren_on);
 
-		SirenAdapter adapter = new SirenAdapter(getActivity(), getData());
+		SirenOnAdapter adapter = new SirenOnAdapter(getActivity(), getData());
 		mListView.setAdapter(adapter);
 
 		return v;

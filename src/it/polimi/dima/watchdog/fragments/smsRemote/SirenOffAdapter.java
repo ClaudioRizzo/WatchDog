@@ -1,9 +1,10 @@
-package it.polimi.dima.watchdog.gps.fragments.localization;
+package it.polimi.dima.watchdog.fragments.smsRemote;
 
 import it.polimi.dima.watchdog.R;
+
 import java.util.List;
+
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,16 +13,16 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-public class GpsAdapter extends BaseAdapter {
+public class SirenOffAdapter extends BaseAdapter {
 
 	private Context context;
 	private List<String> numbers;
 	private static LayoutInflater inflater = null;
 	
-	public GpsAdapter(Context context, List<String> numbers) {
+	public SirenOffAdapter(Context context, List<String> numbers) {
 		this.context = context;
 		this.numbers = numbers;
-		GpsAdapter.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		SirenOffAdapter.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 	}
 	
 	@Override
@@ -52,12 +53,12 @@ public class GpsAdapter extends BaseAdapter {
 		
 		TextView numberTextView = (TextView) mRelativeLayout.findViewById(R.id.text_view_number);
 		String num = this.numbers.get(position);
-		Log.i("[DEBUG gps-adapter]", "[DEBUG - GPS-Adapter] "+num);
+		
 		numberTextView.setText(num);
 		
-		Button localizeButton = (Button) mRelativeLayout.findViewById(R.id.button_send);
-		localizeButton.setText("Localize");
-		localizeButton.setOnClickListener(new GpsLocalizeClickHandler(view, num, this.context));
+		Button sirenOnButton = (Button) mRelativeLayout.findViewById(R.id.button_send);
+		sirenOnButton.setText("Siren Off");
+		sirenOnButton.setOnClickListener(new SirenOffClickHandler(view, num, this.context));
 		
 		
 		return view;

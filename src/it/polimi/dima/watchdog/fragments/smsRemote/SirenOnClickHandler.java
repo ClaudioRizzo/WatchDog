@@ -6,10 +6,10 @@ import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 
-public class SirenClickHandler extends GenericSmsClickHandler implements OnClickListener {
+public class SirenOnClickHandler extends GenericSmsClickHandler implements OnClickListener {
 
 	
-	public SirenClickHandler(View fragView, String otherNumber, Context context) {
+	public SirenOnClickHandler(View fragView, String otherNumber, Context context) {
 		super(fragView, otherNumber, context);
 		
 	}
