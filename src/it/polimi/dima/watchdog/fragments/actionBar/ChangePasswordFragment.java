@@ -1,10 +1,10 @@
 package it.polimi.dima.watchdog.fragments.actionBar;
 
 import it.polimi.dima.watchdog.R;
-import it.polimi.dima.watchdog.exceptions.NoSuchPreferenceFoundException;
 import it.polimi.dima.watchdog.password.PasswordResetter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -38,7 +38,12 @@ public class ChangePasswordFragment extends Fragment {
 				String oldPass = oldEdit.getText().toString();
 				String check = checkEdit.getText().toString();
 				
+				Log.i("DEBUG", "DEBUG: OLD = " + oldPass);
+				Log.i("DEBUG", "DEBUG: NEW = " + newPass);
+				Log.i("DEBUG", "DEBUG: CONF = " + check);
+				
 				if(newPass.equals(check)) {
+					Log.i("DEBUG", "DEBUG: NEW == CHECK");
 						
 					try {
 						PasswordResetter resetter = new PasswordResetter(oldPass, newPass, getActivity());
@@ -51,6 +56,7 @@ public class ChangePasswordFragment extends Fragment {
 						//TODO: notifica errore
 					}
 				} else {
+					Log.i("DEBUG", "DEBUG: NEW != CHECK");
 					//TODO: notifica errore
 				}
 				

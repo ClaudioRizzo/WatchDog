@@ -140,7 +140,7 @@ public class SMSUtility {
 	/**
 	 * PasswordChangeCode (for password reset only)
 	 */
-	public static final String PASSWORD_CHANGE = "CODEBEEF";
+	public static final String PASSWORD_CHANGE = "C0DEBEEF";
 	
 	
 	
