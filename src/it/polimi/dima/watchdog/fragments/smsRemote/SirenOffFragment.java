@@ -27,11 +27,11 @@ public class SirenOffFragment extends Fragment implements FragmentAdapterLifecyc
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
         Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v =  inflater.inflate(R.layout.fragment_siren_on, container, false);
+        View v =  inflater.inflate(R.layout.fragment_siren_off, container, false);
         
         ListView mListView = (ListView) v.findViewById(R.id.list_siren_off);
 
-		SirenOnAdapter adapter = new SirenOnAdapter(getActivity(), getData());
+		SirenOffAdapter adapter = new SirenOffAdapter(getActivity(), getData());
 		mListView.setAdapter(adapter);
 
 		return v;
