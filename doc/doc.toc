@@ -11,60 +11,61 @@
 \contentsline {subsubsection}{\numberline {3.2.2}Mobile phone remote localization}{6}
 \contentsline {subsubsection}{\numberline {3.2.3}Mobile phone remote mark}{6}
 \contentsline {subsubsection}{\numberline {3.2.4}Mobile phone remote alarm triggering}{6}
-\contentsline {subsection}{\numberline {3.3}Non-functional requirements}{6}
-\contentsline {subsubsection}{\numberline {3.3.1}Privacy and security: problems and solutions}{6}
-\contentsline {paragraph}{Sender authentication}{6}
-\contentsline {paragraph}{Message integrity/authentication/non forgeability/non repudiation}{6}
-\contentsline {subparagraph}{\textit {Integrity}}{6}
+\contentsline {subsubsection}{\numberline {3.2.5}Perimeter selection}{6}
+\contentsline {subsection}{\numberline {3.3}Non-functional requirements}{7}
+\contentsline {subsubsection}{\numberline {3.3.1}Privacy and security: problems and solutions}{7}
+\contentsline {paragraph}{Sender authentication}{7}
+\contentsline {paragraph}{Message integrity/authentication/non forgeability/non repudiation}{7}
+\contentsline {subparagraph}{\textit {Integrity}}{7}
 \contentsline {subparagraph}{\textit {Authentication}}{7}
 \contentsline {subparagraph}{\textit {Non forgeability}}{7}
 \contentsline {subparagraph}{\textit {Non repudiation}}{7}
-\contentsline {paragraph}{Message confidentiality}{7}
-\contentsline {paragraph}{Asymmetric keys management}{7}
-\contentsline {paragraph}{Symmetric key/initialization vector management}{7}
+\contentsline {paragraph}{Message confidentiality}{8}
+\contentsline {paragraph}{Asymmetric keys management}{8}
+\contentsline {paragraph}{Symmetric key/initialization vector management}{8}
 \contentsline {paragraph}{Public keys mutual authentication}{8}
-\contentsline {subsubsection}{\numberline {3.3.2}Human friendly interface and transparency}{8}
-\contentsline {subsubsection}{\numberline {3.3.3}Performances}{8}
-\contentsline {subsection}{\numberline {3.4}Use cases}{8}
-\contentsline {subsubsection}{\numberline {3.4.1}Initialization wizard}{8}
-\contentsline {subsubsection}{\numberline {3.4.2}Mobile phones association}{8}
-\contentsline {subsubsection}{\numberline {3.4.3}Remote control: localization}{8}
-\contentsline {subsubsection}{\numberline {3.4.4}Remote control: mark stolen/lost/both/found}{8}
-\contentsline {subsubsection}{\numberline {3.4.5}Remote control: alarm triggering/untriggering}{8}
-\contentsline {section}{\numberline {4}Design}{9}
-\contentsline {subsection}{\numberline {4.1}Application Architecture}{9}
-\contentsline {subsection}{\numberline {4.2}Design Patterns}{9}
-\contentsline {subsection}{\numberline {4.3}Crypto protocols and alogrithms}{9}
-\contentsline {subsubsection}{\numberline {4.3.1}Elliptic Curves key pair generation}{9}
-\contentsline {subsubsection}{\numberline {4.3.2}Elliptic Curves Diffie Hellman key exchange}{10}
-\contentsline {subsubsection}{\numberline {4.3.3}Elliptic Curves Digital Signature Algorithm}{12}
-\contentsline {subsubsection}{\numberline {4.3.4}PBKDF2 with HMAC-SHA-256}{12}
-\contentsline {subsubsection}{\numberline {4.3.5}AES-256-GCM}{13}
-\contentsline {subsubsection}{\numberline {4.3.6}Socialist Millionaire Protocol}{16}
-\contentsline {paragraph}{Public key request}{16}
-\contentsline {paragraph}{Public key sending}{16}
-\contentsline {paragraph}{Question sending}{16}
-\contentsline {paragraph}{Hash sending}{16}
-\contentsline {paragraph}{Ack and password salt sending}{17}
-\contentsline {paragraph}{Second half}{17}
-\contentsline {paragraph}{Error management}{17}
-\contentsline {subsubsection}{\numberline {4.3.7}Command Protocol}{18}
-\contentsline {paragraph}{First message}{18}
-\contentsline {paragraph}{Second message}{18}
-\contentsline {paragraph}{Third message}{18}
-\contentsline {paragraph}{Fourth message}{18}
-\contentsline {paragraph}{Error management}{19}
-\contentsline {paragraph}{Timeout management}{19}
-\contentsline {section}{\numberline {5}Open Issues and TODO list}{20}
-\contentsline {subsection}{\numberline {5.1}Unilateral Uninstallation}{20}
-\contentsline {subsection}{\numberline {5.2}Association Deletion}{20}
-\contentsline {subsection}{\numberline {5.3}The Mark Features}{20}
-\contentsline {section}{\numberline {6}Testing}{21}
-\contentsline {subsection}{\numberline {6.1}Cryptography}{21}
-\contentsline {subsection}{\numberline {6.2}Protocols}{21}
-\contentsline {section}{\numberline {7}Installation and usage manual}{22}
-\contentsline {subsection}{\numberline {7.1}Installation}{22}
-\contentsline {subsection}{\numberline {7.2}Usage}{22}
-\contentsline {subsubsection}{\numberline {7.2.1}Initialization wizard}{22}
-\contentsline {subsubsection}{\numberline {7.2.2}Change application settings}{22}
-\contentsline {subsubsection}{\numberline {7.2.3}Send a command message}{22}
+\contentsline {subsubsection}{\numberline {3.3.2}Human friendly interface and transparency}{9}
+\contentsline {subsubsection}{\numberline {3.3.3}Performances}{9}
+\contentsline {subsection}{\numberline {3.4}Use cases}{9}
+\contentsline {subsubsection}{\numberline {3.4.1}Initialization wizard}{9}
+\contentsline {subsubsection}{\numberline {3.4.2}Mobile phones association}{9}
+\contentsline {subsubsection}{\numberline {3.4.3}Remote control: localization}{9}
+\contentsline {subsubsection}{\numberline {3.4.4}Remote control: mark stolen/lost/both/found}{9}
+\contentsline {subsubsection}{\numberline {3.4.5}Remote control: alarm triggering/untriggering}{9}
+\contentsline {section}{\numberline {4}Design}{10}
+\contentsline {subsection}{\numberline {4.1}Application Architecture}{10}
+\contentsline {subsection}{\numberline {4.2}Design Patterns}{10}
+\contentsline {subsection}{\numberline {4.3}Crypto protocols and alogrithms}{10}
+\contentsline {subsubsection}{\numberline {4.3.1}Elliptic Curves key pair generation}{10}
+\contentsline {subsubsection}{\numberline {4.3.2}Elliptic Curves Diffie Hellman key exchange}{11}
+\contentsline {subsubsection}{\numberline {4.3.3}Elliptic Curves Digital Signature Algorithm}{13}
+\contentsline {subsubsection}{\numberline {4.3.4}PBKDF2 with HMAC-SHA-256}{13}
+\contentsline {subsubsection}{\numberline {4.3.5}AES-256-GCM}{14}
+\contentsline {subsubsection}{\numberline {4.3.6}Socialist Millionaire Protocol}{17}
+\contentsline {paragraph}{Public key request}{17}
+\contentsline {paragraph}{Public key sending}{17}
+\contentsline {paragraph}{Question sending}{17}
+\contentsline {paragraph}{Hash sending}{17}
+\contentsline {paragraph}{Ack and password salt sending}{18}
+\contentsline {paragraph}{Second half}{18}
+\contentsline {paragraph}{Error management}{18}
+\contentsline {subsubsection}{\numberline {4.3.7}Command Protocol}{19}
+\contentsline {paragraph}{First message}{19}
+\contentsline {paragraph}{Second message}{19}
+\contentsline {paragraph}{Third message}{19}
+\contentsline {paragraph}{Fourth message}{19}
+\contentsline {paragraph}{Error management}{20}
+\contentsline {paragraph}{Timeout management}{20}
+\contentsline {section}{\numberline {5}Open Issues and TODO list}{21}
+\contentsline {subsection}{\numberline {5.1}Unilateral Uninstallation}{21}
+\contentsline {subsection}{\numberline {5.2}Association Deletion}{21}
+\contentsline {subsection}{\numberline {5.3}The Mark Features}{21}
+\contentsline {section}{\numberline {6}Testing}{22}
+\contentsline {subsection}{\numberline {6.1}Cryptography}{22}
+\contentsline {subsection}{\numberline {6.2}Protocols}{22}
+\contentsline {section}{\numberline {7}Installation and usage manual}{23}
+\contentsline {subsection}{\numberline {7.1}Installation}{23}
+\contentsline {subsection}{\numberline {7.2}Usage}{23}
+\contentsline {subsubsection}{\numberline {7.2.1}Initialization wizard}{23}
+\contentsline {subsubsection}{\numberline {7.2.2}Change application settings}{23}
+\contentsline {subsubsection}{\numberline {7.2.3}Send a command message}{23}

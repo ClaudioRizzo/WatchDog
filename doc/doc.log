@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014/Debian) (preloaded format=pdflatex 2014.6.17)  19 JUN 2014 15:40
+This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014/Debian) (preloaded format=pdflatex 2014.6.17)  20 JUN 2014 10:29
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -417,7 +417,7 @@ LaTeX Font Info:    External font `lmex10' loaded for size
 LaTeX Font Info:    External font `lmex10' loaded for size
 (Font)              <8> on input line 3.
 
-Overfull \hbox (26.35312pt too wide) in paragraph at lines 17--17
+Overfull \hbox (26.35312pt too wide) in paragraph at lines 18--18
  [][] \T1/lmss/m/n/16 Mes-sage in-tegrity/authentication/non forge-abil-ity/non
  
  []
@@ -438,9 +438,11 @@ Overfull \hbox (26.35312pt too wide) in paragraph at lines 17--17
 (./src/rasd/rasd.tex) (./src/rasd/actors.tex) (./src/rasd/functional.tex)
 (./src/rasd/functional/association.tex) (./src/rasd/functional/localization.tex
 ) (./src/rasd/functional/mark.tex) (./src/rasd/functional/alarms.tex)
-(./src/rasd/nonfunctional.tex)
+(./src/rasd/functional/perimeter.tex) (./src/rasd/nonfunctional.tex)
 (./src/rasd/nonfunctional/privacy_and_security/privacy_security.tex)
-(./src/rasd/nonfunctional/privacy_and_security/password.tex)
+(./src/rasd/nonfunctional/privacy_and_security/password.tex [6
+
+])
 (./src/rasd/nonfunctional/privacy_and_security/integrity_authentication_non-for
 geability_non-repudiation.tex)
 (./src/rasd/nonfunctional/privacy_and_security/ianfnr/integrity.tex
@@ -448,20 +450,18 @@ LaTeX Font Info:    Font shape `T1/lmss/bx/it' in size <16> not available
 (Font)              Font shape `T1/lmss/bx/sl' tried instead on input line 1.
 )
 (./src/rasd/nonfunctional/privacy_and_security/ianfnr/authentication.tex)
-(./src/rasd/nonfunctional/privacy_and_security/ianfnr/non-forgeability.tex
-[6
-
-]) (./src/rasd/nonfunctional/privacy_and_security/ianfnr/non-repudiation.tex) (
-./src/rasd/nonfunctional/privacy_and_security/privacy_security_footer.tex)
-(./src/rasd/nonfunctional/privacy_and_security/confidentiality.tex)
+(./src/rasd/nonfunctional/privacy_and_security/ianfnr/non-forgeability.tex)
+(./src/rasd/nonfunctional/privacy_and_security/ianfnr/non-repudiation.tex)
+(./src/rasd/nonfunctional/privacy_and_security/privacy_security_footer.tex)
+(./src/rasd/nonfunctional/privacy_and_security/confidentiality.tex [7])
 (./src/rasd/nonfunctional/privacy_and_security/asymmetric_keys.tex)
 (./src/rasd/nonfunctional/privacy_and_security/symmetric_keys.tex)
 (./src/rasd/nonfunctional/privacy_and_security/public_keys_authentication.tex)
-(./src/rasd/nonfunctional/human_computer_interaction.tex [7])
+(./src/rasd/nonfunctional/human_computer_interaction.tex [8])
 (./src/rasd/nonfunctional/performances.tex) (./src/rasd/use_cases/use_cases.tex
 ) (./src/rasd/use_cases/wizard.tex) (./src/rasd/use_cases/association.tex)
 (./src/rasd/use_cases/localization.tex) (./src/rasd/use_cases/mark.tex)
-(./src/rasd/use_cases/alarms.tex) [8] (./src/design/design.tex)
+(./src/rasd/use_cases/alarms.tex) [9] (./src/design/design.tex)
 (./src/design/architecture.tex) (./src/design/design_patterns.tex)
 (./src/design/crypto/crypto.tex)
 (./src/design/crypto/protocols_algorithms/EC.tex
@@ -469,12 +469,12 @@ Underfull \hbox (badness 10000) in paragraph at lines 2--3
 
  []
 
-<images/ec.png, id=35, 621.32124pt x 349.305pt>
+<images/ec.png, id=38, 621.32124pt x 349.305pt>
 File: images/ec.png Graphic file (type png)
  <use images/ec.png>
 Package pdftex.def Info: images/ec.png used on input line 6.
 (pdftex.def)             Requested size: 434.9219pt x 244.51183pt.
- [9
+ [10
 
 ])
 (./src/design/crypto/protocols_algorithms/ECDH.tex
@@ -482,13 +482,13 @@ Underfull \hbox (badness 10000) in paragraph at lines 2--3
 
  []
 
-<images/ecdh.png, id=39, 624.3325pt x 394.47375pt>
+<images/ecdh.png, id=42, 624.3325pt x 394.47375pt>
 File: images/ecdh.png Graphic file (type png)
  <use images/ecdh.png>
 Package pdftex.def Info: images/ecdh.png used on input line 6.
 (pdftex.def)             Requested size: 437.02977pt x 276.12973pt.
 
-[10 <./images/ec.png>]) [11 <./images/ecdh.png>]
+[11 <./images/ec.png>]) [12 <./images/ecdh.png>]
 (./src/design/crypto/protocols_algorithms/ECDSA.tex
 Underfull \hbox (badness 10000) in paragraph at lines 2--4
 
@@ -529,28 +529,28 @@ Underfull \hbox (badness 10000) in paragraph at lines 2--3
 
  []
 
-[12
+[13
 
-] <images/aesgcmenc.png, id=55, 791.95876pt x 504.88625pt>
+] <images/aesgcmenc.png, id=59, 791.95876pt x 504.88625pt>
 File: images/aesgcmenc.png Graphic file (type png)
 
 <use images/aesgcmenc.png>
 Package pdftex.def Info: images/aesgcmenc.png used on input line 6.
 (pdftex.def)             Requested size: 395.97841pt x 252.44249pt.
- [13] [14 <./images/aesgcmenc.png>]
-<images/aesgcmdec.png, id=63, 605.26125pt x 465.74pt>
+ [14] [15 <./images/aesgcmenc.png>]
+<images/aesgcmdec.png, id=66, 605.26125pt x 465.74pt>
 File: images/aesgcmdec.png Graphic file (type png)
 
 <use images/aesgcmdec.png>
 Package pdftex.def Info: images/aesgcmdec.png used on input line 11.
 (pdftex.def)             Requested size: 363.15953pt x 279.44615pt.
- <images/aes.png, id=64, 922.44624pt x 839.135pt>
+ <images/aes.png, id=67, 922.44624pt x 839.135pt>
 File: images/aes.png Graphic file (type png)
 
 <use images/aes.png>
 Package pdftex.def Info: images/aes.png used on input line 17.
 (pdftex.def)             Requested size: 276.73601pt x 251.74243pt.
-) [15
+) [16
 
  <./images/aesgcmdec.png> <./images/aes.png (PNG copy)>] (./src/design/crypto/p
 rotocols_algorithms/smp.tex)
@@ -558,18 +558,18 @@ rotocols_algorithms/smp.tex)
 (./src/design/crypto/protocols_algorithms/smp/pksending.tex)
 (./src/design/crypto/protocols_algorithms/smp/question_sending.tex)
 (./src/design/crypto/protocols_algorithms/smp/hash_sending.tex)
-(./src/design/crypto/protocols_algorithms/smp/ack_and_salt_sending.tex [16
+(./src/design/crypto/protocols_algorithms/smp/ack_and_salt_sending.tex [17
 
 ])
 (./src/design/crypto/protocols_algorithms/smp/second_half.tex)
 (./src/design/crypto/protocols_algorithms/smp/errors.tex)
 (./src/design/crypto/protocols_algorithms/command_protocol.tex)
-(./src/design/crypto/protocols_algorithms/commands/first_message.tex [17])
+(./src/design/crypto/protocols_algorithms/commands/first_message.tex [18])
 (./src/design/crypto/protocols_algorithms/commands/second_message.tex)
 (./src/design/crypto/protocols_algorithms/commands/third_message.tex)
 (./src/design/crypto/protocols_algorithms/commands/fourth_message.tex)
-(./src/design/crypto/protocols_algorithms/commands/errors.tex [18])
-(./src/design/crypto/protocols_algorithms/commands/timeout.tex) [19]
+(./src/design/crypto/protocols_algorithms/commands/errors.tex [19])
+(./src/design/crypto/protocols_algorithms/commands/timeout.tex) [20]
 (./src/open_issues/open_issues.tex)
 (./src/open_issues/issues/unilateral_uninstall.tex
 Underfull \hbox (badness 10000) in paragraph at lines 2--3
@@ -584,15 +584,15 @@ LaTeX Font Warning: Font shape `OMS/lmss/m/n' undefined
 (Font)              for symbol `textbullet' on input line 4.
 
 ) (./src/open_issues/issues/association_deletion.tex)
-(./src/open_issues/issues/marks.tex) [20
+(./src/open_issues/issues/marks.tex) [21
 
 ] (./src/testing/testing.tex)
-(./src/testing/crypto.tex) (./src/testing/protocols.tex) [21
+(./src/testing/crypto.tex) (./src/testing/protocols.tex) [22
 
 ]
 (./src/manuals/installation_usage.tex) (./src/manuals/installation.tex)
 (./src/manuals/usage.tex) (./src/manuals/usage/wizard.tex)
-(./src/manuals/usage/settings.tex) (./src/manuals/usage/commands.tex) [22
+(./src/manuals/usage/settings.tex) (./src/manuals/usage/commands.tex) [23
 
 ]
 (./doc.aux)
@@ -603,28 +603,32 @@ LaTeX Font Warning: Size substitutions with differences
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
- ) 
+ )
+(\end occurred inside a group at level 1)
+
+### simple group (level 1) entered at line 2 ({)
+### bottom level 
 Here is how much of TeX's memory you used:
- 4687 strings out of 493113
- 81883 string characters out of 6137488
+ 4693 strings out of 493113
+ 82081 string characters out of 6137488
  162752 words of memory out of 5000000
- 7817 multiletter control sequences out of 15000+600000
+ 7820 multiletter control sequences out of 15000+600000
  65807 words of font info for 56 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 47i,7n,37p,2194b,234s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/usr/share/texmf/fonts/enc/dvips/lm/lm-rm.enc}{/usr/share/texmf/fonts/enc/dv
-ips/lm/lm-mathsy.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-mathit.enc}{/usr/s
-hare/texmf/fonts/enc/dvips/lm/lm-ec.enc}</usr/share/texlive/texmf-dist/fonts/ty
-pe1/public/amsfonts/cm/cmsy10.pfb></usr/share/texmf/fonts/type1/public/lm/lmmi1
-2.pfb></usr/share/texmf/fonts/type1/public/lm/lmr10.pfb></usr/share/texmf/fonts
-/type1/public/lm/lmr12.pfb></usr/share/texmf/fonts/type1/public/lm/lmss12.pfb><
-/usr/share/texmf/fonts/type1/public/lm/lmss17.pfb></usr/share/texmf/fonts/type1
-/public/lm/lmssbo10.pfb></usr/share/texmf/fonts/type1/public/lm/lmssbx10.pfb></
-usr/share/texmf/fonts/type1/public/lm/lmsy10.pfb>
-Output written on doc.pdf (22 pages, 444554 bytes).
+ 47i,7n,37p,2194b,400s stack positions out of 5000i,500n,10000p,200000b,80000s
+{/usr/share/texmf/fonts/enc/dvips/lm/lm-rm.enc}{/usr/share/texm
+f/fonts/enc/dvips/lm/lm-mathsy.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-math
+it.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-ec.enc}</usr/share/texlive/texmf
+-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texmf/fonts/type1/p
+ublic/lm/lmmi12.pfb></usr/share/texmf/fonts/type1/public/lm/lmr10.pfb></usr/sha
+re/texmf/fonts/type1/public/lm/lmr12.pfb></usr/share/texmf/fonts/type1/public/l
+m/lmss12.pfb></usr/share/texmf/fonts/type1/public/lm/lmss17.pfb></usr/share/tex
+mf/fonts/type1/public/lm/lmssbo10.pfb></usr/share/texmf/fonts/type1/public/lm/l
+mssbx10.pfb></usr/share/texmf/fonts/type1/public/lm/lmsy10.pfb>
+Output written on doc.pdf (23 pages, 445778 bytes).
 PDF statistics:
- 125 PDF objects out of 1000 (max. 8388607)
- 82 compressed objects within 1 object stream
+ 128 PDF objects out of 1000 (max. 8388607)
+ 84 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  31 words of extra memory for PDF output out of 10000 (max. 10000000)
 
