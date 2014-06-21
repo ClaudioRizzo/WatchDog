@@ -18,6 +18,7 @@ public class PendingRequestsActivity extends ActionBarActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_pending_requests);
+		setTheme(R.style.Theme_Hacker);
 
 		if (findViewById(R.id.pending_requests_container) != null) {
 			if (savedInstanceState != null) {

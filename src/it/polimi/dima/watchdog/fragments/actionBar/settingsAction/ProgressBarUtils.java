@@ -20,7 +20,7 @@ public class ProgressBarUtils {
 	public void initiProgressBar(String message) {
 		
 		progressBar = new ProgressDialog(context);
-		progressBar.setCancelable(false);
+		progressBar.setCancelable(true);
 		progressBar.setMessage(message);
 		progressBar.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
 		progressBar.setProgress(0);

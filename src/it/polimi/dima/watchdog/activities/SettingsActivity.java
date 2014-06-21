@@ -22,6 +22,7 @@ public class SettingsActivity extends ActionBarActivity implements MyOnListItemC
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		getSupportActionBar().setTitle(R.string.settings_title);
 		setContentView(R.layout.activity_settings_layout);
+		setTheme(R.style.Theme_Hacker);
 
 		if (findViewById(R.id.settings_container) != null) {
 			if (savedInstanceState != null) {

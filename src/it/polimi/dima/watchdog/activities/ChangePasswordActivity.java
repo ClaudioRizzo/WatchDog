@@ -17,6 +17,8 @@ public class ChangePasswordActivity extends ActionBarActivity {
 		getSupportActionBar().setTitle(R.string.change_password_title);
 		setContentView(R.layout.activity_change_password);
 
+		setTheme(R.style.Theme_Hacker);
+		
 		ChangePasswordFragment mChangePwd = new ChangePasswordFragment();
 		getSupportFragmentManager().beginTransaction()
 				.add(R.id.change_password_container, mChangePwd).commit();

@@ -13,6 +13,7 @@ public class MyMapActivity extends ActionBarActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_map);
+		setTheme(R.style.Theme_Hacker);
 		
 		if(findViewById(R.id.map_container) != null) {
 			

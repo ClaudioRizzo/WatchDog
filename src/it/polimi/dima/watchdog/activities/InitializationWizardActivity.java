@@ -29,6 +29,8 @@ public class InitializationWizardActivity extends ActionBarActivity implements O
 		super.onCreate(savedInstanceState);
 		this.context = getApplicationContext();
 		setContentView(R.layout.activity_initialize_wizard);
+		
+		setTheme(R.style.Theme_Hacker);
 
 		if (findViewById(R.id.initialize_wizard_container) != null) {
 			if (savedInstanceState != null) {

@@ -20,7 +20,9 @@ public class AssociateNumberActivity extends ActionBarActivity {
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		getSupportActionBar().setTitle(R.string.title_associate_number);
 		setContentView(R.layout.activity_associate_number);
-
+		
+		setTheme(R.style.Theme_Hacker);
+		
 		if (findViewById(R.id.associate_number_container) != null) {
 			if (savedInstanceState != null) {
 				return;
