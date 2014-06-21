@@ -11,6 +11,7 @@ import it.polimi.dima.watchdog.crypto.SharedSecretAgreement;
 import it.polimi.dima.watchdog.exceptions.NoSuchPreferenceFoundException;
 import it.polimi.dima.watchdog.exceptions.SmpHashesMismatchException;
 import it.polimi.dima.watchdog.fragments.actionBar.PendingRequestsAdapter;
+import it.polimi.dima.watchdog.fragments.actionBar.settingsAction.ProgressBarUtils;
 import it.polimi.dima.watchdog.password.PasswordUtils;
 import it.polimi.dima.watchdog.sms.ParsableSMS;
 import it.polimi.dima.watchdog.sms.commands.flags.StatusFree;
@@ -96,6 +97,7 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 			//preparo la mia chiave pubblica...
 			this.pka.setMyPublicKey(MyPrefFiles.getMyPreference(MyPrefFiles.MY_KEYS, MyPrefFiles.MY_PUB, this.context));
 			
+			ProgressBarUtils.messaggeNumber = 3;
 			//...poi la invio a chi me l'ha chiesta...
 			SMSUtility.sendMessage(this.other, SMSUtility.SMP_PORT, SMSUtility.hexStringToByteArray(SMSUtility.CODE2), this.pka.getMyPublicKey());
 			
@@ -128,6 +130,7 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 			//preparo la mia secret question (non è salvata in Base64, quindi non è richiesta la converione)...
 			this.pka.setSecretQuestion(MyPrefFiles.getMyPreference(MyPrefFiles.SECRET_Q_A, this.other + MyPrefFiles.SECRET_QUESTION, this.context));
 			
+			ProgressBarUtils.messaggeNumber = 1;
 			//... poi la invio a chi mi ha mandato la sua chiave pubblica...
 			SMSUtility.sendMessage(this.other, SMSUtility.SMP_PORT, SMSUtility.hexStringToByteArray(SMSUtility.CODE3), this.pka.getSecretQuestion().getBytes());
 			
@@ -157,7 +160,7 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 			//segno in PENDENT il fatto che ho una richiesta pendente da parte di this.other...
 			String question = new String(Base64.decode(secQuestMsg.getBody(), Base64.DEFAULT), PasswordUtils.UTF_8);
 			MyPrefFiles.setMyPreference(MyPrefFiles.PENDENT, this.other, question, this.context);
-
+			ProgressBarUtils.messaggeNumber = 4;
 			//... e notifico a me stesso di ciò
 			this.notifyUser();
 		} catch (Exception e){
@@ -198,6 +201,7 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 				throw new SmpHashesMismatchException("Hash non corrispondenti!!!");
 			} 
 			else {
+				ProgressBarUtils.messaggeNumber = 2;
 				manageKeyValidated();
 				saveNumber();
 			}
@@ -237,6 +241,7 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 				MyPrefFiles.setMyPreference(MyPrefFiles.SMP_STATUS, preferenceKey, this.other, this.context);
 			}
 			else{
+				ProgressBarUtils.messaggeNumber = 5;
 				Log.i("[DEBUG_SMP]", "[DEBUG_SMP] FULL_SMP_SUCCESSFUL " + MyPrefFiles.getMyPreference(MyPrefFiles.KEYRING, this.other, this.context));
 			
 				//TODO notificare il fragment

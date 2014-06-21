@@ -4,6 +4,7 @@ import it.polimi.dima.watchdog.R;
 import it.polimi.dima.watchdog.exceptions.NoSuchPreferenceFoundException;
 import it.polimi.dima.watchdog.utilities.MyPrefFiles;
 import it.polimi.dima.watchdog.utilities.SMSUtility;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -23,6 +24,8 @@ import android.widget.EditText;
 public class AssociateNumberFragment extends Fragment implements OnClickListener {
 	private String otherNumber;
 	private Context context;
+	
+	
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -52,6 +55,10 @@ public class AssociateNumberFragment extends Fragment implements OnClickListener
 				return;
 			}
 			this.getAndSaveAnswer();
+			ProgressBarUtils progress = new ProgressBarUtils(getActivity());
+			progress.initiProgressBar("Associating with: "+otherNumber);
+			progress.runProgressBar();
+			
 			this.startSMP();
 		}
 		catch (Exception e){
