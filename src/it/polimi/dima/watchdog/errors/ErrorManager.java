@@ -126,6 +126,6 @@ public class ErrorManager {
 	private static void CreatePopup(String message, Context context){
 		FragmentManager manager = ((Activity) context).getFragmentManager();
 		DialogFragment newFragment = new ErrorPopupFragment(message);
-	    newFragment.show(manager, "missiles");
+	    newFragment.show(manager, "Error notification popup");
 	}
 }
