@@ -5,7 +5,9 @@ import it.polimi.dima.watchdog.gps.fragments.localization.map.MyMapFragment;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBarActivity;
+import android.view.MenuItem;
 
 public class MyMapActivity extends ActionBarActivity {
 
@@ -38,6 +40,16 @@ public class MyMapActivity extends ActionBarActivity {
 		l.setLongitude(intent.getDoubleExtra("longitude", 0));
 		
 		return l;
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case android.R.id.home:
+			NavUtils.navigateUpFromSameTask(this);
+			return true;
+		}
+		return super.onOptionsItemSelected(item);
 	}
 	
 	
