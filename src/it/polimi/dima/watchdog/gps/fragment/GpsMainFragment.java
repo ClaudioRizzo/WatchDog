@@ -36,7 +36,7 @@ public class GpsMainFragment extends Fragment {
 		View v = (View) inflater.inflate(R.layout.fragment_gps_main, container,
 				false);
 		this.mAdapter = new TabsAdapter(getChildFragmentManager(), 3,
-				FeatureEnum.GPS);
+				FeatureEnum.GPS, getActivity());
 		this.mViewPager = (ViewPager) v.findViewById(R.id.gps_pager);
 		this.mViewPager.setAdapter(this.mAdapter);
 		mViewPager.setOnPageChangeListener(pageChangeListener);
