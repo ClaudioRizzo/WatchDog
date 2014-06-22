@@ -1,9 +1,13 @@
 package it.polimi.dima.watchdog.siren;
 
+import it.polimi.dima.watchdog.errors.ErrorFactory;
+import it.polimi.dima.watchdog.errors.ErrorManager;
 import it.polimi.dima.watchdog.exceptions.NoSuchPreferenceFoundException;
 import it.polimi.dima.watchdog.utilities.MyPrefFiles;
 import it.polimi.dima.watchdog.utilities.SMSUtility;
+
 import java.security.NoSuchAlgorithmException;
+
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -47,9 +51,9 @@ public class SirenService extends Service {
 	    try {
 			return handleCommand(intent);
 		} catch (Exception e) {
-			e.printStackTrace();
 			Log.i("DEBUG", "DEBUG: servizio delle sirene non partito correttamente!!!");
 			this.stopSelf();
+			ErrorManager.handleNonFatalError(e.getMessage());
 			return START_NOT_STICKY;
 		}
 	}
@@ -116,7 +120,7 @@ public class SirenService extends Service {
 			doSirenOff();
 		}
 		catch (Exception e){
-			//non si fa proprio niente se la sirena non era attiva
+			ErrorManager.handleNonFatalError(ErrorFactory.SIREN_WAS_OFF);
 			Log.i("DEBUG", "DEBUG: la sirena non era attiva: non ho fatto niente");
 		}
 	}

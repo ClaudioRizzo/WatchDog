@@ -15,6 +15,7 @@ import java.util.Map;
 import javax.crypto.spec.SecretKeySpec;
 
 import it.polimi.dima.watchdog.crypto.CryptoUtility;
+import it.polimi.dima.watchdog.errors.ErrorFactory;
 import it.polimi.dima.watchdog.exceptions.NoSuchPreferenceFoundException;
 import it.polimi.dima.watchdog.sms.commands.flags.StatusFree;
 import android.content.Context;
@@ -299,7 +300,7 @@ public class MyPrefFiles {
 		String preference = sp.getString(key, null);
 		
 		if(preference == null){
-			throw new NoSuchPreferenceFoundException("I/O Error");
+			throw new NoSuchPreferenceFoundException(ErrorFactory.MISSING_PREFERENCE);
 		}
 		return preference;
 	}

@@ -1,14 +1,17 @@
 package it.polimi.dima.watchdog.sms.commands.flags;
 
 import it.polimi.dima.watchdog.crypto.CryptoUtility;
+import it.polimi.dima.watchdog.errors.ErrorFactory;
 import it.polimi.dima.watchdog.exceptions.ArbitraryMessageReceivedException;
 import it.polimi.dima.watchdog.exceptions.ErrorInSignatureCheckingException;
 import it.polimi.dima.watchdog.exceptions.NotECKeyException;
 import it.polimi.dima.watchdog.sms.ParsableSMS;
 import it.polimi.dima.watchdog.utilities.SMSUtility;
+
 import java.security.Key;
 import java.security.PublicKey;
 import java.util.Arrays;
+
 import org.spongycastle.crypto.InvalidCipherTextException;
 
 /**
@@ -57,13 +60,13 @@ public class M4Parser {
 
 	private void verifySignature() throws NotECKeyException, ArbitraryMessageReceivedException, ErrorInSignatureCheckingException {
 		if(!CryptoUtility.verifySignature(this.messageWithoutSignature, this.signature, this.oPub)){
-			throw new ArbitraryMessageReceivedException();
+			throw new ArbitraryMessageReceivedException(ErrorFactory.SIGNATURE_EXCEPTION);
 		}
 	}
 	
 	private void verifyHeader(byte[] header) throws ArbitraryMessageReceivedException{
 		if(!Arrays.equals(this.header, header)){
-			throw new ArbitraryMessageReceivedException("Header diverso la quello di m4!!!");
+			throw new ArbitraryMessageReceivedException(ErrorFactory.INVALID_HEADER);
 		}
 	}
 	
@@ -76,7 +79,7 @@ public class M4Parser {
 						if(!header.equals(SMSUtility.MARK_LOST_OR_STOLEN)){
 							if(!header.equals(SMSUtility.MARK_FOUND)){
 								if(!header.equals(SMSUtility.LOCATE)){
-									throw new ArbitraryMessageReceivedException("Subheader non riconosciuto!!!");
+									throw new ArbitraryMessageReceivedException(ErrorFactory.INVALID_HEADER);
 								}
 							}
 						}

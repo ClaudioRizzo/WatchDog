@@ -8,6 +8,7 @@ import java.security.spec.InvalidKeySpecException;
 import it.polimi.dima.watchdog.activities.PendingRequestsActivity;
 import it.polimi.dima.watchdog.crypto.PublicKeyAutenticator;
 import it.polimi.dima.watchdog.crypto.SharedSecretAgreement;
+import it.polimi.dima.watchdog.errors.ErrorManager;
 import it.polimi.dima.watchdog.exceptions.NoSuchPreferenceFoundException;
 import it.polimi.dima.watchdog.exceptions.SmpHashesMismatchException;
 import it.polimi.dima.watchdog.fragments.actionBar.PendingRequestsAdapter;
@@ -76,7 +77,7 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 			}
 		} catch (Exception e) {
 			//notifico e invio richiesta di stop forzato, oltre alla cancellazione delle preferenze
-			SMSUtility.handleErrorOrExceptionInSmp(e, this.other, this.context);
+			ErrorManager.handleErrorOrExceptionInSmp(e, this.other, this.context);
 		}
 	}
 
@@ -106,7 +107,7 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 			MyPrefFiles.setMyPreference(MyPrefFiles.SMP_STATUS, preferenceKey, this.other, this.context);
 		} catch (Exception e){
 			//notifico e invio richiesta di stop forzato, oltre alla cancellazione delle preferenze
-			SMSUtility.handleErrorOrExceptionInSmp(e, this.other, this.context);
+			ErrorManager.handleErrorOrExceptionInSmp(e, this.other, this.context);
 		}
 	}
 
@@ -139,7 +140,7 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 			MyPrefFiles.setMyPreference(MyPrefFiles.SMP_STATUS, preferenceKey, this.other, this.context);
 		} catch (Exception e){
 			//notifico e invio richiesta di stop forzato, oltre alla cancellazione delle preferenze
-			SMSUtility.handleErrorOrExceptionInSmp(e, this.other, this.context);
+			ErrorManager.handleErrorOrExceptionInSmp(e, this.other, this.context);
 		}
 	}
 
@@ -165,7 +166,7 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 			this.notifyUser();
 		} catch (Exception e){
 			//notifico e invio richiesta di stop forzato, oltre alla cancellazione delle preferenze
-			SMSUtility.handleErrorOrExceptionInSmp(e, this.other, this.context);
+			ErrorManager.handleErrorOrExceptionInSmp(e, this.other, this.context);
 		}
 	}
 
@@ -207,7 +208,7 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 			}
 		} catch (Exception e){
 			//notifico e invio richiesta di stop forzato, oltre alla cancellazione delle preferenze
-			SMSUtility.handleErrorOrExceptionInSmp(e, this.other, this.context);
+			ErrorManager.handleErrorOrExceptionInSmp(e, this.other, this.context);
 		}
 	}
 
@@ -248,7 +249,7 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 			}
 		} catch (Exception e){
 			//notifico e invio richiesta di stop forzato, oltre alla cancellazione delle preferenze
-			SMSUtility.handleErrorOrExceptionInSmp(e, this.other, this.context);
+			ErrorManager.handleErrorOrExceptionInSmp(e, this.other, this.context);
 		}
 	}
 
@@ -269,11 +270,11 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 			//se ho riferimenti all'altro utente nelle preferenze...
 			if (MyPrefFiles.iHaveSomeReferencesToThisUser(this.other, this.context)) {
 				//... li cancello ed esorto l'altro a fare lo stesso
-				SMSUtility.handleErrorOrExceptionInSmp(null, this.other, this.context);
+				ErrorManager.handleErrorOrExceptionInSmp(null, this.other, this.context);
 			}
 		} catch (Exception e){
 			//notifico e invio richiesta di stop forzato, oltre alla cancellazione delle preferenze
-			SMSUtility.handleErrorOrExceptionInSmp(e, this.other, this.context);
+			ErrorManager.handleErrorOrExceptionInSmp(e, this.other, this.context);
 		}
 	}
 

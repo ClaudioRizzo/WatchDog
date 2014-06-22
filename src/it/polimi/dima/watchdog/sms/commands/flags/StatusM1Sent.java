@@ -34,7 +34,7 @@ public class StatusM1Sent implements CommandProtocolFlagsReactionInterface {
 
 	private M2Parser parser;
 	public static String CURRENT_STATUS = "m1_sent";
-	private static String STATUS_RECEIVED = "m2_received";
+	public static String STATUS_RECEIVED = "m2_received";
 	public static String NEXT_SENT_STATUS = StatusM3Sent.CURRENT_STATUS;
 
 	

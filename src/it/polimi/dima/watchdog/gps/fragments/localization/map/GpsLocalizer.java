@@ -1,7 +1,8 @@
 package it.polimi.dima.watchdog.gps.fragments.localization.map;
 
-import it.polimi.dima.watchdog.gps.exceptions.LocationDisabledExeption;
-import it.polimi.dima.watchdog.gps.exceptions.LocationException;
+import it.polimi.dima.watchdog.errors.ErrorFactory;
+import it.polimi.dima.watchdog.exceptions.LocationDisabledExeption;
+import it.polimi.dima.watchdog.exceptions.LocationException;
 import it.polimi.dima.watchdog.gps.fragments.localization.interfaces.LocationChangeListenerInterface;
 import android.content.Context;
 import android.location.Criteria;
@@ -25,10 +26,8 @@ public class GpsLocalizer implements LocationListener {
 		boolean isNetworkEnabled = mLocationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
 		
 		if(!isGpsEnabled && !isNetworkEnabled) {
-			throw new LocationDisabledExeption("Gps e rete dati disattivi");
+			throw new LocationDisabledExeption(ErrorFactory.LOCALIZATION_IMPOSSIBLE);
 		}
-			
-		
 	}
 
 	

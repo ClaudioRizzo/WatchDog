@@ -1,5 +1,6 @@
 package it.polimi.dima.watchdog.fragments.actionBar.settingsAction;
 
+import it.polimi.dima.watchdog.errors.ErrorManager;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Handler;
@@ -45,7 +46,7 @@ public class ProgressBarUtils {
 				  try {
 					Thread.sleep(1000);
 				  } catch (InterruptedException e) {
-					e.printStackTrace();
+					  ErrorManager.handleFatalError(e.getMessage());
 				  }
 
 				  // Update the progress bar
@@ -63,7 +64,7 @@ public class ProgressBarUtils {
 					try {
 						Thread.sleep(2000);
 					} catch (InterruptedException e) {
-						e.printStackTrace();
+						ErrorManager.handleFatalError(e.getMessage());
 					}
 
 					// close the progress bar dialog
@@ -83,7 +84,6 @@ public class ProgressBarUtils {
 			case 2:	return 40;
 			case 3: return 60;
 			case 4:	return 80;
-			//case 5: return 100;
 			}
 		}
 		return 100;

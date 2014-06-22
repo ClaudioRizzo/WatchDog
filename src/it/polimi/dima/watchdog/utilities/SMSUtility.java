@@ -1,15 +1,11 @@
 package it.polimi.dima.watchdog.utilities;
 
 import it.polimi.dima.watchdog.exceptions.ArbitraryMessageReceivedException;
-import it.polimi.dima.watchdog.exceptions.MessageWillBeIgnoredException;
 import it.polimi.dima.watchdog.exceptions.TooLongResponseException;
 import it.polimi.dima.watchdog.sms.ParsableSMS;
 import java.util.regex.Pattern;
-import android.content.Context;
 import android.telephony.SmsManager;
 import android.util.Base64;
-import android.util.Log;
-import android.widget.Toast;
 
 /**
  * Raccolta di stringhe e metodi utili per gli sms di SMP e Command Protocol.
@@ -21,9 +17,13 @@ public class SMSUtility {
 	
 	//QUI UTILITIES VARIE
 	
+	/**
+	 * Regex per i numeri di telefono.
+	 */
+	public static final String PHONE_REGEX = "\\+[0-9]+";
 	
 	/**
-	 * Durata del timeout: 120 secondi
+	 * Durata del timeout: 120 secondi.
 	 */
 	public static final int TIMEOUT_LENGTH = 120;
 	
@@ -38,7 +38,7 @@ public class SMSUtility {
 	public static final int M4_BODY_LENGTH = 30;
 	
 	/**
-	 * Usato solo nei metodi byte[] --> Hex e Hex --> byte[]
+	 * Usato solo nei metodi byte[] --> Hex e Hex --> byte[].
 	 */
 	private static final char[] hexArray = "0123456789ABCDEF".toCharArray();
 	
@@ -293,7 +293,7 @@ public class SMSUtility {
 	public static String getHeader(byte[] msg) throws ArbitraryMessageReceivedException {
 		
 		if(msg.length < ParsableSMS.HEADER_LENGTH){
-			throw new ArbitraryMessageReceivedException("Messaggio inaspettato: troppo corto!!!");
+			throw new ArbitraryMessageReceivedException();
 		}
 		byte[] header = new byte[ParsableSMS.HEADER_LENGTH];
 		System.arraycopy(msg, 0, header, 0, ParsableSMS.HEADER_LENGTH);		
@@ -312,7 +312,7 @@ public class SMSUtility {
 	public static String getBody(byte[] msg) throws ArbitraryMessageReceivedException {
 		
 		if(msg.length < ParsableSMS.HEADER_LENGTH){
-			throw new ArbitraryMessageReceivedException("Messaggio inaspettato: troppo corto!!!");
+			throw new ArbitraryMessageReceivedException();
 		}
 		int bodyLength = msg.length - ParsableSMS.HEADER_LENGTH;
 		
@@ -326,72 +326,6 @@ public class SMSUtility {
 		return bodyStr;
 	}
 	
-	/**
-	 * Visualizza un popup di errore.
-	 * 
-	 * @param message : il messaggio da mostrare
-	 * @param ctx : il contesto corrente
-	 */
-	public static void showShortToastMessage(String message, Context ctx) {
-		Toast toast = Toast.makeText(ctx, message, Toast.LENGTH_SHORT);
-		toast.show();
-	}
-	
-	/**
-	 * Se qualcosa va storto nel SMP vengono cancellate tutte le preferenze relative
-	 * all'altro utente e quest'ultimo viene esortato a fare lo stesso.
-	 * 
-	 * @param e : l'eccezione da gestire
-	 * @param other : il numero di telefono dell'altro
-	 * @param ctx : il contesto corrente 
-	 */
-	public static void handleErrorOrExceptionInSmp(Exception e, String other, Context ctx) {
-		//In caso di MessageWillBeIgnoredException non si fa proprio nulla
-		if(!(e instanceof MessageWillBeIgnoredException)){
-			Log.i("[DEBUG_SMP]", "CAUGHT ERROR OR EXCEPTION");
-			
-			//notifico...
-			if(e != null){
-				SMSUtility.showShortToastMessage(e.getMessage(), ctx);
-				e.printStackTrace();
-			}
-			
-			//... e cancello i riferimenti all'altro utente...
-			MyPrefFiles.eraseSmpPreferences(other, ctx);
-			// TODO notificare il fragment di quello che è successo
-			
-			//... e lo notifico, esortandolo a fare lo stesso
-			SMSUtility.sendMessage(other, SMSUtility.SMP_PORT, SMSUtility.hexStringToByteArray(SMSUtility.CODE6), null);
-		}
-	}
-	
-	/**
-	 * Se qualcosa va storto nella sessione di comando, viene gestita l'eccezione e vengono cancellate le
-	 * preferenze della command session; lo stato della comunicazione con l'altro viene resettato a free.
-	 * 
-	 * @param e : l'eccezione da gestire
-	 * @param other : il numero di telefono dell'altro
-	 * @param ctx : il contesto corrente
-	 */
-	public static void handleErrorOrExceptionInCommandSession(Exception e, String other, Context ctx){
-		if(!(e instanceof MessageWillBeIgnoredException)){
-			Log.i("[DEBUG_COMMAND]", "[DEBUG_COMMAND] CAUGHT ERROR OR EXCEPTION");
-			
-			//notifico...
-			if(e != null){
-				SMSUtility.showShortToastMessage(e.getMessage(), ctx);
-				e.printStackTrace();
-			}
-			
-			//... cancello i riferimenti all'altro utente nella sessione di comando (fa anche tornare immediatamente in status free). 
-			MyPrefFiles.eraseCommandSession(other, ctx);
-			
-			// TODO notificare il fragment di quello che è successo
-		}
-		else{
-			Log.i("[DEBUG_COMMAND]", "[DEBUG_COMMAND] messaggio ignorato!!!");
-		}
-	}
 	
 	/**
 	 * Ottiene la lunghezza del padding di m4 a partire dalla lunghezza target e quella effettiva.
@@ -404,7 +338,7 @@ public class SMSUtility {
 	public static int getM4BodyPaddingLength(int m4BodyLength, int dataLength) throws TooLongResponseException {
 		
 		if(dataLength > m4BodyLength){
-			throw new TooLongResponseException("Dati troppo lunghi!!!");
+			throw new TooLongResponseException();
 		}
 		return m4BodyLength - dataLength;
 	}

@@ -1,4 +1,4 @@
-package it.polimi.dima.watchdog.gps.exceptions;
+package it.polimi.dima.watchdog.exceptions;
 
 public class LocationException extends Exception {
 

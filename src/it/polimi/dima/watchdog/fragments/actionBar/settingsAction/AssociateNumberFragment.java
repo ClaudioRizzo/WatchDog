@@ -1,10 +1,12 @@
 package it.polimi.dima.watchdog.fragments.actionBar.settingsAction;
 
 import it.polimi.dima.watchdog.R;
-import it.polimi.dima.watchdog.exceptions.NoSuchPreferenceFoundException;
+import it.polimi.dima.watchdog.errors.ErrorFactory;
+import it.polimi.dima.watchdog.errors.ErrorManager;
+import it.polimi.dima.watchdog.exceptions.BadPhoneNumberException;
+import it.polimi.dima.watchdog.password.PasswordUtils;
 import it.polimi.dima.watchdog.utilities.MyPrefFiles;
 import it.polimi.dima.watchdog.utilities.SMSUtility;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -42,43 +44,44 @@ public class AssociateNumberFragment extends Fragment implements OnClickListener
 		try{
 			Log.i("[DEBUG]", "Ho cliccato per inviare");
 			
-			//salvo in this.otherNumber il numero dell'altro
-			this.getNumber();
-			
-			// TODO: Effettuare validazione degli input !
-			// prendo la domanda digitata e la salva nelle preferenze
-			this.getAndSaveQuestion();
-			try {
-				MyPrefFiles.getMyPreference(MyPrefFiles.SECRET_Q_A, this.otherNumber + MyPrefFiles.SECRET_QUESTION, this.context);
-			} catch (NoSuchPreferenceFoundException e) {
-				e.printStackTrace();
-				return;
+			try{
+				this.getNumber();
+				this.getAndSaveQuestion();
+				this.getAndSaveAnswer();
+				ProgressBarUtils progress = new ProgressBarUtils(getActivity());
+				progress.initiProgressBar("Associating with: "+otherNumber);
+				progress.runProgressBar();
+				
+				this.startSMP();
 			}
-			this.getAndSaveAnswer();
-			ProgressBarUtils progress = new ProgressBarUtils(getActivity());
-			progress.initiProgressBar("Associating with: "+otherNumber);
-			progress.runProgressBar();
-			
-			this.startSMP();
+			catch (BadPhoneNumberException e){
+				ErrorManager.handleNonFatalError(e.getMessage());
+			}
+			catch (IllegalArgumentException e){
+				ErrorManager.handleNonFatalError(e.getMessage());
+			}
 		}
 		catch (Exception e){
 			if(this.otherNumber != null){
-				SMSUtility.handleErrorOrExceptionInSmp(e, this.otherNumber, this.context);
+				ErrorManager.handleErrorOrExceptionInSmp(e, this.otherNumber, this.context);
 			}
 			else{
-				//TODO notificare
-				System.exit(-1);
+				ErrorManager.handleNonFatalError(e.getMessage());
 			}
 		}
 	}
 
 	/**
 	 * Salva in this.otherNumber il numero dell'altro.
+	 * @throws BadPhoneNumberException 
 	 */
-	private void getNumber() {
+	private void getNumber() throws BadPhoneNumberException {
 		View fragView = getView();
 		EditText mPhoneToAssociateEditText = (EditText) fragView.findViewById(R.id.edit_text_associate_number);
 		this.otherNumber = mPhoneToAssociateEditText.getText().toString();
+		if(!this.otherNumber.matches(SMSUtility.PHONE_REGEX)){
+			throw new BadPhoneNumberException(ErrorFactory.BAD_PHONE_NUMBER);
+		}
 	}
 	
 	/**
@@ -90,6 +93,10 @@ public class AssociateNumberFragment extends Fragment implements OnClickListener
 		String mQuestion = mQuestionEditText.getText().toString();
 		Log.i("[DEBUG]", mQuestion);
 		
+		if(PasswordUtils.isEmpty(mQuestion)){
+			throw new IllegalArgumentException(ErrorFactory.BLANK_FIELD);
+		}
+		
 		//salvo nelle preferenze la domanda segreta che sarà inviata all'altro più avanti
 		MyPrefFiles.setMyPreference(MyPrefFiles.SECRET_Q_A, this.otherNumber + MyPrefFiles.SECRET_QUESTION, mQuestion, this.context);
 	}
@@ -99,11 +106,15 @@ public class AssociateNumberFragment extends Fragment implements OnClickListener
 	 */
 	private void getAndSaveAnswer() {
 		View fragView = getView();
-		EditText mQuestionEditText = (EditText) fragView.findViewById(R.id.edit_text_associate_answer);
-		String mQuestion = mQuestionEditText.getText().toString();
+		EditText mAnswerEditText = (EditText) fragView.findViewById(R.id.edit_text_associate_answer);
+		String mAnswer = mAnswerEditText.getText().toString();
+		
+		if(PasswordUtils.isEmpty(mAnswer)){
+			throw new IllegalArgumentException(ErrorFactory.BLANK_FIELD);
+		}
 		
 		//salvo nelle preferenze la risposta alla domanda segreta che sarà inviata all'altro più avanti
-		MyPrefFiles.setMyPreference(MyPrefFiles.SECRET_Q_A, this.otherNumber + MyPrefFiles.SECRET_ANSWER, mQuestion, this.context);
+		MyPrefFiles.setMyPreference(MyPrefFiles.SECRET_Q_A, this.otherNumber + MyPrefFiles.SECRET_ANSWER, mAnswer, this.context);
 	}
 
 	/**

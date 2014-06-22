@@ -1,8 +1,12 @@
 package it.polimi.dima.watchdog.utilities;
 
+import it.polimi.dima.watchdog.errors.ErrorFactory;
+import it.polimi.dima.watchdog.errors.ErrorManager;
 import it.polimi.dima.watchdog.gps.fragments.localization.interfaces.MessageActionListener;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import android.util.Log;
 
 
@@ -44,6 +48,6 @@ public class ListenerUtility {
 	public void notifyLocationAcquired(String errorCode) {
 		
 		Log.i("[DEBUG]", "[DEBUG] nella notify ho ricevuto correttamente il messaggio di errore della locate");
-		//TODO fare qualcosa con l'errore
+		ErrorManager.handleNonFatalError(ErrorFactory.BAD_RETURNED_DATA);
 	}
 }

@@ -14,11 +14,12 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.util.Log;
 import it.polimi.dima.watchdog.crypto.CryptoUtility;
+import it.polimi.dima.watchdog.errors.ErrorManager;
+import it.polimi.dima.watchdog.exceptions.LocationException;
 import it.polimi.dima.watchdog.exceptions.NoSignatureDoneException;
 import it.polimi.dima.watchdog.exceptions.NoSuchPreferenceFoundException;
 import it.polimi.dima.watchdog.exceptions.NotECKeyException;
 import it.polimi.dima.watchdog.exceptions.TooLongResponseException;
-import it.polimi.dima.watchdog.gps.exceptions.LocationException;
 import it.polimi.dima.watchdog.gps.fragments.localization.interfaces.LocationChangeListenerInterface;
 import it.polimi.dima.watchdog.gps.fragments.localization.map.GpsLocalizer;
 import it.polimi.dima.watchdog.siren.SirenService;
@@ -185,8 +186,7 @@ public class SMSM3Handler implements SMSCommandVisitorInterface, LocationChangeL
 		try {
 			constructResponse(SMSUtility.hexStringToByteArray(SMSUtility.LOCATE), this.locationString);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			ErrorManager.handleErrorOrExceptionInCommandSession(e, this.other, this.context, true);
 		}
 	}
 }

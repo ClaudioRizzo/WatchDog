@@ -2,7 +2,9 @@ package it.polimi.dima.watchdog.sms.commands.flags;
 
 import java.security.PublicKey;
 import java.util.Arrays;
+
 import it.polimi.dima.watchdog.crypto.CryptoUtility;
+import it.polimi.dima.watchdog.errors.ErrorFactory;
 import it.polimi.dima.watchdog.exceptions.ArbitraryMessageReceivedException;
 import it.polimi.dima.watchdog.exceptions.ErrorInSignatureCheckingException;
 import it.polimi.dima.watchdog.exceptions.NotECKeyException;
@@ -48,7 +50,7 @@ public class M1Parser {
 		int signatureLength = this.rawMessage.length - messageWithoutSignatureLength;
 			
 		if(signatureLength < 1){
-			throw new ArbitraryMessageReceivedException();
+			throw new ArbitraryMessageReceivedException(ErrorFactory.SIGNATURE_EXCEPTION);
 		}
 		separateMessageParts(ivStartPosition, saltStartPosition, signatureStartPosition, signatureLength);
 		verifySignature(messageWithoutSignatureLength);
@@ -60,7 +62,7 @@ public class M1Parser {
 		//trattato come un m1. Se non lo è si lancia un'eccezione che propagata causerà la cancellazione
 		//di tutte le preferenze della sessione di comando.
 		if(!Arrays.equals(this.header, header)){
-			throw new ArbitraryMessageReceivedException();
+			throw new ArbitraryMessageReceivedException(ErrorFactory.INVALID_HEADER);
 		}
 	}
 
@@ -68,7 +70,7 @@ public class M1Parser {
 		byte[] messageWithoutSignature = new byte[messageWithoutSignatureLength];
 		System.arraycopy(this.rawMessage, 0, messageWithoutSignature, 0, messageWithoutSignatureLength);
 		if(!CryptoUtility.verifySignature(messageWithoutSignature, this.signature, this.oPub)){
-			throw new ArbitraryMessageReceivedException("Firma non valida/non corrispondente!!!");
+			throw new ArbitraryMessageReceivedException(ErrorFactory.SIGNATURE_EXCEPTION);
 		}
 	}
 

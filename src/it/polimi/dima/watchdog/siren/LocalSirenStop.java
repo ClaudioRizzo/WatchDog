@@ -1,13 +1,17 @@
 package it.polimi.dima.watchdog.siren;
 
 import it.polimi.dima.watchdog.crypto.CryptoUtility;
+import it.polimi.dima.watchdog.errors.ErrorFactory;
+import it.polimi.dima.watchdog.errors.ErrorManager;
 import it.polimi.dima.watchdog.exceptions.NoSuchPreferenceFoundException;
 import it.polimi.dima.watchdog.password.PasswordUtils;
 import it.polimi.dima.watchdog.utilities.MyPrefFiles;
 import it.polimi.dima.watchdog.utilities.SMSUtility;
 import it.polimi.dima.watchdog.utilities.ServicesUtilities;
+
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
+
 import android.content.Context;
 import android.content.Intent;
 
@@ -56,11 +60,11 @@ public class LocalSirenStop {
 				this.context.startService(intent);
 			}
 			else{
-				SMSUtility.showShortToastMessage("La sirena non è attiva: non posso spegnerla", this.context);
+				ErrorManager.handleNonFatalError(ErrorFactory.SIREN_WAS_OFF);
 			}
 		}
 		else{
-			SMSUtility.showShortToastMessage("Password sbagliata: non ho potuto interrompere la sirena.", this.context);
+			ErrorManager.handleNonFatalError(ErrorFactory.WRONG_PASSWORD);
 		}
 	}
 }

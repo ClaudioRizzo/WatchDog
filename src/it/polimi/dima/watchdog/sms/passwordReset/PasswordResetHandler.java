@@ -35,7 +35,7 @@ public class PasswordResetHandler extends BroadcastReceiver {
 		} 
 		catch (Exception e) 
 		{
-			//TODO fare qualcosa
+			//TODO necessario fare qualcosa? Forse no.
 		}
 	}
 

@@ -1,14 +1,8 @@
 package it.polimi.dima.watchdog.fragments.smsRemote;
 
 import it.polimi.dima.watchdog.R;
-import it.polimi.dima.watchdog.gps.fragments.localization.GpsAdapter;
-import it.polimi.dima.watchdog.gps.fragments.localization.GpsLocalizeClickHandler;
-import it.polimi.dima.watchdog.utilities.SMSUtility;
-
 import java.util.List;
-
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;

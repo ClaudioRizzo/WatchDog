@@ -4,7 +4,9 @@ import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
 import java.security.spec.InvalidKeySpecException;
 import java.util.Arrays;
+
 import it.polimi.dima.watchdog.crypto.CryptoUtility;
+import it.polimi.dima.watchdog.errors.ErrorFactory;
 import it.polimi.dima.watchdog.exceptions.ArbitraryMessageReceivedException;
 import it.polimi.dima.watchdog.exceptions.ErrorInSignatureCheckingException;
 import it.polimi.dima.watchdog.exceptions.NoSuchPreferenceFoundException;
@@ -72,14 +74,14 @@ public class PasswordResetMessageParser {
 	private void verifySignature() throws NoSuchAlgorithmException, InvalidKeySpecException, NoSuchPreferenceFoundException, ErrorInSignatureCheckingException, NotECKeyException, ArbitraryMessageReceivedException {
 		PublicKey oPub = MyPrefFiles.getOtherPublicKey(this.context, this.other);
 		if(!CryptoUtility.verifySignature(this.messageWithoutSignature, this.signature, oPub)){
-			throw new ArbitraryMessageReceivedException("Firma non valida!!!");
+			throw new ArbitraryMessageReceivedException(ErrorFactory.SIGNATURE_EXCEPTION);
 		}
 	}
 
 	private void verifyHeader() throws ArbitraryMessageReceivedException {
 		byte[] header = SMSUtility.hexStringToByteArray(SMSUtility.PASSWORD_CHANGE);
 		if(!Arrays.equals(this.header, header)){
-			throw new ArbitraryMessageReceivedException("Header non valido!!!");
+			throw new ArbitraryMessageReceivedException(ErrorFactory.INVALID_HEADER);
 		}
 	}
 

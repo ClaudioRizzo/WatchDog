@@ -3,9 +3,12 @@ package it.polimi.dima.watchdog.fragments.smsRemote;
 import it.polimi.dima.watchdog.R;
 import it.polimi.dima.watchdog.crypto.AESKeyGenerator;
 import it.polimi.dima.watchdog.crypto.CryptoUtility;
+import it.polimi.dima.watchdog.errors.ErrorFactory;
+import it.polimi.dima.watchdog.errors.ErrorManager;
 import it.polimi.dima.watchdog.exceptions.NoSignatureDoneException;
 import it.polimi.dima.watchdog.exceptions.NoSuchPreferenceFoundException;
 import it.polimi.dima.watchdog.exceptions.NotECKeyException;
+import it.polimi.dima.watchdog.password.PasswordUtils;
 import it.polimi.dima.watchdog.sms.commands.flags.StatusM1Sent;
 import it.polimi.dima.watchdog.sms.timeout.TimeoutWrapper;
 import it.polimi.dima.watchdog.utilities.MyPrefFiles;
@@ -40,34 +43,36 @@ public class GenericSmsClickHandler {
 	
 	public void handleClick(View v, String commandString) {
 		try{
-			Log.i("[DEBUG]", "[Localize] ho cliccato");
+			Log.i("[DEBUG]", "Ho cliccato");
 			this.password = getPassword();
-			//this.otherNumber = getPhoneNumber();
 			
-			byte[] command = SMSUtility.hexStringToByteArray(commandString); 
-			
-			if(!MyPrefFiles.existsPreference(MyPrefFiles.KEYRING, this.otherNumber, this.context)){
-				throw new NoSuchPreferenceFoundException("Non si può iniziare una sessione di comando con un utente con cui non è stato fatto SMP!!!");
+			if(PasswordUtils.isEmpty(this.password)){
+				ErrorManager.handleNonFatalError(ErrorFactory.BLANK_FIELD);
 			}
-			
-			storeDataToReuseInM3(this.password, command);
-			
-			byte[] body = packIvAndSalt();
-			byte[] secret = Base64.decode(MyPrefFiles.getMyPreference(MyPrefFiles.SHARED_SECRETS, this.otherNumber, this.context), Base64.DEFAULT);
-			generateAndStoreAesKey(secret, this.keySalt);
-			byte[] header = SMSUtility.hexStringToByteArray(SMSUtility.M1_HEADER);
-			byte[] message = packHeaderAndBody(header, body);
-			byte[] signature = generateSignature(message);
-			byte[] finalMessage = packMessage(message, signature);
-			
-			SMSUtility.sendSingleMessage(this.otherNumber, SMSUtility.COMMAND_PORT, finalMessage);
-			MyPrefFiles.replacePreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + this.otherNumber, StatusM1Sent.CURRENT_STATUS, this.context);
-			TimeoutWrapper.addTimeout(SMSUtility.MY_PHONE, this.otherNumber, this.context);
-			
-			
+			else{
+				byte[] command = SMSUtility.hexStringToByteArray(commandString); 
+				
+				if(!MyPrefFiles.existsPreference(MyPrefFiles.KEYRING, this.otherNumber, this.context)){
+					throw new NoSuchPreferenceFoundException(ErrorFactory.COMMAND_TO_NOT_ASSOCIATED);
+				}
+				
+				storeDataToReuseInM3(this.password, command);
+				
+				byte[] body = packIvAndSalt();
+				byte[] secret = Base64.decode(MyPrefFiles.getMyPreference(MyPrefFiles.SHARED_SECRETS, this.otherNumber, this.context), Base64.DEFAULT);
+				generateAndStoreAesKey(secret, this.keySalt);
+				byte[] header = SMSUtility.hexStringToByteArray(SMSUtility.M1_HEADER);
+				byte[] message = packHeaderAndBody(header, body);
+				byte[] signature = generateSignature(message);
+				byte[] finalMessage = packMessage(message, signature);
+				
+				SMSUtility.sendSingleMessage(this.otherNumber, SMSUtility.COMMAND_PORT, finalMessage);
+				MyPrefFiles.replacePreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + this.otherNumber, StatusM1Sent.CURRENT_STATUS, this.context);
+				TimeoutWrapper.addTimeout(SMSUtility.MY_PHONE, this.otherNumber, this.context);
+			}
 		}
 		catch (Exception e){
-			SMSUtility.handleErrorOrExceptionInCommandSession(e, this.otherNumber, this.context);
+			ErrorManager.handleErrorOrExceptionInCommandSession(e, this.otherNumber, this.context, false);
 		}
 	}
 	
@@ -132,16 +137,9 @@ public class GenericSmsClickHandler {
 		return iv;
 	}
 	
-	/*private String getPhoneNumber() {
-		EditText mEditText = (EditText) fragView.findViewById(R.id.phone_number1);
-		String phoneNum = mEditText.getText().toString();
-		return phoneNum;
-	}*/
-	
 	private String getPassword() {
 		EditText mEditText = (EditText) fragView.findViewById(R.id.edit_text_associated_password);
 		String cleanPassword = mEditText.getText().toString();
 		return cleanPassword;
 	}
-
 }

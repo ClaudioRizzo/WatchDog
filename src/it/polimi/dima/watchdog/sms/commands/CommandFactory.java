@@ -1,6 +1,7 @@
 package it.polimi.dima.watchdog.sms.commands;
 
 import android.util.Log;
+import it.polimi.dima.watchdog.errors.ErrorFactory;
 import it.polimi.dima.watchdog.exceptions.ArbitraryMessageReceivedException;
 import it.polimi.dima.watchdog.sms.ParsableSMS;
 import it.polimi.dima.watchdog.sms.ParsebleSMSInterface;
@@ -37,6 +38,6 @@ public class CommandFactory implements ParsebleSMSInterface {
 		else if(header.equals(SMSUtility.LOCATE)){
 			return new LocateCodeMessage(SMSUtility.LOCATE, body);
 		}
-		else throw new ArbitraryMessageReceivedException("Messaggio con un header sconosciuto!!!");
+		else throw new ArbitraryMessageReceivedException(ErrorFactory.INVALID_HEADER);
 	}
 }

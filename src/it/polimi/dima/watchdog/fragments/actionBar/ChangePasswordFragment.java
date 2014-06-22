@@ -1,7 +1,10 @@
 package it.polimi.dima.watchdog.fragments.actionBar;
 
 import it.polimi.dima.watchdog.R;
+import it.polimi.dima.watchdog.errors.ErrorFactory;
+import it.polimi.dima.watchdog.errors.ErrorManager;
 import it.polimi.dima.watchdog.password.PasswordResetter;
+import it.polimi.dima.watchdog.password.PasswordUtils;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -42,7 +45,15 @@ public class ChangePasswordFragment extends Fragment {
 				Log.i("DEBUG", "DEBUG: NEW = " + newPass);
 				Log.i("DEBUG", "DEBUG: CONF = " + check);
 				
-				if(newPass.equals(check)) {
+				if(PasswordUtils.isEmpty(oldPass) || PasswordUtils.isEmpty(newPass) || PasswordUtils.isEmpty(check)){
+					Log.i("DEBUG", "DEBUG: QUALCHE CAMPO è VUOTO");
+					ErrorManager.handleNonFatalError(ErrorFactory.BLANK_FIELD);
+				}
+				else if(!newPass.matches(PasswordUtils.PASSWORD_REGEX)){
+					Log.i("DEBUG", "DEBUG: BAD PASSWORD: NON MATCHA LA REGEX");
+					ErrorManager.handleNonFatalError(ErrorFactory.BAD_PASSWORD);
+				}
+				else if(newPass.equals(check)) {
 					Log.i("DEBUG", "DEBUG: NEW == CHECK");
 						
 					try {
@@ -51,13 +62,11 @@ public class ChangePasswordFragment extends Fragment {
 						resetter.storePasswordHashAndSalt();
 						resetter.notifyAllContacts();
 					} catch (Exception e) {
-						
-						e.printStackTrace();
-						//TODO: notifica errore
+						ErrorManager.handleNonFatalError(e.getMessage());
 					}
 				} else {
 					Log.i("DEBUG", "DEBUG: NEW != CHECK");
-					//TODO: notifica errore
+					ErrorManager.handleNonFatalError(ErrorFactory.WRONG_PASSWORD);
 				}
 				
 			}

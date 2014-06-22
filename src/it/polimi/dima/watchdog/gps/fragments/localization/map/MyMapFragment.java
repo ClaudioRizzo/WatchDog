@@ -1,15 +1,14 @@
 package it.polimi.dima.watchdog.gps.fragments.localization.map;
 
-
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-
 import it.polimi.dima.watchdog.R;
-import it.polimi.dima.watchdog.gps.exceptions.LocationException;
+import it.polimi.dima.watchdog.errors.ErrorManager;
+import it.polimi.dima.watchdog.exceptions.LocationException;
 import android.content.Context;
 import android.location.Location;
 import android.location.LocationManager;
@@ -83,8 +82,7 @@ public class MyMapFragment extends Fragment {
 				}
 
 			} catch (LocationException e) {
-				// TODO i serivizi sono spenti
-				e.printStackTrace();
+				ErrorManager.handleNonFatalError(e.getMessage());
 			}
 
 		} else {

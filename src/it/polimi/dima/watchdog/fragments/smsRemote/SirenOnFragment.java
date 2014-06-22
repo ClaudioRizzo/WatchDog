@@ -3,9 +3,7 @@ package it.polimi.dima.watchdog.fragments.smsRemote;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
 import it.polimi.dima.watchdog.R;
-import it.polimi.dima.watchdog.gps.fragments.localization.GpsAdapter;
 import it.polimi.dima.watchdog.utilities.FragmentAdapterLifecycle;
 import it.polimi.dima.watchdog.utilities.MyPrefFiles;
 import android.content.Context;

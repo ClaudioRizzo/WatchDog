@@ -2,6 +2,8 @@ package it.polimi.dima.watchdog.sms.commands.flags;
 
 import android.content.Context;
 import android.util.Log;
+import it.polimi.dima.watchdog.errors.ErrorFactory;
+import it.polimi.dima.watchdog.errors.ErrorManager;
 import it.polimi.dima.watchdog.sms.commands.LocateCodeMessage;
 import it.polimi.dima.watchdog.sms.commands.MarkFoundCodeMessage;
 import it.polimi.dima.watchdog.sms.commands.MarkLostCodeMessage;
@@ -43,7 +45,7 @@ public class SMSM4Handler implements SMSCommandVisitorInterface {
 			//TODO fare qualcosa
 		}
 		else{
-			throw new IllegalArgumentException();
+			ErrorManager.handleNonFatalError(ErrorFactory.BAD_RETURNED_DATA);
 		}
 		//Cancello anche da questo lato la sessione di comando ormai terminata
 		MyPrefFiles.eraseCommandSession(this.other, this.context);
@@ -61,7 +63,7 @@ public class SMSM4Handler implements SMSCommandVisitorInterface {
 			//TODO fare qualcosa
 		}
 		else{
-			throw new IllegalArgumentException();
+			ErrorManager.handleNonFatalError(ErrorFactory.BAD_RETURNED_DATA);
 		}
 		//Cancello anche da questo lato la sessione di comando ormai terminata
 		MyPrefFiles.eraseCommandSession(this.other, this.context);

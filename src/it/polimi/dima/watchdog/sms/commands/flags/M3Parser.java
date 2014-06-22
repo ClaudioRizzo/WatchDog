@@ -7,6 +7,7 @@ import org.spongycastle.crypto.InvalidCipherTextException;
 
 import android.util.Base64;
 import it.polimi.dima.watchdog.crypto.CryptoUtility;
+import it.polimi.dima.watchdog.errors.ErrorFactory;
 import it.polimi.dima.watchdog.exceptions.ArbitraryMessageReceivedException;
 import it.polimi.dima.watchdog.exceptions.ErrorInSignatureCheckingException;
 import it.polimi.dima.watchdog.exceptions.NotECKeyException;
@@ -83,7 +84,7 @@ public class M3Parser {
 				return i;
 			}
 		}
-		throw new ArbitraryMessageReceivedException();
+		throw new ArbitraryMessageReceivedException(ErrorFactory.INTEGRITY_EXCEPTION);
 	}
 
 	/**
@@ -95,7 +96,7 @@ public class M3Parser {
 	 */
 	private void validateSignature() throws ArbitraryMessageReceivedException, ErrorInSignatureCheckingException, NotECKeyException {
 		if(!CryptoUtility.verifySignature(this.sms, this.signature, this.oPub)){
-			throw new ArbitraryMessageReceivedException("Firma non valida/non corrispondente!!!");
+			throw new ArbitraryMessageReceivedException(ErrorFactory.SIGNATURE_EXCEPTION);
 		}
 	}
 	
@@ -107,7 +108,7 @@ public class M3Parser {
 	private void parse() throws ArbitraryMessageReceivedException{
 		decompose();
 		if(!validate()){
-			throw new ArbitraryMessageReceivedException("La password non è corretta!!!");
+			throw new ArbitraryMessageReceivedException(ErrorFactory.WRONG_PASSWORD);
 		}
 	}
 

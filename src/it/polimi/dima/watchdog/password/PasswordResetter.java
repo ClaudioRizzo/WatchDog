@@ -10,6 +10,7 @@ import java.util.Set;
 import android.content.Context;
 import android.util.Base64;
 import it.polimi.dima.watchdog.crypto.CryptoUtility;
+import it.polimi.dima.watchdog.errors.ErrorFactory;
 import it.polimi.dima.watchdog.exceptions.NoSignatureDoneException;
 import it.polimi.dima.watchdog.exceptions.NoSuchPreferenceFoundException;
 import it.polimi.dima.watchdog.exceptions.NotECKeyException;
@@ -75,15 +76,11 @@ public class PasswordResetter {
 	 */
 	public void changePassword() throws WrongPasswordException, NoSuchAlgorithmException{
 		if(!verifyInsertedPassword()){
-			throw new WrongPasswordException("La password inserita non è giusta!!!");
+			throw new WrongPasswordException(ErrorFactory.WRONG_PASSWORD);
 		}
 		else{
 			this.newSalt = PasswordUtils.nextSalt();
 			this.newPasswordHash = PasswordUtils.computeHash(this.newPassword, this.newSalt, CryptoUtility.SHA_256);
-			String newPwdHash = Base64.encodeToString(this.newPasswordHash, Base64.DEFAULT);
-			String newPwdSalt = Base64.encodeToString(this.newSalt, Base64.DEFAULT);
-			MyPrefFiles.setMyPreference(MyPrefFiles.PASSWORD_AND_SALT, MyPrefFiles.MY_PASSWORD_HASH, newPwdHash, this.context);
-			MyPrefFiles.setMyPreference(MyPrefFiles.PASSWORD_AND_SALT, MyPrefFiles.MY_PASSWORD_SALT, newPwdSalt, this.context);
 		}
 	}
 
@@ -91,10 +88,10 @@ public class PasswordResetter {
 	 * Salva nelle preferenze l'hash della propria password e il sale corrispondente.
 	 */
 	public void storePasswordHashAndSalt() {
-		String hash = Base64.encodeToString(this.newPasswordHash, Base64.DEFAULT);
-		String salt = Base64.encodeToString(this.newSalt, Base64.DEFAULT);
-		MyPrefFiles.setMyPreference(MyPrefFiles.PASSWORD_AND_SALT, MyPrefFiles.MY_PASSWORD_HASH, hash, this.context);
-		MyPrefFiles.setMyPreference(MyPrefFiles.PASSWORD_AND_SALT, MyPrefFiles.MY_PASSWORD_SALT, salt, this.context);
+		String newPwdHash = Base64.encodeToString(this.newPasswordHash, Base64.DEFAULT);
+		String newPwdSalt = Base64.encodeToString(this.newSalt, Base64.DEFAULT);
+		MyPrefFiles.setMyPreference(MyPrefFiles.PASSWORD_AND_SALT, MyPrefFiles.MY_PASSWORD_HASH, newPwdHash, this.context);
+		MyPrefFiles.setMyPreference(MyPrefFiles.PASSWORD_AND_SALT, MyPrefFiles.MY_PASSWORD_SALT, newPwdSalt, this.context);
 	}
 	
 	

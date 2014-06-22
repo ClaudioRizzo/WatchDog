@@ -2,10 +2,13 @@ package it.polimi.dima.watchdog.fragments.wizard;
 
 import it.polimi.dima.watchdog.R;
 import it.polimi.dima.watchdog.crypto.CryptoUtility;
+import it.polimi.dima.watchdog.errors.ErrorFactory;
+import it.polimi.dima.watchdog.errors.ErrorManager;
 import it.polimi.dima.watchdog.password.PasswordUtils;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
+import java.util.regex.Pattern;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -42,26 +45,21 @@ public class InitializeWizardFragment extends Fragment implements OnClickListene
 			String cleanPassword = mTextView.getText().toString();
 			
 			//TODO scommentare alla fine
-			/*while(!Pattern.matches(PasswordUtils.PASSWORD_REGEX, cleanPassword)){
-				//TODO notificare che la password può essere composta solo da lettere maiuscole e minuscole e numeri
-				//e che deve contenere almeno un numero e almeno una lettera (maiuscola o minuscola non ha importanza)
-				//e che deve essere lunga almeno 8 caratteri e non più di 20. Quindi chiedere di immetterla di nuovo
-				//e salvarla di nuovo in cleanPassword
-			}*/
-			byte[] hashToSave = PasswordUtils.computeHash(cleanPassword.getBytes(), this.salt, CryptoUtility.SHA_256);
-			this.mCallBack.saveWizardResults(true, hashToSave, this.salt);
+			if(!Pattern.matches(/*PasswordUtils.PASSWORD_REGEX*/ ".+", cleanPassword)){
+				ErrorManager.handleNonFatalError(ErrorFactory.BAD_PASSWORD);
+			}
+			else{
+				byte[] hashToSave = PasswordUtils.computeHash(cleanPassword.getBytes(), this.salt, CryptoUtility.SHA_256);
+				this.mCallBack.saveWizardResults(true, hashToSave, this.salt);
+			}
 		}
 		catch (NoSuchAlgorithmException e)
 		{
-			e.printStackTrace();
-			//TODO notificare l'errore
-			System.exit(-1);
+			ErrorManager.handleFatalError(ErrorFactory.WIZARD_ERROR);
 		}
 		catch (NoSuchProviderException e)
 		{
-			e.printStackTrace();
-			//TODO notificare l'errore
-			System.exit(-1);
+			ErrorManager.handleFatalError(ErrorFactory.WIZARD_ERROR);
 		}
 	}
 
@@ -74,7 +72,7 @@ public class InitializeWizardFragment extends Fragment implements OnClickListene
 		} 
 		catch (ClassCastException e) 
 		{
-			throw new ClassCastException(activity.toString() + "must implement OnPasswordInizializedListener");
+			ErrorManager.handleFatalError(e.getMessage());
 		}
 	}
 }

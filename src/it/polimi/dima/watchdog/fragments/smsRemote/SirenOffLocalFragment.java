@@ -1,9 +1,7 @@
 package it.polimi.dima.watchdog.fragments.smsRemote;
 
-import java.security.NoSuchAlgorithmException;
-
 import it.polimi.dima.watchdog.R;
-import it.polimi.dima.watchdog.exceptions.NoSuchPreferenceFoundException;
+import it.polimi.dima.watchdog.errors.ErrorManager;
 import it.polimi.dima.watchdog.siren.LocalSirenStop;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -43,14 +41,9 @@ public class SirenOffLocalFragment extends Fragment {
 				
 				try {
 					sirenStopLocal.turnOffSiren();
-				} catch (NoSuchAlgorithmException e) {
-					
-					e.printStackTrace();
-				} catch (NoSuchPreferenceFoundException e) {
-					
-					e.printStackTrace();
+				} catch (Exception e) {
+					ErrorManager.handleNonFatalError(e.getMessage());
 				}
-				
 			}
 		});
 		

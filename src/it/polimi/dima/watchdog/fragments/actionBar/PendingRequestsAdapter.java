@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+
 import it.polimi.dima.watchdog.R;
 import it.polimi.dima.watchdog.crypto.PublicKeyAutenticator;
+import it.polimi.dima.watchdog.errors.ErrorManager;
 import it.polimi.dima.watchdog.utilities.MyPrefFiles;
 import it.polimi.dima.watchdog.utilities.SMSUtility;
 import android.content.Context;
@@ -164,7 +166,7 @@ public class PendingRequestsAdapter extends BaseAdapter {
 				} catch (Exception e) {
 					// notifico e invio richiesta di stop forzato, oltre alla
 					// cancellazione delle preferenze
-					SMSUtility.handleErrorOrExceptionInSmp(e, number, context);
+					ErrorManager.handleErrorOrExceptionInSmp(e, number, context);
 				}
 			}
 		});

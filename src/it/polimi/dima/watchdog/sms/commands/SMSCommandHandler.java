@@ -1,6 +1,6 @@
 package it.polimi.dima.watchdog.sms.commands;
 
-import it.polimi.dima.watchdog.exceptions.NoSuchPreferenceFoundException;
+import it.polimi.dima.watchdog.errors.ErrorManager;
 import it.polimi.dima.watchdog.sms.commands.flags.CommandProtocolFlagsReactionInterface;
 import it.polimi.dima.watchdog.sms.commands.flags.StatusFree;
 import it.polimi.dima.watchdog.sms.commands.flags.StatusM1Sent;
@@ -37,6 +37,7 @@ public class SMSCommandHandler extends BroadcastReceiver {
 		Log.i("[DEBUG_COMMAND]", "[DEBUG_COMMAND] MESSAGGIO RICEVUTO");
 		this.ctx = context;
 		final Bundle bundle = intent.getExtras();
+		String myContext = getMyContext(this.ctx);
 		try {
 			final Object[] pdusObj = (Object[]) bundle.get(SMSUtility.SMS_EXTRA_NAME);
 			SmsMessage message = null;	
@@ -45,8 +46,6 @@ public class SMSCommandHandler extends BroadcastReceiver {
 				message = SmsMessage.createFromPdu((byte[]) pdusObj[i]);
 			}
 			this.other = message.getDisplayOriginatingAddress();
-			String myContext = getMyContext(this.ctx);
-			
 			
 			if(this.statusMap.containsKey(myContext)) {
 				this.statusMap.get(myContext).parse(this.ctx, message, this.other);
@@ -58,17 +57,29 @@ public class SMSCommandHandler extends BroadcastReceiver {
 		} 
 		catch (Exception e) 
 		{
-			SMSUtility.handleErrorOrExceptionInCommandSession(e, this.other, this.ctx);
+			if(myContext.equals(StatusM1Sent.CURRENT_STATUS) || myContext.equals(StatusM1Sent.STATUS_RECEIVED) || myContext.equals(StatusM3Sent.CURRENT_STATUS) || myContext.equals(StatusM3Sent.STATUS_RECEIVED)){
+				ErrorManager.handleErrorOrExceptionInCommandSession(e, this.other, this.ctx, false);
+			}
+			else{
+				ErrorManager.handleErrorOrExceptionInCommandSession(e, this.other, this.ctx, true);
+			}
 		}
 		
 	}
 	
-	private String getMyContext(Context context) throws NoSuchPreferenceFoundException{
-		if(MyPrefFiles.existsPreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + this.other, context)){
-			String myContext = MyPrefFiles.getMyPreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + this.other, context);
-			return myContext;
+	private String getMyContext(Context context) {
+		try{
+			if(MyPrefFiles.existsPreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + this.other, context)){
+				String myContext = MyPrefFiles.getMyPreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + this.other, context);
+				return myContext;
+			}
+			else{
+				return null;
+			}
 		}
-		return null;
+		catch(Exception e){
+			return null;
+		}
 	}
 
 	private void initStatusMap(){
