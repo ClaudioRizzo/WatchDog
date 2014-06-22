@@ -27,8 +27,10 @@ public class MyMapFragment extends Fragment {
 	private Bundle mBundle;
 	private Location location;
 	private GpsLocalizer gps;
+	private Context context;
 
 	public MyMapFragment(Location location) {
+		this.context = getActivity();
 		this.location = location;
 	}
 
@@ -66,8 +68,7 @@ public class MyMapFragment extends Fragment {
 
 			try {
 
-				Context ctx = getActivity().getApplicationContext();
-				this.gps = new GpsLocalizer(ctx, (LocationManager) getActivity()
+				this.gps = new GpsLocalizer(this.context, (LocationManager) getActivity()
 						.getSystemService(Context.LOCATION_SERVICE));
 
 				Location lastLoc = this.gps.getLastKnownLocation();
@@ -82,7 +83,7 @@ public class MyMapFragment extends Fragment {
 				}
 
 			} catch (LocationException e) {
-				ErrorManager.handleNonFatalError(e.getMessage());
+				ErrorManager.handleNonFatalError(e.getMessage(), this.context);
 			}
 
 		} else {

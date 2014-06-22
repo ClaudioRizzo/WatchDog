@@ -53,7 +53,7 @@ public class SirenService extends Service {
 		} catch (Exception e) {
 			Log.i("DEBUG", "DEBUG: servizio delle sirene non partito correttamente!!!");
 			this.stopSelf();
-			ErrorManager.handleNonFatalError(e.getMessage());
+			ErrorManager.handleNonFatalError(e.getMessage(), this.context);
 			return START_NOT_STICKY;
 		}
 	}
@@ -120,7 +120,7 @@ public class SirenService extends Service {
 			doSirenOff();
 		}
 		catch (Exception e){
-			ErrorManager.handleNonFatalError(ErrorFactory.SIREN_WAS_OFF);
+			ErrorManager.handleNonFatalError(ErrorFactory.SIREN_WAS_OFF, this.context);
 			Log.i("DEBUG", "DEBUG: la sirena non era attiva: non ho fatto niente");
 		}
 	}

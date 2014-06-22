@@ -32,9 +32,9 @@ public class MainActivity extends ActionBarActivity implements MessageActionList
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		this.context = getApplicationContext();
+		this.context = this;
 		
-		ListenerUtility.getInstance().addListener(this);
+		ListenerUtility.getInstance(this.context).addListener(this);
 		boolean wizardDone = MyPrefFiles.isWizardDone(this.context);
 		getSupportActionBar().setTitle(R.string.default_tab);
 		setContentView(R.layout.activity_main_layout);

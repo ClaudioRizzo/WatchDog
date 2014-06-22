@@ -12,7 +12,7 @@ public class ProgressBarUtils {
 	private Context context;
 	private Handler progressBarHandler = new Handler();
 	
-	public static int messaggeNumber = 0;
+	public static int messageNumber = 0;
 	
 	public ProgressBarUtils(Context context) {
 		this.context = context;
@@ -20,18 +20,18 @@ public class ProgressBarUtils {
 	
 	public void initiProgressBar(String message) {
 		
-		progressBar = new ProgressDialog(context);
-		progressBar.setCancelable(true);
-		progressBar.setMessage(message);
-		progressBar.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-		progressBar.setProgress(0);
-		progressBar.setMax(100);
-		progressBar.show();
+		this.progressBar = new ProgressDialog(this.context);
+		this.progressBar.setCancelable(true);
+		this.progressBar.setMessage(message);
+		this.progressBar.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+		this.progressBar.setProgress(0);
+		this.progressBar.setMax(100);
+		this.progressBar.show();
 		
 		//reset progress bar status
-		progressBarStatus = 0;
+		this.progressBarStatus = 0;
 		//reset messaggeNumber
-		messaggeNumber = 0;
+		messageNumber = 0;
 	}
 	
 	public void runProgressBar() {
@@ -46,7 +46,7 @@ public class ProgressBarUtils {
 				  try {
 					Thread.sleep(1000);
 				  } catch (InterruptedException e) {
-					  ErrorManager.handleFatalError(e.getMessage());
+					  ErrorManager.handleFatalError(e.getMessage(), context);
 				  }
 
 				  // Update the progress bar
@@ -64,7 +64,7 @@ public class ProgressBarUtils {
 					try {
 						Thread.sleep(2000);
 					} catch (InterruptedException e) {
-						ErrorManager.handleFatalError(e.getMessage());
+						ErrorManager.handleFatalError(e.getMessage(), context);
 					}
 
 					// close the progress bar dialog
@@ -77,9 +77,9 @@ public class ProgressBarUtils {
 	public int checkSMP() {
 		
 		
-		while(messaggeNumber < 5) {
+		while(messageNumber < 5) {
 			
-			switch(messaggeNumber) {
+			switch(messageNumber) {
 			case 1: return 20;
 			case 2:	return 40;
 			case 3: return 60;

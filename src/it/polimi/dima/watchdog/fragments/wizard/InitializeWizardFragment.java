@@ -11,6 +11,7 @@ import java.security.NoSuchProviderException;
 import java.util.regex.Pattern;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -22,6 +23,7 @@ import android.widget.TextView;
 
 public class InitializeWizardFragment extends Fragment implements OnClickListener {
 
+	private Context context;
 	private OnPasswordInizializedListener mCallBack;
 	private final byte[] salt = PasswordUtils.nextSalt();
 
@@ -31,6 +33,7 @@ public class InitializeWizardFragment extends Fragment implements OnClickListene
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		this.context = getActivity();
 		View v = (View) inflater.inflate(R.layout.fragment_initialize_wizard, container, false);
 		Button mButton = (Button) v.findViewById(R.id.button_initialize_password);
 		mButton.setOnClickListener(this);
@@ -45,8 +48,8 @@ public class InitializeWizardFragment extends Fragment implements OnClickListene
 			String cleanPassword = mTextView.getText().toString();
 			
 			//TODO scommentare alla fine
-			if(!Pattern.matches(/*PasswordUtils.PASSWORD_REGEX*/ ".+", cleanPassword)){
-				ErrorManager.handleNonFatalError(ErrorFactory.BAD_PASSWORD);
+			if(!Pattern.matches(PasswordUtils.PASSWORD_REGEX, cleanPassword)){
+				ErrorManager.handleNonFatalError(ErrorFactory.BAD_PASSWORD, this.context);
 			}
 			else{
 				byte[] hashToSave = PasswordUtils.computeHash(cleanPassword.getBytes(), this.salt, CryptoUtility.SHA_256);
@@ -55,11 +58,11 @@ public class InitializeWizardFragment extends Fragment implements OnClickListene
 		}
 		catch (NoSuchAlgorithmException e)
 		{
-			ErrorManager.handleFatalError(ErrorFactory.WIZARD_ERROR);
+			ErrorManager.handleFatalError(ErrorFactory.WIZARD_ERROR, this.context);
 		}
 		catch (NoSuchProviderException e)
 		{
-			ErrorManager.handleFatalError(ErrorFactory.WIZARD_ERROR);
+			ErrorManager.handleFatalError(ErrorFactory.WIZARD_ERROR, this.context);
 		}
 	}
 
@@ -72,7 +75,7 @@ public class InitializeWizardFragment extends Fragment implements OnClickListene
 		} 
 		catch (ClassCastException e) 
 		{
-			ErrorManager.handleFatalError(e.getMessage());
+			ErrorManager.handleFatalError(e.getMessage(), this.context);
 		}
 	}
 }

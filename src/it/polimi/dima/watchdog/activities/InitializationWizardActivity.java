@@ -27,7 +27,7 @@ public class InitializationWizardActivity extends ActionBarActivity implements O
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		this.context = getApplicationContext();
+		this.context = this;
 		setContentView(R.layout.activity_initialize_wizard);
 		
 		setTheme(R.style.Theme_Hacker);

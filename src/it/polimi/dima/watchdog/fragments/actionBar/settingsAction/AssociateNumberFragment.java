@@ -31,7 +31,7 @@ public class AssociateNumberFragment extends Fragment implements OnClickListener
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		this.context = getActivity().getApplicationContext();
+		this.context = getActivity();
 		View v = inflater.inflate(R.layout.fragment_associate_number, container, false);
 		Button mButton = (Button) v.findViewById(R.id.button_associate);
 		mButton.setOnClickListener(this);
@@ -40,7 +40,7 @@ public class AssociateNumberFragment extends Fragment implements OnClickListener
 
 	@Override
 	public void onClick(View v) {
-		this.context = getActivity().getApplicationContext();
+		this.context = getActivity();
 		try{
 			Log.i("[DEBUG]", "Ho cliccato per inviare");
 			
@@ -55,10 +55,10 @@ public class AssociateNumberFragment extends Fragment implements OnClickListener
 				this.startSMP();
 			}
 			catch (BadPhoneNumberException e){
-				ErrorManager.handleNonFatalError(e.getMessage());
+				ErrorManager.handleNonFatalError(e.getMessage(), this.context);
 			}
 			catch (IllegalArgumentException e){
-				ErrorManager.handleNonFatalError(e.getMessage());
+				ErrorManager.handleNonFatalError(e.getMessage(), this.context);
 			}
 		}
 		catch (Exception e){
@@ -66,7 +66,7 @@ public class AssociateNumberFragment extends Fragment implements OnClickListener
 				ErrorManager.handleErrorOrExceptionInSmp(e, this.otherNumber, this.context);
 			}
 			else{
-				ErrorManager.handleNonFatalError(e.getMessage());
+				ErrorManager.handleNonFatalError(e.getMessage(), this.context);
 			}
 		}
 	}

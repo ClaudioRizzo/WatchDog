@@ -5,6 +5,7 @@ import it.polimi.dima.watchdog.errors.ErrorFactory;
 import it.polimi.dima.watchdog.errors.ErrorManager;
 import it.polimi.dima.watchdog.password.PasswordResetter;
 import it.polimi.dima.watchdog.password.PasswordUtils;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -17,8 +18,11 @@ import android.widget.EditText;
 
 public class ChangePasswordFragment extends Fragment {
 
+	private Context context;
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		this.context = getActivity();
 		View v = inflater.inflate(R.layout.fragment_change_password, container, false);
 		
 		handleChange(v);
@@ -47,11 +51,11 @@ public class ChangePasswordFragment extends Fragment {
 				
 				if(PasswordUtils.isEmpty(oldPass) || PasswordUtils.isEmpty(newPass) || PasswordUtils.isEmpty(check)){
 					Log.i("DEBUG", "DEBUG: QUALCHE CAMPO è VUOTO");
-					ErrorManager.handleNonFatalError(ErrorFactory.BLANK_FIELD);
+					ErrorManager.handleNonFatalError(ErrorFactory.BLANK_FIELD, context);
 				}
 				else if(!newPass.matches(PasswordUtils.PASSWORD_REGEX)){
 					Log.i("DEBUG", "DEBUG: BAD PASSWORD: NON MATCHA LA REGEX");
-					ErrorManager.handleNonFatalError(ErrorFactory.BAD_PASSWORD);
+					ErrorManager.handleNonFatalError(ErrorFactory.BAD_PASSWORD, context);
 				}
 				else if(newPass.equals(check)) {
 					Log.i("DEBUG", "DEBUG: NEW == CHECK");
@@ -62,11 +66,11 @@ public class ChangePasswordFragment extends Fragment {
 						resetter.storePasswordHashAndSalt();
 						resetter.notifyAllContacts();
 					} catch (Exception e) {
-						ErrorManager.handleNonFatalError(e.getMessage());
+						ErrorManager.handleNonFatalError(e.getMessage(), context);
 					}
 				} else {
 					Log.i("DEBUG", "DEBUG: NEW != CHECK");
-					ErrorManager.handleNonFatalError(ErrorFactory.WRONG_PASSWORD);
+					ErrorManager.handleNonFatalError(ErrorFactory.WRONG_PASSWORD, context);
 				}
 				
 			}

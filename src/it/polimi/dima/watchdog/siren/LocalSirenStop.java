@@ -14,6 +14,7 @@ import java.util.Arrays;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 /**
  * Classe che permette di spegnere un'eventuale sirena locale previa inserimento della propria password. Uso:
@@ -54,17 +55,19 @@ public class LocalSirenStop {
 	 */
 	public void turnOffSiren() throws NoSuchAlgorithmException, NoSuchPreferenceFoundException{
 		if(isPasswordCorrect()){
+			Log.i("Debug", "DEBUG: password corretta");
 			if(ServicesUtilities.isMyServiceRunning(this.context, SirenService.class)){
 				Intent intent = new Intent(this.context,SirenService.class);
 				intent.putExtra(SMSUtility.COMMAND, SMSUtility.SIREN_OFF);
 				this.context.startService(intent);
 			}
 			else{
-				ErrorManager.handleNonFatalError(ErrorFactory.SIREN_WAS_OFF);
+				ErrorManager.handleNonFatalError(ErrorFactory.SIREN_WAS_OFF, this.context);
 			}
 		}
 		else{
-			ErrorManager.handleNonFatalError(ErrorFactory.WRONG_PASSWORD);
+			Log.i("Debug", "DEBUG: password non corretta");
+			ErrorManager.handleNonFatalError(ErrorFactory.WRONG_PASSWORD, this.context);
 		}
 	}
 }

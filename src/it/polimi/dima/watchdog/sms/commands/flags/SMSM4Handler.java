@@ -45,7 +45,7 @@ public class SMSM4Handler implements SMSCommandVisitorInterface {
 			//TODO fare qualcosa
 		}
 		else{
-			ErrorManager.handleNonFatalError(ErrorFactory.BAD_RETURNED_DATA);
+			ErrorManager.handleNonFatalError(ErrorFactory.BAD_RETURNED_DATA, this.context);
 		}
 		//Cancello anche da questo lato la sessione di comando ormai terminata
 		MyPrefFiles.eraseCommandSession(this.other, this.context);
@@ -63,7 +63,7 @@ public class SMSM4Handler implements SMSCommandVisitorInterface {
 			//TODO fare qualcosa
 		}
 		else{
-			ErrorManager.handleNonFatalError(ErrorFactory.BAD_RETURNED_DATA);
+			ErrorManager.handleNonFatalError(ErrorFactory.BAD_RETURNED_DATA, this.context);
 		}
 		//Cancello anche da questo lato la sessione di comando ormai terminata
 		MyPrefFiles.eraseCommandSession(this.other, this.context);
@@ -108,10 +108,10 @@ public class SMSM4Handler implements SMSCommandVisitorInterface {
 			double latitude = locateCodeMessage.getlatitude();
 			double longitude = locateCodeMessage.getLongitude();
 			
-			ListenerUtility.getInstance().notifyLocationAcquired(latitude, longitude);
+			ListenerUtility.getInstance(this.context).notifyLocationAcquired(latitude, longitude);
 		}
 		else{
-			ListenerUtility.getInstance().notifyLocationAcquired(locateCodeMessage.getErrorCode());
+			ListenerUtility.getInstance(this.context).notifyLocationAcquired(locateCodeMessage.getErrorCode());
 		}
 		//Cancello anche da questo lato la sessione di comando ormai terminata
 		MyPrefFiles.eraseCommandSession(this.other, this.context);

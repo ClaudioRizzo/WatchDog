@@ -47,7 +47,7 @@ public class GenericSmsClickHandler {
 			this.password = getPassword();
 			
 			if(PasswordUtils.isEmpty(this.password)){
-				ErrorManager.handleNonFatalError(ErrorFactory.BLANK_FIELD);
+				ErrorManager.handleNonFatalError(ErrorFactory.BLANK_FIELD, this.context);
 			}
 			else{
 				byte[] command = SMSUtility.hexStringToByteArray(commandString); 

@@ -18,7 +18,7 @@ public class GpsLocalizer implements LocationListener {
 	private LocationManager mLocationManager;
 
 	
-	public GpsLocalizer(Context ctx, LocationManager mLocationManager) throws LocationException {
+	public GpsLocalizer(Context context, LocationManager mLocationManager) throws LocationException {
 		
 		this.mLocationManager = mLocationManager;
 		
