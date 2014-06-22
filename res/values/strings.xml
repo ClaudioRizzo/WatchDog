@@ -73,6 +73,8 @@
     <!--  Button Strings -->
     <!-- Localize button string -->
     <string name="button_localize">Localize</string>
+    <!-- Initialization wizerd button string -->
+    <string name="button_wizard">Go</string>
 	
     <!-- Local siren off -->
     <string name="local_siren_off">Emergency Siren Off</string>

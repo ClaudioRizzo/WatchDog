@@ -1,0 +1,3 @@
+1) dopo aver settato il perimetro la prima volta, le successive, cambiando raggio, il sistema  va in tilt continuando a dire che il perimetro è stato violato.
+2) disinstallazione unilaterale non gestita bene: diventa impossibile riassociarsi.
+3) manca un modo di disassociarsi (o di cancellare le preferenze relative ad un altro).

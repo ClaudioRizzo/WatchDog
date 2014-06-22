@@ -18,6 +18,6 @@
         android:id="@+id/button_initialize_password"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/button_localize" />
+        android:text="@string/button_wizard" />
 
 </LinearLayout>
