@@ -23,13 +23,14 @@ public class ErrorManager {
 	
 	public static void handleFatalError(String message){
 		String popupMessage = ErrorFactory.TITLE + "\n\n" + getErrorMessage(message);
+		//TODO creare popup
 		
 		System.exit(-1);
 	}
 	
 	public static void handleNonFatalError(String message){
 		String popupMessage = ErrorFactory.TITLE + "\n\n" + getErrorMessage(message);
-		
+		//TODO creare popup
 	}
 	
 	
@@ -49,7 +50,7 @@ public class ErrorManager {
 			//notifico...
 			if(e != null){
 				String popupMessage = ErrorFactory.TITLE + "\n\n" + getErrorMessage(e);
-				//showShortToastMessage(e.getMessage(), ctx);
+				//TODO creare popup
 				e.printStackTrace();
 			}
 			
@@ -78,7 +79,7 @@ public class ErrorManager {
 			if(e != null){
 				if(!hidden){
 					String popupMessage = ErrorFactory.TITLE + "\n\n" + getErrorMessage(e);
-					//showShortToastMessage(e.getMessage(), ctx);
+					//TODO creare popup
 				}
 				e.printStackTrace();
 			}
