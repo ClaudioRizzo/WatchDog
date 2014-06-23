@@ -49,6 +49,10 @@ public class ChangePasswordFragment extends Fragment {
 				Log.i("DEBUG", "DEBUG: NEW = " + newPass);
 				Log.i("DEBUG", "DEBUG: CONF = " + check);
 				
+				oldEdit.setText("");
+				newEdit.setText("");
+				checkEdit.setText("");
+				
 				if(PasswordUtils.isEmpty(oldPass) || PasswordUtils.isEmpty(newPass) || PasswordUtils.isEmpty(check)){
 					Log.i("DEBUG", "DEBUG: QUALCHE CAMPO è VUOTO");
 					ErrorManager.handleNonFatalError(ErrorFactory.BLANK_FIELD, context);

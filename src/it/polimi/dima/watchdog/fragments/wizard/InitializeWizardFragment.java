@@ -46,7 +46,10 @@ public class InitializeWizardFragment extends Fragment implements OnClickListene
 			TextView confirmPasswordTextView = (TextView) fragView.findViewById(R.id.user_confirm_password);
 			String check = confirmPasswordTextView.getText().toString();
 			
-			//TODO scommentare alla fine
+			
+			passwordTextView.setText("");
+			confirmPasswordTextView.setText("");
+			
 			if(!cleanPassword.matches(PasswordUtils.PASSWORD_REGEX)){
 				ErrorManager.handleNonFatalError(ErrorFactory.BAD_PASSWORD, this.context);
 			}

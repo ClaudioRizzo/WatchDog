@@ -128,7 +128,10 @@ public class PendingRequestsAdapter extends BaseAdapter {
 							.toString();
 
 					Log.i("[DEBUG]", "[DEBUG_SMP] Ho cliccato send: " + secAnsw);
-
+					
+					editTextList.get(0).setText("");
+					editTextList.get(1).setText("");
+					editTextList.get(2).setText("");
 					// ...poi setto nelle mie preferenze domanda e risposta
 					// segrete che ho scelto (saranno utilizzate dopo il giro di
 					// boa)...

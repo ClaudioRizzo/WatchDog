@@ -45,6 +45,7 @@ public class SirenOffLocalFragment extends Fragment {
 			public void onClick(View v) {
 				String password = passwordField.getText().toString();
 				LocalSirenStop sirenStopLocal = new LocalSirenStop(password, getActivity());
+				passwordField.setText("");
 				
 				try {
 					sirenStopLocal.turnOffSiren();

@@ -82,6 +82,7 @@ public class AssociateNumberFragment extends Fragment implements OnClickListener
 		if(!this.otherNumber.matches(SMSUtility.PHONE_REGEX)){
 			throw new BadPhoneNumberException(ErrorFactory.BAD_PHONE_NUMBER);
 		}
+		mPhoneToAssociateEditText.setText("");
 	}
 	
 	/**
