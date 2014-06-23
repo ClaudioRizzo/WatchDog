@@ -106,6 +106,7 @@ public class PendingRequestsAdapter extends BaseAdapter {
 				// ... lo notifico...
 				SMSUtility.sendMessage(number, SMSUtility.SMP_PORT,
 						SMSUtility.hexStringToByteArray(SMSUtility.CODE6), null);
+				notifyDataSetChanged();
 			}
 		});
 	}
@@ -165,6 +166,7 @@ public class PendingRequestsAdapter extends BaseAdapter {
 					// ... e tolgo dal file PENDENT la richiesta
 					MyPrefFiles.deleteMyPreference(MyPrefFiles.PENDENT, number,
 							context);
+					notifyDataSetChanged();
 
 				} catch (Exception e) {
 					// notifico e invio richiesta di stop forzato, oltre alla
