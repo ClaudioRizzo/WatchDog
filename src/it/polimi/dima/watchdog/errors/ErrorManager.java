@@ -17,10 +17,10 @@ public class ErrorManager {
 	 * Visualizza un popup di errore.
 	 * 
 	 * @param message : il messaggio da mostrare
-	 * @param ctx : il contesto corrente
+	 * @param context : il contesto corrente
 	 */
-	public static void showShortToastMessage(String message, Context ctx) {
-		Toast toast = Toast.makeText(ctx, message, Toast.LENGTH_SHORT);
+	public static void showShortToastMessage(String message, Context context) {
+		Toast toast = Toast.makeText(context, message, Toast.LENGTH_SHORT);
 		toast.show();
 	}
 	
@@ -124,8 +124,13 @@ public class ErrorManager {
 	}
 	
 	private static void CreatePopup(String message, Context context){
-		FragmentManager manager = ((Activity) context).getFragmentManager();
-		DialogFragment newFragment = new ErrorPopupFragment(message, context);
-	    newFragment.show(manager, "Error notification popup");
+		if(context instanceof Activity){
+			FragmentManager manager = ((Activity) context).getFragmentManager();
+			DialogFragment newFragment = new ErrorPopupFragment(message, context);
+		    newFragment.show(manager, "Error notification popup");
+		}
+		else{
+			showShortToastMessage("Error in command session: wait 2 minutes before trying again!", context);
+		}
 	}
 }
