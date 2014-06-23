@@ -26,7 +26,7 @@ public class SMSCommandHandler extends BroadcastReceiver {
 	
 	private String other;
 	private Map<String,CommandProtocolFlagsReactionInterface> statusMap = new HashMap<String,CommandProtocolFlagsReactionInterface>();
-	private Context ctx;
+	private Context context;
 	
 	public SMSCommandHandler(){
 		initStatusMap();
@@ -35,9 +35,9 @@ public class SMSCommandHandler extends BroadcastReceiver {
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		Log.i("[DEBUG_COMMAND]", "[DEBUG_COMMAND] MESSAGGIO RICEVUTO");
-		this.ctx = context;
+		this.context = context;
 		final Bundle bundle = intent.getExtras();
-		String myContext = getMyContext(this.ctx);
+		String myContext = getMyContext(this.context);
 		try {
 			final Object[] pdusObj = (Object[]) bundle.get(SMSUtility.SMS_EXTRA_NAME);
 			SmsMessage message = null;	
@@ -46,22 +46,24 @@ public class SMSCommandHandler extends BroadcastReceiver {
 				message = SmsMessage.createFromPdu((byte[]) pdusObj[i]);
 			}
 			this.other = message.getDisplayOriginatingAddress();
+			myContext = getMyContext(this.context);
 			
 			if(this.statusMap.containsKey(myContext)) {
-				this.statusMap.get(myContext).parse(this.ctx, message, this.other);
+				this.statusMap.get(myContext).parse(this.context, message, this.other);
 			}
 			else{
 				//altrimenti si ignora il messaggio
+				Log.i("[DEBUG]", "DEBUG sono qui");
 				Log.i("debug command","DEBUG COMMAND: messaggio ignorato");
 			}	
 		} 
 		catch (Exception e) 
 		{
 			if(myContext.equals(StatusM1Sent.CURRENT_STATUS) || myContext.equals(StatusM1Sent.STATUS_RECEIVED) || myContext.equals(StatusM3Sent.CURRENT_STATUS) || myContext.equals(StatusM3Sent.STATUS_RECEIVED)){
-				ErrorManager.handleErrorOrExceptionInCommandSession(e, this.other, this.ctx, false);
+				ErrorManager.handleErrorOrExceptionInCommandSession(e, this.other, this.context, false);
 			}
 			else{
-				ErrorManager.handleErrorOrExceptionInCommandSession(e, this.other, this.ctx, true);
+				ErrorManager.handleErrorOrExceptionInCommandSession(e, this.other, this.context, true);
 			}
 		}
 		
