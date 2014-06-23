@@ -744,4 +744,15 @@ public class MyPrefFiles {
 		String storedHash = MyPrefFiles.getMyPreference(MyPrefFiles.PASSWORD_AND_SALT, MyPrefFiles.MY_PASSWORD_SALT, context);
 		return Base64.decode(storedHash, Base64.DEFAULT);
 	}
+	
+	public static String getSecQuestionIfExists(Context context, String other) {
+		if(existsPreference(MyPrefFiles.SECRET_Q_A, other + MyPrefFiles.SECRET_QUESTION, context)) {
+			try {
+				return getMyPreference(MyPrefFiles.SECRET_Q_A, other + MyPrefFiles.SECRET_QUESTION, context);
+			} catch (NoSuchPreferenceFoundException e) {
+				return null;
+			}
+		}
+		return null;
+	}
 }

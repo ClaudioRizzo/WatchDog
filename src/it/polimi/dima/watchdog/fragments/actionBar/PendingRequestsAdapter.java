@@ -33,7 +33,7 @@ public class PendingRequestsAdapter extends BaseAdapter {
 	private LinkedList<SocialistRequestWrapper> data;
 	private static LayoutInflater inflater = null;
 
-	public static String otherNumber;
+	//public static String otherNumber;
 
 	public PendingRequestsAdapter(Context context, List<SocialistRequestWrapper> data) {
 		this.context = context;
@@ -71,7 +71,7 @@ public class PendingRequestsAdapter extends BaseAdapter {
 		EditText mySecQuestionEditText = (EditText) mLinearLayout.findViewById(R.id.edit_text_my_secret_question);
 		EditText mySecAnswerEditText = (EditText) mLinearLayout.findViewById(R.id.edit_text_my_secret_answer);
 		
-		noNeedForSecrets(mLinearLayout);
+		noNeedForSecrets(mLinearLayout, current.getNumber());
 		
 		List<EditText> editTextList = new ArrayList<EditText>(Arrays.asList(secAnswerEditText, mySecQuestionEditText, mySecAnswerEditText));
 
@@ -182,15 +182,17 @@ public class PendingRequestsAdapter extends BaseAdapter {
 		textView.setText(toShow);
 	}
 
-	private boolean noNeedForSecrets(View v) {
-		if (otherNumber != null) {
+	private boolean noNeedForSecrets(View v, String other) {
+		
+		String question = MyPrefFiles.getSecQuestionIfExists(context, other);
+		if (question != null) {
 			EditText mySecQuestionEditText = (EditText) v.findViewById(R.id.edit_text_my_secret_question);
 			EditText mySecAnswerEditText = (EditText) v.findViewById(R.id.edit_text_my_secret_answer);
 			mySecQuestionEditText.setVisibility(View.INVISIBLE);
 			mySecAnswerEditText.setVisibility(View.INVISIBLE);
 			
 			//resetto a null il numero in caso ho piu' richieste
-			otherNumber = null;
+			//otherNumber = null;
 			return true;
 		} else {
 			return false;

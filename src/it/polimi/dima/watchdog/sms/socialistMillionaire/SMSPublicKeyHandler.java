@@ -123,7 +123,7 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 
 			//salvo nel keysquare la chiave ricevuta...
 			MyPrefFiles.setMyPreference(MyPrefFiles.KEYSQUARE, this.other, pubKeySentMsg.getBody(), this.context);
-			PendingRequestsAdapter.otherNumber = this.other;
+			//PendingRequestsAdapter.otherNumber = this.other;
 			//... e anche in SMP_STATUS il fatto che l'abbia ricevuta
 			String prefKey = this.other + MyPrefFiles.PUB_KEY_RECEIVED;
 			MyPrefFiles.setMyPreference(MyPrefFiles.SMP_STATUS, prefKey, this.other, this.context);
