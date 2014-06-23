@@ -13,7 +13,6 @@ public class DeassociationActivity extends ActionBarActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		Log.i("DEBUG", "DEBUG: ho cliccato su deassociate nella lista: l'attività è stata creata");
 		
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		getSupportActionBar().setTitle("Deassociation");

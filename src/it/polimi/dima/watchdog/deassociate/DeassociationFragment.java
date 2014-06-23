@@ -2,9 +2,11 @@ package it.polimi.dima.watchdog.deassociate;
 
 import it.polimi.dima.watchdog.R;
 import it.polimi.dima.watchdog.utilities.MyPrefFiles;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
 import android.support.v4.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
