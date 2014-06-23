@@ -46,7 +46,7 @@ public class SirenOffAdapter extends BaseAdapter {
 		View view = convertView;
 		
 		if (view == null){
-			view = inflater.inflate(R.layout.list_item_asscociated, null);
+			view = inflater.inflate(R.layout.list_item_associated, null);
 		}
 		
 		RelativeLayout mRelativeLayout = (RelativeLayout) view.findViewById(R.id.relative_layout_localize_list);

@@ -6,7 +6,6 @@ import it.polimi.dima.watchdog.gps.fragments.localization.interfaces.MessageActi
 import it.polimi.dima.watchdog.utilities.ListenerUtility;
 import it.polimi.dima.watchdog.utilities.MyPrefFiles;
 import it.polimi.dima.watchdog.utilities.drawer.MyDrawerUtility;
-import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -91,7 +90,10 @@ public class MainActivity extends ActionBarActivity implements MessageActionList
 			intent= new Intent(this, AssociateNumberActivity.class);
 			startActivity(intent);
 			break;
-			
+		case R.id.deassociate_panel:
+			intent= new Intent(this, DeassociationActivity.class);
+			startActivity(intent);
+			break;
 		default:
 			break;
 		}	

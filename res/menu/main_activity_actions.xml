@@ -16,6 +16,11 @@
         yourapp:showAsAction="never"/>
     
     <item
+        android:id="@+id/deassociate_panel"
+        android:title="Deassociate"
+        yourapp:showAsAction="never"/>
+    
+    <item
         android:id="@+id/change_password_panel"
         android:title="@string/change_password_title"
         yourapp:showAsAction="never"/>

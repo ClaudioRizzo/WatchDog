@@ -33,8 +33,6 @@ public class PendingRequestsAdapter extends BaseAdapter {
 	private LinkedList<SocialistRequestWrapper> data;
 	private static LayoutInflater inflater = null;
 
-	//public static String otherNumber;
-
 	public PendingRequestsAdapter(Context context, List<SocialistRequestWrapper> data) {
 		this.context = context;
 		this.data = (LinkedList<SocialistRequestWrapper>) data;
