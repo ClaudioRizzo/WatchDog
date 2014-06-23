@@ -54,12 +54,8 @@ public class MainActivity extends ActionBarActivity implements MessageActionList
 				GpsMainFragment mGpsMainFrag = new GpsMainFragment();
 				getSupportFragmentManager().beginTransaction().add(R.id.main_fragment_container, mGpsMainFrag).commit();
 			}
-			//cancellare TODO
-			/*Intent intent = new Intent(getApplicationContext(),SirenService.class);
-			intent.putExtra(SMSUtility.COMMAND, SMSUtility.SIREN_ON);
-			getApplicationContext().startService(intent);*/
 		} else {
-			Intent intent = new Intent(this, InitializationWizardActivity.class);
+			Intent intent = new Intent(this, WelcomeScreenActivity.class);
 			startActivity(intent);
 		}
 	}

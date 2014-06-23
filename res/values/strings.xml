@@ -54,7 +54,7 @@
     <!-- Phone number string -->
     <string name="edit_text_phone">Phone Number</string>
     <!-- Password string -->
-    <string name="edit_text_password">Password</string>
+    <string name="edit_text_password">Password here</string>
     <!-- Secret question string -->
     <string name="edit_text_question">Secret Question</string>
     <!-- Secret answer string -->
@@ -73,8 +73,8 @@
     <!--  Button Strings -->
     <!-- Localize button string -->
     <string name="button_localize">Localize</string>
-    <!-- Initialization wizerd button string -->
-    <string name="button_wizard">Go</string>
+    <!-- Initialization wizard button string -->
+    <string name="button_wizard">Initialize</string>
 	
     <!-- Local siren off -->
     <string name="local_siren_off">Emergency Siren Off</string>

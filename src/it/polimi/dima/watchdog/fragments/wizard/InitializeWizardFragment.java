@@ -5,11 +5,8 @@ import it.polimi.dima.watchdog.crypto.CryptoUtility;
 import it.polimi.dima.watchdog.errors.ErrorFactory;
 import it.polimi.dima.watchdog.errors.ErrorManager;
 import it.polimi.dima.watchdog.password.PasswordUtils;
-
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
-import java.util.regex.Pattern;
-
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
@@ -48,7 +45,7 @@ public class InitializeWizardFragment extends Fragment implements OnClickListene
 			String cleanPassword = mTextView.getText().toString();
 			
 			//TODO scommentare alla fine
-			if(!Pattern.matches(PasswordUtils.PASSWORD_REGEX, cleanPassword)){
+			if(!cleanPassword.matches(PasswordUtils.PASSWORD_REGEX)){
 				ErrorManager.handleNonFatalError(ErrorFactory.BAD_PASSWORD, this.context);
 			}
 			else{

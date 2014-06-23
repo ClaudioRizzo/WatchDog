@@ -97,6 +97,7 @@
         </activity>
         <activity
             android:name="it.polimi.dima.watchdog.activities.PendingRequestsActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.DarkActionBar" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -104,6 +105,7 @@
         </activity>
         <activity
             android:name="it.polimi.dima.watchdog.activities.MyMapActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.DarkActionBar" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -111,6 +113,7 @@
         </activity>
         <activity
             android:name="it.polimi.dima.watchdog.activities.SettingsActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.DarkActionBar" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -118,10 +121,16 @@
         </activity>
         <activity
             android:name="it.polimi.dima.watchdog.activities.AssociateNumberActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.DarkActionBar" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="it.polimi.dima.watchdog.activities.MainActivity" />
+        </activity>
+        <activity
+            android:name="it.polimi.dima.watchdog.activities.WelcomeScreenActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar" >
         </activity>
     </application>
 
