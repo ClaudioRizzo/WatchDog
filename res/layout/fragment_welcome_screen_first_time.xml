@@ -12,14 +12,16 @@
         android:layout_alignParentTop="true"
         android:layout_marginTop="97dp"
         android:gravity="center"
+        android:textSize="20dp"
         android:text="Welcome to WatchDog, the sms remote control application! Before you can send commands to other telephones you must select a password which other users can use to send command to your phone!" />
 
     <Button
         android:id="@+id/button_welcome_screen"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/welcome_screen_text"
         android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
+        android:layout_marginTop="20dp"
         android:text="Proceed" />
 
 </RelativeLayout>
