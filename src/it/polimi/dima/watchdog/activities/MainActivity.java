@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.Window;
 
 /**
  * 
@@ -25,27 +26,29 @@ import android.view.MenuItem;
  */
 public class MainActivity extends ActionBarActivity implements MessageActionListener {
 
-	private Context context;
+
 	MyDrawerUtility mDrawerUtil;
 	static final String ACTION = "android.intent.action.DATA_SMS_RECEIVED";
+	private boolean wizardDone;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		this.context = this;
+		this.wizardDone = MyPrefFiles.isWizardDone(this);
 		
-		ListenerUtility.getInstance(this.context).addListener(this);
-		boolean wizardDone = MyPrefFiles.isWizardDone(this.context);
-		getSupportActionBar().setTitle(R.string.default_tab);
-		setContentView(R.layout.activity_main_layout);
 		
-		setTheme(R.style.Theme_Hacker);
-		
-		this.mDrawerUtil = new MyDrawerUtility();
-		this.mDrawerUtil.InitializeDrawerList(this, R.id.drawer_layout,R.id.left_drawer);
-		this.mDrawerUtil.handleOpenCloseDrawer(this, R.id.drawer_layout);
 		
 		if (wizardDone) {
+		
+			ListenerUtility.getInstance(this).addListener(this);
+			getSupportActionBar().setTitle(R.string.default_tab);
+			setContentView(R.layout.activity_main_layout);
+			
+			setTheme(R.style.Theme_Hacker);
+			this.mDrawerUtil = new MyDrawerUtility();
+			this.mDrawerUtil.InitializeDrawerList(this, R.id.drawer_layout,R.id.left_drawer);
+			this.mDrawerUtil.handleOpenCloseDrawer(this, R.id.drawer_layout);
+			
 			if (findViewById(R.id.main_fragment_container) != null) {
 				if (savedInstanceState != null) {
 					return;
@@ -55,6 +58,8 @@ public class MainActivity extends ActionBarActivity implements MessageActionList
 				getSupportFragmentManager().beginTransaction().add(R.id.main_fragment_container, mGpsMainFrag).commit();
 			}
 		} else {
+		    getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
+		    getActionBar().hide();
 			Intent intent = new Intent(this, WelcomeScreenActivity.class);
 			startActivity(intent);
 		}
@@ -96,13 +101,16 @@ public class MainActivity extends ActionBarActivity implements MessageActionList
 	@Override
 	protected void onPostCreate(Bundle savedInstanceState) {
 		super.onPostCreate(savedInstanceState);
-		this.mDrawerUtil.syncDrawerToggle();
+		if(wizardDone)
+			this.mDrawerUtil.syncDrawerToggle();
 	}
 
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
-		this.mDrawerUtil.onConfigurationChangedNeeded(newConfig);
+		
+		if(wizardDone)
+			this.mDrawerUtil.onConfigurationChangedNeeded(newConfig);
 	}
 
 	public void replaceFragment(Fragment fragment, String tag) {
