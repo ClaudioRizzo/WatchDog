@@ -3,7 +3,8 @@ package it.polimi.dima.watchdog.gps.fragment;
 import it.polimi.dima.watchdog.R;
 import it.polimi.dima.watchdog.factory.FeatureEnum;
 import it.polimi.dima.watchdog.utilities.FragmentAdapterLifecycle;
-import it.polimi.dima.watchdog.utilities.TabsAdapter;
+import it.polimi.dima.watchdog.utilities.tabsAdapters.GpsTabsAdapter;
+import it.polimi.dima.watchdog.utilities.tabsAdapters.TabsAdapter;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -35,7 +36,7 @@ public class GpsMainFragment extends Fragment {
 			Bundle savedInstanceState) {
 		View v = (View) inflater.inflate(R.layout.fragment_gps_main, container,
 				false);
-		this.mAdapter = new TabsAdapter(getChildFragmentManager(), 3,
+		this.mAdapter = new GpsTabsAdapter(getChildFragmentManager(), 2,
 				FeatureEnum.GPS, getActivity());
 		this.mViewPager = (ViewPager) v.findViewById(R.id.gps_pager);
 		this.mViewPager.setAdapter(this.mAdapter);

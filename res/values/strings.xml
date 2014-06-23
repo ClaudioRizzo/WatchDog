@@ -67,8 +67,7 @@
     <string name="siren_off">Siren Off</string>
     <!-- Perimeter string -->
     <string name="perimeter">Perimeter</string>
-    <!-- SMS Test string -->
-    <string name="sms_test">Try sms</string>
+    
     
     <!--  Button Strings -->
     <!-- Localize button string -->

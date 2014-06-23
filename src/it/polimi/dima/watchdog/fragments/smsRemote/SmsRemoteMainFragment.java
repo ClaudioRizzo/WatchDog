@@ -2,7 +2,8 @@ package it.polimi.dima.watchdog.fragments.smsRemote;
 
 import it.polimi.dima.watchdog.R;
 import it.polimi.dima.watchdog.factory.FeatureEnum;
-import it.polimi.dima.watchdog.utilities.TabsAdapter;
+import it.polimi.dima.watchdog.utilities.tabsAdapters.SirenTabsAdapter;
+import it.polimi.dima.watchdog.utilities.tabsAdapters.TabsAdapter;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -27,7 +28,7 @@ public class SmsRemoteMainFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View v = (View) inflater.inflate(R.layout.fragment_sms_remote_main, container, false);
-		this.mAdapter = new TabsAdapter(getChildFragmentManager(), 3, FeatureEnum.REMOTE, getActivity());
+		this.mAdapter = new SirenTabsAdapter(getChildFragmentManager(), 3, FeatureEnum.REMOTE, getActivity());
 		this.mViewPager = (ViewPager) v.findViewById(R.id.sms_remote_pager);
 		this.mViewPager.setAdapter(this.mAdapter);
 		return v;
