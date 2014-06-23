@@ -41,12 +41,17 @@ public class InitializeWizardFragment extends Fragment implements OnClickListene
 	public void onClick(View v) {
 		try{
 			View fragView = getView();
-			TextView mTextView = (TextView) fragView.findViewById(R.id.user_password);
-			String cleanPassword = mTextView.getText().toString();
+			TextView passwordTextView = (TextView) fragView.findViewById(R.id.user_password);
+			String cleanPassword = passwordTextView.getText().toString();
+			TextView confirmPasswordTextView = (TextView) fragView.findViewById(R.id.user_confirm_password);
+			String check = confirmPasswordTextView.getText().toString();
 			
 			//TODO scommentare alla fine
 			if(!cleanPassword.matches(PasswordUtils.PASSWORD_REGEX)){
 				ErrorManager.handleNonFatalError(ErrorFactory.BAD_PASSWORD, this.context);
+			}
+			else if(!cleanPassword.equals(check)){
+				ErrorManager.handleNonFatalError(ErrorFactory.DIFFERENT_PASSWORDS, this.context);
 			}
 			else{
 				byte[] hashToSave = PasswordUtils.computeHash(cleanPassword.getBytes(), this.salt, CryptoUtility.SHA_256);
