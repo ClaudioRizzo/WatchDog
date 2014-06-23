@@ -99,6 +99,7 @@ public class AssociateNumberFragment extends Fragment implements OnClickListener
 		
 		//salvo nelle preferenze la domanda segreta che sarà inviata all'altro più avanti
 		MyPrefFiles.setMyPreference(MyPrefFiles.SECRET_Q_A, this.otherNumber + MyPrefFiles.SECRET_QUESTION, mQuestion, this.context);
+		mQuestionEditText.setText("");
 	}
 
 	/**
@@ -115,6 +116,7 @@ public class AssociateNumberFragment extends Fragment implements OnClickListener
 		
 		//salvo nelle preferenze la risposta alla domanda segreta che sarà inviata all'altro più avanti
 		MyPrefFiles.setMyPreference(MyPrefFiles.SECRET_Q_A, this.otherNumber + MyPrefFiles.SECRET_ANSWER, mAnswer, this.context);
+		mAnswerEditText.setText("");
 	}
 
 	/**
