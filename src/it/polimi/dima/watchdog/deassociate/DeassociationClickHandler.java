@@ -23,6 +23,7 @@ public class DeassociationClickHandler implements OnClickListener {
 	@Override
 	public void onClick(View v) {
 		Log.i("DEBUG", "DEBUG: ho cancellato le preferenze");
+		//TODO chiaramente scommentare queste due righe e commentare il toast.
 		//MyPrefFiles.eraseSmpPreferences(this.number, this.context);
 		//this.mCallBack.notifyDataSetChanged();
 		ErrorManager.showShortToastMessage("preferenze cancellate", this.context);

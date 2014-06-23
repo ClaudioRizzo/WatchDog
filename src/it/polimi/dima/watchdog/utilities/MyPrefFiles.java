@@ -427,6 +427,9 @@ public class MyPrefFiles {
 		
 		//dato che non ha più senso avere uno stato della sessione di comando, lo cancello se esiste
 		eraseCommandSession(phoneNumber, context);
+		if(MyPrefFiles.existsPreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + phoneNumber, context)){
+			MyPrefFiles.deleteMyPreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + phoneNumber, context);
+		}
 		
 		if(MyPrefFiles.existsPreference(MyPrefFiles.ASSOCIATED, phoneNumber, context)) {
 			MyPrefFiles.deleteMyPreference(MyPrefFiles.ASSOCIATED, phoneNumber, context);
@@ -523,7 +526,7 @@ public class MyPrefFiles {
 	}
 	
 	/**
-	 * Cancella l'intera sessione di comando. Anche 'MyPrefFiles.COMMUNICATION_STATUS_WITH + other' viene cancellato, NON settato a free.
+	 * Cancella l'intera sessione di comando e resetta a status free lo stato della comunicazione.
 	 * 
 	 * @param other : il numero di telefono dell'altro
 	 * @param context : il contesto corrente
