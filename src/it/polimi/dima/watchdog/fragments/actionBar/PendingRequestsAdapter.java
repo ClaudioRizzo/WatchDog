@@ -32,19 +32,10 @@ public class PendingRequestsAdapter extends BaseAdapter {
 	private Context context;
 	private LinkedList<SocialistRequestWrapper> data;
 	private static LayoutInflater inflater = null;
-	private Button acceptButton;
-	private Button refuseButton;
-	private Button stopButton;
-	private ProgressBar smpProgressBar;
-	private List<EditText> editTextList;
+	private boolean clicked = false;
+
 	
-	public Button getStopButton(){
-		return this.stopButton;
-	}
-	
-	public ProgressBar getProgressBar(){
-		return this.smpProgressBar;
-	}
+
 
 	public PendingRequestsAdapter(Context context, List<SocialistRequestWrapper> data) {
 		this.context = context;
@@ -82,28 +73,28 @@ public class PendingRequestsAdapter extends BaseAdapter {
 		EditText mySecQuestionEditText = (EditText) mLinearLayout.findViewById(R.id.edit_text_my_secret_question);
 		EditText mySecAnswerEditText = (EditText) mLinearLayout.findViewById(R.id.edit_text_my_secret_answer);
 		
-		noNeedForSecrets(mLinearLayout, current.getNumber());
 		
-		this.smpProgressBar = (ProgressBar) mLinearLayout.findViewById(R.id.progress_bar_smp);
-		this.smpProgressBar.setVisibility(View.GONE);
-		this.editTextList = new ArrayList<EditText>(Arrays.asList(secAnswerEditText, mySecQuestionEditText, mySecAnswerEditText));
-		this.refuseButton = (Button) mLinearLayout.findViewById(R.id.button_refuse_smp);
-		this.acceptButton = (Button) mLinearLayout.findViewById(R.id.button_accept_smp);
-		this.stopButton = (Button) mLinearLayout.findViewById(R.id.button_stop_smp);
+		List<EditText> editTextList = new ArrayList<EditText>(Arrays.asList(secAnswerEditText, mySecQuestionEditText, mySecAnswerEditText));
 		
-		handleRefuse(current.getNumber());
-		handleSend(current.getNumber());
-		handleStop(current.getNumber());
+		noNeedForSecrets(mLinearLayout, editTextList,current.getNumber());
+		
+		
+		handleRefuse(vi, current.getNumber(), editTextList);
+		handleSend(vi, current.getNumber(), editTextList);
+		handleStop(vi, editTextList,current.getNumber());
 		
 		return vi;
 	}
 	
 	
-	private void handleStop(final String number){
-		modifyStopButtonVisibility();
-		modifyProgressBarVisibility();
+	private void handleStop(final View rawView, final List<EditText> editTextList, final String number){
+		modifyStopButtonVisibility(rawView);
+		modifyProgressBarVisibility(rawView);
 		
-		this.stopButton.setOnClickListener(new OnClickListener() {
+		
+		Button stopButton = (Button) rawView.findViewById(R.id.button_stop_smp);
+		
+		stopButton.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
@@ -111,7 +102,7 @@ public class PendingRequestsAdapter extends BaseAdapter {
 				if(MyPrefFiles.iHaveSomeReferencesToThisUser(number, context)){
 					ErrorManager.handleErrorOrExceptionInSmp(null, number, context);
 				}
-				hideElementsAfterClick(false);
+				hideElementsAfterClick(rawView, editTextList, false);
 			}
 		});
 	}
@@ -123,8 +114,13 @@ public class PendingRequestsAdapter extends BaseAdapter {
 	 * @param refuseButton : il bottone di rifiuto
 	 * @param number : il numero dell'altro
 	 */
-	private void handleRefuse(final String number) {
-		this.refuseButton.setOnClickListener(new OnClickListener() {
+	private void handleRefuse(final View rawView, final String number, final List<EditText> editTextList) {
+		
+
+		Button refuseButton = (Button) rawView.findViewById(R.id.button_refuse_smp);
+		
+		
+		refuseButton.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
@@ -137,17 +133,22 @@ public class PendingRequestsAdapter extends BaseAdapter {
 				if(MyPrefFiles.iHaveSomeReferencesToThisUser(number, context)){
 					SMSUtility.sendMessage(number, SMSUtility.SMP_PORT, SMSUtility.hexStringToByteArray(SMSUtility.CODE6), null);
 				}
-				hideElementsAfterClick(false);
+				hideElementsAfterClick(rawView, editTextList, false);
 			}
 		});
 	}
 
-	private void handleSend(final String number) {
-		this.acceptButton.setOnClickListener(new OnClickListener() {
+	private void handleSend(final View rawView, final String number, final List<EditText> editTextList) {
+		
+		Button acceptButton = (Button) rawView.findViewById(R.id.button_accept_smp);
+		
+		acceptButton.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-				hideElementsAfterClick(true);
+				
+				clicked = true;
+				
 				// creo un pka...
 				PublicKeyAutenticator pka = new PublicKeyAutenticator();
 				try {
@@ -161,9 +162,6 @@ public class PendingRequestsAdapter extends BaseAdapter {
 					Log.i("[DEBUG]", "[DEBUG_SMP] My Secret answer: " + mySecAnswer);
 					Log.i("[DEBUG]", "[DEBUG_SMP] Ho cliccato send");
 					
-					editTextList.get(0).setText("");
-					editTextList.get(1).setText("");
-					editTextList.get(2).setText("");
 					
 					// ...poi setto nelle mie preferenze domanda e risposta segrete che ho scelto (saranno utilizzate dopo il giro di  boa)...
 					MyPrefFiles.setMyPreference(MyPrefFiles.SECRET_Q_A, number + MyPrefFiles.SECRET_QUESTION, mySecQuestion, context);
@@ -178,6 +176,7 @@ public class PendingRequestsAdapter extends BaseAdapter {
 					// ... poi computo l'hash di mia chiave pubblica || risposta...
 					pka.doHashToSend();
 
+					hideElementsAfterClick(rawView, editTextList, true);
 					// ... lo mando all'altro...
 					SMSUtility.sendMessage(number, SMSUtility.SMP_PORT, SMSUtility.hexStringToByteArray(SMSUtility.CODE4), pka.getHashToSend());
 
@@ -185,13 +184,14 @@ public class PendingRequestsAdapter extends BaseAdapter {
 					String preferenceKey = number + MyPrefFiles.HASH_FORWARDED;
 					MyPrefFiles.setMyPreference(MyPrefFiles.SMP_STATUS, preferenceKey, number, context);
 
-					// ... e tolgo dal file PENDENT la richiesta
-					MyPrefFiles.deleteMyPreference(MyPrefFiles.PENDENT, number, context);				
+				
+									
 
 				} catch (Exception e) {
+					clicked = false;
 					// notifico e invio richiesta di stop forzato, oltre alla cancellazione delle preferenze
 					ErrorManager.handleErrorOrExceptionInSmp(e, number, context);
-					cancelView();
+					cancelView(rawView, editTextList);
 				}
 			}
 		});
@@ -202,7 +202,7 @@ public class PendingRequestsAdapter extends BaseAdapter {
 		textView.setText(toShow);
 	}
 
-	private boolean noNeedForSecrets(View v, String other) {
+	private void noNeedForSecrets(View v, List<EditText> editTextList, String other) {
 		
 		String question = MyPrefFiles.getSecQuestionIfExists(context, other);
 		if (question != null) {
@@ -210,16 +210,29 @@ public class PendingRequestsAdapter extends BaseAdapter {
 			EditText mySecAnswerEditText = (EditText) v.findViewById(R.id.edit_text_my_secret_answer);
 			mySecQuestionEditText.setVisibility(View.GONE);
 			mySecAnswerEditText.setVisibility(View.GONE);
-			return true;
-		} else {
-			return false;
+			
 		}
+		
+		if(clicked) {
+			Log.i("[DEBUG]", "[SMP_DEBUG] sono dentro");
+			hideElementsAfterClick(v, editTextList, true);
+		}
+		
+		
+
 	}
 	
-	private void hideElementsAfterClick(boolean accept_or_refuse){
+	private void hideElementsAfterClick(View rawView, List<EditText> editTextList, boolean accept_or_refuse){
 		editTextList.get(0).setVisibility(View.GONE);
 		editTextList.get(1).setVisibility(View.GONE);
 		editTextList.get(2).setVisibility(View.GONE);
+		
+		Button acceptButton = (Button) rawView.findViewById(R.id.button_accept_smp);
+		Button refuseButton = (Button) rawView.findViewById(R.id.button_refuse_smp);
+		Button stopButton = (Button) rawView.findViewById(R.id.button_stop_smp);
+		
+		ProgressBar smpProgressBar = (ProgressBar) rawView.findViewById(R.id.progress_bar_smp);
+		
 		acceptButton.setVisibility(View.GONE);
 		refuseButton.setVisibility(View.GONE);
 		
@@ -234,31 +247,47 @@ public class PendingRequestsAdapter extends BaseAdapter {
 		notifyDataSetChanged();
 	}
 	
-	private void cancelView(){
+	private void cancelView(View rawView, List<EditText> editTextList){
 		editTextList.get(0).setVisibility(View.GONE);
 		editTextList.get(1).setVisibility(View.GONE);
 		editTextList.get(2).setVisibility(View.GONE);
+		
+		Button acceptButton = (Button) rawView.findViewById(R.id.button_accept_smp);
+		Button refuseButton = (Button) rawView.findViewById(R.id.button_refuse_smp);
+		Button stopButton = (Button) rawView.findViewById(R.id.button_stop_smp);
+		
+		ProgressBar smpProgressBar = (ProgressBar) rawView.findViewById(R.id.progress_bar_smp);
+		
 		acceptButton.setVisibility(View.GONE);
 		refuseButton.setVisibility(View.GONE);
 		smpProgressBar.setVisibility(View.GONE);
 		stopButton.setVisibility(View.GONE);
 	}
 	
-	private void modifyStopButtonVisibility(){
-		if(this.acceptButton.getVisibility() == View.VISIBLE){
-			this.stopButton.setVisibility(View.GONE);
+	private void modifyStopButtonVisibility(View rawView){
+		
+		Button acceptButton = (Button) rawView.findViewById(R.id.button_accept_smp);
+		Button stopButton = (Button) rawView.findViewById(R.id.button_stop_smp);
+		
+		
+		if(acceptButton.getVisibility() == View.VISIBLE){
+			stopButton.setVisibility(View.GONE);
 		}
-		else if(this.acceptButton.getVisibility() == View.GONE){
-			this.stopButton.setVisibility(View.VISIBLE);
+		else if(acceptButton.getVisibility() == View.GONE){
+			stopButton.setVisibility(View.VISIBLE);
 		}
 	}
 	
-	private void modifyProgressBarVisibility(){
-		if(this.acceptButton.getVisibility() == View.VISIBLE){
-			this.smpProgressBar.setVisibility(View.GONE);
+	private void modifyProgressBarVisibility(View rawView){
+		
+		Button acceptButton = (Button) rawView.findViewById(R.id.button_accept_smp);		
+		ProgressBar smpProgressBar = (ProgressBar) rawView.findViewById(R.id.progress_bar_smp);
+		
+		if(acceptButton.getVisibility() == View.VISIBLE){
+			smpProgressBar.setVisibility(View.GONE);
 		}
-		else if(this.acceptButton.getVisibility() == View.GONE){
-			this.smpProgressBar.setVisibility(View.VISIBLE);
+		else if(acceptButton.getVisibility() == View.GONE){
+			smpProgressBar.setVisibility(View.VISIBLE);
 		}
 	}
 }
