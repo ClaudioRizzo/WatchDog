@@ -413,6 +413,14 @@ public class MyPrefFiles {
 			MyPrefFiles.deleteMyPreference(MyPrefFiles.HASHRING, phoneNumber, context);
 		}
 		
+		//cancellazione della secret question e delle secret answer inviate all'altro utente
+		if(MyPrefFiles.existsPreference(MyPrefFiles.SECRET_Q_A, phoneNumber + MyPrefFiles.SECRET_QUESTION, context)){
+			MyPrefFiles.deleteMyPreference(MyPrefFiles.SECRET_Q_A, phoneNumber + MyPrefFiles.SECRET_QUESTION, context);
+		}
+		if(MyPrefFiles.existsPreference(MyPrefFiles.SECRET_Q_A, phoneNumber + MyPrefFiles.SECRET_ANSWER, context)){
+			MyPrefFiles.deleteMyPreference(MyPrefFiles.SECRET_Q_A, phoneNumber + MyPrefFiles.SECRET_ANSWER, context);
+		}
+		
 		List<String> keys = MyPrefFiles.createKeysForSmpStatus(phoneNumber);
 		//resetta il file che tiene lo stato del SMP
 		for(String s : keys){

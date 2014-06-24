@@ -11,7 +11,6 @@ import it.polimi.dima.watchdog.crypto.SharedSecretAgreement;
 import it.polimi.dima.watchdog.errors.ErrorManager;
 import it.polimi.dima.watchdog.exceptions.NoSuchPreferenceFoundException;
 import it.polimi.dima.watchdog.exceptions.SmpHashesMismatchException;
-import it.polimi.dima.watchdog.fragments.actionBar.PendingRequestsAdapter;
 import it.polimi.dima.watchdog.fragments.actionBar.settingsAction.ProgressBarUtils;
 import it.polimi.dima.watchdog.password.PasswordUtils;
 import it.polimi.dima.watchdog.sms.ParsableSMS;

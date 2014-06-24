@@ -14,7 +14,8 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:textColor="@color/hacker_green"/>
+        android:textColor="@color/hacker_green"
+        android:textSize="20dp"/>
 
     <EditText
         android:id="@+id/edit_text_secret_answer"
@@ -38,6 +39,12 @@
         android:hint="Your Secret Answer"
         android:textColor="@color/hacker_green" />
 
+    <ProgressBar
+        android:id="@+id/progress_bar_smp"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="280dp"
+        android:layout_height="wrap_content" />
+
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/linear_layout_pending_list"
@@ -46,16 +53,22 @@
         android:orientation="horizontal" >
 
         <Button
+            android:id="@+id/button_stop_smp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Stop" />
+        
+        <Button
             android:id="@+id/button_accept_smp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="accept" />
+            android:text="Accept" />
 
         <Button
             android:id="@+id/button_refuse_smp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="refuse" />
+            android:text="Refuse" />
     </LinearLayout>
 
 </LinearLayout>

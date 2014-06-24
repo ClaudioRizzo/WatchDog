@@ -15,7 +15,8 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="30dp"
         android:gravity="center"
-        android:text="TextView" />
+        android:text="TextView"
+        android:textSize="20dp" />
 
     <Button
         android:id="@+id/button_delete_association"
@@ -24,6 +25,7 @@
         android:layout_below="@+id/text_view_number"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="17dp"
-        android:text="Deassociate" />
+        android:text="Deassociate"
+        android:textSize="16dp" />
 
 </RelativeLayout>
