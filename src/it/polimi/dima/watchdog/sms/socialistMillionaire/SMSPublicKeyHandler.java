@@ -8,6 +8,7 @@ import java.security.spec.InvalidKeySpecException;
 import it.polimi.dima.watchdog.activities.PendingRequestsActivity;
 import it.polimi.dima.watchdog.crypto.PublicKeyAutenticator;
 import it.polimi.dima.watchdog.crypto.SharedSecretAgreement;
+import it.polimi.dima.watchdog.errors.ErrorFactory;
 import it.polimi.dima.watchdog.errors.ErrorManager;
 import it.polimi.dima.watchdog.exceptions.NoSuchPreferenceFoundException;
 import it.polimi.dima.watchdog.exceptions.SmpHashesMismatchException;
@@ -95,8 +96,6 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 			
 			//preparo la mia chiave pubblica...
 			this.pka.setMyPublicKey(MyPrefFiles.getMyPreference(MyPrefFiles.MY_KEYS, MyPrefFiles.MY_PUB, this.context));
-			
-			
 			
 			//...poi la invio a chi me l'ha chiesta...
 			SMSUtility.sendMessage(this.other, SMSUtility.SMP_PORT, SMSUtility.hexStringToByteArray(SMSUtility.CODE2), this.pka.getMyPublicKey());
@@ -198,13 +197,10 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 			//se gli hash non coincidono il SMP si interrompe, altrimenti si prosegue
 			if (!this.pka.checkForEquality()) {
 				Log.i("DEBUG_SMP", "[DEBUG_SMP] CHIAVE NON VALIDATA!!!");
-				throw new SmpHashesMismatchException("Hash non corrispondenti!!!");
+				throw new SmpHashesMismatchException(ErrorFactory.WRONG_SECRET_ANSWER);
 			} 
 			else {
-				
-				
 				manageKeyValidated();
-				saveNumber();
 			}
 		} catch (Exception e){
 			//notifico e invio richiesta di stop forzato, oltre alla cancellazione delle preferenze
@@ -242,8 +238,7 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 				MyPrefFiles.setMyPreference(MyPrefFiles.SMP_STATUS, preferenceKey, this.other, this.context);
 			}
 			else{
-				MyPrefFiles.deleteMyPreference(MyPrefFiles.PENDENT, this.other, context);
-				
+				MyPrefFiles.setMyPreference(MyPrefFiles.ASSOCIATED, this.other, this.other, this.context);
 				Log.i("[DEBUG_SMP]", "[DEBUG_SMP] FULL_SMP_SUCCESSFUL " + MyPrefFiles.getMyPreference(MyPrefFiles.KEYRING, this.other, this.context));
 			
 				//TODO notificare il fragment
@@ -360,20 +355,12 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 		//infine computo il segreto condiviso...
 		doECDH();
 		
+		//... salvo il numero in associated se non bisognerà fare il giro di boa...
+		if(MyPrefFiles.existsPreference(MyPrefFiles.SMP_STATUS, this.other + MyPrefFiles.HASH_FORWARDED, this.context)){
+			MyPrefFiles.setMyPreference(MyPrefFiles.ASSOCIATED, this.other, this.other, this.context);
+		}
+		
 		//... e segno di essere disponibile a iniziare una sessione di comando
 		MyPrefFiles.setMyPreference(MyPrefFiles.COMMAND_SESSION, MyPrefFiles.COMMUNICATION_STATUS_WITH + this.other, StatusFree.CURRENT_STATUS, this.context);
-	}
-	
-	private void saveNumber() {
-		
-		if(MyPrefFiles.existsPreference(MyPrefFiles.SMP_STATUS, this.other + MyPrefFiles.HASH_FORWARDED, this.context)) {
-			MyPrefFiles.deleteMyPreference(MyPrefFiles.PENDENT, this.other, context);
-		}
-		
-		if(!MyPrefFiles.existsPreference(MyPrefFiles.ASSOCIATED, other, context)) {
-			Log.i("[DEBUG SMP]", "[DEBUG-SMP] ho salvato il numero: "+other);
-			MyPrefFiles.setMyPreference(MyPrefFiles.ASSOCIATED, other, other, context);
-		}
-		
 	}
 }

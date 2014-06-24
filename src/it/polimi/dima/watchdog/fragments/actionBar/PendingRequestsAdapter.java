@@ -19,7 +19,6 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 /**
@@ -32,10 +31,6 @@ public class PendingRequestsAdapter extends BaseAdapter {
 	private Context context;
 	private LinkedList<SocialistRequestWrapper> data;
 	private static LayoutInflater inflater = null;
-	private boolean clicked = false;
-
-	
-
 
 	public PendingRequestsAdapter(Context context, List<SocialistRequestWrapper> data) {
 		this.context = context;
@@ -81,33 +76,10 @@ public class PendingRequestsAdapter extends BaseAdapter {
 		
 		handleRefuse(vi, current.getNumber(), editTextList);
 		handleSend(vi, current.getNumber(), editTextList);
-		handleStop(vi, editTextList,current.getNumber());
 		
 		return vi;
 	}
 	
-	
-	private void handleStop(final View rawView, final List<EditText> editTextList, final String number){
-		modifyStopButtonVisibility(rawView);
-		modifyProgressBarVisibility(rawView);
-		
-		
-		Button stopButton = (Button) rawView.findViewById(R.id.button_stop_smp);
-		
-		stopButton.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				Log.i("DEBUG","DEBUG: ho cliccato su stop per interrompere il socialist in corso.");
-				if(MyPrefFiles.iHaveSomeReferencesToThisUser(number, context)){
-					ErrorManager.handleErrorOrExceptionInSmp(null, number, context);
-				}
-				hideElementsAfterClick(rawView, editTextList, false);
-			}
-		});
-	}
-	
-
 	/**
 	 * Chiamato se l'utente rifiuta di associare i telefoni
 	 * 
@@ -133,7 +105,7 @@ public class PendingRequestsAdapter extends BaseAdapter {
 				if(MyPrefFiles.iHaveSomeReferencesToThisUser(number, context)){
 					SMSUtility.sendMessage(number, SMSUtility.SMP_PORT, SMSUtility.hexStringToByteArray(SMSUtility.CODE6), null);
 				}
-				hideElementsAfterClick(rawView, editTextList, false);
+				hideElementsAfterClick(rawView, editTextList);
 			}
 		});
 	}
@@ -141,13 +113,10 @@ public class PendingRequestsAdapter extends BaseAdapter {
 	private void handleSend(final View rawView, final String number, final List<EditText> editTextList) {
 		
 		Button acceptButton = (Button) rawView.findViewById(R.id.button_accept_smp);
-		
 		acceptButton.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-				
-				clicked = true;
 				
 				// creo un pka...
 				PublicKeyAutenticator pka = new PublicKeyAutenticator();
@@ -157,16 +126,15 @@ public class PendingRequestsAdapter extends BaseAdapter {
 					String mySecQuestion = editTextList.get(1).getText().toString();
 					String mySecAnswer = editTextList.get(2).getText().toString();
 
-					Log.i("[DEBUG]", "[DEBUG_SMP] Secret answer: " + secAnsw);
-					Log.i("[DEBUG]", "[DEBUG_SMP] My Secret question: " + mySecQuestion);
-					Log.i("[DEBUG]", "[DEBUG_SMP] My Secret answer: " + mySecAnswer);
 					Log.i("[DEBUG]", "[DEBUG_SMP] Ho cliccato send");
-					
 					
 					// ...poi setto nelle mie preferenze domanda e risposta segrete che ho scelto (saranno utilizzate dopo il giro di  boa)...
 					MyPrefFiles.setMyPreference(MyPrefFiles.SECRET_Q_A, number + MyPrefFiles.SECRET_QUESTION, mySecQuestion, context);
 					MyPrefFiles.setMyPreference(MyPrefFiles.SECRET_Q_A, number + MyPrefFiles.SECRET_ANSWER, mySecAnswer, context);
 
+					// ...poi tolgo il numero dalla lista delle richieste pendenti...
+					MyPrefFiles.deleteMyPreference(MyPrefFiles.PENDENT, number, context);
+					
 					// ... poi recupero la mia chiave pubblica...
 					pka.setMyPublicKey(MyPrefFiles.getMyPreference( MyPrefFiles.MY_KEYS, MyPrefFiles.MY_PUB, context));
 
@@ -175,23 +143,19 @@ public class PendingRequestsAdapter extends BaseAdapter {
 
 					// ... poi computo l'hash di mia chiave pubblica || risposta...
 					pka.doHashToSend();
-
-					hideElementsAfterClick(rawView, editTextList, true);
+					
+					hideElementsAfterClick(rawView, editTextList);
 					// ... lo mando all'altro...
 					SMSUtility.sendMessage(number, SMSUtility.SMP_PORT, SMSUtility.hexStringToByteArray(SMSUtility.CODE4), pka.getHashToSend());
 
 					// ... segno in SMP_STATUS di aver inviato l'hash
 					String preferenceKey = number + MyPrefFiles.HASH_FORWARDED;
 					MyPrefFiles.setMyPreference(MyPrefFiles.SMP_STATUS, preferenceKey, number, context);
-
-				
-									
-
+					
 				} catch (Exception e) {
-					clicked = false;
 					// notifico e invio richiesta di stop forzato, oltre alla cancellazione delle preferenze
 					ErrorManager.handleErrorOrExceptionInSmp(e, number, context);
-					cancelView(rawView, editTextList);
+					hideElementsAfterClick(rawView, editTextList);
 				}
 			}
 		});
@@ -204,90 +168,26 @@ public class PendingRequestsAdapter extends BaseAdapter {
 
 	private void noNeedForSecrets(View v, List<EditText> editTextList, String other) {
 		
-		String question = MyPrefFiles.getSecQuestionIfExists(context, other);
+		String question = MyPrefFiles.getSecQuestionIfExists(this.context, other);
 		if (question != null) {
 			EditText mySecQuestionEditText = (EditText) v.findViewById(R.id.edit_text_my_secret_question);
 			EditText mySecAnswerEditText = (EditText) v.findViewById(R.id.edit_text_my_secret_answer);
 			mySecQuestionEditText.setVisibility(View.GONE);
 			mySecAnswerEditText.setVisibility(View.GONE);
-			
 		}
-		
-		if(clicked) {
-			Log.i("[DEBUG]", "[SMP_DEBUG] sono dentro");
-			hideElementsAfterClick(v, editTextList, true);
-		}
-		
-		
-
 	}
 	
-	private void hideElementsAfterClick(View rawView, List<EditText> editTextList, boolean accept_or_refuse){
+	private void hideElementsAfterClick(View rawView, List<EditText> editTextList){
 		editTextList.get(0).setVisibility(View.GONE);
 		editTextList.get(1).setVisibility(View.GONE);
 		editTextList.get(2).setVisibility(View.GONE);
 		
 		Button acceptButton = (Button) rawView.findViewById(R.id.button_accept_smp);
 		Button refuseButton = (Button) rawView.findViewById(R.id.button_refuse_smp);
-		Button stopButton = (Button) rawView.findViewById(R.id.button_stop_smp);
-		
-		ProgressBar smpProgressBar = (ProgressBar) rawView.findViewById(R.id.progress_bar_smp);
 		
 		acceptButton.setVisibility(View.GONE);
 		refuseButton.setVisibility(View.GONE);
 		
-		if(accept_or_refuse){
-			smpProgressBar.setVisibility(View.VISIBLE);
-			stopButton.setVisibility(View.VISIBLE);
-		}
-		else{
-			smpProgressBar.setVisibility(View.GONE);
-			stopButton.setVisibility(View.GONE);
-		}
 		notifyDataSetChanged();
-	}
-	
-	private void cancelView(View rawView, List<EditText> editTextList){
-		editTextList.get(0).setVisibility(View.GONE);
-		editTextList.get(1).setVisibility(View.GONE);
-		editTextList.get(2).setVisibility(View.GONE);
-		
-		Button acceptButton = (Button) rawView.findViewById(R.id.button_accept_smp);
-		Button refuseButton = (Button) rawView.findViewById(R.id.button_refuse_smp);
-		Button stopButton = (Button) rawView.findViewById(R.id.button_stop_smp);
-		
-		ProgressBar smpProgressBar = (ProgressBar) rawView.findViewById(R.id.progress_bar_smp);
-		
-		acceptButton.setVisibility(View.GONE);
-		refuseButton.setVisibility(View.GONE);
-		smpProgressBar.setVisibility(View.GONE);
-		stopButton.setVisibility(View.GONE);
-	}
-	
-	private void modifyStopButtonVisibility(View rawView){
-		
-		Button acceptButton = (Button) rawView.findViewById(R.id.button_accept_smp);
-		Button stopButton = (Button) rawView.findViewById(R.id.button_stop_smp);
-		
-		
-		if(acceptButton.getVisibility() == View.VISIBLE){
-			stopButton.setVisibility(View.GONE);
-		}
-		else if(acceptButton.getVisibility() == View.GONE){
-			stopButton.setVisibility(View.VISIBLE);
-		}
-	}
-	
-	private void modifyProgressBarVisibility(View rawView){
-		
-		Button acceptButton = (Button) rawView.findViewById(R.id.button_accept_smp);		
-		ProgressBar smpProgressBar = (ProgressBar) rawView.findViewById(R.id.progress_bar_smp);
-		
-		if(acceptButton.getVisibility() == View.VISIBLE){
-			smpProgressBar.setVisibility(View.GONE);
-		}
-		else if(acceptButton.getVisibility() == View.GONE){
-			smpProgressBar.setVisibility(View.VISIBLE);
-		}
 	}
 }
