@@ -46,10 +46,6 @@ public class InitializeWizardFragment extends Fragment implements OnClickListene
 			TextView confirmPasswordTextView = (TextView) fragView.findViewById(R.id.user_confirm_password);
 			String check = confirmPasswordTextView.getText().toString();
 			
-			
-			passwordTextView.setText("");
-			confirmPasswordTextView.setText("");
-			
 			if(!cleanPassword.matches(PasswordUtils.PASSWORD_REGEX)){
 				ErrorManager.handleNonFatalError(ErrorFactory.BAD_PASSWORD, this.context);
 			}
@@ -57,6 +53,7 @@ public class InitializeWizardFragment extends Fragment implements OnClickListene
 				ErrorManager.handleNonFatalError(ErrorFactory.DIFFERENT_PASSWORDS, this.context);
 			}
 			else{
+				cleanScreen(passwordTextView, confirmPasswordTextView, fragView);
 				byte[] hashToSave = PasswordUtils.computeHash(cleanPassword.getBytes(), this.salt, CryptoUtility.SHA_256);
 				this.mCallBack.saveWizardResults(true, hashToSave, this.salt);
 			}
@@ -69,6 +66,13 @@ public class InitializeWizardFragment extends Fragment implements OnClickListene
 		{
 			ErrorManager.handleFatalError(ErrorFactory.WIZARD_ERROR, this.context);
 		}
+	}
+
+	private void cleanScreen(TextView passwordTextView, TextView confirmPasswordTextView, View fragView) {
+		Button button = (Button) fragView.findViewById(R.id.button_initialize_password);
+		button.setVisibility(View.GONE);
+		passwordTextView.setVisibility(View.GONE);
+		confirmPasswordTextView.setVisibility(View.GONE);
 	}
 
 	@Override

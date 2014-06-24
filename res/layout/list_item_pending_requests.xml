@@ -14,6 +14,16 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:layout_centerHorizontal="true"
+        android:textColor="@color/hacker_green"
+        android:textSize="20dp"/>
+    
+    <TextView
+        android:id="@+id/text_view_pending2"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_centerHorizontal="true"
         android:textColor="@color/hacker_green"
         android:textSize="20dp"/>
 
@@ -39,24 +49,12 @@
         android:hint="Your Secret Answer"
         android:textColor="@color/hacker_green" />
 
-    <ProgressBar
-        android:id="@+id/progress_bar_smp"
-      	style="@android:style/Widget.ProgressBar.Horizontal"
-        android:layout_width="280dp"
-        android:layout_height="wrap_content" />
-
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/linear_layout_pending_list"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal" >
-
-        <Button
-            android:id="@+id/button_stop_smp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Stop" />
         
         <Button
             android:id="@+id/button_accept_smp"

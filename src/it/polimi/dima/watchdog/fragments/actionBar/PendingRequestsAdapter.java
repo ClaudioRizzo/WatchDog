@@ -60,9 +60,10 @@ public class PendingRequestsAdapter extends BaseAdapter {
 			vi = inflater.inflate(R.layout.list_item_pending_requests, null);
 		}
 		LinearLayout mLinearLayout = (LinearLayout) vi.findViewById(R.id.linear_layout_pending_list);
-		TextView mTextView = (TextView) mLinearLayout.findViewById(R.id.text_view_pending1);
+		TextView numberTextView = (TextView) mLinearLayout.findViewById(R.id.text_view_pending1);
+		TextView questionTextView = (TextView) mLinearLayout.findViewById(R.id.text_view_pending2);
 		SocialistRequestWrapper current = data.get(position);
-		setStringToShow(current, mTextView);
+		setStringToShow(current, numberTextView, questionTextView);
 
 		EditText secAnswerEditText = (EditText) mLinearLayout.findViewById(R.id.edit_text_secret_answer);
 		EditText mySecQuestionEditText = (EditText) mLinearLayout.findViewById(R.id.edit_text_my_secret_question);
@@ -161,9 +162,13 @@ public class PendingRequestsAdapter extends BaseAdapter {
 		});
 	}
 
-	private void setStringToShow(SocialistRequestWrapper socReqWrapper,TextView textView) {
-		String toShow = socReqWrapper.getNumber() + ": " + socReqWrapper.getQuestion();
-		textView.setText(toShow);
+	private void setStringToShow(SocialistRequestWrapper socReqWrapper, TextView numberTextView, TextView questionTextView) {
+		String number = "Request from " + socReqWrapper.getNumber();
+		String question = "Secret question: " + socReqWrapper.getQuestion();
+		numberTextView.setText(number);
+		questionTextView.setText(question);
+		numberTextView.setTextSize(20);
+		questionTextView.setTextSize(20);
 	}
 
 	private void noNeedForSecrets(View v, List<EditText> editTextList, String other) {
