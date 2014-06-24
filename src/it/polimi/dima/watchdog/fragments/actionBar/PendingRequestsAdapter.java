@@ -73,8 +73,7 @@ public class PendingRequestsAdapter extends BaseAdapter {
 		
 		List<EditText> editTextList = new ArrayList<EditText>(Arrays.asList(secAnswerEditText, mySecQuestionEditText, mySecAnswerEditText));
 		
-		noNeedForSecrets(myRelativeLayout, editTextList,current.getNumber());
-		
+		hideElementsIfInSmpSecondHalf(myRelativeLayout, editTextList,current.getNumber());
 		
 		handleRefuse(vi, current.getNumber(), editTextList);
 		handleSend(vi, current.getNumber(), editTextList);
@@ -169,7 +168,7 @@ public class PendingRequestsAdapter extends BaseAdapter {
 		questionTextView.setTextSize(20);
 	}
 
-	private void noNeedForSecrets(View v, List<EditText> editTextList, String other) {
+	private void hideElementsIfInSmpSecondHalf(View v, List<EditText> editTextList, String other) {
 		
 		String question = MyPrefFiles.getSecQuestionIfExists(this.context, other);
 		if (question != null) {

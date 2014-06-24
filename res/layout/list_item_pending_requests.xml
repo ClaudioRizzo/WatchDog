@@ -2,80 +2,82 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/linear_layout_pending_list"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent" 
+    android:layout_height="fill_parent"  
     style="?app_background">
 
-    <EditText
-        android:id="@+id/edit_text_my_secret_answer"
+    <TextView
+        android:id="@+id/text_view_pending_number"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/text_view_pending_number"
-        android:layout_alignRight="@+id/text_view_pending_number"
+        android:layout_marginTop="10dp"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="26dp"
-        android:ems="10"
-        android:hint="Your Secret Answer" />
-
-    <EditText
-        android:id="@+id/edit_text_secret_answer"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/text_view_pending_number"
-        android:layout_alignRight="@+id/text_view_pending_number"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="31dp"
-        android:ems="10"
-        android:hint="Secret Answer" />
-
-    <EditText
-        android:id="@+id/edit_text_my_secret_question"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/text_view_pending_number"
-        android:layout_alignRight="@+id/text_view_pending_number"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="26dp"
-        android:ems="10"
-        android:hint="Your Secret Question" >
-
-        <requestFocus />
-    </EditText>
-
+        android:textSize="20dp"
+        android:gravity="center_horizontal"
+        android:textAlignment="gravity"
+        android:text="This will be overwritten" />
+    
     <TextView
         android:id="@+id/text_view_pending_question"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/text_view_pending_number"
-        android:layout_alignRight="@+id/text_view_pending_number"
+        android:layout_marginTop="10dp"
+        android:layout_centerHorizontal="true"
         android:layout_below="@+id/text_view_pending_number"
-        android:layout_marginTop="26dp"
-        android:textSize="20dp" />
+        android:textSize="20dp"
+        android:gravity="center_horizontal"
+        android:textAlignment="gravity"
+        android:text="This will be overwritten" />
+    
+    <EditText
+        android:id="@+id/edit_text_secret_answer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/text_view_pending_question"
+        android:ems="10"
+        android:hint="Secret Answer" />
+    
+    <EditText
+        android:id="@+id/edit_text_my_secret_question"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/edit_text_secret_answer"
+        android:ems="10"
+        android:hint="Your Secret Question" />
+    
+    <EditText
+        android:id="@+id/edit_text_my_secret_answer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/edit_text_my_secret_question"
+        android:ems="10"
+        android:hint="Your Secret Answer" />
 
     <Button
         android:id="@+id/button_accept_smp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/text_view_pending_number"
-        android:layout_marginTop="34dp"
+        android:layout_below="@+id/edit_text_my_secret_answer"
+        android:layout_alignParentLeft="true"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="50dp"
         android:text="Accept" />
 
     <Button
         android:id="@+id/button_refuse_smp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/button_accept_smp"
-        android:layout_alignRight="@+id/text_view_pending_number"
-        android:layout_marginTop="34dp"
+        android:layout_below="@+id/edit_text_my_secret_answer"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="50dp"
         android:text="Refuse" />
 
-    <TextView
-        android:id="@+id/text_view_pending_number"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/edit_text_secret_answer"
-        android:layout_alignParentTop="true"
-        android:layout_alignRight="@+id/edit_text_secret_answer"
-        android:layout_marginTop="16dp"
-        android:textSize="20dp" />
+    
 
 </RelativeLayout>
