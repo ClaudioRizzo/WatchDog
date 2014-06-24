@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+
 import it.polimi.dima.watchdog.R;
 import it.polimi.dima.watchdog.crypto.PublicKeyAutenticator;
 import it.polimi.dima.watchdog.errors.ErrorManager;
@@ -18,7 +19,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 /**
@@ -59,20 +60,20 @@ public class PendingRequestsAdapter extends BaseAdapter {
 		if (vi == null) {
 			vi = inflater.inflate(R.layout.list_item_pending_requests, null);
 		}
-		LinearLayout mLinearLayout = (LinearLayout) vi.findViewById(R.id.linear_layout_pending_list);
-		TextView numberTextView = (TextView) mLinearLayout.findViewById(R.id.text_view_pending1);
-		TextView questionTextView = (TextView) mLinearLayout.findViewById(R.id.text_view_pending2);
+		RelativeLayout myRelativeLayout = (RelativeLayout) vi.findViewById(R.id.linear_layout_pending_list);
+		TextView numberTextView = (TextView) myRelativeLayout.findViewById(R.id.text_view_pending_number);
+		TextView questionTextView = (TextView) myRelativeLayout.findViewById(R.id.text_view_pending_question);
 		SocialistRequestWrapper current = data.get(position);
 		setStringToShow(current, numberTextView, questionTextView);
 
-		EditText secAnswerEditText = (EditText) mLinearLayout.findViewById(R.id.edit_text_secret_answer);
-		EditText mySecQuestionEditText = (EditText) mLinearLayout.findViewById(R.id.edit_text_my_secret_question);
-		EditText mySecAnswerEditText = (EditText) mLinearLayout.findViewById(R.id.edit_text_my_secret_answer);
+		EditText secAnswerEditText = (EditText) myRelativeLayout.findViewById(R.id.edit_text_secret_answer);
+		EditText mySecQuestionEditText = (EditText) myRelativeLayout.findViewById(R.id.edit_text_my_secret_question);
+		EditText mySecAnswerEditText = (EditText) myRelativeLayout.findViewById(R.id.edit_text_my_secret_answer);
 		
 		
 		List<EditText> editTextList = new ArrayList<EditText>(Arrays.asList(secAnswerEditText, mySecQuestionEditText, mySecAnswerEditText));
 		
-		noNeedForSecrets(mLinearLayout, editTextList,current.getNumber());
+		noNeedForSecrets(myRelativeLayout, editTextList,current.getNumber());
 		
 		
 		handleRefuse(vi, current.getNumber(), editTextList);
@@ -89,10 +90,7 @@ public class PendingRequestsAdapter extends BaseAdapter {
 	 */
 	private void handleRefuse(final View rawView, final String number, final List<EditText> editTextList) {
 		
-
 		Button refuseButton = (Button) rawView.findViewById(R.id.button_refuse_smp);
-		
-		
 		refuseButton.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -192,6 +190,9 @@ public class PendingRequestsAdapter extends BaseAdapter {
 		
 		acceptButton.setVisibility(View.GONE);
 		refuseButton.setVisibility(View.GONE);
+		
+		rawView.findViewById(R.id.text_view_pending_number).setVisibility(View.GONE);
+		rawView.findViewById(R.id.text_view_pending_question).setVisibility(View.GONE);
 		
 		notifyDataSetChanged();
 	}
