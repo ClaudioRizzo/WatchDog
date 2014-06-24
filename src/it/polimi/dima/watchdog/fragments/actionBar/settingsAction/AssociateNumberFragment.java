@@ -48,10 +48,7 @@ public class AssociateNumberFragment extends Fragment implements OnClickListener
 				this.getNumber();
 				this.getAndSaveQuestion();
 				this.getAndSaveAnswer();
-				ProgressBarUtils progress = new ProgressBarUtils(getActivity());
-				progress.initiProgressBar("Associating with: "+otherNumber);
-				progress.runProgressBar();
-				
+				clearScreen(v);
 				this.startSMP();
 			}
 			catch (BadPhoneNumberException e){
@@ -133,5 +130,15 @@ public class AssociateNumberFragment extends Fragment implements OnClickListener
 		//... e segno di aver mandato la richiesta in SMP_STATUS
 		String preferenceKey = this.otherNumber + MyPrefFiles.PUB_KEY_REQUEST_FORWARDED;
 		MyPrefFiles.setMyPreference(MyPrefFiles.SMP_STATUS, preferenceKey, this.otherNumber, this.context);
+	}
+	
+	public void clearScreen(View view){
+		view.findViewById(R.id.text_view_hint_associate).setVisibility(View.GONE);
+		view.findViewById(R.id.edit_text_associate_number).setVisibility(View.GONE);
+		view.findViewById(R.id.edit_text_associate_question).setVisibility(View.GONE);
+		view.findViewById(R.id.edit_text_associate_answer).setVisibility(View.GONE);
+		view.findViewById(R.id.button_associate).setVisibility(View.GONE);
+		
+		//TODO dialog che informa che l'associazione è partita
 	}
 }

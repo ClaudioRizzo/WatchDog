@@ -14,13 +14,15 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="72dp"
-        android:text="Associate" />
+        android:text="Associate"
+        android:textSize="18dp" />
 
     <EditText
         android:id="@+id/edit_text_associate_answer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/button_associate"
+        android:layout_alignLeft="@+id/edit_text_associate_question"
         android:layout_alignRight="@+id/edit_text_associate_number"
         android:layout_marginBottom="31dp"
         android:ems="10"
@@ -36,7 +38,8 @@
         android:layout_alignRight="@+id/edit_text_associate_number"
         android:layout_marginBottom="30dp"
         android:gravity="center"
-        android:text="Associate a Number" />
+        android:text="Associate a Number"
+        android:textSize="20dp" />
 
     <EditText
         android:id="@+id/edit_text_associate_number"

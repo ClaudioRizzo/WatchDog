@@ -49,10 +49,6 @@ public class ChangePasswordFragment extends Fragment {
 				Log.i("DEBUG", "DEBUG: NEW = " + newPass);
 				Log.i("DEBUG", "DEBUG: CONF = " + check);
 				
-				oldEdit.setText("");
-				newEdit.setText("");
-				checkEdit.setText("");
-				
 				if(PasswordUtils.isEmpty(oldPass) || PasswordUtils.isEmpty(newPass) || PasswordUtils.isEmpty(check)){
 					Log.i("DEBUG", "DEBUG: QUALCHE CAMPO è VUOTO");
 					ErrorManager.handleNonFatalError(ErrorFactory.BLANK_FIELD, context);
@@ -68,6 +64,7 @@ public class ChangePasswordFragment extends Fragment {
 						PasswordResetter resetter = new PasswordResetter(oldPass, newPass, getActivity());
 						resetter.changePassword();
 						resetter.storePasswordHashAndSalt();
+						clearScreen(v);
 						resetter.notifyAllContacts();
 					} catch (Exception e) {
 						ErrorManager.handleNonFatalError(e.getMessage(), context);
@@ -79,6 +76,18 @@ public class ChangePasswordFragment extends Fragment {
 				
 			}
 		});
+	}
+	
+	public void clearScreen(View view){
+		EditText old = (EditText) view.findViewById(R.id.edit_text_old_password);
+		EditText newP = (EditText) view.findViewById(R.id.edit_text_new_pass);
+		EditText confirm = (EditText) view.findViewById(R.id.edit_text_confirm_new_pass);
+		
+		old.setText("");
+		newP.setText("");
+		confirm.setText("");
+		
+		//TODO dialog che informa del successo
 	}
 	
 }

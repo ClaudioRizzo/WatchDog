@@ -22,7 +22,8 @@
         android:layout_toRightOf="@+id/image_view_item"
         android:paddingRight="10dp"
         android:textAppearance="?android:attr/textAppearanceListItemSmall"
-        android:textColor="@color/hacker_green" />
+        android:textColor="@color/hacker_green"
+        android:textSize="20dp" />
  
 </RelativeLayout>
 

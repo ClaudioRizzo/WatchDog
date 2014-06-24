@@ -5,8 +5,10 @@ import it.polimi.dima.watchdog.crypto.CryptoUtility;
 import it.polimi.dima.watchdog.errors.ErrorFactory;
 import it.polimi.dima.watchdog.errors.ErrorManager;
 import it.polimi.dima.watchdog.password.PasswordUtils;
+
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
+
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
@@ -16,6 +18,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 public class InitializeWizardFragment extends Fragment implements OnClickListener {
@@ -41,10 +44,11 @@ public class InitializeWizardFragment extends Fragment implements OnClickListene
 	public void onClick(View v) {
 		try{
 			View fragView = getView();
-			TextView passwordTextView = (TextView) fragView.findViewById(R.id.user_password);
+			EditText passwordTextView = (EditText) fragView.findViewById(R.id.user_password);
 			String cleanPassword = passwordTextView.getText().toString();
-			TextView confirmPasswordTextView = (TextView) fragView.findViewById(R.id.user_confirm_password);
+			EditText confirmPasswordTextView = (EditText) fragView.findViewById(R.id.user_confirm_password);
 			String check = confirmPasswordTextView.getText().toString();
+			TextView title = (TextView) fragView.findViewById(R.id.text_view_hint_initialize);
 			
 			if(!cleanPassword.matches(PasswordUtils.PASSWORD_REGEX)){
 				ErrorManager.handleNonFatalError(ErrorFactory.BAD_PASSWORD, this.context);
@@ -53,7 +57,7 @@ public class InitializeWizardFragment extends Fragment implements OnClickListene
 				ErrorManager.handleNonFatalError(ErrorFactory.DIFFERENT_PASSWORDS, this.context);
 			}
 			else{
-				cleanScreen(passwordTextView, confirmPasswordTextView, fragView);
+				cleanScreen(passwordTextView, confirmPasswordTextView, title, fragView);
 				byte[] hashToSave = PasswordUtils.computeHash(cleanPassword.getBytes(), this.salt, CryptoUtility.SHA_256);
 				this.mCallBack.saveWizardResults(true, hashToSave, this.salt);
 			}
@@ -68,11 +72,12 @@ public class InitializeWizardFragment extends Fragment implements OnClickListene
 		}
 	}
 
-	private void cleanScreen(TextView passwordTextView, TextView confirmPasswordTextView, View fragView) {
+	private void cleanScreen(EditText passwordTextView, EditText confirmPasswordTextView, TextView title, View fragView) {
 		Button button = (Button) fragView.findViewById(R.id.button_initialize_password);
 		button.setVisibility(View.GONE);
 		passwordTextView.setVisibility(View.GONE);
 		confirmPasswordTextView.setVisibility(View.GONE);
+		title.setVisibility(View.GONE);
 	}
 
 	@Override

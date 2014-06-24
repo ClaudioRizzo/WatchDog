@@ -16,6 +16,7 @@
         android:layout_alignRight="@+id/edit_text_associated_password"
         android:layout_marginTop="22dp"
         android:gravity="center"
+        android:textSize="20dp"
         android:text="TextView" />
 
     <EditText
@@ -37,7 +38,8 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="22dp"
         android:layout_marginBottom="22dp"
-        android:text="Localize" />
+        android:text="Localize"
+        android:textSize="18dp" />
 
 </RelativeLayout><!--
  <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"

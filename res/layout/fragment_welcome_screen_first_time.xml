@@ -22,6 +22,7 @@
         android:layout_below="@+id/welcome_screen_text"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
-        android:text="Proceed" />
+        android:text="Proceed"
+        android:textSize="18dp" />
 
 </RelativeLayout>

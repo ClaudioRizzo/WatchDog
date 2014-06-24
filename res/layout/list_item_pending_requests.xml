@@ -66,7 +66,8 @@
         android:layout_alignParentLeft="true"
         android:layout_marginTop="10dp"
         android:layout_marginLeft="50dp"
-        android:text="Accept" />
+        android:text="Accept"
+        android:textSize="18dp" />
 
     <Button
         android:id="@+id/button_refuse_smp"
@@ -76,7 +77,8 @@
         android:layout_alignParentRight="true"
         android:layout_marginTop="10dp"
         android:layout_marginRight="50dp"
-        android:text="Refuse" />
+        android:text="Refuse"
+        android:textSize="18dp" />
 
     
 
