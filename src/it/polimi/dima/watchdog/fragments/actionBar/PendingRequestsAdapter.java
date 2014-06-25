@@ -100,10 +100,8 @@ public class PendingRequestsAdapter extends BaseAdapter {
 				MyPrefFiles.eraseSmpPreferences(number, context);
 
 				// ... lo notifico...
-				if(MyPrefFiles.iHaveSomeReferencesToThisUser(number, context)){
-					Log.i("DEBUG", "DEBUG: rifiuto: parte il messaggio code6");
-					SMSUtility.sendMessage(number, SMSUtility.SMP_PORT, SMSUtility.hexStringToByteArray(SMSUtility.CODE6), null);
-				}
+				Log.i("DEBUG", "DEBUG: rifiuto: parte il messaggio code6");
+				SMSUtility.sendMessage(number, SMSUtility.SMP_PORT, SMSUtility.hexStringToByteArray(SMSUtility.CODE6), null);
 				hideElementsAfterClick(rawView, editTextList);
 			}
 		});
