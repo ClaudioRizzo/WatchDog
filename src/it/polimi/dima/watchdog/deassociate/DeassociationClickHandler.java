@@ -28,10 +28,9 @@ public class DeassociationClickHandler implements OnClickListener {
 	public void onClick(View v) {
 		Log.i("DEBUG", "DEBUG: ho cancellato le preferenze");
 		MyPrefFiles.eraseSmpPreferences(this.number, this.context);
-		//this.mCallBack.notifyDataSetChanged();
 		this.view.findViewById(R.id.text_view_number).setVisibility(View.GONE);
 		this.view.findViewById(R.id.button_delete_association).setVisibility(View.GONE);
 		NotificationUtilities.CreatePopup("Notification from the system", "You succesfully removed " + this.number + " from your associated numbers list!", "DEASSOCIATION_SUCCESS", this.context);
-		
+		this.mCallBack.notifyDataSetChanged();
 	}
 }
