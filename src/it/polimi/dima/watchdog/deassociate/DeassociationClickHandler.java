@@ -1,7 +1,9 @@
 package it.polimi.dima.watchdog.deassociate;
 
+import it.polimi.dima.watchdog.R;
 import it.polimi.dima.watchdog.errors.ErrorManager;
 import it.polimi.dima.watchdog.utilities.MyPrefFiles;
+import it.polimi.dima.watchdog.utilities.NotificationUtilities;
 import android.content.Context;
 import android.util.Log;
 import android.view.View;
@@ -24,8 +26,10 @@ public class DeassociationClickHandler implements OnClickListener {
 	public void onClick(View v) {
 		Log.i("DEBUG", "DEBUG: ho cancellato le preferenze");
 		MyPrefFiles.eraseSmpPreferences(this.number, this.context);
-		//TODO dialog che informa del successo e cancellare gli elementi della pagina
-		this.mCallBack.notifyDataSetChanged();
-		ErrorManager.showShortToastMessage("preferenze cancellate", this.context);
+		//this.mCallBack.notifyDataSetChanged();
+		v.findViewById(R.id.text_view_number).setVisibility(View.GONE);
+		v.findViewById(R.id.button_delete_association).setVisibility(View.GONE);
+		NotificationUtilities.CreatePopup("Notification from the system", "You succesfully removed " + this.number + " from your associated numbers list!", "DEASSOCIATION_SUCCESS", this.context);
+		
 	}
 }
