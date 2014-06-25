@@ -14,12 +14,14 @@ public class DeassociationClickHandler implements OnClickListener {
 	private Context context;
 	private String number;
 	private DeassociationAdapter mCallBack;
+	private View view;
 	
 	
-	public DeassociationClickHandler(Context context, String number, DeassociationAdapter mCallBack){
+	public DeassociationClickHandler(View view, Context context, String number, DeassociationAdapter mCallBack){
 		this.context = context;
 		this.number = number;
 		this.mCallBack = mCallBack;
+		this.view = view;
 	}
 	
 	@Override
@@ -27,8 +29,8 @@ public class DeassociationClickHandler implements OnClickListener {
 		Log.i("DEBUG", "DEBUG: ho cancellato le preferenze");
 		MyPrefFiles.eraseSmpPreferences(this.number, this.context);
 		//this.mCallBack.notifyDataSetChanged();
-		v.findViewById(R.id.text_view_number).setVisibility(View.GONE);
-		v.findViewById(R.id.button_delete_association).setVisibility(View.GONE);
+		this.view.findViewById(R.id.text_view_number).setVisibility(View.GONE);
+		this.view.findViewById(R.id.button_delete_association).setVisibility(View.GONE);
 		NotificationUtilities.CreatePopup("Notification from the system", "You succesfully removed " + this.number + " from your associated numbers list!", "DEASSOCIATION_SUCCESS", this.context);
 		
 	}

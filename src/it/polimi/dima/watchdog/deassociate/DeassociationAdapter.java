@@ -53,7 +53,7 @@ public class DeassociationAdapter extends BaseAdapter {
 		numberTextView.setText(num);
 		
 		Button localizeButton = (Button) mRelativeLayout.findViewById(R.id.button_delete_association);
-		localizeButton.setOnClickListener(new DeassociationClickHandler(this.context, num, this));
+		localizeButton.setOnClickListener(new DeassociationClickHandler(view, this.context, num, this));
 		return view;	
 	}
 }
