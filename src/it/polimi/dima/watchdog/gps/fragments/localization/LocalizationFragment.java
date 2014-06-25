@@ -17,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.TextView;
 
 /**
  * 
@@ -34,12 +35,21 @@ public class LocalizationFragment extends Fragment implements FragmentAdapterLif
 
 		View v = inflater.inflate(R.layout.fragment_localization, container,
 				false);
+		
+		TextView message = (TextView) v.findViewById(R.id.message_localize_no_contacts);
+		message.setVisibility(View.GONE);
 
 		ListView mListView = (ListView) v.findViewById(R.id.list_localize);
 
-		GpsAdapter adapter = new GpsAdapter(getActivity(), getData());
-		mListView.setAdapter(adapter);
-
+		List<String> contacts = getData();
+		
+		if(contacts.size() == 0){
+			message.setVisibility(View.VISIBLE);
+		}
+		else{
+			GpsAdapter adapter = new GpsAdapter(getActivity(), getData());
+			mListView.setAdapter(adapter);
+		}
 		return v;
 	}
 

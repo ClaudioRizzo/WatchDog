@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.TextView;
 
 /**
  * 
@@ -26,14 +27,24 @@ public class SirenOffFragment extends Fragment implements FragmentAdapterLifecyc
 	@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
         Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+		
         View v =  inflater.inflate(R.layout.fragment_siren_off, container, false);
+        
+        TextView message = (TextView) v.findViewById(R.id.message_siren_off_no_contacts);
+		message.setVisibility(View.GONE);
         
         ListView mListView = (ListView) v.findViewById(R.id.list_siren_off);
 
-		SirenOffAdapter adapter = new SirenOffAdapter(getActivity(), getData());
-		mListView.setAdapter(adapter);
-
+		List<String> contacts = getData();
+		
+		if(contacts.size() == 0){
+			message.setVisibility(View.VISIBLE);
+		}
+		else{
+			SirenOffAdapter adapter = new SirenOffAdapter(getActivity(), getData());
+			mListView.setAdapter(adapter);
+		}
+		
 		return v;
     }
 	

@@ -11,5 +11,17 @@
         android:layout_height="wrap_content"
         android:divider="#b5b5b5"
         android:dividerHeight="1dp" />
+    
+    <TextView 
+        android:id="@+id/message_siren_off_no_contacts"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="22dp"
+        android:layout_centerHorizontal="true"
+        android:textSize="20dp"
+        android:gravity="center_horizontal"
+        android:textAlignment="gravity"
+        android:text="Associate a number before you can start sending command messages"
+        />
 
 </LinearLayout>

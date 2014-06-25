@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.TextView;
 
 /**
  * 
@@ -28,10 +29,20 @@ public class SirenOnFragment extends Fragment implements FragmentAdapterLifecycl
         // Inflate the layout for this fragment
         View v =  inflater.inflate(R.layout.fragment_siren_on, container, false);
         
+        TextView message = (TextView) v.findViewById(R.id.message_siren_on_no_contacts);
+		message.setVisibility(View.GONE);
+        
         ListView mListView = (ListView) v.findViewById(R.id.list_siren_on);
-
-		SirenOnAdapter adapter = new SirenOnAdapter(getActivity(), getData());
-		mListView.setAdapter(adapter);
+		
+		List<String> contacts = getData();
+		
+		if(contacts.size() == 0){
+			message.setVisibility(View.VISIBLE);
+		}
+		else{
+			SirenOnAdapter adapter = new SirenOnAdapter(getActivity(), getData());
+			mListView.setAdapter(adapter);
+		}
 
 		return v;
     }
