@@ -30,14 +30,21 @@ public class MainActivity extends ActionBarActivity implements
 	MyDrawerUtility mDrawerUtil;
 	static final String ACTION = "android.intent.action.DATA_SMS_RECEIVED";
 	private boolean wizardDone;
+	public String TAG;
+	
+	public String getTag(){
+		return this.TAG;
+	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		this.wizardDone = MyPrefFiles.isWizardDone(this);
+		TAG = "main";
 
 		if (wizardDone) {
 
+			
 			ListenerUtility.getInstance(this).addListener(this);
 			getSupportActionBar().setTitle(R.string.default_tab);
 			setContentView(R.layout.activity_main_layout);

@@ -1,5 +1,6 @@
 package it.polimi.dima.watchdog.utilities;
 
+import it.polimi.dima.watchdog.activities.MainActivity;
 import it.polimi.dima.watchdog.errors.ErrorFactory;
 import it.polimi.dima.watchdog.errors.ErrorManager;
 import it.polimi.dima.watchdog.gps.fragments.localization.interfaces.MessageActionListener;
@@ -31,9 +32,23 @@ public class ListenerUtility {
 	}
 	
 	public void addListener(MessageActionListener listener) {
-		
 		Log.i("[DEBUG]", "[DEBUG] prima di aggiungere il listener");
-		if(!this.listeners.contains(listener)){
+		
+		boolean toAdd = true;
+		
+		if(listener instanceof MainActivity){
+			MainActivity main = (MainActivity) listener;
+			for(MessageActionListener l : this.listeners){
+				if(l instanceof MainActivity){
+					MainActivity mainListener = (MainActivity) l;
+					if(mainListener.getTag().equals(main.getTag())){
+						toAdd = false;
+					}
+				}
+			}
+		}
+		
+		if(toAdd){
 			Log.i("[DEBUG]", "[DEBUG] in listenrUtil aggiungo il listener");
 			this.listeners.add(listener);
 			Log.i("[DEBUG]", "[DEBUG] in listenrUtil aggiungo il listener " + this.listeners.size());
