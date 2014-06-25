@@ -9,10 +9,11 @@
         android:id="@+id/text_view_pending_number"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="20dp"
         android:layout_centerHorizontal="true"
         android:textSize="20dp"
-        android:gravity="center"
+        android:gravity="center_horizontal"
+        android:textAlignment="gravity"
         android:text="This will be overwritten" />
     
     <TextView
@@ -23,37 +24,44 @@
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/text_view_pending_number"
         android:textSize="20dp"
-        android:gravity="center"       
+        android:gravity="center_horizontal"
+        android:textAlignment="gravity"
         android:text="This will be overwritten" />
     
     <EditText
         android:id="@+id/edit_text_secret_answer"
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:layout_centerHorizontal="true"
+        android:layout_alignLeft="@+id/text_view_pending_number"
+        android:layout_alignRight="@+id/text_view_pending_number"
         android:layout_below="@+id/text_view_pending_question"
         android:ems="10"
         android:hint="Secret Answer" />
     
     <EditText
         android:id="@+id/edit_text_my_secret_question"
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/edit_text_secret_answer"
         android:ems="10"
+        android:layout_alignLeft="@+id/text_view_pending_number"
+        android:layout_alignRight="@+id/text_view_pending_number"
         android:hint="Your Secret Question" />
     
     <EditText
         android:id="@+id/edit_text_my_secret_answer"
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/edit_text_my_secret_question"
         android:ems="10"
+        android:layout_alignLeft="@+id/text_view_pending_number"
+        android:layout_alignRight="@+id/text_view_pending_number"
         android:hint="Your Secret Answer" />
 
     <Button
