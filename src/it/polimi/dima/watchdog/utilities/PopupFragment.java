@@ -1,4 +1,4 @@
-package it.polimi.dima.watchdog.errors;
+package it.polimi.dima.watchdog.utilities;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -10,12 +10,14 @@ import android.os.Bundle;
 import android.view.Gravity;
 import android.widget.TextView;
 
-public class ErrorPopupFragment extends DialogFragment {
+public class PopupFragment extends DialogFragment {
 
+	private String title;
 	private String message;
 	private Context context;
 	
-	public ErrorPopupFragment(String message, Context context){
+	public PopupFragment(String title, String message, Context context){
+		this.title = title;
 		this.message = message;
 		this.context = context;
 	}
@@ -26,7 +28,7 @@ public class ErrorPopupFragment extends DialogFragment {
         AlertDialog.Builder errorPopupBuilder = new AlertDialog.Builder(getActivity());
         
         TextView title = new TextView(this.context);
-        title.setText(ErrorFactory.TITLE);
+        title.setText(this.title);
         title.setBackgroundColor(Color.DKGRAY);
         title.setPadding(10, 10, 10, 10);
         title.setGravity(Gravity.CENTER);

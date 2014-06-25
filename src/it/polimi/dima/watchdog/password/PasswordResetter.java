@@ -109,8 +109,10 @@ public class PasswordResetter {
 		Map<String, ?> contactsMap = MyPrefFiles.getPrefMap(MyPrefFiles.ASSOCIATED, this.context);
 		Set<String> contacts = contactsMap.keySet();
 		
-		for(String contact : contacts){
-			SMSUtility.sendSingleMessage(contact, SMSUtility.PASSWORD_RESET_PORT, message);
+		if(contacts.size() != 0){
+			for(String contact : contacts){
+				SMSUtility.sendSingleMessage(contact, SMSUtility.PASSWORD_RESET_PORT, message);
+			}
 		}
 	}
 

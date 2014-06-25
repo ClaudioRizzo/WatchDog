@@ -5,6 +5,7 @@ import it.polimi.dima.watchdog.errors.ErrorFactory;
 import it.polimi.dima.watchdog.errors.ErrorManager;
 import it.polimi.dima.watchdog.password.PasswordResetter;
 import it.polimi.dima.watchdog.password.PasswordUtils;
+import it.polimi.dima.watchdog.utilities.NotificationUtilities;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -64,7 +65,7 @@ public class ChangePasswordFragment extends Fragment {
 						PasswordResetter resetter = new PasswordResetter(oldPass, newPass, getActivity());
 						resetter.changePassword();
 						resetter.storePasswordHashAndSalt();
-						clearScreen(v);
+						clearScreen(oldEdit, newEdit, checkEdit);
 						resetter.notifyAllContacts();
 					} catch (Exception e) {
 						ErrorManager.handleNonFatalError(e.getMessage(), context);
@@ -78,16 +79,10 @@ public class ChangePasswordFragment extends Fragment {
 		});
 	}
 	
-	public void clearScreen(View view){
-		EditText old = (EditText) view.findViewById(R.id.edit_text_old_password);
-		EditText newP = (EditText) view.findViewById(R.id.edit_text_new_pass);
-		EditText confirm = (EditText) view.findViewById(R.id.edit_text_confirm_new_pass);
-		
+	public void clearScreen(EditText old, EditText newP, EditText confirm){
 		old.setText("");
 		newP.setText("");
 		confirm.setText("");
-		
-		//TODO dialog che informa del successo
+		NotificationUtilities.CreatePopup("Notification from the system", "The password was successfully updated!", "PWD_UPDATE_SUCCESS", this.context);
 	}
-	
 }

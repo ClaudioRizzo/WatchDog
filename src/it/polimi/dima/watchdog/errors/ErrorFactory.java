@@ -3,6 +3,8 @@ package it.polimi.dima.watchdog.errors;
 public class ErrorFactory {
 	
 	public static final String TITLE = "AN ERROR OCCURRED!!!";
+	public static final String ERROR_TAG = "Error notification popup";
+	public static final String COMMAND_SESSION_ERROR = "Error in command session: wait 2 minutes before trying again!";
 	public static final String WIZARD_ERROR = "Fatal error in the inizialization: the application will be closed!";
 	public static final String BAD_PHONE_NUMBER = "The number inserted is not a valid phone number: remember the national prefix starting with \"+\" character!";
 	public static final String COMMAND_TO_NOT_ASSOCIATED = "You can't send a command to a not associated telephone!";

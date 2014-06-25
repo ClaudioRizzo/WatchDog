@@ -2,10 +2,9 @@ package it.polimi.dima.watchdog.errors;
 
 import it.polimi.dima.watchdog.exceptions.MessageWillBeIgnoredException;
 import it.polimi.dima.watchdog.utilities.MyPrefFiles;
+import it.polimi.dima.watchdog.utilities.NotificationUtilities;
 import it.polimi.dima.watchdog.utilities.SMSUtility;
 import android.app.Activity;
-import android.app.DialogFragment;
-import android.app.FragmentManager;
 import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
@@ -125,12 +124,10 @@ public class ErrorManager {
 	
 	private static void CreatePopup(String message, Context context){
 		if(context instanceof Activity){
-			FragmentManager manager = ((Activity) context).getFragmentManager();
-			DialogFragment newFragment = new ErrorPopupFragment(message, context);
-		    newFragment.show(manager, "Error notification popup");
+			NotificationUtilities.CreatePopup(ErrorFactory.TITLE, message, ErrorFactory.ERROR_TAG, context);
 		}
 		else{
-			showShortToastMessage("Error in command session: wait 2 minutes before trying again!", context);
+			showShortToastMessage(ErrorFactory.COMMAND_SESSION_ERROR, context);
 		}
 	}
 }

@@ -34,7 +34,10 @@
         android:layout_marginTop="18dp"
         android:ems="10"
         android:hint="@string/edit_text_password"
-        android:inputType="textPassword" />
+        android:inputType="textPassword" >
+        
+        <requestFocus />
+    </EditText>
 
     <EditText
         android:id="@+id/user_confirm_password"
@@ -44,9 +47,6 @@
         android:layout_below="@+id/user_password"
         android:ems="10"
         android:hint="Confirm password"
-        android:inputType="textPassword" >
-
-        <requestFocus />
-    </EditText>
+        android:inputType="textPassword" />
 
 </RelativeLayout>
