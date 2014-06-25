@@ -6,6 +6,7 @@ import it.polimi.dima.watchdog.errors.ErrorManager;
 import it.polimi.dima.watchdog.exceptions.BadPhoneNumberException;
 import it.polimi.dima.watchdog.password.PasswordUtils;
 import it.polimi.dima.watchdog.utilities.MyPrefFiles;
+import it.polimi.dima.watchdog.utilities.NotificationUtilities;
 import it.polimi.dima.watchdog.utilities.SMSUtility;
 import android.content.Context;
 import android.os.Bundle;
@@ -48,7 +49,7 @@ public class AssociateNumberFragment extends Fragment implements OnClickListener
 				this.getNumber();
 				this.getAndSaveQuestion();
 				this.getAndSaveAnswer();
-				clearScreen(v);
+				clearScreen();
 				this.startSMP();
 			}
 			catch (BadPhoneNumberException e){
@@ -132,13 +133,14 @@ public class AssociateNumberFragment extends Fragment implements OnClickListener
 		MyPrefFiles.setMyPreference(MyPrefFiles.SMP_STATUS, preferenceKey, this.otherNumber, this.context);
 	}
 	
-	public void clearScreen(View view){
+	public void clearScreen(){
+		View view = getView();
 		view.findViewById(R.id.text_view_hint_associate).setVisibility(View.GONE);
 		view.findViewById(R.id.edit_text_associate_number).setVisibility(View.GONE);
 		view.findViewById(R.id.edit_text_associate_question).setVisibility(View.GONE);
 		view.findViewById(R.id.edit_text_associate_answer).setVisibility(View.GONE);
 		view.findViewById(R.id.button_associate).setVisibility(View.GONE);
 		
-		//TODO dialog che informa che l'associazione è partita
+		NotificationUtilities.CreatePopup("Message from the system", "The association has started", "ASSOCIATION_STARTED", this.context);
 	}
 }

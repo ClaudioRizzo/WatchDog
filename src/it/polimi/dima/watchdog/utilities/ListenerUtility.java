@@ -53,4 +53,8 @@ public class ListenerUtility {
 		Log.i("[DEBUG]", "[DEBUG] nella notify ho ricevuto correttamente il messaggio di errore della locate");
 		ErrorManager.handleNonFatalError(ErrorFactory.BAD_RETURNED_DATA, this.context);
 	}
+	
+	public void notifySmpOver(String other){
+		NotificationUtilities.CreatePopup("Message from the system", "The association with " + other + " has succeed. Refresh the gps/sire view to start sending command messages.", "ASSOCIATION_SUCCESS", this.context);
+	}
 }
