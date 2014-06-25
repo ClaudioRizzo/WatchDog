@@ -36,12 +36,11 @@ public class MyDrawerUtility {
 	 */
 	public void InitializeDrawerList(ActionBarActivity mActivity, int drawerLayout, int drawerList) {
 		
-		ObjectDrawerItem[] drawerItem = new ObjectDrawerItem[3];
+		ObjectDrawerItem[] drawerItem = new ObjectDrawerItem[2];
 		 
 		//QUa si prendono le icone e il loro nome: icone 48x48
 		drawerItem[0] = new ObjectDrawerItem(R.drawable.radaricon, "Gps");
-		drawerItem[1] = new ObjectDrawerItem(R.drawable.radaricon, "Remote");
-		drawerItem[2] = new ObjectDrawerItem(R.drawable.radaricon, "Status");
+		drawerItem[1] = new ObjectDrawerItem(R.drawable.radaricon, "Siren");
 		
 		//mGenFeatures = mActivity.getResources().getStringArray(R.array.gen_features_array);
 		mDrawerLayout = (DrawerLayout) mActivity.findViewById(drawerLayout);
