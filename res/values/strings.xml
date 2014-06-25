@@ -4,13 +4,7 @@
     <!-- Strings Array for drawer -->
     <string-array name="gen_features_array">
         <item>Gps</item>
-        <item>Remote</item>
-        <item>Status</item>
-    </string-array>
-    
-    <!-- Strings Array for settings activity -->
-    <string-array name="array_settings">
-        <item>Change Password</item>
+        <item>Siren</item>
     </string-array>
     
     <!-- Application name -->
@@ -32,8 +26,6 @@
     <string name="drawer_open">Open navigation drawer</string>
     <!-- Close the navigation drawer -->
     <string name="drawer_close">Close navigation drawer</string>
-    <!-- Settings title -->
-    <string name="settings_title">Settings</string>
     <!-- Change password title -->
     <string name="change_password_title">Change Password</string>
     
@@ -43,10 +35,8 @@
     <!-- Action Bar Titles -->
     <!-- GPS title -->
     <string name="gps_title">Gps</string>
-    <!-- Status title -->
-    <string name="status_title">Status</string>
-    <!-- Remote title -->
-    <string name="remote_title">Remote</string>
+    <!-- Siren title -->
+    <string name="siren_title">Siren</string>
     <!-- Number association title -->
     <string name="title_associate_number">Number Association</string>
     

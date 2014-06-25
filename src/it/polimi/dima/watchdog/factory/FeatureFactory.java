@@ -13,8 +13,8 @@ public abstract class FeatureFactory {
 		switch(e) {
 		case GPS:
 			return new GpsFactory();
-		case REMOTE:
-			return new SmsRemoteFactory();
+		case SIREN:
+			return new SmsSirenFactory();
 		}
 		return null;
 	}

@@ -1,7 +1,7 @@
 package it.polimi.dima.watchdog.activities;
 
 import it.polimi.dima.watchdog.R;
-import it.polimi.dima.watchdog.fragments.actionBar.settingsAction.AssociateNumberFragment;
+import it.polimi.dima.watchdog.fragments.actionBar.AssociateNumberFragment;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBarActivity;

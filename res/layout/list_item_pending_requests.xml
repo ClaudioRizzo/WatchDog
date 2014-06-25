@@ -41,7 +41,8 @@
         android:layout_alignRight="@+id/text_view_pending_number"
         android:layout_below="@+id/text_view_pending_question"
         android:ems="10"
-        android:hint="Secret Answer" />
+        android:hint="Secret Answer"
+        android:inputType="textPassword" />
     
     <EditText
         android:id="@+id/edit_text_my_secret_question"
@@ -53,7 +54,8 @@
         android:ems="10"
         android:layout_alignLeft="@+id/text_view_pending_number"
         android:layout_alignRight="@+id/text_view_pending_number"
-        android:hint="Your Secret Question" />
+        android:hint="Your Secret Question"
+        android:inputType="text" />
     
     <EditText
         android:id="@+id/edit_text_my_secret_answer"
@@ -65,7 +67,8 @@
         android:ems="10"
         android:layout_alignLeft="@+id/text_view_pending_number"
         android:layout_alignRight="@+id/text_view_pending_number"
-        android:hint="Your Secret Answer" />
+        android:hint="Your Secret Answer"
+        android:inputType="textPassword" />
 
     <Button
         android:id="@+id/button_accept_smp"

@@ -41,31 +41,4 @@
         android:text="Localize"
         android:textSize="18dp" />
 
-</RelativeLayout><!--
- <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/linear_layout_localize_list"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:layout_gravity="center"
-    android:orientation="vertical" >
-    
-    <TextView
-        android:id="@+id/text_view_localize_number"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="+393466342499" />
-    
-    <EditText
-        android:id="@+id/edit_text_associated_password"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:hint="Password here"/>
-
-    <Button
-        android:id="@+id/button_localize"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:text="Localize"/>
-    
- </LinearLayout>
--->
+</RelativeLayout>

@@ -61,7 +61,7 @@
             </intent-filter>
         </receiver>
         <receiver
-            android:name="it.polimi.dima.watchdog.sms.timeout.TimeoutManagement"
+            android:name="it.polimi.dima.watchdog.sms.commands.timeout.TimeoutManagement"
             android:process=".remote" >
         </receiver>
 

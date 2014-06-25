@@ -17,7 +17,7 @@ import javax.crypto.spec.SecretKeySpec;
 import it.polimi.dima.watchdog.crypto.CryptoUtility;
 import it.polimi.dima.watchdog.errors.ErrorFactory;
 import it.polimi.dima.watchdog.exceptions.NoSuchPreferenceFoundException;
-import it.polimi.dima.watchdog.sms.commands.flags.StatusFree;
+import it.polimi.dima.watchdog.sms.commands.session.StatusFree;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Base64;

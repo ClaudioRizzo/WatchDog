@@ -14,7 +14,7 @@ import it.polimi.dima.watchdog.exceptions.NoSuchPreferenceFoundException;
 import it.polimi.dima.watchdog.exceptions.SmpHashesMismatchException;
 import it.polimi.dima.watchdog.password.PasswordUtils;
 import it.polimi.dima.watchdog.sms.ParsableSMS;
-import it.polimi.dima.watchdog.sms.commands.flags.StatusFree;
+import it.polimi.dima.watchdog.sms.commands.session.StatusFree;
 import it.polimi.dima.watchdog.sms.socialistMillionaire.factory.SocialistMillionaireFactory;
 import it.polimi.dima.watchdog.utilities.ListenerUtility;
 import it.polimi.dima.watchdog.utilities.MyPrefFiles;

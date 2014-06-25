@@ -1,15 +1,17 @@
 package it.polimi.dima.watchdog.sms.commands;
 
 import it.polimi.dima.watchdog.errors.ErrorManager;
-import it.polimi.dima.watchdog.sms.commands.flags.CommandProtocolFlagsReactionInterface;
-import it.polimi.dima.watchdog.sms.commands.flags.StatusFree;
-import it.polimi.dima.watchdog.sms.commands.flags.StatusM1Sent;
-import it.polimi.dima.watchdog.sms.commands.flags.StatusM2Sent;
-import it.polimi.dima.watchdog.sms.commands.flags.StatusM3Sent;
+import it.polimi.dima.watchdog.sms.commands.session.CommandProtocolFlagsReactionInterface;
+import it.polimi.dima.watchdog.sms.commands.session.StatusFree;
+import it.polimi.dima.watchdog.sms.commands.session.StatusM1Sent;
+import it.polimi.dima.watchdog.sms.commands.session.StatusM2Sent;
+import it.polimi.dima.watchdog.sms.commands.session.StatusM3Sent;
 import it.polimi.dima.watchdog.utilities.MyPrefFiles;
 import it.polimi.dima.watchdog.utilities.SMSUtility;
+
 import java.util.HashMap;
 import java.util.Map;
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;

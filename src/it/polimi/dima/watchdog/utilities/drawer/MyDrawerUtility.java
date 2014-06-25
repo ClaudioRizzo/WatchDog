@@ -2,8 +2,8 @@ package it.polimi.dima.watchdog.utilities.drawer;
 
 import it.polimi.dima.watchdog.R;
 import it.polimi.dima.watchdog.activities.MainActivity;
-import it.polimi.dima.watchdog.fragments.smsRemote.SmsRemoteMainFragment;
-import it.polimi.dima.watchdog.gps.fragment.GpsMainFragment;
+import it.polimi.dima.watchdog.fragments.gps.GpsMainFragment;
+import it.polimi.dima.watchdog.fragments.siren.SirenMainFragment;
 import android.content.res.Configuration;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
@@ -122,8 +122,8 @@ public class MyDrawerUtility {
 				mDrawerLayout.closeDrawers();
 				break;
 			case 1:
-				mainActivity.replaceFragment(new SmsRemoteMainFragment(), SmsRemoteMainFragment.TAG);
-				mTitle = SmsRemoteMainFragment.TAG;
+				mainActivity.replaceFragment(new SirenMainFragment(), SirenMainFragment.TAG);
+				mTitle = SirenMainFragment.TAG;
 				mDrawerLayout.closeDrawers();
 				break;
 			default:

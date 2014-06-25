@@ -1,7 +1,7 @@
 package it.polimi.dima.watchdog.factory;
 
-import it.polimi.dima.watchdog.gps.fragment.perimeter.PerimeterFragment;
-import it.polimi.dima.watchdog.gps.fragments.localization.LocalizationFragment;
+import it.polimi.dima.watchdog.fragments.gps.localization.LocalizationFragment;
+import it.polimi.dima.watchdog.fragments.gps.perimeter.PerimeterFragment;
 import android.support.v4.app.Fragment;
 
 /**

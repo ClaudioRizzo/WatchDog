@@ -3,7 +3,7 @@ package it.polimi.dima.watchdog.utilities;
 import it.polimi.dima.watchdog.activities.MainActivity;
 import it.polimi.dima.watchdog.errors.ErrorFactory;
 import it.polimi.dima.watchdog.errors.ErrorManager;
-import it.polimi.dima.watchdog.gps.fragments.localization.interfaces.MessageActionListener;
+import it.polimi.dima.watchdog.fragments.gps.localization.interfaces.MessageActionListener;
 
 import java.util.ArrayList;
 import java.util.List;
