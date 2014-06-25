@@ -5,6 +5,7 @@ import it.polimi.dima.watchdog.gps.fragment.GpsMainFragment;
 import it.polimi.dima.watchdog.gps.fragments.localization.interfaces.MessageActionListener;
 import it.polimi.dima.watchdog.utilities.ListenerUtility;
 import it.polimi.dima.watchdog.utilities.MyPrefFiles;
+import it.polimi.dima.watchdog.utilities.NotificationUtilities;
 import it.polimi.dima.watchdog.utilities.drawer.MyDrawerUtility;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -177,8 +178,8 @@ public class MainActivity extends ActionBarActivity implements
 		 * " has succeed. Refresh the gps/siren view to start sending command messages."
 		 * , "ASSOCIATION_SUCCESS", this);
 		 */
+		NotificationUtilities.showShortToastMessage("The association with " + other + " has succeed. Refresh the gps/siren view to start sending command messages.", this);
 		Log.i("DEBUG", "DEBUG: dovrei creare il popup");
-
 	}
 
 }
