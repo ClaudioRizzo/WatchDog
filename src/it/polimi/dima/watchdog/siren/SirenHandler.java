@@ -33,7 +33,7 @@ public class SirenHandler {
 	
 	public void turnVolumeToMax(){
 		this.audioManager = (AudioManager) this.context.getSystemService(Context.AUDIO_SERVICE);
-		this.audioManager.setStreamVolume(AudioManager.STREAM_RING, /*this.audioManager.getStreamMaxVolume(AudioManager.STREAM_RING)*/1, AudioManager.FLAG_ALLOW_RINGER_MODES);
+		this.audioManager.setStreamVolume(AudioManager.STREAM_RING, this.audioManager.getStreamMaxVolume(AudioManager.STREAM_RING), AudioManager.FLAG_ALLOW_RINGER_MODES);
 	}
 	
 	public void playAlarmSound() {
