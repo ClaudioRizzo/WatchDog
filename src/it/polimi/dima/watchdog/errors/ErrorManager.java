@@ -7,23 +7,10 @@ import it.polimi.dima.watchdog.utilities.SMSUtility;
 import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
-import android.widget.Toast;
 
 public class ErrorManager {
 	
-	
-	/**
-	 * Visualizza un popup di errore.
-	 * 
-	 * @param message : il messaggio da mostrare
-	 * @param context : il contesto corrente
-	 */
-	public static void showShortToastMessage(String message, Context context) {
-		Toast toast = Toast.makeText(context, message, Toast.LENGTH_SHORT);
-		toast.show();
-	}
-	
-	
+		
 	public static void handleFatalError(String message, Context context){
 		String popupMessage = getErrorMessage(message);
 		CreatePopup(popupMessage, context);
@@ -127,7 +114,7 @@ public class ErrorManager {
 			NotificationUtilities.CreatePopup(ErrorFactory.TITLE, message, ErrorFactory.ERROR_TAG, context);
 		}
 		else{
-			showShortToastMessage(ErrorFactory.COMMAND_SESSION_ERROR, context);
+			NotificationUtilities.showShortToastMessage(ErrorFactory.COMMAND_SESSION_ERROR, context);
 		}
 	}
 }

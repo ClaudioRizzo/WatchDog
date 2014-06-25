@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.DialogFragment;
 import android.app.FragmentManager;
 import android.content.Context;
+import android.widget.Toast;
 
 public class NotificationUtilities {
 
@@ -13,5 +14,16 @@ public class NotificationUtilities {
 			DialogFragment newFragment = new PopupFragment(title, message, context);
 		    newFragment.show(manager, tag);
 		}
+	}
+	
+	/**
+	 * Visualizza un popup di errore.
+	 * 
+	 * @param message : il messaggio da mostrare
+	 * @param context : il contesto corrente
+	 */
+	public static void showShortToastMessage(String message, Context context) {
+		Toast toast = Toast.makeText(context, message, Toast.LENGTH_SHORT);
+		toast.show();
 	}
 }

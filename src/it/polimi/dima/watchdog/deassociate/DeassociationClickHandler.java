@@ -1,7 +1,6 @@
 package it.polimi.dima.watchdog.deassociate;
 
 import it.polimi.dima.watchdog.R;
-import it.polimi.dima.watchdog.errors.ErrorManager;
 import it.polimi.dima.watchdog.utilities.MyPrefFiles;
 import it.polimi.dima.watchdog.utilities.NotificationUtilities;
 import android.content.Context;
