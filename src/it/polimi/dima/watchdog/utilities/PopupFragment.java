@@ -1,10 +1,13 @@
 package it.polimi.dima.watchdog.utilities;
 
+import it.polimi.dima.watchdog.activities.MainActivity;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -15,11 +18,13 @@ public class PopupFragment extends DialogFragment {
 	private String title;
 	private String message;
 	private Context context;
+	private boolean initialization;
 	
-	public PopupFragment(String title, String message, Context context){
+	public PopupFragment(String title, String message, Context context, boolean initialization){
 		this.title = title;
 		this.message = message;
 		this.context = context;
+		this.initialization = initialization;
 	}
 	
 	@Override
@@ -45,7 +50,12 @@ public class PopupFragment extends DialogFragment {
         
         errorPopupBuilder.setNeutralButton("Ok", new DialogInterface.OnClickListener() {
                    public void onClick(DialogInterface dialog, int id) {
-                       dialog.dismiss();
+                	   dialog.dismiss();
+                	   if(initialization){
+							Intent intent = new Intent(context, MainActivity.class);
+							startActivity(intent);
+							((Activity)context).finish();
+                       } 
                    }
                });
         

@@ -8,13 +8,14 @@ import android.widget.Toast;
 
 public class NotificationUtilities {
 
-	public static void CreatePopup(String title, String message, String tag, Context context){
+	public static void CreatePopup(String title, String message, String tag, Context context, boolean initialization){
 		if(context instanceof Activity){
 			FragmentManager manager = ((Activity) context).getFragmentManager();
-			DialogFragment newFragment = new PopupFragment(title, message, context);
+			DialogFragment newFragment = new PopupFragment(title, message, context, initialization);
 		    newFragment.show(manager, tag);
 		}
 	}
+
 	
 	/**
 	 * Visualizza un popup di errore.

@@ -8,7 +8,6 @@ import it.polimi.dima.watchdog.fragments.wizard.InitializeWizardFragment;
 import it.polimi.dima.watchdog.fragments.wizard.InitializeWizardFragment.OnPasswordInizializedListener;
 import it.polimi.dima.watchdog.utilities.MyPrefFiles;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Base64;
@@ -56,10 +55,5 @@ public class InitializationWizardActivity extends ActionBarActivity implements O
 		MyPrefFiles.setMyPreference(MyPrefFiles.PASSWORD_AND_SALT, MyPrefFiles.MY_PASSWORD_HASH, Base64.encodeToString(hashToSave, Base64.DEFAULT), this.context);
 		MyPrefFiles.setMyPreference(MyPrefFiles.PASSWORD_AND_SALT, MyPrefFiles.MY_PASSWORD_SALT, Base64.encodeToString(salt, Base64.DEFAULT), this.context);
 		MyPrefFiles.setWizardDone(this.context);
-		
-		//start MainActivity
-		Intent intent = new Intent(this, MainActivity.class);
-		startActivity(intent);
-		finish();
 	}	
 }

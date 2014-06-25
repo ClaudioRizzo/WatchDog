@@ -6,10 +6,8 @@ import it.polimi.dima.watchdog.errors.ErrorFactory;
 import it.polimi.dima.watchdog.errors.ErrorManager;
 import it.polimi.dima.watchdog.password.PasswordUtils;
 import it.polimi.dima.watchdog.utilities.NotificationUtilities;
-
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
-
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
@@ -27,6 +25,10 @@ public class InitializeWizardFragment extends Fragment implements OnClickListene
 	private Context context;
 	private OnPasswordInizializedListener mCallBack;
 	private final byte[] salt = PasswordUtils.nextSalt();
+	
+	public OnPasswordInizializedListener getCallBack(){
+		return this.mCallBack;
+	}
 
 	public interface OnPasswordInizializedListener {
 		public void saveWizardResults(boolean wizardDone, byte[] hashToSave, byte[] salt) throws NoSuchAlgorithmException, NoSuchProviderException;
@@ -58,8 +60,9 @@ public class InitializeWizardFragment extends Fragment implements OnClickListene
 				ErrorManager.handleNonFatalError(ErrorFactory.DIFFERENT_PASSWORDS, this.context);
 			}
 			else{
-				cleanScreen(passwordTextView, confirmPasswordTextView, title, fragView);
+				NotificationUtilities.CreatePopup("Notification from the system", "The Password Was successfully created!", "PASSWORD_CREATED", this.context, true);
 				byte[] hashToSave = PasswordUtils.computeHash(cleanPassword.getBytes(), this.salt, CryptoUtility.SHA_256);
+				cleanScreen(passwordTextView, confirmPasswordTextView, title, fragView);
 				this.mCallBack.saveWizardResults(true, hashToSave, this.salt);
 			}
 		}
@@ -79,7 +82,6 @@ public class InitializeWizardFragment extends Fragment implements OnClickListene
 		passwordTextView.setVisibility(View.GONE);
 		confirmPasswordTextView.setVisibility(View.GONE);
 		title.setVisibility(View.GONE);
-		NotificationUtilities.CreatePopup("Notification from the system", "The Password Was successfully created!", "PASSWORD_CREATED", this.context);
 	}
 
 	@Override
