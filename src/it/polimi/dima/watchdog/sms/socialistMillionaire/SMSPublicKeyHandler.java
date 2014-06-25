@@ -241,6 +241,7 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 			else{
 				
 				MyPrefFiles.setMyPreference(MyPrefFiles.ASSOCIATED, this.other, this.other, this.context);
+				Log.i("DEBUG", "DEBUG: prima del popup lato b");
 				ListenerUtility.getInstance(this.context).notifySmpOver(this.other);
 				Log.i("[DEBUG_SMP]", "[DEBUG_SMP] FULL_SMP_SUCCESSFUL " + MyPrefFiles.getMyPreference(MyPrefFiles.KEYRING, this.other, this.context));
 			
@@ -361,6 +362,7 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 		//... salvo il numero in associated se non bisognerà fare il giro di boa...
 		if(MyPrefFiles.existsPreference(MyPrefFiles.SMP_STATUS, this.other + MyPrefFiles.HASH_FORWARDED, this.context)){
 			MyPrefFiles.setMyPreference(MyPrefFiles.ASSOCIATED, this.other, this.other, this.context);
+			Log.i("DEBUG", "DEBUG: prima del popup lato a");
 			ListenerUtility.getInstance(this.context).notifySmpOver(this.other);
 		}
 		
