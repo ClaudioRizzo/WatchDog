@@ -5,6 +5,7 @@ import it.polimi.dima.watchdog.gps.fragment.GpsMainFragment;
 import it.polimi.dima.watchdog.gps.fragments.localization.interfaces.MessageActionListener;
 import it.polimi.dima.watchdog.utilities.ListenerUtility;
 import it.polimi.dima.watchdog.utilities.MyPrefFiles;
+import it.polimi.dima.watchdog.utilities.NotificationUtilities;
 import it.polimi.dima.watchdog.utilities.drawer.MyDrawerUtility;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -21,44 +22,45 @@ import android.view.Window;
 /**
  * 
  * @author claudio
- *
+ * 
  */
-public class MainActivity extends ActionBarActivity implements MessageActionListener {
-
+public class MainActivity extends ActionBarActivity implements
+		MessageActionListener {
 
 	MyDrawerUtility mDrawerUtil;
 	static final String ACTION = "android.intent.action.DATA_SMS_RECEIVED";
 	private boolean wizardDone;
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		this.wizardDone = MyPrefFiles.isWizardDone(this);
-		
-		
-		
+
 		if (wizardDone) {
-		
+
 			ListenerUtility.getInstance(this).addListener(this);
 			getSupportActionBar().setTitle(R.string.default_tab);
 			setContentView(R.layout.activity_main_layout);
-			
+
 			setTheme(R.style.Theme_Hacker);
 			this.mDrawerUtil = new MyDrawerUtility();
-			this.mDrawerUtil.InitializeDrawerList(this, R.id.drawer_layout,R.id.left_drawer);
+			this.mDrawerUtil.InitializeDrawerList(this, R.id.drawer_layout,
+					R.id.left_drawer);
 			this.mDrawerUtil.handleOpenCloseDrawer(this, R.id.drawer_layout);
-			
+
 			if (findViewById(R.id.main_fragment_container) != null) {
 				if (savedInstanceState != null) {
 					return;
 				}
 				// la view di default sarà per noi quella con le gps features
 				GpsMainFragment mGpsMainFrag = new GpsMainFragment();
-				getSupportFragmentManager().beginTransaction().add(R.id.main_fragment_container, mGpsMainFrag).commit();
+				getSupportFragmentManager().beginTransaction()
+						.add(R.id.main_fragment_container, mGpsMainFrag)
+						.commit();
 			}
 		} else {
-		    getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
-		    getActionBar().hide();
+			getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
+			getActionBar().hide();
 			Intent intent = new Intent(this, WelcomeScreenActivity.class);
 			startActivity(intent);
 		}
@@ -74,9 +76,9 @@ public class MainActivity extends ActionBarActivity implements MessageActionList
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		this.mDrawerUtil.getOnOptionsItemSelected(item);
-		
+
 		Intent intent;
-		
+
 		switch (item.getItemId()) {
 		case R.id.change_password_panel:
 			intent = new Intent(this, ChangePasswordActivity.class);
@@ -87,36 +89,37 @@ public class MainActivity extends ActionBarActivity implements MessageActionList
 			startActivity(intent);
 			break;
 		case R.id.associate_panel:
-			intent= new Intent(this, AssociateNumberActivity.class);
+			intent = new Intent(this, AssociateNumberActivity.class);
 			startActivity(intent);
 			break;
 		case R.id.deassociate_panel:
-			intent= new Intent(this, DeassociationActivity.class);
+			intent = new Intent(this, DeassociationActivity.class);
 			startActivity(intent);
 			break;
 		default:
 			break;
-		}	
+		}
 		return super.onOptionsItemSelected(item);
 	}
 
 	@Override
 	protected void onPostCreate(Bundle savedInstanceState) {
 		super.onPostCreate(savedInstanceState);
-		if(wizardDone)
+		if (wizardDone)
 			this.mDrawerUtil.syncDrawerToggle();
 	}
 
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
-		
-		if(wizardDone)
+
+		if (wizardDone)
 			this.mDrawerUtil.onConfigurationChangedNeeded(newConfig);
 	}
 
 	public void replaceFragment(Fragment fragment, String tag) {
-		FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+		FragmentTransaction transaction = getSupportFragmentManager()
+				.beginTransaction();
 		transaction.replace(R.id.main_fragment_container, fragment, tag);
 		transaction.addToBackStack(tag);
 		transaction.commit();
@@ -127,13 +130,20 @@ public class MainActivity extends ActionBarActivity implements MessageActionList
 
 		Log.i("[DEBUG]", "[DEBUG] ricevuta la locazione: tento di cambiare");
 
-		
 		Intent intent = new Intent(this, MyMapActivity.class);
 		intent.putExtra("latitude", lat);
 		intent.putExtra("longitude", lon);
 		startActivity(intent);
-		//TODO: start new activity map
+		// TODO: start new activity map
 	}
-	
+
+	@Override
+	public void onSmpOver(String other) {
+		 NotificationUtilities.CreatePopup("Message from the system",
+		 "The association with " + other +
+		 " has succeed. Refresh the gps/sire view to start sending command messages.",
+		 "ASSOCIATION_SUCCESS", this);
+
+	}
 
 }

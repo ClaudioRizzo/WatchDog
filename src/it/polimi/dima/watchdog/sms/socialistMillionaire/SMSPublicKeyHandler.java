@@ -16,6 +16,7 @@ import it.polimi.dima.watchdog.password.PasswordUtils;
 import it.polimi.dima.watchdog.sms.ParsableSMS;
 import it.polimi.dima.watchdog.sms.commands.flags.StatusFree;
 import it.polimi.dima.watchdog.sms.socialistMillionaire.factory.SocialistMillionaireFactory;
+import it.polimi.dima.watchdog.utilities.ListenerUtility;
 import it.polimi.dima.watchdog.utilities.MyPrefFiles;
 import it.polimi.dima.watchdog.utilities.SMSUtility;
 import android.app.NotificationManager;
@@ -238,7 +239,9 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 				MyPrefFiles.setMyPreference(MyPrefFiles.SMP_STATUS, preferenceKey, this.other, this.context);
 			}
 			else{
+				
 				MyPrefFiles.setMyPreference(MyPrefFiles.ASSOCIATED, this.other, this.other, this.context);
+				ListenerUtility.getInstance(this.context).notifySmpOver(this.other);
 				Log.i("[DEBUG_SMP]", "[DEBUG_SMP] FULL_SMP_SUCCESSFUL " + MyPrefFiles.getMyPreference(MyPrefFiles.KEYRING, this.other, this.context));
 			
 				//TODO notificare il fragment
@@ -358,6 +361,7 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 		//... salvo il numero in associated se non bisognerà fare il giro di boa...
 		if(MyPrefFiles.existsPreference(MyPrefFiles.SMP_STATUS, this.other + MyPrefFiles.HASH_FORWARDED, this.context)){
 			MyPrefFiles.setMyPreference(MyPrefFiles.ASSOCIATED, this.other, this.other, this.context);
+			ListenerUtility.getInstance(this.context).notifySmpOver(this.other);
 		}
 		
 		//... e segno di essere disponibile a iniziare una sessione di comando
