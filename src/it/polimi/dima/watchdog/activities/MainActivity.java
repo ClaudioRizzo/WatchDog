@@ -139,10 +139,11 @@ public class MainActivity extends ActionBarActivity implements
 
 	@Override
 	public void onSmpOver(String other) {
-		 NotificationUtilities.CreatePopup("Message from the system",
+		/* NotificationUtilities.CreatePopup("Message from the system",
 		 "The association with " + other +
 		 " has succeed. Refresh the gps/sire view to start sending command messages.",
-		 "ASSOCIATION_SUCCESS", this);
+		 "ASSOCIATION_SUCCESS", this);*/
+		Log.i("DEBUG", "DEBUG: dovrei creare il popup");
 
 	}
 
