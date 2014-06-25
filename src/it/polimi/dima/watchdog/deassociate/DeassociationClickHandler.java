@@ -29,7 +29,7 @@ public class DeassociationClickHandler implements OnClickListener {
 		MyPrefFiles.eraseSmpPreferences(this.number, this.context);
 		this.view.findViewById(R.id.text_view_number).setVisibility(View.GONE);
 		this.view.findViewById(R.id.button_delete_association).setVisibility(View.GONE);
-		NotificationUtilities.CreatePopup("Notification from the system", "You succesfully removed " + this.number + " from your associated numbers list!", "DEASSOCIATION_SUCCESS", this.context, false);
+		NotificationUtilities.CreatePopup("Notification from the system", "You succesfully removed " + this.number + " from your associated numbers list! Refresh the page if you still see it.", "DEASSOCIATION_SUCCESS", this.context, false);
 		this.mCallBack.notifyDataSetChanged();
 	}
 }

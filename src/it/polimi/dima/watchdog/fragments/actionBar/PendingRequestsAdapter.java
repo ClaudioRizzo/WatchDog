@@ -191,6 +191,7 @@ public class PendingRequestsAdapter extends BaseAdapter {
 		
 		rawView.findViewById(R.id.text_view_pending_number).setVisibility(View.GONE);
 		rawView.findViewById(R.id.text_view_pending_question).setVisibility(View.GONE);
+		rawView.findViewById(R.id.text_view_message_waiting).setVisibility(View.GONE);
 		
 		notifyDataSetChanged();
 	}

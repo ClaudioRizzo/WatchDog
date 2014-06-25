@@ -89,6 +89,16 @@
         android:text="Refuse"
         android:textSize="18dp" />
 
-    
+    <TextView
+        android:id="@+id/text_view_message_waiting"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_below="@+id/button_refuse_smp"
+        android:layout_centerHorizontal="true"
+        android:textSize="20dp"
+        android:gravity="center_horizontal"
+        android:textAlignment="gravity"
+        android:text="After you accept wait for a notification" />
 
 </RelativeLayout>

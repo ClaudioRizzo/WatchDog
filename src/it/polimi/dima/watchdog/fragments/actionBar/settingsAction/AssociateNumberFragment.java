@@ -141,6 +141,6 @@ public class AssociateNumberFragment extends Fragment implements OnClickListener
 		view.findViewById(R.id.edit_text_associate_answer).setVisibility(View.GONE);
 		view.findViewById(R.id.button_associate).setVisibility(View.GONE);
 		
-		NotificationUtilities.CreatePopup("Message from the system", "The association has started", "ASSOCIATION_STARTED", this.context, false);
+		NotificationUtilities.CreatePopup("Message from the system", "The association has started, wait for a notification", "ASSOCIATION_STARTED", this.context, false);
 	}
 }
