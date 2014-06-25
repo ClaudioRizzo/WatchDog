@@ -178,8 +178,11 @@ public class MainActivity extends ActionBarActivity implements
 		 * " has succeed. Refresh the gps/siren view to start sending command messages."
 		 * , "ASSOCIATION_SUCCESS", this);
 		 */
-		NotificationUtilities.showShortToastMessage("The association with " + other + " has succeed. Refresh the gps/siren view to start sending command messages.", this);
+		//NotificationUtilities.showShortToastMessage("The association with " + other + " has succeed. Refresh the gps/siren view to start sending command messages.", this);
 		Log.i("DEBUG", "DEBUG: dovrei creare il popup");
+		Intent intent = new Intent(this, SmpOverActivity.class);
+		intent.putExtra("other", other);
+		startActivity(intent);
 	}
 
 }

@@ -60,7 +60,7 @@ public class InitializeWizardFragment extends Fragment implements OnClickListene
 				ErrorManager.handleNonFatalError(ErrorFactory.DIFFERENT_PASSWORDS, this.context);
 			}
 			else{
-				NotificationUtilities.CreatePopup("Notification from the system", "The Password Was successfully created!", "PASSWORD_CREATED", this.context, true);
+				NotificationUtilities.CreatePopup("Notification from the system", "The Password has been successfully created!", "PASSWORD_CREATED", this.context, true);
 				byte[] hashToSave = PasswordUtils.computeHash(cleanPassword.getBytes(), this.salt, CryptoUtility.SHA_256);
 				cleanScreen(passwordTextView, confirmPasswordTextView, title, fragView);
 				this.mCallBack.saveWizardResults(true, hashToSave, this.salt);

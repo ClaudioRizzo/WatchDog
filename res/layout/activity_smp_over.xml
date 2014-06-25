@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <View
+        android:id="@+id/view1"
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="59dp"
+        android:background="@android:color/white" />
+
+    <TextView
+        android:id="@+id/smp_over_body"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/view1"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="24dp"
+        android:text="This will be overwritten"
+        android:textColor="@android:color/holo_green_light"
+        android:textSize="20dp"
+        android:gravity="center"
+        android:textAlignment="gravity" />
+
+    <TextView
+        android:id="@+id/smp_over_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/view1"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="18dp"
+        android:text="Message from the system"
+        android:textColor="@android:color/holo_green_light"
+        android:textSize="20dp" />
+
+    <Button
+        android:id="@+id/button_smp_over"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/smp_over_body"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="29dp"
+        android:text="Done"
+        android:textSize="18dp" />
+
+</RelativeLayout>
