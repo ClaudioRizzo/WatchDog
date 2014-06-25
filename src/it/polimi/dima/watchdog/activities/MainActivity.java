@@ -5,7 +5,6 @@ import it.polimi.dima.watchdog.gps.fragment.GpsMainFragment;
 import it.polimi.dima.watchdog.gps.fragments.localization.interfaces.MessageActionListener;
 import it.polimi.dima.watchdog.utilities.ListenerUtility;
 import it.polimi.dima.watchdog.utilities.MyPrefFiles;
-import it.polimi.dima.watchdog.utilities.NotificationUtilities;
 import it.polimi.dima.watchdog.utilities.drawer.MyDrawerUtility;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
