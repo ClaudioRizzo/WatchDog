@@ -30,7 +30,7 @@ public class MainActivity extends ActionBarActivity implements
 	MyDrawerUtility mDrawerUtil;
 	static final String ACTION = "android.intent.action.DATA_SMS_RECEIVED";
 	private boolean wizardDone;
-	public String TAG;
+	private String TAG;
 	
 	public String getTag(){
 		return this.TAG;
