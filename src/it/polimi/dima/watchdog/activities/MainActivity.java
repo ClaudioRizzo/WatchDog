@@ -36,8 +36,8 @@ public class MainActivity extends ActionBarActivity implements
 	static final String ACTION = "android.intent.action.DATA_SMS_RECEIVED";
 	private boolean wizardDone;
 	private String TAG;
-	
-	public String getTag(){
+
+	public String getTag() {
 		return this.TAG;
 	}
 
@@ -49,7 +49,6 @@ public class MainActivity extends ActionBarActivity implements
 
 		if (wizardDone) {
 
-			
 			ListenerUtility.getInstance(this).addListener(this);
 			getSupportActionBar().setTitle(R.string.default_tab);
 			setContentView(R.layout.activity_main_layout);
@@ -142,36 +141,43 @@ public class MainActivity extends ActionBarActivity implements
 
 		Log.i("[DEBUG]", "[DEBUG] ricevuta la locazione: tento di cambiare");
 
-		
-		
-		/*Intent intent = new Intent(this, MyMapActivity.class);
-		intent.putExtra("latitude", lat);
-		intent.putExtra("longitude", lon);
-		startActivity(intent);*/
+		/*
+		 * Intent intent = new Intent(this, MyMapActivity.class);
+		 * intent.putExtra("latitude", lat); intent.putExtra("longitude", lon);
+		 * startActivity(intent);
+		 */
 		// TODO: start new activity map
 		notifyUser(lat, lon);
 	}
-	
+
 	private void notifyUser(double lat, double lon) {
-		NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this).setSmallIcon(android.R.drawable.stat_notify_chat).setContentTitle("prova").setContentText("hello world").setAutoCancel(true);
+		NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(
+				this).setSmallIcon(android.R.drawable.stat_notify_chat)
+				.setContentTitle("Localized")
+				.setContentText("Your phone has been localized")
+				.setAutoCancel(true);
 		Intent resultIntent = new Intent(this, MyMapActivity.class);
 		resultIntent.putExtra("latitude", lat);
 		resultIntent.putExtra("longitude", lon);
 		TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
 		stackBuilder.addParentStack(PendingRequestsActivity.class);
 		stackBuilder.addNextIntent(resultIntent);
-		PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+		PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0,
+				PendingIntent.FLAG_UPDATE_CURRENT);
 		mBuilder.setContentIntent(resultPendingIntent);
-		NotificationManager mNotificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
+		NotificationManager mNotificationManager = (NotificationManager) this
+				.getSystemService(Context.NOTIFICATION_SERVICE);
 		mNotificationManager.notify(0, mBuilder.build());
 	}
 
 	@Override
 	public void onSmpOver(String other) {
-		/*NotificationUtilities.CreatePopup("Message from the system",
-		 "The association with " + other +
-		 " has succeed. Refresh the gps/siren view to start sending command messages.",
-		 "ASSOCIATION_SUCCESS", this);*/
+		/*
+		 * NotificationUtilities.CreatePopup("Message from the system",
+		 * "The association with " + other +
+		 * " has succeed. Refresh the gps/siren view to start sending command messages."
+		 * , "ASSOCIATION_SUCCESS", this);
+		 */
 		Log.i("DEBUG", "DEBUG: dovrei creare il popup");
 
 	}
