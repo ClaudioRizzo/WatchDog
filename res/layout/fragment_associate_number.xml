@@ -50,7 +50,10 @@
         android:layout_marginBottom="38dp"
         android:ems="10"
         android:hint="Phone Number"
-        android:inputType="phone" />
+        android:inputType="phone" >
+        
+        <requestFocus />
+    </EditText>
 
     <EditText
         android:id="@+id/edit_text_associate_question"

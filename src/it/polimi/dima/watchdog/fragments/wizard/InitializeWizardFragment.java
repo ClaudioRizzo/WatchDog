@@ -5,6 +5,7 @@ import it.polimi.dima.watchdog.crypto.CryptoUtility;
 import it.polimi.dima.watchdog.errors.ErrorFactory;
 import it.polimi.dima.watchdog.errors.ErrorManager;
 import it.polimi.dima.watchdog.password.PasswordUtils;
+import it.polimi.dima.watchdog.utilities.NotificationUtilities;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
@@ -78,6 +79,7 @@ public class InitializeWizardFragment extends Fragment implements OnClickListene
 		passwordTextView.setVisibility(View.GONE);
 		confirmPasswordTextView.setVisibility(View.GONE);
 		title.setVisibility(View.GONE);
+		NotificationUtilities.CreatePopup("Notification from the system", "The Password Was successfully created!", "PASSWORD_CREATED", this.context);
 	}
 
 	@Override
