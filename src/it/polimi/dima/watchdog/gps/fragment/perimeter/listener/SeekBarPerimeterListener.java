@@ -24,7 +24,7 @@ public class SeekBarPerimeterListener implements OnSeekBarChangeListener {
 	public void onProgressChanged(SeekBar seekBar, int progress,
 			boolean fromUser) {
 		TextView radiusView = (TextView) ((ActionBarActivity) this.context).findViewById(R.id.text_view_settled_radius);
-		radiusView.setText("Hai settato un raggio di: "+progress+" metri");
+		radiusView.setText("Radius settled to: "+progress+" meters");
 		
 		this.tracker.setRadius(progress);
 

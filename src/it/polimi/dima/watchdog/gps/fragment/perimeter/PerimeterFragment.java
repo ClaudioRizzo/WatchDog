@@ -5,9 +5,13 @@ import it.polimi.dima.watchdog.gps.fragment.perimeter.listener.PerimeterTrackerL
 import it.polimi.dima.watchdog.gps.fragment.perimeter.listener.SeekBarPerimeterListener;
 import it.polimi.dima.watchdog.gps.fragment.perimeter.listener.StopTrackButtonListener;
 import it.polimi.dima.watchdog.gps.fragment.perimeter.listener.TrackButtonListener;
+import it.polimi.dima.watchdog.siren.SirenService;
 import it.polimi.dima.watchdog.utilities.FragmentAdapterLifecycle;
+import it.polimi.dima.watchdog.utilities.SMSUtility;
+import it.polimi.dima.watchdog.utilities.ServicesUtilities;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationManager;
@@ -19,6 +23,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.SeekBar;
+
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -125,7 +130,12 @@ public class PerimeterFragment extends Fragment implements
 	@Override
 	public void onPerimeterViolated() {
 		Log.i("[DEBUG]", "[VIOLATE] ho violato il perimetro");
-		//TODO: la precisione non è troppo scarsa :( 
+		if(!ServicesUtilities.isMyServiceRunning(getActivity(), SirenService.class)){
+			Intent intent = new Intent(getActivity(),SirenService.class);
+			intent.putExtra(SMSUtility.COMMAND, SMSUtility.SIREN_ON);
+			getActivity().startService(intent);
+			
+		} 
 	}
 
 	@Override

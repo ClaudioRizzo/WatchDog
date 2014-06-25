@@ -36,8 +36,8 @@ public class TrackButtonListener implements OnClickListener {
 		}
 
 		this.tracker.getLocationUpdates();
-		((ActionBarActivity) this.context).findViewById(R.id.seek_bar_radius).setVisibility(View.INVISIBLE);
-		((ActionBarActivity) this.context).findViewById(R.id.linear_layout_seek_bar_values).setVisibility(View.INVISIBLE);
+		((ActionBarActivity) this.context).findViewById(R.id.seek_bar_radius).setVisibility(View.GONE);
+		((ActionBarActivity) this.context).findViewById(R.id.linear_layout_seek_bar_values).setVisibility(View.GONE);
 		
 
 	}
