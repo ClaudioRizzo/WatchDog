@@ -111,7 +111,7 @@ public class ErrorManager {
 	
 	private static void CreatePopup(String message, Context context){
 		if(context instanceof Activity){
-			NotificationUtilities.CreatePopup(ErrorFactory.TITLE, message, ErrorFactory.ERROR_TAG, context);
+			NotificationUtilities.CreatePopup(ErrorFactory.TITLE, message, ErrorFactory.ERROR_TAG, context, false);
 		}
 		else{
 			NotificationUtilities.showShortToastMessage(ErrorFactory.COMMAND_SESSION_ERROR, context);

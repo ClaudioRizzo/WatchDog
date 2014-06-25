@@ -83,6 +83,6 @@ public class ChangePasswordFragment extends Fragment {
 		old.setText("");
 		newP.setText("");
 		confirm.setText("");
-		NotificationUtilities.CreatePopup("Notification from the system", "The password was successfully updated!", "PWD_UPDATE_SUCCESS", this.context);
+		NotificationUtilities.CreatePopup("Notification from the system", "The password was successfully updated!", "PWD_UPDATE_SUCCESS", this.context, false);
 	}
 }
