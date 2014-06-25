@@ -7,11 +7,16 @@ import it.polimi.dima.watchdog.utilities.ListenerUtility;
 import it.polimi.dima.watchdog.utilities.MyPrefFiles;
 import it.polimi.dima.watchdog.utilities.NotificationUtilities;
 import it.polimi.dima.watchdog.utilities.drawer.MyDrawerUtility;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.TaskStackBuilder;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -137,11 +142,28 @@ public class MainActivity extends ActionBarActivity implements
 
 		Log.i("[DEBUG]", "[DEBUG] ricevuta la locazione: tento di cambiare");
 
-		Intent intent = new Intent(this, MyMapActivity.class);
+		
+		
+		/*Intent intent = new Intent(this, MyMapActivity.class);
 		intent.putExtra("latitude", lat);
 		intent.putExtra("longitude", lon);
-		startActivity(intent);
+		startActivity(intent);*/
 		// TODO: start new activity map
+		notifyUser(lat, lon);
+	}
+	
+	private void notifyUser(double lat, double lon) {
+		NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this).setSmallIcon(android.R.drawable.stat_notify_chat).setContentTitle("prova").setContentText("hello world").setAutoCancel(true);
+		Intent resultIntent = new Intent(this, MyMapActivity.class);
+		resultIntent.putExtra("latitude", lat);
+		resultIntent.putExtra("longitude", lon);
+		TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+		stackBuilder.addParentStack(PendingRequestsActivity.class);
+		stackBuilder.addNextIntent(resultIntent);
+		PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+		mBuilder.setContentIntent(resultPendingIntent);
+		NotificationManager mNotificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
+		mNotificationManager.notify(0, mBuilder.build());
 	}
 
 	@Override
