@@ -171,13 +171,6 @@ public class MainActivity extends ActionBarActivity implements
 
 	@Override
 	public void onSmpOver(String other) {
-		/*
-		 * NotificationUtilities.CreatePopup("Message from the system",
-		 * "The association with " + other +
-		 * " has succeed. Refresh the gps/siren view to start sending command messages."
-		 * , "ASSOCIATION_SUCCESS", this);
-		 */
-		//NotificationUtilities.showShortToastMessage("The association with " + other + " has succeed. Refresh the gps/siren view to start sending command messages.", this);
 		Log.i("DEBUG", "DEBUG: dovrei creare il popup");
 		Intent intent = new Intent(this, SmpOverActivity.class);
 		intent.putExtra("other", other);

@@ -23,6 +23,9 @@ import android.widget.TextView;
  */
 public class PendingRequestsFragment extends Fragment {
 
+	private PendingRequestsAdapter mAdapter;
+	
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.fragment_pending_requests, container, false);
@@ -35,8 +38,8 @@ public class PendingRequestsFragment extends Fragment {
 			message.setVisibility(View.VISIBLE);
 		}
 		else{
-			PendingRequestsAdapter mAdapter = new PendingRequestsAdapter(getActivity(), getData());
-			mListView.setAdapter(mAdapter);
+			this.mAdapter = new PendingRequestsAdapter(getActivity(), getData());
+			mListView.setAdapter(this.mAdapter);
 		}
 		
 		return v;

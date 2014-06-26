@@ -10,7 +10,7 @@ import android.support.v4.app.Fragment;
  *
  */
 public class GpsFactory extends FeatureFactory {
-
+	
 	@Override
 	public Fragment getFragment(int pos) {
 		switch (pos) {

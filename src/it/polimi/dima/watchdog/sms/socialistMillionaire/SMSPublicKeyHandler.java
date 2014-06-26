@@ -5,6 +5,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.spec.InvalidKeySpecException;
 
+import it.polimi.dima.watchdog.R;
 import it.polimi.dima.watchdog.activities.PendingRequestsActivity;
 import it.polimi.dima.watchdog.crypto.PublicKeyAutenticator;
 import it.polimi.dima.watchdog.crypto.SharedSecretAgreement;
@@ -302,7 +303,7 @@ public class SMSPublicKeyHandler extends BroadcastReceiver implements SMSPublicK
 	 * Notifica l'utente della richiesta di associazione.
 	 */
 	private void notifyUser() {
-		NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this.context).setSmallIcon(android.R.drawable.stat_notify_chat).setContentTitle("prova").setContentText("hello world").setAutoCancel(true);
+		NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this.context).setSmallIcon(R.drawable.ic_launcher).setContentTitle("Notification from Watchdog").setContentText("Request from " + this.other).setAutoCancel(true);
 		Intent resultIntent = new Intent(this.context, PendingRequestsActivity.class);
 		TaskStackBuilder stackBuilder = TaskStackBuilder.create(this.context);
 		stackBuilder.addParentStack(PendingRequestsActivity.class);

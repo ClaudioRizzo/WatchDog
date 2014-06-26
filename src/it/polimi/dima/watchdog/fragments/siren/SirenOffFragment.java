@@ -3,7 +3,6 @@ package it.polimi.dima.watchdog.fragments.siren;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
 import it.polimi.dima.watchdog.R;
 import it.polimi.dima.watchdog.utilities.FragmentAdapterLifecycle;
 import it.polimi.dima.watchdog.utilities.MyPrefFiles;
@@ -24,16 +23,18 @@ import android.widget.TextView;
  */
 public class SirenOffFragment extends Fragment implements FragmentAdapterLifecycle {
 
+	private SirenOffAdapter adapter;
+	
 	@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
         Bundle savedInstanceState) {
 		
-        View v =  inflater.inflate(R.layout.fragment_siren_off, container, false);
+        View view =  inflater.inflate(R.layout.fragment_siren_off, container, false);
         
-        TextView message = (TextView) v.findViewById(R.id.message_siren_off_no_contacts);
+        TextView message = (TextView) view.findViewById(R.id.message_siren_off_no_contacts);
 		message.setVisibility(View.GONE);
         
-        ListView mListView = (ListView) v.findViewById(R.id.list_siren_off);
+        ListView mListView = (ListView) view.findViewById(R.id.list_siren_off);
 
 		List<String> contacts = getData();
 		
@@ -41,19 +42,17 @@ public class SirenOffFragment extends Fragment implements FragmentAdapterLifecyc
 			message.setVisibility(View.VISIBLE);
 		}
 		else{
-			SirenOffAdapter adapter = new SirenOffAdapter(getActivity(), getData());
-			mListView.setAdapter(adapter);
+			this.adapter = new SirenOffAdapter(getActivity(), getData());
+			mListView.setAdapter(this.adapter);
 		}
 		
-		return v;
+		return view;
     }
 	
 	private List<String> getData() {
 		Map<String, ?> pendingReqMap = getActivity().getSharedPreferences(
 				MyPrefFiles.ASSOCIATED, Context.MODE_PRIVATE).getAll();
 		List<String> data = new ArrayList<String>();
-		// data.add("+393488941694");
-		Log.i("[DEBUG]", "[DEBUG] prima del for");
 		for (String num : pendingReqMap.keySet()) {
 			Log.i("[DEBUG]", "[DEBUG] ci sono numeri associati " + num);
 			data.add(num);
@@ -62,8 +61,12 @@ public class SirenOffFragment extends Fragment implements FragmentAdapterLifecyc
 	}
 
 	@Override
+	public void onResume(){
+		super.onResume();
+	}
+	
+	@Override
 	public void onResumeFragment() {
-		// TODO Auto-generated method stub
 		
 	}
 

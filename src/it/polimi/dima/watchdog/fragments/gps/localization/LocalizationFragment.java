@@ -8,7 +8,6 @@ import java.security.Security;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -27,19 +26,21 @@ import android.widget.TextView;
 public class LocalizationFragment extends Fragment implements FragmentAdapterLifecycle {
 
 	public static String TAG = "LOCALIZATION_FRAGMENT";
+	private GpsAdapter adapter;
+	
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		Security.addProvider(new org.spongycastle.jce.provider.BouncyCastleProvider());
 
-		View v = inflater.inflate(R.layout.fragment_localization, container,
+		View view = inflater.inflate(R.layout.fragment_localization, container,
 				false);
 		
-		TextView message = (TextView) v.findViewById(R.id.message_localize_no_contacts);
+		TextView message = (TextView) view.findViewById(R.id.message_localize_no_contacts);
 		message.setVisibility(View.GONE);
 
-		ListView mListView = (ListView) v.findViewById(R.id.list_localize);
+		ListView mListView = (ListView) view.findViewById(R.id.list_localize);
 
 		List<String> contacts = getData();
 		
@@ -47,18 +48,16 @@ public class LocalizationFragment extends Fragment implements FragmentAdapterLif
 			message.setVisibility(View.VISIBLE);
 		}
 		else{
-			GpsAdapter adapter = new GpsAdapter(getActivity(), getData());
-			mListView.setAdapter(adapter);
+			this.adapter = new GpsAdapter(getActivity(), getData());
+			mListView.setAdapter(this.adapter);
 		}
-		return v;
+		return view;
 	}
 
 	private List<String> getData() {
 		Map<String, ?> pendingReqMap = getActivity().getSharedPreferences(
 				MyPrefFiles.ASSOCIATED, Context.MODE_PRIVATE).getAll();
 		List<String> data = new ArrayList<String>();
-		// data.add("+393488941694");
-		Log.i("[DEBUG]", "[DEBUG] prima del for");
 		for (String num : pendingReqMap.keySet()) {
 			Log.i("[DEBUG]", "[DEBUG] ci sono numeri associati " + num);
 			data.add(num);
@@ -68,13 +67,16 @@ public class LocalizationFragment extends Fragment implements FragmentAdapterLif
 
 	@Override
 	public void onResumeFragment() {
-		// TODO Auto-generated method stub
 		
+	}
+	
+	@Override
+	public void onResume(){
+		super.onResume();
 	}
 
 	@Override
 	public void onPauseFragment() {
-		// TODO Auto-generated method stub
 		
 	}
 }
