@@ -22,6 +22,6 @@ public class SmsSirenFactory extends FeatureFactory {
 		case 2:
 			return new SirenOffLocalFragment();
 		}
-		throw new IllegalStateException("Per il Remote Control questa posizione non esiste!");
+		throw new IllegalStateException("Questa posizione non esiste!");
 	}
 }

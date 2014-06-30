@@ -11,10 +11,10 @@ public class SocialistRequestWrapper {
 	}
 
 	public String getQuestion() {
-		return question;
+		return this.question;
 	}
 	
 	public String getNumber() {
-		return number;
+		return this.number;
 	}
 }

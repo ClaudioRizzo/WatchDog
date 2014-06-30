@@ -8,12 +8,9 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.SecureRandom;
 import java.security.Security;
-
 import org.spongycastle.jce.ECNamedCurveTable;
 import org.spongycastle.jce.spec.ECParameterSpec;
-
 import android.annotation.SuppressLint;
-import android.util.Log;
 
 /**
  * Classe che genera una coppia di chiavi pubblica/privata a partire dalla curva ellittica secp256r1 e da un
@@ -22,7 +19,7 @@ import android.util.Log;
  * @author emanuele
  *
  */
-public class ECKeyPairGeneratorWrapper {
+public class ECKeyPairGenerator {
 		
 	private PublicKey pub;
 	private PrivateKey priv;
@@ -30,7 +27,7 @@ public class ECKeyPairGeneratorWrapper {
 	
 	//TODO si può fare qualcosa?
 	@SuppressLint("TrulyRandom")
-	public ECKeyPairGeneratorWrapper() throws NoSuchAlgorithmException, NoSuchProviderException{
+	public ECKeyPairGenerator() throws NoSuchAlgorithmException, NoSuchProviderException{
 		Security.addProvider(new org.spongycastle.jce.provider.BouncyCastleProvider());
 		this.secureRandom = SecureRandom.getInstance(CryptoUtility.SHA1_PRNG);
 	}
@@ -65,19 +62,8 @@ public class ECKeyPairGeneratorWrapper {
 			keyPairGenerator.initialize(ellipticCurvesParameterSpecifiers, this.secureRandom);
 			KeyPair pair = keyPairGenerator.generateKeyPair();
 			
-			if(pair == null){
-	        	Log.i("[DEBUG]", "NULL key generation");
-	        }
-			
 			this.pub = pair.getPublic();
 			this.priv = pair.getPrivate();
-			
-			if(this.priv == null){
-	        	Log.i("[DEBUG]", "NULL privkey generation");
-	        }
-	        if(this.pub == null){
-	        	Log.i("[DEBUG]", "NULL pubkey generation");
-	        }
 		}
 		catch(Exception e){
 			e.printStackTrace();

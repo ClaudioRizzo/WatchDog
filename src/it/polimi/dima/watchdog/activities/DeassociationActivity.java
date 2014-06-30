@@ -5,7 +5,6 @@ import it.polimi.dima.watchdog.fragments.actionBar.DeassociationFragment;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.MenuItem;
 
 public class DeassociationActivity extends ActionBarActivity {
@@ -31,7 +30,6 @@ public class DeassociationActivity extends ActionBarActivity {
 	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		Log.i("DEBUG", "DEBUG: ho cliccato su deassociate nella lista");
 		switch (item.getItemId()) {
 		case android.R.id.home:
 			NavUtils.navigateUpFromSameTask(this);

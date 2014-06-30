@@ -49,13 +49,23 @@ public class DeassociationAdapter extends BaseAdapter {
 			view = inflater.inflate(R.layout.list_item_associated_for_deletion, null);
 		}
 		RelativeLayout mRelativeLayout = (RelativeLayout) view.findViewById(R.id.relative_layout_associated_list_for_deletion);
-		
-		TextView numberTextView = (TextView) mRelativeLayout.findViewById(R.id.text_view_number);
 		String num = this.numbers.get(position);
-		numberTextView.setText(num);
 		
+		showNumber(mRelativeLayout, num);
+		showButton(mRelativeLayout, view, num);
+		
+		return view;	
+	}
+
+
+	private void showButton(RelativeLayout mRelativeLayout, View view, String num) {
 		Button localizeButton = (Button) mRelativeLayout.findViewById(R.id.button_delete_association);
 		localizeButton.setOnClickListener(new DeassociationClickHandler(view, this.context, num, this));
-		return view;	
+	}
+
+
+	private void showNumber(RelativeLayout mRelativeLayout, String num) {
+		TextView numberTextView = (TextView) mRelativeLayout.findViewById(R.id.text_view_number);
+		numberTextView.setText(num);
 	}
 }

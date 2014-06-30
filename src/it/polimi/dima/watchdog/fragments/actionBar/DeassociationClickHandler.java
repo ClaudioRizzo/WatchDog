@@ -4,7 +4,6 @@ import it.polimi.dima.watchdog.R;
 import it.polimi.dima.watchdog.utilities.MyPrefFiles;
 import it.polimi.dima.watchdog.utilities.NotificationUtilities;
 import android.content.Context;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 
@@ -25,7 +24,6 @@ public class DeassociationClickHandler implements OnClickListener {
 	
 	@Override
 	public void onClick(View v) {
-		Log.i("DEBUG", "DEBUG: ho cancellato le preferenze");
 		MyPrefFiles.eraseSmpPreferences(this.number, this.context);
 		this.view.findViewById(R.id.text_view_number).setVisibility(View.GONE);
 		this.view.findViewById(R.id.button_delete_association).setVisibility(View.GONE);

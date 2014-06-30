@@ -1,13 +1,8 @@
 package it.polimi.dima.watchdog.crypto;
 
-
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.Signature;
-import java.security.SignatureException;
-
 import android.util.Base64;
 import it.polimi.dima.watchdog.exceptions.*;
 
@@ -137,16 +132,7 @@ public class ECDSA_Signature {
 	        this.signature = this.sig.sign();
 	        this.stringSignature = Base64.encodeToString(this.signature, Base64.DEFAULT);
 		}
-		catch (NoSuchAlgorithmException e) {
-			this.sig = null;
-		} 
-		catch (SignatureException e) {
-			this.sig = null;
-		}
-		catch (InvalidKeyException e) {
-			this.sig = null;
-		}
-		if(this.sig == null){
+		catch (Exception e) {
 			throw new NoSignatureDoneException();
 		}
 	}
@@ -164,13 +150,7 @@ public class ECDSA_Signature {
 			verify.update(this.plaintext);
 			return verify.verify(this.signatureToVerify);
 		}
-		catch(SignatureException e){
-			throw new ErrorInSignatureCheckingException();
-		}
-		catch(InvalidKeyException e){
-			throw new ErrorInSignatureCheckingException();
-		}
-		catch(NoSuchAlgorithmException e){
+		catch(Exception e){
 			throw new ErrorInSignatureCheckingException();
 		}	
 	}

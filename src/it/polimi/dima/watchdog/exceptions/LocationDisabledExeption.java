@@ -8,5 +8,4 @@ public class LocationDisabledExeption extends LocationException {
 	public LocationDisabledExeption(String error) {
 		super(error);
 	}
-
 }

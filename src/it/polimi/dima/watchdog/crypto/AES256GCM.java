@@ -1,16 +1,12 @@
 package it.polimi.dima.watchdog.crypto;
 
 import java.security.Key;
-
 import javax.crypto.spec.SecretKeySpec;
-
 import org.spongycastle.crypto.InvalidCipherTextException;
 import org.spongycastle.crypto.engines.AESFastEngine;
 import org.spongycastle.crypto.modes.GCMBlockCipher;
 import org.spongycastle.crypto.params.AEADParameters;
 import org.spongycastle.crypto.params.KeyParameter;
-
-import android.util.Log;
 
 /**
  * Classe che wrappa la crittazione e la decrittazione con AES 256 in GCM mode of operation.
@@ -145,7 +141,6 @@ public class AES256GCM {
 		AEADParameters parameters = new AEADParameters(key, AES256GCM.TAG_LENGTH, this.iv);
 		GCMBlockCipher cipher = new GCMBlockCipher(new AESFastEngine());
 		cipher.init(AES256GCM.ENCRYPT, parameters);
-		Log.i("[DEBUG]", "[DEBUG-NULL-POINTER] "+this.plaintext);
 		byte[] ciphertext = new byte[cipher.getOutputSize(this.plaintext.length)];
 		int ciphertextLength = cipher.processBytes(this.plaintext, 0, this.plaintext.length, ciphertext, 0);
 		ciphertextLength += cipher.doFinal(ciphertext, ciphertextLength);
