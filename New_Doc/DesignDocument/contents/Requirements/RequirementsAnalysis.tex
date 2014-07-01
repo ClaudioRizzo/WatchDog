@@ -1,0 +1,169 @@
+\chapter{Requirements Analysis}
+\label{cap:RequirementsAnalysis} 
+
+
+\section{Actors}
+
+As said before, the main actor is usually a single user which uses the ap-
+plication on two different mobile phones, one being the stolen/lost one and
+the other the rescue one. It’s also possible a second actor to exists: a (very)
+trusted friend may be the one who sends remote commands to the target tele-
+phone; since a password authentication scheme is employed, it’s not possible
+to do any abuse in this case.
+
+\section{Functional Requirements}
+
+The application allows the user do to the following tasks:
+
+\begin{itemize}
+ \item Initialization
+ \item Mobile Phone Association
+ \item Password Change
+ \item Unilateral Deassociation
+ \item Remote Localization
+ \item Mobile Phone Mark
+ \item Remote Alarm Triggering
+ \item Local Alarm Off
+ \item Perimeter Selection
+\end{itemize}
+
+\section{Non Functional Requirements}
+
+The remote control of a cellphone is a critical activity and has many security
+and privacy requirements: the next paragraphs show them briefly: for in-depth
+explainations see the design section (4.3). %metti il riferimento latexiano
+
+\subsection{Privacy and Security: problems and Solutions}
+
+\bfseries 
+Sender authentication:
+\normalfont
+While the sender (telephone) authentication plays indeed a key role, it’s even
+more crucial the authentication of the person behind a control message; that’s
+the reason for employing a password based authentication scheme: in the
+initialization wizard the user is required to insert a password which is going
+to be needed to send a message to that telephone (the basic assumption
+is the password is known only by the mobile owner and by some people,
+possibly no one, he trusts). The password is stored hashed with SHA-256 in
+the application preferences, along with the hashing salt (a random token) to
+avoid both time-to-memory attacks (such as rainbow tables) and the equality
+of two hashes generated from two equal passwords; the salt is sent to another
+telephone after the process of public keys authentication (See section 4.3.6).
+
+
+\bfseries 
+Integrity:
+\normalfont
+The message received must be exactly the one sent: every transmission error
+or tampering must be detected and cause the abort of the current command
+session: no retransmission is done.
+
+
+\bfseries
+Authentication:
+\normalfont
+The receiver must have a secure way to understand which telephone the
+received message comes from.
+
+
+\bfseries 
+Non forgeability:
+\normalfont
+Nobody should be able to forge a command message which is both valid and
+correctly authenticated.
+
+
+\bfseries 
+Non Repudation:
+\normalfont
+The sender must not be able to deny he sent a specific message (if he actually
+did it).
+Digitally signing every command message can ensure integrity, authentica-
+tion, non repudiation and a weak defense against non forgeability: symmetric
+encryption (and in particular AES-256 in GCM mode of operation) is needed
+for full protection.
+
+
+\bfseries
+Message Confidentiality:
+\normalfont
+No one should be able to detect that and which command is sent to a mobile
+phone, so the command message is encrypted with the symmetric cipher
+AES-256 in GCM mode of operation (used for performance reasons and for a
+supplementary integrity check).
+
+
+
+\bfseries
+Asymmetric keys management:
+\normalfont
+Asymmetric keys management
+Digital signatures (and shared secrets computation as we will see) require
+asymmetric cryptography: in the initialization wizard the application gener-
+ates and stores in the preferences a key pair based on the elliptic curves; the
+reasons for this choice are performances and the smaller key length with re-
+spect to other keys (like RSA and DSA ones) at a fixed level of security. This
+makes the 140 characters (bytes) Android limit for a single sms no more a
+problem.
+
+
+\bfseries
+Symmetric key/initialization vector management:
+\normalfont
+AES-256, being a symmetric cipher, encrypts and decrypts a specific message
+with the same key, and, given the communication channel is not secure, the
+two parts must agree on the same key in some way; in particular ECDH is
+used to compute a common secret once and for all, then, when in need to
+send a message, the sender picks up a random 32 bytes salt, forwards it to
+the receiver, then both parts use a keyschedule algorithm (PBKDF2 with
+HMAC-SHA-256) to derive the same key starting from the secret and the
+salt. Furthermore the GCM mode of operation requires for every message the
+sender to generate a 12 bytes random initialization vector and to send it to
+the receiver.
+
+
+\bfseries
+Public keys mutual authentication:
+\normalfont
+
+While dealing with asymmetric cryptography, the main problem is to bind a
+public key with a real user to avoid active Man-In-The-Middle (MITM from
+now on) attacks. Neither a Pulic Key infrastructure (PKI) or a Web Of Trust
+(WOT) is employed, because they are both potentially insecure for various
+reasons (in the PKI case the presence of a trusted element, a certification
+autorithy hierarchy, which may be compromised/untrusted/fake; in the WOT
+case the presence of a net of trusted elements, the ones who signed a specific
+public key, which might be fake/bad persons; furthermore a key with no
+signatures is not automatically a fake one, but there isn’t a way to tell), so
+the application uses a modified version of the Socialist Millionaire Protocol
+(SMP) to authenticate to each one each other key; this requires the two parts
+to have a common secret (an answer to a particular question set up on the fly
+by the users during the SMP), which is easy to achieve, since the two users
+are likely to be the same person or two people who trust themselves.
+
+\subsection{Performance}
+
+We chose the crypto algorithms with an eye on the performances of the
+whole system: the key idea is the bottleneck must be the sms and not the
+computation time required by the encryptions/decryptions; for this reason
+the command messages are encrypted with a symmetric algorithm and not
+with RSA or ElGamal (or another asymmetric algorithm), since symmetric
+cryptography is faster than asymmetric at least by two orders of magnitude
+(they are very likely to be 3 anyway); however to do ECDH and ECDSA
+the application needs also an asymmetric key pair, which is generate during
+the intitial wizard once an for all, so an acceptable overhead. The public
+keys mutual validation (SMP + ECDH in practice) takes some time, but it’s
+done only one time per association, which means two telephones have to do it
+only when they associate themselves. Finally the digital signature/verification
+process are quite fast and so is the key-derivation from the secret and the
+salt.
+
+
+
+
+
+
+
+
+
+
