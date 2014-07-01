@@ -61,26 +61,31 @@ public class PendingRequestsAdapter extends BaseAdapter {
 			vi = inflater.inflate(R.layout.list_item_pending_requests, null);
 		}
 		RelativeLayout myRelativeLayout = (RelativeLayout) vi.findViewById(R.id.linear_layout_pending_list);
-		TextView numberTextView = (TextView) myRelativeLayout.findViewById(R.id.text_view_pending_number);
-		TextView questionTextView = (TextView) myRelativeLayout.findViewById(R.id.text_view_pending_question);
-		SocialistRequestWrapper current = data.get(position);
-		setStringToShow(current, numberTextView, questionTextView);
-
-		EditText secAnswerEditText = (EditText) myRelativeLayout.findViewById(R.id.edit_text_secret_answer);
-		EditText mySecQuestionEditText = (EditText) myRelativeLayout.findViewById(R.id.edit_text_my_secret_question);
-		EditText mySecAnswerEditText = (EditText) myRelativeLayout.findViewById(R.id.edit_text_my_secret_answer);
+		SocialistRequestWrapper current = this.data.get(position);
+		List<EditText> editTextList = getEditTexts(myRelativeLayout);
 		
-		
-		List<EditText> editTextList = new ArrayList<EditText>(Arrays.asList(secAnswerEditText, mySecQuestionEditText, mySecAnswerEditText));
-		
+		constructStringToShow(myRelativeLayout, current);
 		hideElementsIfInSmpSecondHalf(myRelativeLayout, editTextList,current.getNumber());
-		
 		handleRefuse(vi, current.getNumber(), editTextList);
 		handleSend(vi, current.getNumber(), editTextList);
 		
 		return vi;
 	}
 	
+	private void constructStringToShow(RelativeLayout myRelativeLayout, SocialistRequestWrapper current) {
+		TextView numberTextView = (TextView) myRelativeLayout.findViewById(R.id.text_view_pending_number);
+		TextView questionTextView = (TextView) myRelativeLayout.findViewById(R.id.text_view_pending_question);
+		setStringToShow(current, numberTextView, questionTextView);
+	}
+
+	private List<EditText> getEditTexts(RelativeLayout myRelativeLayout) {
+		EditText secAnswerEditText = (EditText) myRelativeLayout.findViewById(R.id.edit_text_secret_answer);
+		EditText mySecQuestionEditText = (EditText) myRelativeLayout.findViewById(R.id.edit_text_my_secret_question);
+		EditText mySecAnswerEditText = (EditText) myRelativeLayout.findViewById(R.id.edit_text_my_secret_answer);
+		
+		return new ArrayList<EditText>(Arrays.asList(secAnswerEditText, mySecQuestionEditText, mySecAnswerEditText));
+	}
+
 	/**
 	 * Chiamato se l'utente rifiuta di associare i telefoni
 	 * 
@@ -168,8 +173,8 @@ public class PendingRequestsAdapter extends BaseAdapter {
 	}
 
 	private void hideElementsIfInSmpSecondHalf(View v, List<EditText> editTextList, String other) {
-		
 		String question = MyPrefFiles.getSecQuestionIfExists(this.context, other);
+		
 		if (question != null) {
 			EditText mySecQuestionEditText = (EditText) v.findViewById(R.id.edit_text_my_secret_question);
 			EditText mySecAnswerEditText = (EditText) v.findViewById(R.id.edit_text_my_secret_answer);
@@ -179,16 +184,12 @@ public class PendingRequestsAdapter extends BaseAdapter {
 	}
 	
 	private void hideElementsAfterClick(View rawView, List<EditText> editTextList){
-		editTextList.get(0).setVisibility(View.GONE);
-		editTextList.get(1).setVisibility(View.GONE);
-		editTextList.get(2).setVisibility(View.GONE);
+		for(int i=0; i<=2; i++){
+			editTextList.get(i).setVisibility(View.GONE);
+		}
 		
-		Button acceptButton = (Button) rawView.findViewById(R.id.button_accept_smp);
-		Button refuseButton = (Button) rawView.findViewById(R.id.button_refuse_smp);
-		
-		acceptButton.setVisibility(View.GONE);
-		refuseButton.setVisibility(View.GONE);
-		
+		rawView.findViewById(R.id.button_accept_smp).setVisibility(View.GONE);
+		rawView.findViewById(R.id.button_refuse_smp).setVisibility(View.GONE);
 		rawView.findViewById(R.id.text_view_pending_number).setVisibility(View.GONE);
 		rawView.findViewById(R.id.text_view_pending_question).setVisibility(View.GONE);
 		rawView.findViewById(R.id.text_view_message_waiting).setVisibility(View.GONE);

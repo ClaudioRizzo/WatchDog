@@ -3,11 +3,9 @@ package it.polimi.dima.watchdog.crypto;
 import it.polimi.dima.watchdog.exceptions.ErrorInSignatureCheckingException;
 import it.polimi.dima.watchdog.exceptions.NoSignatureDoneException;
 import it.polimi.dima.watchdog.exceptions.NotECKeyException;
-
 import java.security.Key;
 import java.security.PrivateKey;
 import java.security.PublicKey;
-
 import org.spongycastle.crypto.InvalidCipherTextException;
 
 /**

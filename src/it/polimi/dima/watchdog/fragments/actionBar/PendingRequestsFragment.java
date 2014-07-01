@@ -2,11 +2,9 @@ package it.polimi.dima.watchdog.fragments.actionBar;
 
 import it.polimi.dima.watchdog.R;
 import it.polimi.dima.watchdog.utilities.MyPrefFiles;
-
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -34,6 +32,11 @@ public class PendingRequestsFragment extends Fragment {
 		ListView mListView = (ListView) v.findViewById(R.id.list_pending_requests);
 		List<SocialistRequestWrapper> contacts = getData();
 		
+		showContent(contacts, message, mListView);
+		return v;
+	}
+	
+	private void showContent(List<SocialistRequestWrapper> contacts, TextView message, ListView mListView){
 		if(contacts.size() == 0){
 			message.setVisibility(View.VISIBLE);
 		}
@@ -41,8 +44,6 @@ public class PendingRequestsFragment extends Fragment {
 			this.mAdapter = new PendingRequestsAdapter(getActivity(), getData());
 			mListView.setAdapter(this.mAdapter);
 		}
-		
-		return v;
 	}
 
 	private List<SocialistRequestWrapper> getData() {

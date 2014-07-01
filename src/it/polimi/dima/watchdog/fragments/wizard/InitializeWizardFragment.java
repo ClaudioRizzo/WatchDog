@@ -31,7 +31,7 @@ public class InitializeWizardFragment extends Fragment implements OnClickListene
 	}
 
 	public interface OnPasswordInizializedListener {
-		public void saveWizardResults(boolean wizardDone, byte[] hashToSave, byte[] salt) throws NoSuchAlgorithmException, NoSuchProviderException;
+		public void saveWizardResults(byte[] hashToSave, byte[] salt) throws NoSuchAlgorithmException, NoSuchProviderException;
 	}
 
 	@Override
@@ -63,7 +63,7 @@ public class InitializeWizardFragment extends Fragment implements OnClickListene
 				NotificationUtilities.CreatePopup("Notification from the system", "The Password has been successfully created!", "PASSWORD_CREATED", this.context, true);
 				byte[] hashToSave = PasswordUtils.computeHash(cleanPassword.getBytes(), this.salt, CryptoUtility.SHA_256);
 				cleanScreen(passwordTextView, confirmPasswordTextView, title, fragView);
-				this.mCallBack.saveWizardResults(true, hashToSave, this.salt);
+				this.mCallBack.saveWizardResults(hashToSave, this.salt);
 			}
 		}
 		catch (NoSuchAlgorithmException e)

@@ -1,15 +1,20 @@
 package it.polimi.dima.watchdog.fragments.actionBar;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import it.polimi.dima.watchdog.R;
 import it.polimi.dima.watchdog.errors.ErrorFactory;
 import it.polimi.dima.watchdog.errors.ErrorManager;
+import it.polimi.dima.watchdog.exceptions.NoSignatureDoneException;
+import it.polimi.dima.watchdog.exceptions.NoSuchPreferenceFoundException;
+import it.polimi.dima.watchdog.exceptions.NotECKeyException;
+import it.polimi.dima.watchdog.exceptions.WrongPasswordException;
 import it.polimi.dima.watchdog.password.PasswordResetter;
 import it.polimi.dima.watchdog.password.PasswordUtils;
 import it.polimi.dima.watchdog.utilities.NotificationUtilities;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -42,43 +47,47 @@ public class ChangePasswordFragment extends Fragment {
 			
 			@Override
 			public void onClick(View v) {
-				String newPass = newEdit.getText().toString();
-				String oldPass = oldEdit.getText().toString();
-				String check = checkEdit.getText().toString();
+				String newPassword = newEdit.getText().toString();
+				String oldPassword = oldEdit.getText().toString();
+				String newPasswordConfirmation = checkEdit.getText().toString();
 				
-				Log.i("DEBUG", "DEBUG: OLD = " + oldPass);
-				Log.i("DEBUG", "DEBUG: NEW = " + newPass);
-				Log.i("DEBUG", "DEBUG: CONF = " + check);
-				
-				if(PasswordUtils.isEmpty(oldPass) || PasswordUtils.isEmpty(newPass) || PasswordUtils.isEmpty(check)){
-					Log.i("DEBUG", "DEBUG: QUALCHE CAMPO è VUOTO");
-					ErrorManager.handleNonFatalError(ErrorFactory.BLANK_FIELD, context);
-				}
-				else if(!newPass.matches(PasswordUtils.PASSWORD_REGEX)){
-					Log.i("DEBUG", "DEBUG: BAD PASSWORD: NON MATCHA LA REGEX");
-					ErrorManager.handleNonFatalError(ErrorFactory.BAD_PASSWORD, context);
-				}
-				else if(newPass.equals(check)) {
-					Log.i("DEBUG", "DEBUG: NEW == CHECK");
-						
-					try {
-						PasswordResetter resetter = new PasswordResetter(oldPass, newPass, getActivity());
-						resetter.changePassword();
-						resetter.storePasswordHashAndSalt();
-						clearScreen(oldEdit, newEdit, checkEdit);
-						resetter.notifyAllContacts();
-					} catch (Exception e) {
-						ErrorManager.handleNonFatalError(e.getMessage(), context);
-					}
-				} else {
-					Log.i("DEBUG", "DEBUG: NEW != CHECK");
-					ErrorManager.handleNonFatalError(ErrorFactory.WRONG_PASSWORD, context);
-				}
-				
+				tryChangingPassword(oldPassword, newPassword, newPasswordConfirmation, oldEdit, newEdit, checkEdit);
 			}
 		});
 	}
 	
+	protected void tryChangingPassword(String oldPassword, String newPassword, String newPasswordConfirmation, EditText oldEdit, EditText newEdit, EditText checkEdit) {
+		if(PasswordUtils.isEmpty(oldPassword) || PasswordUtils.isEmpty(newPassword) || PasswordUtils.isEmpty(newPasswordConfirmation)){
+			ErrorManager.handleNonFatalError(ErrorFactory.BLANK_FIELD, this.context);
+		}
+		else if(!newPassword.matches(PasswordUtils.PASSWORD_REGEX)){
+			ErrorManager.handleNonFatalError(ErrorFactory.BAD_PASSWORD, this.context);
+		}
+		else if(newPassword.equals(newPasswordConfirmation)) {
+			tryToResetAndNotify(oldPassword, newPassword, oldEdit, newEdit, checkEdit);
+		}
+		else {
+			ErrorManager.handleNonFatalError(ErrorFactory.WRONG_PASSWORD, this.context);
+		}
+	}
+
+	private void tryToResetAndNotify(String oldPassword, String newPassword, EditText oldEdit, EditText newEdit, EditText checkEdit) {
+		try {
+			resetAndNotify(oldPassword, newPassword, oldEdit, newEdit, checkEdit);
+		} 
+		catch (Exception e) {
+			ErrorManager.handleNonFatalError(e.getMessage(), this.context);
+		}
+	}
+
+	private void resetAndNotify(String oldPassword, String newPassword, EditText oldEdit, EditText newEdit, EditText checkEdit) throws NoSuchAlgorithmException, WrongPasswordException, InvalidKeySpecException, NoSuchPreferenceFoundException, NoSignatureDoneException, NotECKeyException {
+		PasswordResetter resetter = new PasswordResetter(oldPassword, newPassword, getActivity());
+		resetter.changePassword();
+		resetter.storePasswordHashAndSalt();
+		clearScreen(oldEdit, newEdit, checkEdit);
+		resetter.notifyAllContacts();
+	}
+
 	public void clearScreen(EditText old, EditText newP, EditText confirm){
 		old.setText("");
 		newP.setText("");

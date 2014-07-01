@@ -46,7 +46,7 @@ public class MainActivity extends ActionBarActivity implements
 		this.wizardDone = MyPrefFiles.isWizardDone(this);
 		TAG = "main";
 
-		if (wizardDone) {
+		if (this.wizardDone) {
 
 			ListenerUtility.getInstance(this).addListener(this);
 			getSupportActionBar().setTitle(R.string.default_tab);
@@ -115,7 +115,7 @@ public class MainActivity extends ActionBarActivity implements
 	@Override
 	protected void onPostCreate(Bundle savedInstanceState) {
 		super.onPostCreate(savedInstanceState);
-		if (wizardDone)
+		if (this.wizardDone)
 			this.mDrawerUtil.syncDrawerToggle();
 	}
 
@@ -123,7 +123,7 @@ public class MainActivity extends ActionBarActivity implements
 	public void onConfigurationChanged(Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
 
-		if (wizardDone)
+		if (this.wizardDone)
 			this.mDrawerUtil.onConfigurationChangedNeeded(newConfig);
 	}
 

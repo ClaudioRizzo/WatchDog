@@ -43,7 +43,6 @@ public class AssociateNumberFragment extends Fragment implements OnClickListener
 	public void onClick(View v) {
 		this.context = getActivity();
 		try{
-			Log.i("[DEBUG]", "Ho cliccato per inviare");
 			
 			try{
 				this.getNumber();

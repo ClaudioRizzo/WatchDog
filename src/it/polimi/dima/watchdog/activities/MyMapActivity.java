@@ -51,6 +51,4 @@ public class MyMapActivity extends ActionBarActivity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
-	
-	
 }
