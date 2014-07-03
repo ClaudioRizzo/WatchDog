@@ -67,6 +67,11 @@ succesfully updated and the user notified back.
 
 \section{Unilateral Deassociation}
 
+The user selects from the list of his contacts the one he wants to deassociate
+with and confirms his intention by clicking on the apposite button. The
+relative preferences are deleted, but the "target" is not notified.
+
+
 \newpage
 \subsection{Activity Diagram}
 
@@ -79,6 +84,14 @@ succesfully updated and the user notified back.
 
 \section{Remote Localization}
 
+The user (which sees a list of his contacts/associated numbers) types the
+target password and confirms the intention to send a localize command by
+clicking on the apposite button. After an handshake (done by sms exchanging)
+the target phone executes the command and sends back a failure message or
+his actual coordinates. The original sender receives a notification with a map
+and a marker indicating the target position.
+
+
 \newpage
 \subsection{Activity Diagram}
 
@@ -88,14 +101,24 @@ succesfully updated and the user notified back.
 \subsection{User Interface Design}
 
 \section{Mobile Phone Mark}
+The mark features have been left unimplemented: they are in the TODO list,
+so no use cases for now.
+
 
 \newpage
-\subsection{Activity Diagram}
+%\subsection{Activity Diagram}
 
-\newpage
-\subsection{User Interface Design}
+%\newpage
+%\subsection{User Interface Design}
 
 \section{Remote Alarm Triggering: Activate and Deactivate Siren}
+
+The user selects from his contacts the target and confirms by clicking on a
+specific button the will to send a siren on/siren off command. The command
+session is similar to the localization one: the only difference is that the re-
+turned message is only an ack or a failure code. The siren off is simply ignored
+if the alarm in not active. There is also a feature which allows a user to turn
+off locally a siren by inserting the password and clicking on the button.
 
 \newpage
 \subsection{Activity Diagram}
@@ -108,6 +131,12 @@ succesfully updated and the user notified back.
 \subsection{User Interface Design}
 
 \section{Perimeter Selection}
+
+The perimeter selection feature, when activated, must select a circle area
+centered where the cellphone is at that moment, and trigger an alarm if the
+mobile phone exits from there. The circular limit has also to be visible on a
+map on the telefone
+
 
 \newpage
 \subsection{Activity Diagram}
