@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<class-diagram version="1.1.6" icons="true" always-add-relationships="false" generalizations="true" realizations="true" 
+  associations="true" dependencies="false" nesting-relationships="true">  
+  <class id="1" language="java" name="it.polimi.dima.watchdog.sms.socialistMillionaire.SMSPublicKeyHandler" 
+    project="WatchDog" file="/WatchDog/src/it/polimi/dima/watchdog/sms/socialistMillionaire/SMSPublicKeyHandler.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="215" y="368"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="2" language="java" name="it.polimi.dima.watchdog.sms.socialistMillionaire.PublicKeyRequestCodeMessage" 
+    project="WatchDog" 
+    file="/WatchDog/src/it/polimi/dima/watchdog/sms/socialistMillionaire/PublicKeyRequestCodeMessage.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="128" y="110"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="3" language="java" name="it.polimi.dima.watchdog.sms.socialistMillionaire.PublicKeySentCodeMessage" 
+    project="WatchDog" 
+    file="/WatchDog/src/it/polimi/dima/watchdog/sms/socialistMillionaire/PublicKeySentCodeMessage.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="426" y="81"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="4" language="java" name="it.polimi.dima.watchdog.sms.socialistMillionaire.SecretQuestionSentCodeMessage" 
+    project="WatchDog" 
+    file="/WatchDog/src/it/polimi/dima/watchdog/sms/socialistMillionaire/SecretQuestionSentCodeMessage.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="685" y="192"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="5" language="java" 
+    name="it.polimi.dima.watchdog.sms.socialistMillionaire.SecretAnswerAndPublicKeyHashSentCodeMessage" 
+    project="WatchDog" 
+    file="/WatchDog/src/it/polimi/dima/watchdog/sms/socialistMillionaire/SecretAnswerAndPublicKeyHashSentCodeMessage.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="640" y="357"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="6" language="java" name="it.polimi.dima.watchdog.sms.socialistMillionaire.KeyValidatedCodeMessage" 
+    project="WatchDog" 
+    file="/WatchDog/src/it/polimi/dima/watchdog/sms/socialistMillionaire/KeyValidatedCodeMessage.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="648" y="566"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="7" language="java" name="it.polimi.dima.watchdog.sms.socialistMillionaire.IDontWantToAssociateCodeMessage" 
+    project="WatchDog" 
+    file="/WatchDog/src/it/polimi/dima/watchdog/sms/socialistMillionaire/IDontWantToAssociateCodeMessage.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="229" y="634"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="8" language="java" name="it.polimi.dima.watchdog.sms.ParsableSMS" project="WatchDog" 
+    file="/WatchDog/src/it/polimi/dima/watchdog/sms/ParsableSMS.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="520" y="957"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="9" language="java" name="it.polimi.dima.watchdog.crypto.PublicKeyAutenticator" project="WatchDog" 
+    file="/WatchDog/src/it/polimi/dima/watchdog/crypto/PublicKeyAutenticator.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="121" y="942"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <dependency id="10">    
+    <end type="SOURCE" refId="1"/>    
+    <end type="TARGET" refId="4"/>  
+  </dependency>  
+  <generalization id="11">    
+    <end type="SOURCE" refId="6"/>    
+    <end type="TARGET" refId="8"/>  
+  </generalization>  
+  <generalization id="12">    
+    <end type="SOURCE" refId="7"/>    
+    <end type="TARGET" refId="8"/>  
+  </generalization>  
+  <dependency id="13">    
+    <end type="SOURCE" refId="1"/>    
+    <end type="TARGET" refId="2"/>  
+  </dependency>  
+  <generalization id="14">    
+    <end type="SOURCE" refId="3"/>    
+    <end type="TARGET" refId="8"/>  
+  </generalization>  
+  <generalization id="15">    
+    <bendpoint x="403" y="221"/>    
+    <end type="SOURCE" refId="2"/>    
+    <end type="TARGET" refId="8"/>  
+  </generalization>  
+  <dependency id="16">    
+    <end type="SOURCE" refId="1"/>    
+    <end type="TARGET" refId="6"/>  
+  </dependency>  
+  <association id="17">    
+    <bendpoint x="407" y="595"/>    
+    <end type="SOURCE" refId="1" navigable="false">      
+      <attribute id="18" name="recMsg"/>      
+      <multiplicity id="19" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="8" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="20">    
+    <end type="SOURCE" refId="1"/>    
+    <end type="TARGET" refId="7"/>  
+  </dependency>  
+  <dependency id="21">    
+    <end type="SOURCE" refId="1"/>    
+    <end type="TARGET" refId="3"/>  
+  </dependency>  
+  <generalization id="22">    
+    <bendpoint x="435" y="307"/>    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="8"/>  
+  </generalization>  
+  <generalization id="23">    
+    <bendpoint x="509" y="479"/>    
+    <end type="SOURCE" refId="5"/>    
+    <end type="TARGET" refId="8"/>  
+  </generalization>  
+  <dependency id="24">    
+    <end type="SOURCE" refId="1"/>    
+    <end type="TARGET" refId="5"/>  
+  </dependency>  
+  <association id="25">    
+    <bendpoint x="32" y="570"/>    
+    <end type="SOURCE" refId="1" navigable="false">      
+      <attribute id="26" name="pka"/>      
+      <multiplicity id="27" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="9" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+    accessors="true" visibility="true">    
+    <attributes public="true" package="true" protected="true" private="true" static="true"/>    
+    <operations public="true" package="true" protected="false" private="false" static="true"/>  
+  </classifier-display>  
+  <association-display labels="true" multiplicity="true"/>
+</class-diagram>

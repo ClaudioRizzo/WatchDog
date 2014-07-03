@@ -1,0 +1,21 @@
+\section{Elliptic Curves Digital Signature Algorithm}
+Nowadays ECDSA is the best known algorithm for computing digital signature with a reasonable size, high performances and very high security: it's the EC variant of the DSS-DSA algorithm and it works like this: assumed the signer (sender) has a keypair based on EC (Apriv = s, Apub = [s]P), and the receiver knows Apub and trusts it, and both parts know the curve and its parameters (n = size of the group, P a generator of the group), then:
+\linebreak
+\begin{enumerate}
+\item The signer chooses a random integer $r$ $mod$ $n$ such that $n > 0$ and $GCD(r,n) = 1$
+\item The signer computes $[r]P = (x,y)$
+\item If $x = 0$ goto step 1, else the signer stores $x$ as $k$
+\item The signer computes $r^{-1}$ $mod$ $n$ and $e = SHA-1(m)$ where $m$ is the message to sign
+\item The signer computes $z = r^{-1}(e + sk)$ $mod$ $n$
+\item If $z = 0$ goto step 1, else the signature is made by $(k,z)$
+\linebreak
+\end{enumerate}
+Verification:
+\linebreak
+\begin{enumerate}
+\item The receiver checks whether $k$ and $z$ are $mod$ $n$ and positive not null integers, if not, the signature is not valid
+\item The receiver computes $e = SHA-1(m)$ and $w = z^{-1}$ $mod$ $n$
+\item The receiver computes $u_{1} = ew$ $mod$ $n$ and $u_{2} = kw$ $mod$ $n$
+\item The receiver computes a point $X = [u_{1}]P + [u_{2}][s]P$ and stores it as $(x,y)$
+\item If $X$ is the point at infinity or is not verified $x = k$ $mod$ $n$, the signature is not valid, otherwise is valid.
+\end{enumerate}

@@ -1,0 +1,2 @@
+\section{PBKDF2 with HMAC-SHA-256}
+The Password Based Key Derivation Function \#2 is a deterministic key-derivation algorithm which generates a symmetric crypto key with a desired length by taking in input a password or a passphrase (in our case the secret from ECDH) and a salt (which makes possible to derivate different keys from the same password) and doing a certain number (4096 in our case) of application of a pseudorandom function (HMAC-SHA-256 in our case) to them in the so called "key stretching", which makes very hard the use of rainbow tables for cryptanalysis.

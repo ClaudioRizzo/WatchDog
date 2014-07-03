@@ -34,3 +34,21 @@
 \BOOKMARK [1][-]{section.4.8}{Perimeter Selection}{chapter.4}% 34
 \BOOKMARK [2][-]{subsection.4.8.1}{Activity Diagram}{section.4.8}% 35
 \BOOKMARK [2][-]{subsection.4.8.2}{User Interface Design}{section.4.8}% 36
+\BOOKMARK [0][-]{chapter.5}{Appendix A: Crypto protocols and alogrithms}{}% 37
+\BOOKMARK [1][-]{section.5.1}{Elliptic Curves key pair generation}{chapter.5}% 38
+\BOOKMARK [1][-]{section.5.2}{Elliptic Curves Diffie Hellman key exchange}{chapter.5}% 39
+\BOOKMARK [1][-]{section.5.3}{Elliptic Curves Digital Signature Algorithm}{chapter.5}% 40
+\BOOKMARK [1][-]{section.5.4}{PBKDF2 with HMAC-SHA-256}{chapter.5}% 41
+\BOOKMARK [1][-]{section.5.5}{AES-256-GCM}{chapter.5}% 42
+\BOOKMARK [1][-]{section.5.6}{Socialist Millionaire Protocol}{chapter.5}% 43
+\BOOKMARK [1][-]{section.5.7}{Command Protocol}{chapter.5}% 44
+\BOOKMARK [1][-]{section.5.8}{Open Issues and TODO list}{chapter.5}% 45
+\BOOKMARK [2][-]{subsection.5.8.1}{Unilateral Uninstallation}{section.5.8}% 46
+\BOOKMARK [2][-]{subsection.5.8.2}{Association Deletion}{section.5.8}% 47
+\BOOKMARK [2][-]{subsection.5.8.3}{The Mark Features}{section.5.8}% 48
+\BOOKMARK [1][-]{section.5.9}{Testing}{chapter.5}% 49
+\BOOKMARK [2][-]{subsection.5.9.1}{Cryptography}{section.5.9}% 50
+\BOOKMARK [2][-]{subsection.5.9.2}{Protocols}{section.5.9}% 51
+\BOOKMARK [1][-]{section.5.10}{Installation and usage manual}{chapter.5}% 52
+\BOOKMARK [2][-]{subsection.5.10.1}{Installation}{section.5.10}% 53
+\BOOKMARK [2][-]{subsection.5.10.2}{Usage}{section.5.10}% 54
