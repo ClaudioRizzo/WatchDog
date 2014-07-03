@@ -1,3 +1,4 @@
+
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -9,17 +10,19 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:paddingRight="10dp" />
+        android:paddingRight="10dp"
+        android:layout_centerInParent="true" />
  
     <TextView
         android:id="@+id/text_view_item"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="100dp"
         android:layout_centerVertical="true"
+        android:gravity="center"
         android:layout_toRightOf="@+id/image_view_item"
         android:paddingRight="10dp"
         android:textAppearance="?android:attr/textAppearanceListItemSmall"
         android:textColor="@color/hacker_green"
-        android:textSize="20dp" />
+        android:textSize="30dp" />
  
 </RelativeLayout>

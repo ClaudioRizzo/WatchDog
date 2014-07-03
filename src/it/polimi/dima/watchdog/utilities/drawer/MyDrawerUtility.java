@@ -40,7 +40,7 @@ public class MyDrawerUtility {
 		 
 		//QUa si prendono le icone e il loro nome: icone 48x48
 		drawerItem[0] = new ObjectDrawerItem(R.drawable.radaricon, "Gps");
-		drawerItem[1] = new ObjectDrawerItem(R.drawable.radaricon, "Siren");
+		drawerItem[1] = new ObjectDrawerItem(R.drawable.sirenon, "Siren");
 		
 		//mGenFeatures = mActivity.getResources().getStringArray(R.array.gen_features_array);
 		mDrawerLayout = (DrawerLayout) mActivity.findViewById(drawerLayout);
