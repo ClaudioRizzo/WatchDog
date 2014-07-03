@@ -151,7 +151,7 @@ public class MainActivity extends ActionBarActivity implements
 
 	private void notifyUser(double lat, double lon) {
 		NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(
-				this).setSmallIcon(android.R.drawable.stat_notify_chat)
+				this).setSmallIcon(R.drawable.ic_launcher)
 				.setContentTitle("Localized")
 				.setContentText("Your phone has been localized")
 				.setAutoCancel(true);
