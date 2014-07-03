@@ -27,51 +27,42 @@
 \contentsline {subsection}{\numberline {4.5.1}Activity Diagram}{21}{subsection.4.5.1}
 \contentsline {subsection}{\numberline {4.5.2}User Interface Design}{22}{subsection.4.5.2}
 \contentsline {section}{\numberline {4.6}Mobile Phone Mark}{22}{section.4.6}
-<<<<<<< HEAD
-\contentsline {subsection}{\numberline {4.6.1}Activity Diagram}{23}{subsection.4.6.1}
-\contentsline {subsection}{\numberline {4.6.2}User Interface Design}{24}{subsection.4.6.2}
-\contentsline {section}{\numberline {4.7}Remote Alarm Triggering: Activate and Deactivate Siren}{24}{section.4.7}
-\contentsline {subsection}{\numberline {4.7.1}Activity Diagram}{25}{subsection.4.7.1}
-\contentsline {subsection}{\numberline {4.7.2}User Interface Design}{27}{subsection.4.7.2}
-\contentsline {section}{\numberline {4.8}Perimeter Selection}{27}{section.4.8}
-\contentsline {subsection}{\numberline {4.8.1}Activity Diagram}{28}{subsection.4.8.1}
-\contentsline {subsection}{\numberline {4.8.2}User Interface Design}{29}{subsection.4.8.2}
-\contentsline {chapter}{\numberline {5}Appendix A: Crypto protocols and alogrithms}{30}{chapter.5}
-\contentsline {section}{\numberline {5.1}Elliptic Curves key pair generation}{30}{section.5.1}
-\contentsline {section}{\numberline {5.2}Elliptic Curves Diffie Hellman key exchange}{31}{section.5.2}
-\contentsline {section}{\numberline {5.3}Elliptic Curves Digital Signature Algorithm}{33}{section.5.3}
-\contentsline {section}{\numberline {5.4}PBKDF2 with HMAC-SHA-256}{33}{section.5.4}
-\contentsline {section}{\numberline {5.5}AES-256-GCM}{33}{section.5.5}
-\contentsline {section}{\numberline {5.6}Socialist Millionaire Protocol}{37}{section.5.6}
-\contentsline {paragraph}{Public key request}{37}{section*.2}
-\contentsline {paragraph}{Public key sending}{37}{section*.3}
-\contentsline {paragraph}{Question sending}{37}{section*.4}
-\contentsline {paragraph}{Hash sending}{37}{section*.5}
-\contentsline {paragraph}{Ack and password salt sending}{37}{section*.6}
-\contentsline {paragraph}{Second half}{38}{section*.7}
-\contentsline {paragraph}{Error management}{38}{section*.8}
-\contentsline {section}{\numberline {5.7}Command Protocol}{38}{section.5.7}
-\contentsline {paragraph}{First message}{38}{section*.9}
-\contentsline {paragraph}{Second message}{39}{section*.10}
-\contentsline {paragraph}{Third message}{39}{section*.11}
-\contentsline {paragraph}{Fourth message}{39}{section*.12}
-\contentsline {paragraph}{Error management}{39}{section*.13}
-\contentsline {paragraph}{Timeout management}{39}{section*.14}
-\contentsline {section}{\numberline {5.8}Open Issues and TODO list}{40}{section.5.8}
-\contentsline {subsection}{\numberline {5.8.1}Unilateral Uninstallation}{40}{subsection.5.8.1}
-\contentsline {subsection}{\numberline {5.8.2}Association Deletion}{40}{subsection.5.8.2}
-\contentsline {subsection}{\numberline {5.8.3}The Mark Features}{40}{subsection.5.8.3}
-\contentsline {section}{\numberline {5.9}Testing}{41}{section.5.9}
-\contentsline {subsection}{\numberline {5.9.1}Cryptography}{41}{subsection.5.9.1}
-\contentsline {subsection}{\numberline {5.9.2}Protocols}{41}{subsection.5.9.2}
-\contentsline {section}{\numberline {5.10}Installation and usage manual}{42}{section.5.10}
-\contentsline {subsection}{\numberline {5.10.1}Installation}{42}{subsection.5.10.1}
-\contentsline {subsection}{\numberline {5.10.2}Usage}{42}{subsection.5.10.2}
-=======
 \contentsline {section}{\numberline {4.7}Remote Alarm Triggering: Activate and Deactivate Siren}{23}{section.4.7}
 \contentsline {subsection}{\numberline {4.7.1}Activity Diagram}{24}{subsection.4.7.1}
-\contentsline {subsection}{\numberline {4.7.2}User Interface Design}{26}{subsection.4.7.2}
-\contentsline {section}{\numberline {4.8}Perimeter Selection}{26}{section.4.8}
-\contentsline {subsection}{\numberline {4.8.1}Activity Diagram}{27}{subsection.4.8.1}
-\contentsline {subsection}{\numberline {4.8.2}User Interface Design}{28}{subsection.4.8.2}
->>>>>>> d31e6d9040ddc472407a8e7e8ceeaa4a76b39daf
+\contentsline {section}{\numberline {4.8}Perimeter Selection}{27}{section.4.8}
+\contentsline {subsection}{\numberline {4.8.1}Activity Diagram}{28}{subsection.4.8.1}
+\contentsline {chapter}{\numberline {5}Design}{29}{chapter.5}
+\contentsline {section}{\numberline {5.1}Application Architecture}{29}{section.5.1}
+\contentsline {section}{\numberline {5.2}Design Patterns}{29}{section.5.2}
+\contentsline {section}{\numberline {5.3}Class diagrams}{30}{section.5.3}
+\contentsline {chapter}{\numberline {6}Appendix A: Crypto protocols and alogrithms}{33}{chapter.6}
+\contentsline {section}{\numberline {6.1}Elliptic Curves key pair generation}{33}{section.6.1}
+\contentsline {section}{\numberline {6.2}Elliptic Curves Diffie Hellman key exchange}{34}{section.6.2}
+\contentsline {section}{\numberline {6.3}Elliptic Curves Digital Signature Algorithm}{36}{section.6.3}
+\contentsline {section}{\numberline {6.4}PBKDF2 with HMAC-SHA-256}{36}{section.6.4}
+\contentsline {section}{\numberline {6.5}AES-256-GCM}{36}{section.6.5}
+\contentsline {section}{\numberline {6.6}Socialist Millionaire Protocol}{40}{section.6.6}
+\contentsline {paragraph}{Public key request}{40}{section*.2}
+\contentsline {paragraph}{Public key sending}{40}{section*.3}
+\contentsline {paragraph}{Question sending}{40}{section*.4}
+\contentsline {paragraph}{Hash sending}{40}{section*.5}
+\contentsline {paragraph}{Ack and password salt sending}{40}{section*.6}
+\contentsline {paragraph}{Second half}{41}{section*.7}
+\contentsline {paragraph}{Error management}{41}{section*.8}
+\contentsline {section}{\numberline {6.7}Command Protocol}{41}{section.6.7}
+\contentsline {paragraph}{First message}{41}{section*.9}
+\contentsline {paragraph}{Second message}{42}{section*.10}
+\contentsline {paragraph}{Third message}{42}{section*.11}
+\contentsline {paragraph}{Fourth message}{42}{section*.12}
+\contentsline {paragraph}{Error management}{42}{section*.13}
+\contentsline {paragraph}{Timeout management}{42}{section*.14}
+\contentsline {chapter}{\numberline {7}Appendix B: Open Issues and TODO list}{43}{chapter.7}
+\contentsline {section}{\numberline {7.1}Unilateral Uninstallation}{43}{section.7.1}
+\contentsline {section}{\numberline {7.2}Association Deletion}{43}{section.7.2}
+\contentsline {section}{\numberline {7.3}The Mark Features}{43}{section.7.3}
+\contentsline {chapter}{\numberline {8}Appendix C: Testing}{44}{chapter.8}
+\contentsline {section}{\numberline {8.1}Cryptography}{44}{section.8.1}
+\contentsline {section}{\numberline {8.2}Protocols}{44}{section.8.2}
+\contentsline {chapter}{\numberline {9}Appendix D: Installation and usage manual}{45}{chapter.9}
+\contentsline {section}{\numberline {9.1}Installation}{45}{section.9.1}
+\contentsline {section}{\numberline {9.2}Usage}{45}{section.9.2}
