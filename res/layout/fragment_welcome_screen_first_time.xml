@@ -4,16 +4,25 @@
     android:layout_height="fill_parent"
     style="?app_background" >
 
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="15dp"
+        android:src="@drawable/welcome" />
+
     <TextView
         android:id="@+id/welcome_screen_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="97dp"
+        android:layout_below="@+id/imageView1"
+        android:layout_marginTop="18dp"
         android:gravity="center"
-        android:textSize="20dp"
-        android:text="Welcome to WatchDog, the sms remote control application! Before you can send commands to other telephones you must select a password which other users can use to send command to your phone!" />
+        android:text="Welcome to WatchDog, the sms remote control application! Before you can send commands to other telephones you must select a password which other users can use to send command to your phone!"
+        android:textSize="20dp" />
 
     <Button
         android:id="@+id/button_welcome_screen"
@@ -21,7 +30,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/welcome_screen_text"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="27dp"
         android:text="Proceed"
         android:textSize="18dp" />
 
