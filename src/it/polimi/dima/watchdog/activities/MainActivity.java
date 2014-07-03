@@ -11,6 +11,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.media.RingtoneManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -154,7 +155,8 @@ public class MainActivity extends ActionBarActivity implements
 				this).setSmallIcon(R.drawable.ic_launcher)
 				.setContentTitle("Localized")
 				.setContentText("Your phone has been localized")
-				.setAutoCancel(true);
+				.setAutoCancel(true)
+				.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
 		Intent resultIntent = new Intent(this, MyMapActivity.class);
 		resultIntent.putExtra("latitude", lat);
 		resultIntent.putExtra("longitude", lon);
