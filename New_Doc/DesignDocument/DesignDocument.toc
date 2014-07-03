@@ -27,11 +27,9 @@
 \contentsline {subsection}{\numberline {4.5.1}Activity Diagram}{21}{subsection.4.5.1}
 \contentsline {subsection}{\numberline {4.5.2}User Interface Design}{22}{subsection.4.5.2}
 \contentsline {section}{\numberline {4.6}Mobile Phone Mark}{22}{section.4.6}
-\contentsline {subsection}{\numberline {4.6.1}Activity Diagram}{23}{subsection.4.6.1}
-\contentsline {subsection}{\numberline {4.6.2}User Interface Design}{24}{subsection.4.6.2}
-\contentsline {section}{\numberline {4.7}Remote Alarm Triggering: Activate and Deactivate Siren}{24}{section.4.7}
-\contentsline {subsection}{\numberline {4.7.1}Activity Diagram}{25}{subsection.4.7.1}
-\contentsline {subsection}{\numberline {4.7.2}User Interface Design}{27}{subsection.4.7.2}
-\contentsline {section}{\numberline {4.8}Perimeter Selection}{27}{section.4.8}
-\contentsline {subsection}{\numberline {4.8.1}Activity Diagram}{28}{subsection.4.8.1}
-\contentsline {subsection}{\numberline {4.8.2}User Interface Design}{29}{subsection.4.8.2}
+\contentsline {section}{\numberline {4.7}Remote Alarm Triggering: Activate and Deactivate Siren}{23}{section.4.7}
+\contentsline {subsection}{\numberline {4.7.1}Activity Diagram}{24}{subsection.4.7.1}
+\contentsline {subsection}{\numberline {4.7.2}User Interface Design}{26}{subsection.4.7.2}
+\contentsline {section}{\numberline {4.8}Perimeter Selection}{26}{section.4.8}
+\contentsline {subsection}{\numberline {4.8.1}Activity Diagram}{27}{subsection.4.8.1}
+\contentsline {subsection}{\numberline {4.8.2}User Interface Design}{28}{subsection.4.8.2}
