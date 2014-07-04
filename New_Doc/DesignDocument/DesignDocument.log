@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014/Debian) (preloaded format=pdflatex 2014.7.2)  3 JUL 2014 21:53
+This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014/Debian) (preloaded format=pdflatex 2014.7.2)  4 JUL 2014 09:20
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1025,7 +1025,7 @@ LaTeX Info: Redefining \nameref on input line 95.
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: End \AtBeginDocument code.
 
-<images/logopm.pdf, id=224, 597.50786pt x 845.04686pt>
+<images/logopm.pdf, id=232, 597.50786pt x 845.04686pt>
 File: images/logopm.pdf Graphic file (type pdf)
  <use images/logopm.pdf>
 Package pdftex.def Info: images/logopm.pdf used on input line 98.
@@ -1164,7 +1164,7 @@ Chapter 4.
 
 pdfTeX warning: pdflatex (file ./images/initialization_activity.pdf): PDF inclu
 sion: found PDF version <1.7>, but at most version <1.5> allowed
-<images/initialization_activity.pdf, id=325, 794.97pt x 614.295pt>
+<images/initialization_activity.pdf, id=335, 794.97pt x 614.295pt>
 File: images/initialization_activity.pdf Graphic file (type pdf)
 
 <use images/initialization_activity.pdf>
@@ -1184,7 +1184,7 @@ Overfull \hbox (27.59819pt too wide) in paragraph at lines 18--19
 
 pdfTeX warning: pdflatex (file ./images/initialization_design.pdf): PDF inclusi
 on: found PDF version <1.7>, but at most version <1.5> allowed
-<images/initialization_design.pdf, id=331, 614.295pt x 794.97pt>
+<images/initialization_design.pdf, id=341, 614.295pt x 794.97pt>
 File: images/initialization_design.pdf Graphic file (type pdf)
 
 <use images/initialization_design.pdf>
@@ -1203,7 +1203,7 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 
 pdfTeX warning: pdflatex (file ./images/SMP_activity.pdf): PDF inclusion: found
  PDF version <1.7>, but at most version <1.5> allowed
-<images/SMP_activity.pdf, id=357, 614.295pt x 794.97pt>
+<images/SMP_activity.pdf, id=367, 614.295pt x 794.97pt>
 File: images/SMP_activity.pdf Graphic file (type pdf)
 
 <use images/SMP_activity.pdf>
@@ -1218,7 +1218,7 @@ Overfull \hbox (60.11772pt too wide) in paragraph at lines 44--45
 
 pdfTeX warning: pdflatex (file ./images/SMP_design.pdf): PDF inclusion: found P
 DF version <1.7>, but at most version <1.5> allowed
-<images/SMP_design.pdf, id=364, 614.295pt x 794.97pt>
+<images/SMP_design.pdf, id=374, 614.295pt x 794.97pt>
 File: images/SMP_design.pdf Graphic file (type pdf)
 
 <use images/SMP_design.pdf>
@@ -1236,7 +1236,7 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 
 pdfTeX warning: pdflatex (file ./images/ChangePassword_activity.pdf): PDF inclu
 sion: found PDF version <1.7>, but at most version <1.5> allowed
-<images/ChangePassword_activity.pdf, id=435, 614.295pt x 794.97pt>
+<images/ChangePassword_activity.pdf, id=445, 614.295pt x 794.97pt>
 File: images/ChangePassword_activity.pdf Graphic file (type pdf)
 
 <use images/ChangePassword_activity.pdf>
@@ -1247,7 +1247,7 @@ Package pdftex.def Info: images/ChangePassword_activity.pdf used on input line
 
 pdfTeX warning: pdflatex (file ./images/PasswordChange_UI.pdf): PDF inclusion: 
 found PDF version <1.7>, but at most version <1.5> allowed
-<images/PasswordChange_UI.pdf, id=441, 614.295pt x 794.97pt>
+<images/PasswordChange_UI.pdf, id=451, 614.295pt x 794.97pt>
 File: images/PasswordChange_UI.pdf Graphic file (type pdf)
 
 <use images/PasswordChange_UI.pdf>
@@ -1265,7 +1265,7 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 
 pdfTeX warning: pdflatex (file ./images/UnilateralDeassociation.pdf): PDF inclu
 sion: found PDF version <1.7>, but at most version <1.5> allowed
-<images/UnilateralDeassociation.pdf, id=477, 614.295pt x 794.97pt>
+<images/UnilateralDeassociation.pdf, id=487, 614.295pt x 794.97pt>
 File: images/UnilateralDeassociation.pdf Graphic file (type pdf)
 
 <use images/UnilateralDeassociation.pdf>
@@ -1281,7 +1281,7 @@ Overfull \hbox (60.11772pt too wide) in paragraph at lines 78--79
 
 pdfTeX warning: pdflatex (file ./images/DeassociationAndroid.pdf): PDF inclusio
 n: found PDF version <1.7>, but at most version <1.5> allowed
-<images/DeassociationAndroid.pdf, id=483, 597.23125pt x 844.15375pt>
+<images/DeassociationAndroid.pdf, id=493, 597.23125pt x 844.15375pt>
 File: images/DeassociationAndroid.pdf Graphic file (type pdf)
 
 <use images/DeassociationAndroid.pdf>
@@ -1297,7 +1297,7 @@ Overfull \hbox (48.17319pt too wide) in paragraph at lines 83--84
 
 pdfTeX warning: pdflatex (file ./images/Localization.pdf): PDF inclusion: found
  PDF version <1.7>, but at most version <1.5> allowed
-<images/Localization.pdf, id=514, 614.295pt x 794.97pt>
+<images/Localization.pdf, id=524, 614.295pt x 794.97pt>
 File: images/Localization.pdf Graphic file (type pdf)
 
 <use images/Localization.pdf>
@@ -1308,77 +1308,123 @@ Overfull \hbox (60.11772pt too wide) in paragraph at lines 98--99
 [] 
  []
 
-[21 <./images/Localization.pdf>] [22] [23]
+[21 <./images/Localization.pdf>]
 
-pdfTeX warning: pdflatex (file ./images/SirenOn.pdf): PDF inclusion: found PDF 
-version <1.7>, but at most version <1.5> allowed
-<images/SirenOn.pdf, id=528, 614.295pt x 794.97pt>
-File: images/SirenOn.pdf Graphic file (type pdf)
- <use images/SirenOn.pdf>
-Package pdftex.def Info: images/SirenOn.pdf used on input line 126.
+pdfTeX warning: pdflatex (file ./images/Localization_mobile.pdf): PDF inclusion
+: found PDF version <1.7>, but at most version <1.5> allowed
+<images/Localization_mobile.pdf, id=530, 614.295pt x 794.97pt>
+File: images/Localization_mobile.pdf Graphic file (type pdf)
+
+<use images/Localization_mobile.pdf>
+Package pdftex.def Info: images/Localization_mobile.pdf used on input line 103.
+
 (pdftex.def)             Requested size: 430.00356pt x 556.4752pt.
 
-Overfull \hbox (60.11772pt too wide) in paragraph at lines 126--127
+Overfull \hbox (60.11772pt too wide) in paragraph at lines 103--104
 [] 
  []
 
-[24 <./images/SirenOn.pdf>]
 
-pdfTeX warning: pdflatex (file ./images/SirenOff.pdf): PDF inclusion: found PDF
- version <1.7>, but at most version <1.5> allowed
-<images/SirenOff.pdf, id=534, 614.295pt x 794.97pt>
-File: images/SirenOff.pdf Graphic file (type pdf)
- <use images/SirenOff.pdf>
-Package pdftex.def Info: images/SirenOff.pdf used on input line 128.
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [22 <./images/Localization_mobile.pdf>] [23] [24]
+
+pdfTeX warning: pdflatex (file ./images/SirenOn.pdf): PDF inclusion: found PDF 
+version <1.7>, but at most version <1.5> allowed
+<images/SirenOn.pdf, id=581, 614.295pt x 794.97pt>
+File: images/SirenOn.pdf Graphic file (type pdf)
+ <use images/SirenOn.pdf>
+Package pdftex.def Info: images/SirenOn.pdf used on input line 128.
 (pdftex.def)             Requested size: 430.00356pt x 556.4752pt.
 
 Overfull \hbox (60.11772pt too wide) in paragraph at lines 128--129
-[][] 
+[] 
  []
 
-[25 <./images/SirenOff.pdf>]
+[25 <./images/SirenOn.pdf>]
 
-pdfTeX warning: pdflatex (file ./images/localsirenoff.pdf): PDF inclusion: foun
-d PDF version <1.7>, but at most version <1.5> allowed
-<images/localsirenoff.pdf, id=542, 614.295pt x 794.97pt>
-File: images/localsirenoff.pdf Graphic file (type pdf)
-
-<use images/localsirenoff.pdf>
-Package pdftex.def Info: images/localsirenoff.pdf used on input line 130.
+pdfTeX warning: pdflatex (file ./images/SirenOff.pdf): PDF inclusion: found PDF
+ version <1.7>, but at most version <1.5> allowed
+<images/SirenOff.pdf, id=588, 614.295pt x 794.97pt>
+File: images/SirenOff.pdf Graphic file (type pdf)
+ <use images/SirenOff.pdf>
+Package pdftex.def Info: images/SirenOff.pdf used on input line 130.
 (pdftex.def)             Requested size: 430.00356pt x 556.4752pt.
 
 Overfull \hbox (60.11772pt too wide) in paragraph at lines 130--131
 [][] 
  []
 
+[26 <./images/SirenOff.pdf>]
 
-Underfull \vbox (badness 10000) has occurred while \output is active []
+pdfTeX warning: pdflatex (file ./images/localsirenoff.pdf): PDF inclusion: foun
+d PDF version <1.7>, but at most version <1.5> allowed
+<images/localsirenoff.pdf, id=594, 614.295pt x 794.97pt>
+File: images/localsirenoff.pdf Graphic file (type pdf)
 
- [26 <./images/localsirenoff.pdf>] [27]
-
-pdfTeX warning: pdflatex (file ./images/Perimeter.pdf): PDF inclusion: found PD
-F version <1.7>, but at most version <1.5> allowed
-<images/Perimeter.pdf, id=552, 614.295pt x 794.97pt>
-File: images/Perimeter.pdf Graphic file (type pdf)
-
-<use images/Perimeter.pdf>
-Package pdftex.def Info: images/Perimeter.pdf used on input line 144.
+<use images/localsirenoff.pdf>
+Package pdftex.def Info: images/localsirenoff.pdf used on input line 132.
 (pdftex.def)             Requested size: 430.00356pt x 556.4752pt.
-)
-Overfull \hbox (60.11772pt too wide) in paragraph at lines 144--114
+
+Overfull \hbox (60.11772pt too wide) in paragraph at lines 132--133
+[][] 
+ []
+
+[27 <./images/localsirenoff.pdf>]
+
+pdfTeX warning: pdflatex (file ./images/sirenonoff_mobile.pdf): PDF inclusion: 
+found PDF version <1.7>, but at most version <1.5> allowed
+<images/sirenonoff_mobile.pdf, id=600, 597.23125pt x 844.15375pt>
+File: images/sirenonoff_mobile.pdf Graphic file (type pdf)
+
+<use images/sirenonoff_mobile.pdf>
+Package pdftex.def Info: images/sirenonoff_mobile.pdf used on input line 137.
+(pdftex.def)             Requested size: 418.05902pt x 590.9036pt.
+
+Overfull \hbox (48.17319pt too wide) in paragraph at lines 137--138
 [] 
  []
 
-[28 <./images/Perimeter.pdf>]
+[28 <./images/sirenonoff_mobile.pdf>] [29]
+
+pdfTeX warning: pdflatex (file ./images/Perimeter.pdf): PDF inclusion: found PD
+F version <1.7>, but at most version <1.5> allowed
+<images/Perimeter.pdf, id=656, 614.295pt x 794.97pt>
+File: images/Perimeter.pdf Graphic file (type pdf)
+
+<use images/Perimeter.pdf>
+Package pdftex.def Info: images/Perimeter.pdf used on input line 151.
+(pdftex.def)             Requested size: 430.00356pt x 556.4752pt.
+
+Overfull \hbox (60.11772pt too wide) in paragraph at lines 151--152
+[] 
+ []
+
+[30 <./images/Perimeter.pdf>]
+
+pdfTeX warning: pdflatex (file ./images/Perimeter_mobile.pdf): PDF inclusion: f
+ound PDF version <1.7>, but at most version <1.5> allowed
+<images/Perimeter_mobile.pdf, id=663, 614.295pt x 794.97pt>
+File: images/Perimeter_mobile.pdf Graphic file (type pdf)
+
+<use images/Perimeter_mobile.pdf>
+Package pdftex.def Info: images/Perimeter_mobile.pdf used on input line 156.
+(pdftex.def)             Requested size: 430.00356pt x 556.4752pt.
+)
+Overfull \hbox (60.11772pt too wide) in paragraph at lines 156--114
+[] 
+ []
+
+[31 <./images/Perimeter_mobile.pdf>]
 \openout2 = `contents/design.aux'.
 
  (./contents/design.tex
 Chapter 5.
-[29
+[32
 
 
 
-] <images/smp.png, id=562, 824.07875pt x 847.165pt>
+] <images/smp.png, id=707, 824.07875pt x 847.165pt>
 File: images/smp.png Graphic file (type png)
  <use images/smp.png>
 Package pdftex.def Info: images/smp.png used on input line 13.
@@ -1388,8 +1434,8 @@ Overfull \hbox (42.15253pt too wide) in paragraph at lines 13--14
  [][] 
  []
 
-[30 <./images/smp.png (PNG copy)>]
-<images/commands.png, id=567, 833.1125pt x 1234.6125pt>
+[33 <./images/smp.png (PNG copy)>]
+<images/commands.png, id=712, 833.1125pt x 1234.6125pt>
 File: images/commands.png Graphic file (type png)
 
 <use images/commands.png>
@@ -1400,8 +1446,8 @@ Overfull \hbox (5.01132pt too wide) in paragraph at lines 18--19
  [][] 
  []
 
-[31 <./images/commands.png (PNG copy)>]
-<images/crypto.png, id=573, 820.06375pt x 1155.31625pt>
+[34 <./images/commands.png (PNG copy)>]
+<images/crypto.png, id=717, 820.06375pt x 1155.31625pt>
 File: images/crypto.png Graphic file (type png)
 
 <use images/crypto.png>
@@ -1412,14 +1458,14 @@ Overfull \hbox (40.14503pt too wide) in paragraph at lines 23--24
  [][] 
  []
 
-[32 <./images/crypto.png (PNG copy)>]) (./src/design/crypto/crypto.tex
+[35 <./images/crypto.png (PNG copy)>]) (./src/design/crypto/crypto.tex
 Chapter 6.
 ) (./src/design/crypto/protocols_algorithms/EC.tex
 Underfull \hbox (badness 10000) in paragraph at lines 2--3
 
  []
 
-<images/ec.png, id=578, 621.32124pt x 349.305pt>
+<images/ec.png, id=722, 621.32124pt x 349.305pt>
 File: images/ec.png Graphic file (type png)
  <use images/ec.png>
 Package pdftex.def Info: images/ec.png used on input line 6.
@@ -1427,7 +1473,7 @@ Package pdftex.def Info: images/ec.png used on input line 6.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [33
+ [36
 
 
 ])
@@ -1436,7 +1482,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 2--3
 
  []
 
-<images/ecdh.png, id=584, 624.3325pt x 394.47375pt>
+<images/ecdh.png, id=728, 624.3325pt x 394.47375pt>
 File: images/ecdh.png Graphic file (type png)
  <use images/ecdh.png>
 Package pdftex.def Info: images/ecdh.png used on input line 6.
@@ -1444,7 +1490,7 @@ Package pdftex.def Info: images/ecdh.png used on input line 6.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [34 <./images/ec.png>]) [35 <./images/ecdh.png>]
+ [37 <./images/ec.png>]) [38 <./images/ecdh.png>]
 (./src/design/crypto/protocols_algorithms/ECDSA.tex
 Underfull \hbox (badness 10000) in paragraph at lines 2--4
 \T1/ppl/m/n/10 the group), then:
@@ -1483,22 +1529,22 @@ Underfull \hbox (badness 10000) in paragraph at lines 2--3
 
  []
 
-[36
+[39
 
-] <images/aesgcmenc.png, id=612, 791.95876pt x 504.88625pt>
+] <images/aesgcmenc.png, id=757, 791.95876pt x 504.88625pt>
 File: images/aesgcmenc.png Graphic file (type png)
 
 <use images/aesgcmenc.png>
 Package pdftex.def Info: images/aesgcmenc.png used on input line 6.
 (pdftex.def)             Requested size: 316.7779pt x 201.95091pt.
- [37 <./images/aesgcmenc.png>]
-<images/aesgcmdec.png, id=618, 605.26125pt x 465.74pt>
+ [40 <./images/aesgcmenc.png>]
+<images/aesgcmdec.png, id=762, 605.26125pt x 465.74pt>
 File: images/aesgcmdec.png Graphic file (type png)
 
 <use images/aesgcmdec.png>
 Package pdftex.def Info: images/aesgcmdec.png used on input line 11.
 (pdftex.def)             Requested size: 363.15953pt x 279.44615pt.
- <images/aes.png, id=619, 922.44624pt x 839.135pt>
+ <images/aes.png, id=763, 922.44624pt x 839.135pt>
 File: images/aes.png Graphic file (type png)
 
 <use images/aes.png>
@@ -1507,16 +1553,16 @@ Package pdftex.def Info: images/aes.png used on input line 17.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [38
+ [41
 
- <./images/aesgcmdec.png>]) [39 <./images/aes.png (PNG copy)>]
+ <./images/aesgcmdec.png>]) [42 <./images/aes.png (PNG copy)>]
 (./src/design/crypto/protocols_algorithms/smp.tex)
 (./src/design/crypto/protocols_algorithms/smp/pkreq.tex)
 (./src/design/crypto/protocols_algorithms/smp/pksending.tex)
 (./src/design/crypto/protocols_algorithms/smp/question_sending.tex)
 (./src/design/crypto/protocols_algorithms/smp/hash_sending.tex)
 (./src/design/crypto/protocols_algorithms/smp/ack_and_salt_sending.tex)
-(./src/design/crypto/protocols_algorithms/smp/second_half.tex [40
+(./src/design/crypto/protocols_algorithms/smp/second_half.tex [43
 
 ])
 (./src/design/crypto/protocols_algorithms/smp/errors.tex)
@@ -1528,10 +1574,10 @@ es-sage made by "CODE6FFF"
 
 ) (./src/design/crypto/protocols_algorithms/commands/first_message.tex)
 (./src/design/crypto/protocols_algorithms/commands/second_message.tex)
-(./src/design/crypto/protocols_algorithms/commands/third_message.tex [41])
+(./src/design/crypto/protocols_algorithms/commands/third_message.tex [44])
 (./src/design/crypto/protocols_algorithms/commands/fourth_message.tex)
 (./src/design/crypto/protocols_algorithms/commands/errors.tex)
-(./src/design/crypto/protocols_algorithms/commands/timeout.tex) [42]
+(./src/design/crypto/protocols_algorithms/commands/timeout.tex) [45]
 (./src/open_issues/open_issues.tex
 Chapter 7.
 ) (./src/open_issues/issues/unilateral_uninstall.tex
@@ -1542,12 +1588,12 @@ Underfull \hbox (badness 10000) in paragraph at lines 2--3
 LaTeX Font Info:    Font shape `OMS/ppl/m/n' in size <10> not available
 (Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 4.
 ) (./src/open_issues/issues/association_deletion.tex)
-(./src/open_issues/issues/marks.tex) [43
+(./src/open_issues/issues/marks.tex) [46
 
 
 ] (./src/testing/testing.tex
 Chapter 8.
-) (./src/testing/crypto.tex) (./src/testing/protocols.tex) [44
+) (./src/testing/crypto.tex) (./src/testing/protocols.tex) [47
 
 
 ]
@@ -1559,7 +1605,7 @@ Overfull \hbox (7.70992pt too wide) in paragraph at lines 2--155
 l-iza-tion) and to the perime-
  []
 
-[45
+[48
 
 
 ]
@@ -1571,17 +1617,17 @@ contents/Planning.aux) (./contents/Requirements/RequirementsAnalysis.aux)
 Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 166.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 166.
 Package rerunfilecheck Info: File `DesignDocument.out' has not changed.
-(rerunfilecheck)             Checksum: E9D7917BFC4CCD80CE6FCC316BFB9A0C;3639.
+(rerunfilecheck)             Checksum: 4E84876F01C6BF93F225FF2AB0337E96;3789.
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 166.
  ) 
 Here is how much of TeX's memory you used:
- 21175 strings out of 493113
- 397966 string characters out of 6137489
+ 21197 strings out of 493113
+ 398516 string characters out of 6137489
  458669 words of memory out of 5000000
- 23955 multiletter control sequences out of 15000+600000
+ 23969 multiletter control sequences out of 15000+600000
  42927 words of font info for 90 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 55i,12n,69p,2199b,460s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 55i,12n,69p,2199b,461s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/share/texliv
 e/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texm
 f-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/
@@ -1589,10 +1635,10 @@ fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/
 type1/urw/palatino/uplb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/pa
 latino/uplr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/palatino/uplri
 8a.pfb>
-Output written on DesignDocument.pdf (45 pages, 834334 bytes).
+Output written on DesignDocument.pdf (48 pages, 1444783 bytes).
 PDF statistics:
- 720 PDF objects out of 1000 (max. 8388607)
- 628 compressed objects within 7 object streams
- 125 named destinations out of 1000 (max. 500000)
- 555 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 865 PDF objects out of 1000 (max. 8388607)
+ 755 compressed objects within 8 object streams
+ 130 named destinations out of 1000 (max. 500000)
+ 586 words of extra memory for PDF output out of 10000 (max. 10000000)
 

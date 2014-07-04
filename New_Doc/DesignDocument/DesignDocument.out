@@ -28,27 +28,29 @@
 \BOOKMARK [1][-]{section.4.6}{Mobile Phone Mark}{chapter.4}% 28
 \BOOKMARK [1][-]{section.4.7}{Remote Alarm Triggering: Activate and Deactivate Siren}{chapter.4}% 29
 \BOOKMARK [2][-]{subsection.4.7.1}{Activity Diagram}{section.4.7}% 30
-\BOOKMARK [1][-]{section.4.8}{Perimeter Selection}{chapter.4}% 31
-\BOOKMARK [2][-]{subsection.4.8.1}{Activity Diagram}{section.4.8}% 32
-\BOOKMARK [0][-]{chapter.5}{Design}{}% 33
-\BOOKMARK [1][-]{section.5.1}{Application Architecture}{chapter.5}% 34
-\BOOKMARK [1][-]{section.5.2}{Design Patterns}{chapter.5}% 35
-\BOOKMARK [1][-]{section.5.3}{Class diagrams}{chapter.5}% 36
-\BOOKMARK [0][-]{chapter.6}{Appendix A: Crypto protocols and alogrithms}{}% 37
-\BOOKMARK [1][-]{section.6.1}{Elliptic Curves key pair generation}{chapter.6}% 38
-\BOOKMARK [1][-]{section.6.2}{Elliptic Curves Diffie Hellman key exchange}{chapter.6}% 39
-\BOOKMARK [1][-]{section.6.3}{Elliptic Curves Digital Signature Algorithm}{chapter.6}% 40
-\BOOKMARK [1][-]{section.6.4}{PBKDF2 with HMAC-SHA-256}{chapter.6}% 41
-\BOOKMARK [1][-]{section.6.5}{AES-256-GCM}{chapter.6}% 42
-\BOOKMARK [1][-]{section.6.6}{Socialist Millionaire Protocol}{chapter.6}% 43
-\BOOKMARK [1][-]{section.6.7}{Command Protocol}{chapter.6}% 44
-\BOOKMARK [0][-]{chapter.7}{Appendix B: Open Issues and TODO list}{}% 45
-\BOOKMARK [1][-]{section.7.1}{Unilateral Uninstallation}{chapter.7}% 46
-\BOOKMARK [1][-]{section.7.2}{Association Deletion}{chapter.7}% 47
-\BOOKMARK [1][-]{section.7.3}{The Mark Features}{chapter.7}% 48
-\BOOKMARK [0][-]{chapter.8}{Appendix C: Testing}{}% 49
-\BOOKMARK [1][-]{section.8.1}{Cryptography}{chapter.8}% 50
-\BOOKMARK [1][-]{section.8.2}{Protocols}{chapter.8}% 51
-\BOOKMARK [0][-]{chapter.9}{Appendix D: Installation and usage manual}{}% 52
-\BOOKMARK [1][-]{section.9.1}{Installation}{chapter.9}% 53
-\BOOKMARK [1][-]{section.9.2}{Usage}{chapter.9}% 54
+\BOOKMARK [2][-]{subsection.4.7.2}{User Interface Design}{section.4.7}% 31
+\BOOKMARK [1][-]{section.4.8}{Perimeter Selection}{chapter.4}% 32
+\BOOKMARK [2][-]{subsection.4.8.1}{Activity Diagram}{section.4.8}% 33
+\BOOKMARK [2][-]{subsection.4.8.2}{User Interface Design}{section.4.8}% 34
+\BOOKMARK [0][-]{chapter.5}{Design}{}% 35
+\BOOKMARK [1][-]{section.5.1}{Application Architecture}{chapter.5}% 36
+\BOOKMARK [1][-]{section.5.2}{Design Patterns}{chapter.5}% 37
+\BOOKMARK [1][-]{section.5.3}{Class diagrams}{chapter.5}% 38
+\BOOKMARK [0][-]{chapter.6}{Appendix A: Crypto protocols and alogrithms}{}% 39
+\BOOKMARK [1][-]{section.6.1}{Elliptic Curves key pair generation}{chapter.6}% 40
+\BOOKMARK [1][-]{section.6.2}{Elliptic Curves Diffie Hellman key exchange}{chapter.6}% 41
+\BOOKMARK [1][-]{section.6.3}{Elliptic Curves Digital Signature Algorithm}{chapter.6}% 42
+\BOOKMARK [1][-]{section.6.4}{PBKDF2 with HMAC-SHA-256}{chapter.6}% 43
+\BOOKMARK [1][-]{section.6.5}{AES-256-GCM}{chapter.6}% 44
+\BOOKMARK [1][-]{section.6.6}{Socialist Millionaire Protocol}{chapter.6}% 45
+\BOOKMARK [1][-]{section.6.7}{Command Protocol}{chapter.6}% 46
+\BOOKMARK [0][-]{chapter.7}{Appendix B: Open Issues and TODO list}{}% 47
+\BOOKMARK [1][-]{section.7.1}{Unilateral Uninstallation}{chapter.7}% 48
+\BOOKMARK [1][-]{section.7.2}{Association Deletion}{chapter.7}% 49
+\BOOKMARK [1][-]{section.7.3}{The Mark Features}{chapter.7}% 50
+\BOOKMARK [0][-]{chapter.8}{Appendix C: Testing}{}% 51
+\BOOKMARK [1][-]{section.8.1}{Cryptography}{chapter.8}% 52
+\BOOKMARK [1][-]{section.8.2}{Protocols}{chapter.8}% 53
+\BOOKMARK [0][-]{chapter.9}{Appendix D: Installation and usage manual}{}% 54
+\BOOKMARK [1][-]{section.9.1}{Installation}{chapter.9}% 55
+\BOOKMARK [1][-]{section.9.2}{Usage}{chapter.9}% 56
